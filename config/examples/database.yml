@@ -1,0 +1,26 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: www_development
+  pool: 5
+  username: root
+  password:
+  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: www_test
+  pool: 5
+  username: root
+  password:
+  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: www_production
+  pool: 5
+  username: root
+  password:
+  socket: /opt/local/var/run/mysql5/mysqld.sock
