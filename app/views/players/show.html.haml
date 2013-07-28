@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b First name:
+  = @player.first_name
+%p
+  %b Last name:
+  = @player.last_name
+
+= link_to 'Edit', edit_player_path(@player)
+\|
+= link_to 'Back', players_path
