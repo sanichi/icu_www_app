@@ -1,4 +1,8 @@
 IcuWwwApp::Application.routes.draw do
-  root to: "players#index"
+  root to: "pages#home"
+  get "home" => "pages#home"
+
   resources :players
+  
+  match "*url", to: "pages#not_found", via: :all
 end
