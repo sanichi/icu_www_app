@@ -1,0 +1,21 @@
+// Default link sytles (component/_type.scss)
+a {
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+// Custom h1 in header section
+#header h1 {
+  font-variant: small-caps;
+  font-family: Georgia, Bookman, serif;
+}
+
+// Section panels
+#header {
+  @include panel($secondary-color, emCalc(5));
+}
+#content {
+  @include panel;
+}
