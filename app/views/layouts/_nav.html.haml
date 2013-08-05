@@ -1,16 +1,15 @@
-%nav.top-bar
-  %ul.title-area
-    %li.name
-    %li.toggle-topbar.menu-icon
-      = link_to "#" do
-        %span
-  %section.top-bar-section
-    %ul.left
-      %li.active= link_to "Home", home_path
-      %li.divider
-      %li.has-dropdown
-        = link_to "Players", players_path
-        %ul.dropdown
-          %li
-            = link_to "New", new_player_path
-      %li.divider
+.navbar
+  %button.navbar-toggle{"type" => "button", "data-toggle" => "collapse", "data-target" => "navbar-responsive-collapse"}
+    %span.icon-bar
+    %span.icon-bar
+    %span.icon-bar
+  .nav-collapse.collapse.navbar-responsive-collapse
+    %ul.nav.navbar-nav
+      %li= link_to "Home", home_path
+      %li.dropdown
+        = link_to players_path, "class" => "dropdown-toggle", "data-toggle" => "dropdown" do
+          Players
+          %span.caret
+          %ul.dropdown-menu
+            %li= link_to "List", players_path
+            %li= link_to "New", new_player_path

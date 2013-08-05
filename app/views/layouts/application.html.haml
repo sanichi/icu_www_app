@@ -6,13 +6,14 @@
     %title
       = content_for?(:title) ? yield(:title) : "Irish Chess Union"
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
-    = javascript_include_tag "vendor/custom.modernizr"
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
-    #header.row
+    #header.container
       = render "layouts/header"
-    #nav.row
+    #nav.container
       = render "layouts/nav"
-    #content.row
+    #flash.container
+      = render "layouts/flash"
+    #content.container
       = yield
