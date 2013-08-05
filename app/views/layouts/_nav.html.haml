@@ -1,8 +1,16 @@
 %nav.top-bar
   %ul.title-area
+    %li.name
+    %li.toggle-topbar.menu-icon
+      = link_to "#" do
+        %span
   %section.top-bar-section
-    %ul.right
+    %ul.left
+      %li.active= link_to "Home", home_path
       %li.divider
-      %li= link_to "Home", home_path
+      %li.has-dropdown
+        = link_to "Players", players_path
+        %ul.dropdown
+          %li
+            = link_to "New", new_player_path
       %li.divider
-      %li= link_to "Players", players_path

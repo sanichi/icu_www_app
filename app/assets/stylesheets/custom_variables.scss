@@ -2,4 +2,28 @@
 // Customize foundation variables.
 //
 
+// General
 $primary-color: #080;
+$body-font-color: #222;
+
+// Panels
+$panel-bg: darken(#fff, 5%);
+
+// Top bar
+$topbar-bg: $panel-bg;
+$topbar-dropdown-bg: darken($topbar-bg, 5%);
+$topbar-dropdown-link-color: #f00;
+$topbar-dropdown-link-bg: darken($topbar-bg,5%);
+$topbar-dropdown-toggle-color: darken($topbar-bg, 20%); // the little downward pointing arrow
+$topbar-dropdown-toggle-alpha: 1.0;
+$topbar-link-color: $body-font-color;
+$topbar-dropdown-link-color: $topbar-link-color;
+
+// Not sure we need all of these
+$topbar-link-color-hover: lighten($topbar-link-color, 10%);
+$topbar-link-color-active: lighten($topbar-link-color, 10%);
+$topbar-dropdown-label-color: #555;
+$topbar-menu-link-color: $topbar-link-color;
+$topbar-menu-icon-color: $topbar-link-color;
+$topbar-menu-link-color-toggled: lighten($topbar-link-color, 10%);
+$topbar-menu-icon-color-toggled: lighten($topbar-link-color, 10%);

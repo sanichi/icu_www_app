@@ -12,10 +12,17 @@ a {
   font-family: Georgia, Bookman, serif;
 }
 
-// Section panels
+// Header panel has smaller padding
 #header {
   @include panel($secondary-color, emCalc(5));
 }
+
+// Nav panel has no padding (panel is just for it's borders)
+#nav {
+  @include panel($secondary-color, 0);
+}
+
+// Content is plain panel.
 #content {
   @include panel;
 }
