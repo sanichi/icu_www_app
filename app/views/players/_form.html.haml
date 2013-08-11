@@ -1,14 +1,14 @@
-= form_for @player do |f|
-  %fieldset
-    %legend New Player
-    .control-group
-      = f.label :first_name, class: "control-label"
-      .controls
-        = f.text_field :first_name, class: "text_field"
-    .control-group
-      = f.label :last_name, class: "control-label"
-      .controls
-        = f.text_field :last_name, class: "text_field"
-    .form-actions
-      = f.submit "Save", class: "btn btn-primary"
-      = link_to "Cancel", players_path, class: "btn"
+.span2
+.span8
+  = simple_form_for @player, html: { class: "form-vertical" } do |f|
+    %fieldset
+      %legend= legend
+      
+      .form-attributes
+        = f.input :last_name
+        = f.input :first_name
+
+      .form-actions
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", players_path, class: "btn btn-danger"
+.span2

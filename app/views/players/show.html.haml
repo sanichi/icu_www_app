@@ -1,12 +1,13 @@
-%p#notice= notice
-
-%p
-  %b First name:
-  = @player.first_name
-%p
-  %b Last name:
-  = @player.last_name
-
-= link_to 'Edit', edit_player_path(@player)
-\|
-= link_to 'Back', players_path
+.span2
+.span8
+  %table.table.table-bordered
+    %tr
+      %th ICU #
+      %td= @player.id
+    %tr
+      %th Last Name
+      %td= @player.last_name
+    %tr
+      %th First Name
+      %td= @player.first_name
+.span2

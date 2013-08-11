@@ -3,17 +3,17 @@
   %head
     %meta{charset: "utf-8"}
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
-    %title
-      = content_for?(:title) ? yield(:title) : "Irish Chess Union"
+    %title= content_for?(:title) ? yield(:title) : "Irish Chess Union"
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
-    #header.container
-      = render "layouts/header"
-    #nav.container
-      = render "layouts/nav"
-    #flash.container
-      = render "layouts/flash"
-    #content.container
-      = yield
+    .container
+      #header.row
+        = render "layouts/header"
+      #nav.navbar
+        = render "layouts/nav"
+      #flash.row
+        = render "layouts/flash"
+      #content.row
+        = yield

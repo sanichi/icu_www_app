@@ -1,22 +1,24 @@
-%h1 Listing players
-
-%table
-  %thead
-    %tr
-      %td First name
-      %td Last name
-      %td
-      %td
-      %td
-  %tbody
-    - @players.each do |player|
+.span12
+  %h1{class: "text-center"} Players
+  %table{class: "table table-bordered table-striped table-condensed"}
+    %thead
       %tr
-        %td= player.first_name
-        %td= player.last_name
-        %td= link_to 'Show', player
-        %td= link_to 'Edit', edit_player_path(player)
-        %td= link_to 'Destroy', player, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %th First name
+        %th Last name
+        %th{style: "width: 30px"} Actions
+    %tbody
+      - @players.each do |player|
+        %tr
+          %td= player.first_name
+          %td= player.last_name
+          %td
+            = link_to player do
+              %i.icon-hand-right
+            = link_to edit_player_path(player) do
+              %i.icon-edit
+            = link_to player, :method => :delete, :data => { :confirm => 'Are you sure?' } do
+              %i.icon-trash
 
-%br
+  %br
 
-= link_to 'New Player', new_player_path
+  = link_to 'New Player', new_player_path, class: "btn btn-primary btn-mini"
