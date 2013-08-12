@@ -1,14 +1,17 @@
-.span12
+.span2
+.span8
   %h1{class: "text-center"} Players
   %table{class: "table table-bordered table-striped table-condensed"}
     %thead
       %tr
+        %th #
         %th First name
         %th Last name
         %th{style: "width: 30px"} Actions
     %tbody
       - @players.each do |player|
         %tr
+          %td= player.id
           %td= player.first_name
           %td= player.last_name
           %td
@@ -18,7 +21,6 @@
               %i.icon-edit
             = link_to player, :method => :delete, :data => { :confirm => 'Are you sure?' } do
               %i.icon-trash
+  = link_to 'New Player', new_player_path, class: "btn btn-primary"
+.span2
 
-  %br
-
-  = link_to 'New Player', new_player_path, class: "btn btn-primary btn-mini"
