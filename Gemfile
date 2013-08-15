@@ -13,6 +13,7 @@ gem "turbolinks"
 
 group :development do
   gem "capistrano"
+  gem "capistrano-maintenance"
   gem "wirble"
 end
 
