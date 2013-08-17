@@ -1,5 +1,4 @@
-.span2
-.span8
+.col-md-8.col-md-offset-2
   %h1{class: "text-center"} Players
   %table{class: "table table-bordered table-striped table-condensed"}
     %thead
@@ -7,7 +6,7 @@
         %th #
         %th First name
         %th Last name
-        %th{style: "width: 30px"} Actions
+        %th Actions
     %tbody
       - @players.each do |player|
         %tr
@@ -15,12 +14,8 @@
           %td= player.first_name
           %td= player.last_name
           %td
-            = link_to player do
-              %i.icon-hand-right
-            = link_to edit_player_path(player) do
-              %i.icon-edit
-            = link_to player, :method => :delete, :data => { :confirm => 'Are you sure?' } do
-              %i.icon-trash
-  = link_to 'New Player', new_player_path, class: "btn btn-primary"
-.span2
+            = link_to t("show"), player, class: "btn btn-info btn-xs"
+            = link_to t("edit"), edit_player_path(player), class: "btn btn-warning btn-xs"
+            = link_to t("delete"), player, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "btn btn-danger btn-xs"
+  = link_to t("player.new"), new_player_path, class: "btn btn-primary"
 

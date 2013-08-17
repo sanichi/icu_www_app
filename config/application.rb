@@ -17,5 +17,8 @@ module IcuWwwApp
   class Application < Rails::Application
     # Express preference for double quoted attributes (single quoted is HAML's default).
     Haml::Template.options[:attr_wrapper] = '"'
+
+    # Autoload these directories.
+    config.autoload_paths += %W(#{Rails.root}/lib)
   end
 end

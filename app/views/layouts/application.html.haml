@@ -11,7 +11,7 @@
     .container
       #header.row
         = render "layouts/header"
-      #nav.navbar
+      %nav{class: "navbar", role: "navigation"}
         = render "layouts/nav"
       #flash.row
         = render "layouts/flash"

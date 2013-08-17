@@ -20,4 +20,16 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  cancel: Cancel
+  delete: Delete
+  edit: Edit
+  save: Save
+  show: Show
+  player:
+    new: New Player
+    edit: Edit Player
+  helpers:
+    label:
+      player:
+        first_name: First Name
+        last_name: Last Name

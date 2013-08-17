@@ -1,5 +1,4 @@
-.span2
-.span8
+.col-md-8.col-md-offset-2
   %table.table.table-bordered
     %tr
       %th ICU #
@@ -10,4 +9,4 @@
     %tr
       %th First Name
       %td= @player.first_name
-.span2
+  = link_to t("player.edit"), edit_player_path(@player), class: "btn btn-primary"
