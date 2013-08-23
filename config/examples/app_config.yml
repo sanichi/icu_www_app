@@ -1,9 +1,13 @@
+# For importing data from legacy database
 old_db_ro:
   host: localhost
   database: icu_db_copy
   username: ro_username
   password: ro_password
   encoding: latin1
+
+# Set this to just "pasword" if you don't want encrypted passwords.
+password_encryptor: 'Digest::MD5.hexdigest("#{password}#{salt}")'
 
 secret_key_base: 4fbd352d214c2118a7fd152173de8dd358dcd07289a8eb751e332e279848a905fd1228b5e51e4ec60c14b41d69c93eetea7a35bb8854d99356a0f13091bd08b7
 

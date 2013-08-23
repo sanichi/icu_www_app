@@ -11,11 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130728172042) do
+ActiveRecord::Schema.define(version: 20130821194340) do
 
   create_table "players", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", force: true do |t|
+    t.string   "email"
+    t.string   "encrypted_password", limit: 32
+    t.string   "salt",               limit: 32
+    t.string   "permissions",                   default: "--- {}\n"
+    t.string   "status",                        default: "OK"
+    t.integer  "icu_id"
+    t.date     "expires_on"
+    t.datetime "verified_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

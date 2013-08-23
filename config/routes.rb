@@ -4,5 +4,9 @@ IcuWwwApp::Application.routes.draw do
 
   resources :players
   
+  namespace :admin do
+    resources :users
+  end
+
   match "*url", to: "pages#not_found", via: :all
 end
