@@ -12,11 +12,12 @@ module ICU
         mem_status:   :status,
         mem_expiry:   :expires_on,
         mem_verified: :verified_at,
+        mem_pin:      :season_ticket,
       }
 
       def synchronize(force=false)
         if existing_users?(force)
-          puts "can't synchronize legacy members unless the users table is empty or force is used"
+          report_error "can't synchronize legacy members unless the users table is empty or force is used"
           return
         end
         member_count = 0
@@ -37,10 +38,12 @@ module ICU
         MAP.values.each do |user_attr|
           return unless valid?(params, user_attr)
         end
+        params.delete(:season_ticket)
         begin
           User.create!(params)
+          puts "created User #{params[:id]}, #{params[:email]}"
         rescue => e
-          puts "could not create user ID #{params[:id]}: #{e.message}"
+          report_error "could not create user ID #{params[:id]}: #{e.message}"
         end
       end
 
@@ -50,7 +53,7 @@ module ICU
         when :id
           error = "ID (#{params[:id]}) must be positive integer" unless params[:id].present? && params[:id] > 0
         when :icu_id
-          error = "missing or invalid ICU ID for ID #{params[:id]}" unless params[:icu_id].present? && params[:icu_id] > 0
+          error = "missing or invalid ICU ID (#{params[:icu_id]}) for ID #{params[:id]}" unless params[:icu_id].present? && params[:icu_id] > 0
         when :email
           error = "missing email for ID #{params[:id]}" unless params[:email].present?
         when :encrypted_password
@@ -65,10 +68,24 @@ module ICU
         when :verified_at
           params[:verified_at] = Time.now if params[:verified_at].nil? && params[:status].match(/\AOK\z/i)
           error = "missing verification date for ID #{params[:id]}" unless params[:verified_at].present?
+        when :season_ticket
+          error = "missing season ticket for ID #{params[:id]}" unless params[:season_ticket].present?
+          unless error
+            ticket = SeasonTicket.new(params[:season_ticket])
+            if ticket.valid?
+              if ticket.icu_id != params[:icu_id]
+                error = "mismatched ICU ID between ticket (#{ticket.icu_id}) and record (#{params[:icu_id]}) for ID #{params[:id]}"
+              elsif ticket.expires_on != params[:expires_on].to_s
+                error = "mismatched expiry date between ticket (#{ticket.expires_on}) and record (#{params[:expires_on]}) for ID #{params[:id]}"
+              end
+            else
+              error = "invalid season ticket (#{params[:season_ticket]}) for ID #{params[:id]}"
+            end
+          end
         else
           raise ArgumentError.new("invalid user attribute: #{user_attr}")
         end
-        puts error if error
+        report_error(error) if error
         error ? false : true
       end
 
@@ -84,6 +101,10 @@ module ICU
         else
           true
         end
+      end
+
+      def report_error(msg)
+        puts "ERROR: #{msg}"
       end
     end
   end

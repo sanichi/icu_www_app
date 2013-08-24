@@ -5,10 +5,9 @@ class User < ActiveRecord::Base
   OK = "OK"
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /@/ }
-  validates :encrypted_password, presence: true
+  validates :encrypted_password, :expires_on, presence: true
   validates :salt, length: { is: 32 }
   validates :icu_id, numericality: { only_integer: true, greater_than: 0 }
-  validates :expires_on, presence: true
 
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
