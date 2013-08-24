@@ -43,7 +43,7 @@ module ICU
           puts "could not create user ID #{params[:id]}: #{e.message}"
         end
       end
-      
+
       def valid?(params, user_attr)
         error = nil
         case user_attr
