@@ -18,8 +18,10 @@
         %time{datetime: @user.verified_at.to_s(:html5)}= @user.verified_at.to_s(:nosec)
     %tr
       %th Created
-      %td= @user.created_at.to_s(:db)
+      %td
+        %time{datetime: @user.created_at.to_s(:html5)}= @user.created_at.to_s(:nosec)
     %tr
       %th Last Updated
-      %td= @user.updated_at.to_s(:db)
+      %td
+        %time{datetime: @user.updated_at.to_s(:html5)}= @user.updated_at.to_s(:nosec)
   = link_to "Edit", edit_player_path(@player), class: "btn btn-primary"

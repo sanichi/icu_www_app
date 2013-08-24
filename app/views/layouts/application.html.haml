@@ -8,10 +8,12 @@
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
+    .jumbotron
+      .container
+        #header.row
+          = render "layouts/header"
     .container
-      #header.row
-        = render "layouts/header"
-      %nav{class: "navbar", role: "navigation"}
+      %nav{class: "navbar navbar-default", role: "navigation"}
         = render "layouts/nav"
       #flash.row
         = render "layouts/flash"
