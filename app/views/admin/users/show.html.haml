@@ -1,21 +1,25 @@
-%p#notice= notice
-
-%p
-  %b Email:
-  = @admin_user.email
-%p
-  %b Password:
-  = @admin_user.password
-%p
-  %b Salt:
-  = @admin_user.salt
-%p
-  %b Icu:
-  = @admin_user.icu_id
-%p
-  %b Expiry:
-  = @admin_user.expiry
-
-= link_to 'Edit', edit_admin_user_path(@admin_user)
-\|
-= link_to 'Back', admin_users_path
+.col-md-8.col-md-offset-2
+  %table.table.table-bordered
+    %tr
+      %th Email
+      %td= @user.email
+    %tr
+      %th Expires On
+      %td= @user.expires_on
+    %tr
+      %th ICU #
+      %td= @user.icu_id
+    %tr
+      %th Status
+      %td= @user.status
+    %tr
+      %th Verified
+      %td
+        %time{datetime: @user.verified_at.to_s(:html5)}= @user.verified_at.to_s(:nosec)
+    %tr
+      %th Created
+      %td= @user.created_at.to_s(:db)
+    %tr
+      %th Last Updated
+      %td= @user.updated_at.to_s(:db)
+  = link_to "Edit", edit_player_path(@player), class: "btn btn-primary"

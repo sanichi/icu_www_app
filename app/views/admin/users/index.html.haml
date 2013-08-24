@@ -1,27 +1,13 @@
-%h1 Listing admin_users
-
-%table
-  %tr
-    %th Email
-    %th Password
-    %th Salt
-    %th Icu
-    %th Expiry
-    %th
-    %th
-    %th
-
-  - @admin_users.each do |admin_user|
-    %tr
-      %td= admin_user.email
-      %td= admin_user.password
-      %td= admin_user.salt
-      %td= admin_user.icu_id
-      %td= admin_user.expiry
-      %td= link_to 'Show', admin_user
-      %td= link_to 'Edit', edit_admin_user_path(admin_user)
-      %td= link_to 'Destroy', admin_user, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-%br
-
-= link_to 'New User', new_admin_user_path
+.col-sm-8.col-sm-offset-2
+  %h1{class: "text-center"} Users
+  %table{class: "table table-bordered table-striped table-condensed"}
+    %thead
+      %tr
+        %th Email
+        %th Expires On
+    %tbody
+      - @users.each do |user|
+        %tr
+          %td= link_to user.email, [:admin, user]
+          %td
+            %date= user.expires_on
