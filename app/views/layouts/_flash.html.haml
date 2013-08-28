@@ -1,5 +1,6 @@
-- flash.each do |name, msg|
-  .col-xs-12
-    .text-center.alert{class: "alert-#{name == :notice ? 'success' : 'error'}"}
-      %button.close{"type" => "button", "data-dismiss" => "alert"} ×
-      = msg
+.row
+  - flash.each do |name, msg|
+    .col-xs-12
+      .text-center.alert{class: "alert-#{name == :notice ? 'success' : 'error'}"}
+        %button.close{"type" => "button", "data-dismiss" => "alert"} ×
+        = msg

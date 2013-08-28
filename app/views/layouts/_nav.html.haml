@@ -1,10 +1,11 @@
-.navbar-header
-  %button{class: "navbar-toggle", type: "button", "data-toggle" => "collapse", "data-target" => ".navbar-ex1-collapse"}
-    %span.icon-bar
-    %span.icon-bar
-    %span.icon-bar
-.collapse.navbar-collapse.navbar-ex1-collapse
-  %ul.nav.navbar-nav
-    %li= link_to "Home", home_path
-    %li= link_to "Players", players_path
-    %li= link_to "Users", admin_users_path
+%nav{class: "navbar navbar-default", role: "navigation"}
+  .navbar-header
+    %button{class: "navbar-toggle", type: "button", "data-toggle" => "collapse", "data-target" => ".navbar-ex1-collapse"}
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+  .collapse.navbar-collapse.navbar-ex1-collapse
+    %ul.nav.navbar-nav
+      %li{class: active("pages", "home")}= link_to "Home", home_path
+      %li{class: active("players")}= link_to "Players", players_path
+      %li{class: active("admin/users")}= link_to "Users", admin_users_path

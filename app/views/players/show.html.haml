@@ -1,12 +1,13 @@
-.col-md-8.col-md-offset-2
-  %table.table.table-bordered
-    %tr
-      %th ICU #
-      %td= @player.id
-    %tr
-      %th Last Name
-      %td= @player.last_name
-    %tr
-      %th First Name
-      %td= @player.first_name
-  = link_to t("player.edit"), edit_player_path(@player), class: "btn btn-primary"
+.row
+  .col-md-8.col-md-offset-2
+    %table.table.table-bordered
+      %tr
+        %th ICU #
+        %td= @player.id
+      %tr
+        %th Last Name
+        %td= @player.last_name
+      %tr
+        %th First Name
+        %td= @player.first_name
+    = link_to t("player.edit"), edit_player_path(@player), class: "btn btn-primary"

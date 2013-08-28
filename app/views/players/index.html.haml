@@ -1,21 +1,22 @@
-.col-md-8.col-md-offset-2
-  %h1{class: "text-center"} Players
-  %table{class: "table table-bordered table-striped table-condensed"}
-    %thead
-      %tr
-        %th #
-        %th First name
-        %th Last name
-        %th Actions
-    %tbody
-      - @players.each do |player|
+.row
+  .col-md-8.col-md-offset-2
+    %h1{class: "text-center"} Players
+    %table{class: "table table-bordered table-striped table-condensed"}
+      %thead
         %tr
-          %td= player.id
-          %td= player.first_name
-          %td= player.last_name
-          %td
-            = link_to t("show"), player, class: "btn btn-info btn-xs"
-            = link_to t("edit"), edit_player_path(player), class: "btn btn-warning btn-xs"
-            = link_to t("delete"), player, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "btn btn-danger btn-xs"
-  = link_to t("player.new"), new_player_path, class: "btn btn-primary"
+          %th #
+          %th First name
+          %th Last name
+          %th Actions
+      %tbody
+        - @players.each do |player|
+          %tr
+            %td= player.id
+            %td= player.first_name
+            %td= player.last_name
+            %td
+              = link_to t("show"), player, class: "btn btn-info btn-xs"
+              = link_to t("edit"), edit_player_path(player), class: "btn btn-warning btn-xs"
+              = link_to t("delete"), player, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "btn btn-danger btn-xs"
+    = link_to t("player.new"), new_player_path, class: "btn btn-primary"
 

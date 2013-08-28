@@ -10,12 +10,8 @@
   %body
     .jumbotron
       .container
-        #header.row
-          = render "layouts/header"
+        = render "layouts/header"
     .container
-      %nav{class: "navbar navbar-default", role: "navigation"}
-        = render "layouts/nav"
-      #flash.row
-        = render "layouts/flash"
-      #content.row
-        = yield
+      = render "layouts/nav"
+      = render "layouts/flash"
+      = yield

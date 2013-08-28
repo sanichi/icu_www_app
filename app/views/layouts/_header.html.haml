@@ -1,4 +1,5 @@
-.col-md-2.text-center
-  = image_tag "misc/logo.png", alt: "ICU Logo", title: "ICU Logo", size: "80x80"
-.col-md-8.text-center
-  %h1 Irish Chess Union
+.row
+  .col-md-2.text-center
+    = image_tag "misc/logo.png", alt: t("icu_logo"), title: t("icu_logo"), size: "160x160", class: "hidden-sm hidden-xs"
+  .col-md-8.text-center
+    %h1= t("irish_chess_union")
