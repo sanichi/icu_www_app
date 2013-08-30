@@ -1,13 +1,18 @@
-.col-sm-8.col-sm-offset-2
-  %h1{class: "text-center"} Users
-  %table{class: "table table-bordered table-striped table-condensed"}
-    %thead
-      %tr
-        %th Email
-        %th Expires On
-    %tbody
-      - @users.each do |user|
-        %tr
-          %td= link_to user.email, [:admin, user]
-          %td
-            %date= user.expires_on
+.row
+  .col-sm-8.col-sm-offset-2
+    .panel.panel-default
+      .panel-heading.text-center
+        %strong Users
+      .panel-body= render "admin/users/search_form"
+    - if @users.size > 0
+      %table{class: "table table-bordered table-striped table-condensed"}
+        %thead
+          %tr
+            %th Email
+            %th Expires
+        %tbody
+          - @users.each do |user|
+            %tr
+              %td= link_to user.email, [:admin, user]
+              %td
+                %date= user.expires_on.year

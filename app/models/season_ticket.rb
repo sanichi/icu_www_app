@@ -20,6 +20,13 @@ class SeasonTicket
     return false if date && (!valid_date?(date) || date.to_s > expires_on)
     true
   end
+  
+  def self.icu_config
+    return @icu_config unless @icu_config.nil?
+    @icu_config = { base: "af1d3f65fe9dd2b10739ae81a846bd8e", shuffle: "395d57908a4ffffca42f04a1db5af010" }.inject(true) do |m, (k,v)|
+      m && Digest::MD5.hexdigest(APP_CONFIG["season_ticket"][k.to_s]) == v
+    end
+  end
 
   private
 

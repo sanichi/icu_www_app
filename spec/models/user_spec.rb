@@ -28,6 +28,14 @@ describe User do
       expect { FactoryGirl.create(:user, icu_id: nil) }.to raise_error(/icu.*not.*number/i)
       expect { FactoryGirl.create(:user, icu_id: 0) }.to raise_error(/icu.*greater.*than.*0/i)
     end
+
+    it "should have a valid set of roles" do
+      expect { FactoryGirl.create(:user, roles: User::ROLES.join(" ")) }.to_not raise_error
+      expect { FactoryGirl.create(:user, roles: User::ROLES.sample(2).join(" ")) }.to_not raise_error
+      #expect { FactoryGirl.create(:user, roles: User::ROLES.sample) }.to_not raise_error
+      expect { FactoryGirl.create(:user, roles: nil) }.to_not raise_error
+      expect { FactoryGirl.create(:user, roles: "rubbish") }.to raise_error(/role.*invalid/i)
+    end
   end
 
   context "#valid_password?" do
@@ -59,11 +67,11 @@ describe User do
     end
 
     it "invalid password" do
-      expect { User.authenticate!(@addr, "bad") }.to raise_error("invalid_password")
+      expect { User.authenticate!(@addr, "bad") }.to raise_error("invalid_details")
     end
 
     it "unknown email" do
-      expect { User.authenticate!("bad" + @addr, @pass) }.to raise_error("unknown_email")
+      expect { User.authenticate!("bad" + @addr, @pass) }.to raise_error("invalid_details")
     end
 
     it "subscription expired" do

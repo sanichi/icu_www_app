@@ -25,9 +25,27 @@ en:
   edit: Edit
   save: Save
   show: Show
-  irish_chess_union: Irish Chess Union
-  icu: ICU
+  search: Search
+  icu: Irish Chess Union
+  ICU: ICU
   icu_logo: ICU Logo
+  session:
+    sign_in: Sign in
+    sign_out: Sign out
+    signed_in_as: Signed in as
+    signed_out: Signed out!
+    invalid_details: Invalid email or password
+    unverified_email: Unverified email
+    account_disabled: Account disabled
+    subscription_expired: Subscription expired    
+  user:
+    email: Email
+    password: Password
+    role:
+      admin: Administrator
+      editor: Editor
+      translator: Translator
+      treasurer: Treasurer
   player:
     new: New Player
     edit: Edit Player

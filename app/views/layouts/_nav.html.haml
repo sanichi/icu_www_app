@@ -9,3 +9,6 @@
       %li{class: active("pages", "home")}= link_to "Home", home_path
       %li{class: active("players")}= link_to "Players", players_path
       %li{class: active("admin/users")}= link_to "Users", admin_users_path
+    %ul.nav.navbar-nav.navbar-right
+      - text, path = current_user ? ["out", sign_out_path] : ["in", sign_in_path]
+      %li{class: active("session")}= link_to t("session.sign_#{text}"), path

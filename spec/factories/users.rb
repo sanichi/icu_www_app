@@ -7,6 +7,6 @@ FactoryGirl.define do
     expires_on         { Date.today.next_year.at_beginning_of_year }
     status             User::OK
     verified_at        { Time.now.last_year.at_end_of_year }
-    permissions        { Hash.new }
+    roles              nil
   end
 end

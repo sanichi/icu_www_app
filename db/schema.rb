@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20130821194340) do
     t.string   "email"
     t.string   "encrypted_password", limit: 32
     t.string   "salt",               limit: 32
-    t.string   "permissions",                   default: "--- {}\n"
+    t.string   "roles"
     t.string   "status",                        default: "OK"
     t.integer  "icu_id"
     t.date     "expires_on"

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SeasonTicket do
   context "decode a ticket" do
-    it "should result in correct ICU ID and expiry date" do
+    it "should result in correct ICU ID and expiry date", if: SeasonTicket.icu_config do
       @t = SeasonTicket.new("brDK6")
       @t.error.should be_nil
       @t.valid?.should be_true
@@ -18,7 +18,7 @@ describe SeasonTicket do
   end
 
   context "encoding an ID and date" do
-    it "should result in a correct ticket" do
+    it "should result in a correct ticket", if: SeasonTicket.icu_config do
       @t = SeasonTicket.new(10470, "2012-12-31")
       @t.error.should be_nil
       @t.valid?.should be_true
