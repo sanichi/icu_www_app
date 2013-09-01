@@ -1,17 +1,18 @@
 class User < ActiveRecord::Base
   attr_accessor :password
 
-  ROLES = %w[admin editor translator treasurer]
   OK = "OK"
-  
-  before_validation :flatten_roles
+  ROLES = %w[admin editor translator treasurer]
+  SessionError = Class.new(RuntimeError)
+
+  before_validation :canonicalize_roles
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /@/ }
   validates :encrypted_password, :expires_on, :status, presence: true
   validates :salt, length: { is: 32 }
   validates :icu_id, numericality: { only_integer: true, greater_than: 0 }
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
-  validate :change_password_if_present
+  validate  :update_password_if_present
 
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
@@ -29,6 +30,32 @@ class User < ActiveRecord::Base
     not expires_on.past?
   end
 
+  ROLES.each do |role|
+    define_method "#{role}?" do
+      roles.present? && (roles.include?(role) || roles.include?("admin"))
+    end
+  end
+
+  def guest?
+    false
+  end
+
+  class Guest
+    def id
+      "guest"
+    end
+
+    def guest?
+      true
+    end
+
+    User::ROLES.each do |role|
+      define_method "#{role}?" do
+        false
+      end
+    end
+  end
+
   def self.search(params)
     matches = order(:email)
     matches = matches.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
@@ -44,8 +71,6 @@ class User < ActiveRecord::Base
   def self.random_salt
     Digest::MD5.hexdigest(rand(1000000).to_s + Time.now.to_s)
   end
-  
-  SessionError = Class.new(RuntimeError)
 
   def self.authenticate!(email, password)
     user = User.find_by(email: email)
@@ -57,7 +82,9 @@ class User < ActiveRecord::Base
     user
   end
 
-  def change_password_if_present
+  private
+
+  def update_password_if_present
     if password.present?
       if password.length >= 6
         if password.match(/\d/)
@@ -71,15 +98,16 @@ class User < ActiveRecord::Base
       end
     end
   end
-  
-  def flatten_roles
-    if roles.present? && roles.is_a?(Array)
+
+  def canonicalize_roles
+    if roles.present?
+      self.roles = roles.scan(/\w+/) unless roles.is_a?(Array)
       if roles.include?("admin")
         self.roles = "admin"
       else
         self.roles = roles.select{ |r| User::ROLES.include?(r) }.sort.join(" ")
-        self.roles = nil if roles.blank?
       end
     end
+    self.roles = nil if roles.blank?
   end
 end

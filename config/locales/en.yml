@@ -37,7 +37,7 @@ en:
     invalid_details: Invalid email or password
     unverified_email: Unverified email
     account_disabled: Account disabled
-    subscription_expired: Subscription expired    
+    subscription_expired: Subscription expired
   user:
     email: Email
     password: Password
@@ -46,6 +46,7 @@ en:
       editor: Editor
       translator: Translator
       treasurer: Treasurer
+    unauthorized: You are not authorized to view this page
   player:
     new: New Player
     edit: Edit Player

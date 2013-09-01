@@ -9,6 +9,7 @@ gem "coffee-rails", "~> 4.0.0"
 gem "therubyracer", platforms: :ruby
 gem "jquery-rails"
 gem "turbolinks"
+gem "cancan", "~> 1.6"
 
 group :development do
   gem "capistrano"

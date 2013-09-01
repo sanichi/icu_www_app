@@ -2,39 +2,87 @@ require 'spec_helper'
 
 describe User do
   context "model validation" do
-    it "the factory test user should be valid" do
+    it "the default factory user should be valid" do
       expect { FactoryGirl.create(:user) }.to_not raise_error
     end
 
-    it "should not allow duplicate emails (case insensitively)" do
+    it "duplicate emails not allowed (case insensitive)" do
       user = FactoryGirl.create(:user)
       expect { FactoryGirl.create(:user, email: user.email) }.to raise_error(/email.*already.*taken/i)
       expect { FactoryGirl.create(:user, email: user.email.upcase) }.to raise_error(/email.*already.*taken/i)
     end
 
-    it "should have an encrypted password" do
+    it "encrypted password should be present" do
       expect { FactoryGirl.create(:user, encrypted_password: "") }.to raise_error(/password.*blank/i)
     end
 
-    it "should have a 32 character salt" do
+    it "salt should have 32 characters" do
       expect { FactoryGirl.create(:user, salt: "abc") }.to raise_error(/salt.*length/i)
     end
 
-    it "should have an expiry date" do
+    it "expiry date should be present" do
       expect { FactoryGirl.create(:user, expires_on: nil) }.to raise_error(/expires.*blank/i)
     end
 
-    it "should have a positive ICU ID" do
+    it "ICU ID should be positive" do
       expect { FactoryGirl.create(:user, icu_id: nil) }.to raise_error(/icu.*not.*number/i)
       expect { FactoryGirl.create(:user, icu_id: 0) }.to raise_error(/icu.*greater.*than.*0/i)
     end
+  end
 
-    it "should have a valid set of roles" do
-      expect { FactoryGirl.create(:user, roles: User::ROLES.join(" ")) }.to_not raise_error
-      expect { FactoryGirl.create(:user, roles: User::ROLES.sample(2).join(" ")) }.to_not raise_error
-      #expect { FactoryGirl.create(:user, roles: User::ROLES.sample) }.to_not raise_error
-      expect { FactoryGirl.create(:user, roles: nil) }.to_not raise_error
-      expect { FactoryGirl.create(:user, roles: "rubbish") }.to raise_error(/role.*invalid/i)
+  context "roles" do
+    before(:each) do
+      @roles_without_admin = User::ROLES.reject{ |r| r == "admin" }
+      @non_admin_roles = @roles_without_admin.sort.join(" ")
+      @non_admin_role = @roles_without_admin.sample
+    end
+
+    it "should be canonicalized" do
+      expect(FactoryGirl.create(:user, roles: User::ROLES).roles).to eq("admin")
+      expect(FactoryGirl.create(:user, roles: @roles_without_admin).roles).to eq(@non_admin_roles)
+      expect(FactoryGirl.create(:user, roles: @roles_without_admin.shuffle.join("-")).roles).to eq(@non_admin_roles)
+      expect(FactoryGirl.create(:user, roles: @non_admin_role).roles).to eq(@non_admin_role)
+      expect(FactoryGirl.create(:user, roles: " ").roles).to be_nil
+      expect(FactoryGirl.create(:user, roles: "").roles).to be_nil
+      expect(FactoryGirl.create(:user, roles: nil).roles).to be_nil
+      expect(FactoryGirl.create(:user, roles: "rubbish").roles).to be_nil
+      expect(FactoryGirl.create(:user, roles: "rubbish invalid").roles).to be_nil
+      expect(FactoryGirl.create(:user, roles: "rubbish invalid #{@non_admin_role}").roles).to eq(@non_admin_role)
+      expect(FactoryGirl.create(:user, roles: " rubbish  invalid  #{@non_admin_role} ").roles).to eq(@non_admin_role)
+    end
+
+    it "none for the default factory user" do
+      user = FactoryGirl.create(:user)
+      expect(user.roles).to be_nil
+      User::ROLES.each do |role|
+        expect(user.send("#{role}?")).to be_false
+      end
+    end
+
+    it "all for the admin user" do
+      user = FactoryGirl.create(:user, roles: "admin")
+      expect(user.roles).to eq("admin")
+      User::ROLES.each do |role|
+        expect(user.send("#{role}?")).to be_true
+      end
+    end
+
+    it "multiple non-admin" do
+      user = FactoryGirl.create(:user, roles: @roles_without_admin.shuffle.join(" "))
+      expect(user.roles).to eq(@non_admin_roles)
+      expect(user.admin?).to be_false
+      @roles_without_admin.each do |role|
+        expect(user.send("#{role}?")).to be_true
+      end
+    end
+
+    it "single non-admin" do
+      user = FactoryGirl.create(:user, roles: @non_admin_role)
+      expect(user.roles).to eq(@non_admin_role)
+      expect(user.admin?).to be_false
+      @roles_without_admin.each do |role|
+        expect(user.send("#{role}?")).to eq(role == @non_admin_role)
+      end
     end
   end
 
@@ -93,6 +141,33 @@ describe User do
       @user.save
       expect { User.authenticate!(@addr, @pass) }.to raise_error("account_disabled")
       expect { User.authenticate!(@addr, "bad") }.to raise_error("account_disabled")
+    end
+  end
+
+  context "#guest?" do
+    it "should be false" do
+      user = FactoryGirl.create(:user)
+      expect(user.guest?).to be_false
+    end
+  end
+end
+
+describe User::Guest do
+  before(:each) do
+    @user = User::Guest.new
+  end
+
+  context "roles" do
+    it "should not respond to any roles" do
+      User::ROLES.each do |role|
+        expect(@user.send("#{role}?")).to be_false
+      end
+    end
+  end
+  
+  context "#guest?" do
+    it "should be true" do
+      expect(@user.guest?).to be_true
     end
   end
 end
