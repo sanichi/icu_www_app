@@ -40,6 +40,9 @@ module ICU
         end
         params.delete(:season_ticket)
         begin
+          case params[:id]
+          when 1 then params[:roles] = "admin"
+          end
           User.create!(params)
           puts "created User #{params[:id]}, #{params[:email]}"
         rescue => e

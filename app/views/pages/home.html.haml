@@ -2,8 +2,8 @@
   .col-xs-12.text-center
     %h2 Under Construction
 .row
-  .col-sm-2
-  .col-sm-8
+  .col-sm-3
+  .col-sm-6
     %p
       This will be the new web site for the ICU. There will be a transition period during which some functions
       will be available here and some on the
@@ -11,7 +11,7 @@
       until roughly the summer of 2014 when everything should have been moved over and the old site can be retired.
       The list below gives an indication of current progress.
     %ul
-      %li Users
+      %li= render partial: "todo", locals: { topic: "Users", items: {"sessions" => true, "logins" => true, "preferences" => false, "admin pages" => false} }
       %li English/Gaelic
       %li Players
       %li Help
