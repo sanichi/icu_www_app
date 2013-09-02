@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130821194340) do
+ActiveRecord::Schema.define(version: 20130902122830) do
+
+  create_table "logins", force: true do |t|
+    t.integer  "user_id"
+    t.string   "email"
+    t.string   "error"
+    t.string   "roles"
+    t.string   "ip",         limit: 39
+    t.datetime "created_at"
+  end
 
   create_table "players", force: true do |t|
     t.string   "first_name"

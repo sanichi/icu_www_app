@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   ROLES = %w[admin editor translator treasurer]
   SessionError = Class.new(RuntimeError)
 
+  has_many :logins
+
   before_validation :canonicalize_roles
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /@/ }
@@ -72,14 +74,25 @@ class User < ActiveRecord::Base
     Digest::MD5.hexdigest(rand(1000000).to_s + Time.now.to_s)
   end
 
-  def self.authenticate!(email, password)
+  def self.authenticate!(email, password, ip="127.0.0.1")
     user = User.find_by(email: email)
-    raise SessionError.new("invalid_details")      unless user
-    raise SessionError.new("unverified_email")     unless user.verified?
-    raise SessionError.new("account_disabled")     unless user.status_ok?
-    raise SessionError.new("subscription_expired") unless user.subscribed?
-    raise SessionError.new("invalid_details")      unless user.valid_password?(password)
-    user
+    self.add_login(ip, "invalid_details", email) unless user
+    user.add_login(ip, "unverified_email")       unless user.verified?
+    user.add_login(ip, "account_disabled")       unless user.status_ok?
+    user.add_login(ip, "subscription_expired")   unless user.subscribed?
+    user.add_login(ip, "invalid_details")        unless user.valid_password?(password)
+    user.add_login(ip)
+  end
+
+  def self.add_login(ip, error, email)
+    Login.create(ip: ip, email: email, error: error)
+    raise SessionError.new(error)
+  end
+
+  def add_login(ip, error=nil)
+    logins.create(ip: ip, error: error, roles: roles)
+    raise SessionError.new(error) if error
+    self
   end
 
   private

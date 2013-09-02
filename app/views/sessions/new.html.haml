@@ -1,14 +1,16 @@
+- content_for :title, t("session.sign_in")
+
 .row
   .col-sm-8.col-sm-offset-2
     = form_tag sessions_path, class: "form-horizontal", role: "form" do
       %fieldset
 
         .form-group
-          = label_tag t("user.email"), nil, class: "control-label col-sm-3"
+          = label_tag :email, t("user.email"), class: "control-label col-sm-3"
           .col-sm-5= email_field_tag :email, params[:email], class: "form-control"
 
         .form-group
-          = label_tag t("user.password"), nil, class: "control-label col-sm-3"
+          = label_tag :password, t("user.password"), class: "control-label col-sm-3"
           .col-sm-5= password_field_tag :password, nil, class: "form-control"
 
         %hr

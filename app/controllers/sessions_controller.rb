@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
 
   def create
     begin
-      user = User.authenticate!(params[:email], params[:password])
+      user = User.authenticate!(params[:email], params[:password], request.ip)
       session[:user_id] = user.id
       flash.notice = "#{t('session.signed_in_as')} #{user.email}"
       redirect_to home_path
