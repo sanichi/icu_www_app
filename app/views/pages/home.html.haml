@@ -5,17 +5,19 @@
   .col-sm-3
   .col-sm-6
     %p
-      This will be the new web site for the ICU. There will be a transition period during which some functions
-      will be available here and some on the
+      This will eventually be the new web site for the ICU. During a transition phase lasting from the August 2013 to
+      (roughly) June 2014 some functions will be available here and some on the
       = link_to "old site", "http://www.icu.ie"
-      until roughly the summer of 2014 when everything should have been moved over and the old site can be retired.
-      The list below gives an indication of current progress.
+      until everything is finally moved over and the old site can be retired.
+      Right now there's nothing much to get excited about here, but watch this space.
+    %p
+      The list below gives an indication of what's been done and what's still to do.
     %ul
-      %li= render partial: "todo", locals: { topic: "Users", items: {"sessions" => true, "logins" => true, "preferences" => false, "admin pages" => false} }
+      %li= render partial: "todo", locals: { topic: "Users", items: {sessions: true, logins: true, preferences: false, admin: false} }
       %li English/Gaelic
-      %li Players
-      %li Help
+      %li Members
       %li Shop
+      %li Help
       %li Images
       %li Calendar
       %li Games
@@ -23,4 +25,4 @@
       %li News
       %li Articles
       %li Juniors
-      %li Votes
+      %li Voting
