@@ -22,18 +22,11 @@ ActiveRecord::Schema.define(version: 20130902122830) do
     t.datetime "created_at"
   end
 
-  create_table "players", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "users", force: true do |t|
     t.string   "email"
+    t.string   "roles"
     t.string   "encrypted_password", limit: 32
     t.string   "salt",               limit: 32
-    t.string   "roles"
     t.string   "status",                        default: "OK"
     t.integer  "icu_id"
     t.date     "expires_on"
