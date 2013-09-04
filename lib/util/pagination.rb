@@ -6,11 +6,12 @@ module Util
       page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
       matches = matches.offset(per_page * (page - 1)) if page > 1
       matches = matches.limit(per_page)
-      Paginator.new(matches, params, path, per_page, page, count)
+      [:action, :controller, :button, :utf8].each { |key| params.delete(key) }
+      Pager.new(matches, params, path, per_page, page, count)
     end
   end
 
-  class Paginator
+  class Pager
     attr_reader :matches, :count
 
     def initialize(matches, params, path, per_page, page, count)
