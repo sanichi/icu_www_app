@@ -20,15 +20,23 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  icu: Irish Chess Union
+  ICU: ICU
+  icu_logo: ICU Logo
+  home: Home
+  search: Search
   cancel: Cancel
   delete: Delete
   edit: Edit
   save: Save
   show: Show
-  search: Search
-  icu: Irish Chess Union
-  ICU: ICU
-  icu_logo: ICU Logo
+  no_matches: No matches
+  pagination:
+    frst: first
+    next: next
+    prev: previous
+    last: last
+    of: of
   session:
     sign_in: Sign in
     sign_out: Sign out

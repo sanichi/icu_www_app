@@ -6,9 +6,11 @@
       %span.icon-bar
   .collapse.navbar-collapse.navbar-ex1-collapse
     %ul.nav.navbar-nav
-      %li{class: active("pages", "home")}= link_to "Home", home_path
+      %li{class: active("pages", "home")}= link_to t("home"), home_path
       - if can?(:manage, User)
         %li{class: active("admin/users")}= link_to "Users", admin_users_path
+      - if can?(:manage, Login)
+        %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
     %ul.nav.navbar-nav.navbar-right
       - text, path = current_user.guest? ? ["in", sign_in_path] : ["out", sign_out_path]
       %li{class: active("sessions")}= link_to t("session.sign_#{text}"), path

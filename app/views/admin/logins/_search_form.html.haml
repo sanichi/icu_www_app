@@ -1,0 +1,8 @@
+= form_tag admin_logins_path, method: :get, class: "form-inline", role: "form" do
+  .form-group
+    = label_tag :email, "Email", class: "sr-only"
+    = text_field_tag :email, params[:email], class: "form-control", placeholder: "Email", size: 15, type: "search"
+  .form-group
+    = label_tag :ip, "IP", class: "sr-only"
+    = text_field_tag :ip, params[:ip], class: "form-control", placeholder: "IP", size: 15, type: "search"
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

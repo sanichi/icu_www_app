@@ -1,0 +1,66 @@
+module Util
+  module Pagination
+    def paginate(matches, params, path, per_page=15)
+      count = matches.count
+      page = params[:page].to_i > 0 ? params[:page].to_i : 1
+      page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
+      matches = matches.offset(per_page * (page - 1)) if page > 1
+      matches = matches.limit(per_page)
+      Paginator.new(matches, params, path, per_page, page, count)
+    end
+  end
+
+  class Paginator
+    attr_reader :matches, :count
+
+    def initialize(matches, params, path, per_page, page, count)
+      @matches  = matches
+      @params   = params
+      @path     = path
+      @per_page = per_page
+      @page     = page
+      @count    = count
+    end
+    
+    def multi_page
+      @count > @per_page
+    end
+
+    def before_end
+      @page * @per_page < @count
+    end
+
+    def after_start
+      @page > 1
+    end
+
+    def frst_page
+      page_path(1)
+    end
+
+    def next_page
+      page_path(@page + 1)
+    end
+
+    def prev_page
+      page_path(@page - 1)
+    end
+    
+    def last_page
+      page_path(1 + (@count > 0 ? (@count - 1) / @per_page : 0))
+    end
+
+    def min_and_max
+      min = 1 + @per_page * (@page - 1)
+      max = @per_page * @page
+      max = @count if @count < max
+      min == max ? min.to_s : "#{min}-#{max}"
+    end
+
+    private
+
+    def page_path(page)
+      @path + "?" + @params.merge(page: page).to_query
+    end
+  end
+end
