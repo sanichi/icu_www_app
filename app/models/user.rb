@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
     matches = matches.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     matches = matches.where(status: User::OK) if params[:status] == "OK"
     matches = matches.where.not(status: User::OK) if params[:status] == "Not OK"
-    paginate(matches, params, path, 20)
+    paginate(matches, params, path)
   end
 
   def self.encrypt_password(password, salt)

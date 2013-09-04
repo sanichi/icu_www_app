@@ -1,12 +1,11 @@
 module Util
   module Pagination
-    def paginate(matches, params, path, per_page=15)
+    def paginate(matches, params, path, per_page=10)
       count = matches.count
       page = params[:page].to_i > 0 ? params[:page].to_i : 1
       page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
       matches = matches.offset(per_page * (page - 1)) if page > 1
       matches = matches.limit(per_page)
-      [:action, :controller, :button, :utf8].each { |key| params.delete(key) }
       Pager.new(matches, params, path, per_page, page, count)
     end
   end
@@ -61,7 +60,13 @@ module Util
     private
 
     def page_path(page)
-      @path + "?" + @params.merge(page: page).to_query
+      @path + "?" + query_params(page)
+    end
+    
+    def query_params(page)
+      params = @params.dup
+      [:action, :controller, :button, :utf8].each { |key| params.delete(key) }
+      params.merge(page: page).to_query
     end
   end
 end

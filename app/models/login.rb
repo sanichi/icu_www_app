@@ -12,6 +12,6 @@ class Login < ActiveRecord::Base
       like = "%#{params[:email]}%"
       matches = matches.where("users.email LIKE ? OR logins.email LIKE ?", like, like)
     end
-    paginate(matches, params, path, 20)
+    paginate(matches, params, path)
   end
 end
