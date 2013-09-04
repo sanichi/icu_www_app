@@ -3,8 +3,8 @@ class Admin::UsersController < ApplicationController
   authorize_resource
 
   def index
-    @users = User.search(params)
-    flash.now[:warning] = "No matching users found" if @users.size == 0
+    @users = User.search(params, admin_users_path)
+    flash.now[:warning] = t("no_matches") if @users.count == 0
   end
 
   def show

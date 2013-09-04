@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  extend Util::Pagination
   attr_accessor :password
 
   OK = "OK"
@@ -58,12 +59,12 @@ class User < ActiveRecord::Base
     end
   end
 
-  def self.search(params)
+  def self.search(params, path)
     matches = order(:email)
     matches = matches.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     matches = matches.where(status: User::OK) if params[:status] == "OK"
     matches = matches.where.not(status: User::OK) if params[:status] == "Not OK"
-    matches
+    paginate(matches, params, path, 20)
   end
 
   def self.encrypt_password(password, salt)

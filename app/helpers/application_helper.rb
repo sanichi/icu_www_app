@@ -32,6 +32,6 @@ module ApplicationHelper
     links.push(link_to t("pagination.next"), pager.next_page) if pager.before_end
     links.push(link_to t("pagination.prev"), pager.prev_page) if pager.after_start
     links.push(link_to t("pagination.last"), pager.last_page) if pager.before_end
-    raw "#{pager.min_and_max} #{t("pagination.of")} #{pager.count} #{links.join(" ∙ ")}"
+    raw "#{pager.min_and_max} #{t('pagination.of')} #{pager.count} #{links.size > 0 ? '∙' : ''} #{links.join(' ∙ ')}"
   end
 end
