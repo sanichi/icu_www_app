@@ -15,7 +15,11 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    redirect_to sign_in_path, notice: t("session.signed_out")
+    if session[:user_id]
+      session[:user_id] = nil
+      redirect_to sign_in_path, notice: t("session.signed_out")
+    else
+      redirect_to sign_in_path
+    end
   end
 end

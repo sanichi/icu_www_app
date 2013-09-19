@@ -40,3 +40,19 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+# Create and login a user with a given role or roles.
+def login(user_or_roles=nil)
+  user, roles = user_or_roles.instance_of?(User) ? [user_or_roles, nil] : [nil, user_or_roles]
+  user ||= FactoryGirl.create(:user, roles: roles)
+  visit sign_out_path
+  page.fill_in I18n.t("user.email"), with: user.email
+  page.fill_in I18n.t("user.password"), with: "password"
+  click_button I18n.t("session.sign_in")
+  user
+end
+
+# Logout the current user.
+def logout
+  visit sign_out_path
+end
