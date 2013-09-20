@@ -8,14 +8,13 @@ class User < ActiveRecord::Base
 
   has_many :logins
 
-  before_validation :canonicalize_roles
+  before_validation :canonicalize_roles, :update_password_if_present
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /@/ }
   validates :encrypted_password, :expires_on, :status, presence: true
   validates :salt, length: { is: 32 }
   validates :icu_id, numericality: { only_integer: true, greater_than: 0 }
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
-  validate  :update_password_if_present
 
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
@@ -102,8 +101,8 @@ class User < ActiveRecord::Base
     if password.present?
       if password.length >= 6
         if password.match(/\d/)
-          salt = User.random_salt
-          encrypted_password = User.encrypt_password(password, salt)
+          self.salt = User.random_salt
+          self.encrypted_password = User.encrypt_password(password, salt)
         else
           errors.add :password, "password should contain at least 1 digit"
         end

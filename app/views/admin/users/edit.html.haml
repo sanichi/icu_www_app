@@ -6,18 +6,18 @@
 
         .form-group{class: @user.errors[:status].any? ? "has-error" : ""}
           = f.label :status, class: "control-label col-sm-3"
-          .col-sm-5= f.text_field :status, class: "form-control"
-          .col-sm-6.help-block= @user.errors.messages[:status].first
+          .col-sm-4= f.text_field :status, class: "form-control"
+          .col-sm-5.help-block= @user.errors.messages[:status].first
 
         .form-group{class: @user.errors[:password].any? ? "has-error" : ""}
           = f.label :password, class: "control-label col-sm-3"
-          .col-sm-5= f.password_field :password, class: "form-control"
-          .col-sm-6.help-block= @user.errors.messages[:password].first
+          .col-sm-4= f.password_field :password, class: "form-control", value: ""
+          .col-sm-5.help-block= @user.errors.messages[:password].first
 
         .form-group{class: @user.errors[:roles].any? ? "has-error" : ""}
           = f.label :roles, class: "control-label col-sm-3"
-          .col-sm-5= f.select :roles, admin_user_roles(@user.roles), {}, class: "form-control", multiple: true
-          .col-sm-6.help-block= @user.errors.messages[:roles].first
+          .col-sm-4= f.select :roles, admin_user_roles(@user.roles), {}, class: "form-control", multiple: true
+          .col-sm-5.help-block= @user.errors.messages[:roles].first
 
         %hr
         = f.submit "Save", class: "btn btn-primary"

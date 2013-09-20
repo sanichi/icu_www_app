@@ -38,3 +38,56 @@ feature "Authorization for users" do
     end
   end
 end
+
+feature "Editing users" do
+  given!(:user)        { FactoryGirl.create(:user) }
+  given(:success)      { "div.alert-success" }
+  given(:failure)      { "div.help-block" }
+  given(:signed_in_as) { I18n.t("session.signed_in_as") }
+  given(:updated)      { "User was successfully updated" }
+
+  scenario "change a user's password" do
+    old_encrypted_password = user.encrypted_password
+    login("admin")
+    visit admin_users_path
+    click_link user.email
+    click_link "Edit"
+
+    new_password = "blah"
+    page.fill_in "Password", with: new_password
+    click_button "Save"
+    expect(page).to have_css(failure, text: "password minimum length is 6")
+    user.reload
+    expect(user.encrypted_password).to eq(old_encrypted_password)
+
+    new_password = "blahblah"
+    page.fill_in "Password", with: new_password
+    click_button "Save"
+    expect(page).to have_css(failure, text: "password should contain at least 1 digit")
+    user.reload
+    expect(user.encrypted_password).to eq(old_encrypted_password)
+
+    new_password = "blah123"
+    page.fill_in "Password", with: new_password
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user.encrypted_password).not_to eq(old_encrypted_password)
+
+    login(user, new_password)
+    expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
+  end
+
+  scenario "change a user's status" do
+    new_status = "banned for being an asshole"
+    login("admin")
+    visit admin_users_path
+    click_link user.email
+    click_link "Edit"
+    page.fill_in "Status", with: new_status
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user.status).to eq(new_status)
+  end
+end
