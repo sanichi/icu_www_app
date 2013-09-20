@@ -79,11 +79,19 @@ feature "Editing users" do
   end
 
   scenario "change a user's status" do
-    new_status = "banned for being an asshole"
     login("admin")
     visit admin_users_path
     click_link user.email
     click_link "Edit"
+
+    new_status = ""
+    page.fill_in "Status", with: new_status
+    click_button "Save"
+    expect(page).to have_css(failure, text: "can't be blank")
+    user.reload
+    expect(user.status).not_to eq(new_status)
+
+    new_status = "banned for being an asshole"
     page.fill_in "Status", with: new_status
     click_button "Save"
     expect(page).to have_css(success, text: updated)
