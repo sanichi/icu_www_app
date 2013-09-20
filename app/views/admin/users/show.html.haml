@@ -29,4 +29,4 @@
         %td
           %time{datetime: @user.updated_at.to_s(:html5)}= @user.updated_at.to_s(:nosec)
     = link_to "Edit", edit_admin_user_path(@user), class: "btn btn-primary"
-    = link_to_function "Back", "history.back()", class: "btn btn-default"
+    = link_to "Back", "#", "data-back" => "", class: "btn btn-default"
