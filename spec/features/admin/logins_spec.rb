@@ -4,7 +4,7 @@ feature "Authorization for logins" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("user.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "admin users can view the logins list" do

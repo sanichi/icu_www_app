@@ -26,7 +26,21 @@ class User < ActiveRecord::Base
   end
 
   def verified?
-    verified_at
+    verified_at ? true : false
+  end
+  
+  def verify
+    verified? ? "yes" : "no"
+  end
+
+  def verify=(action)
+    case action
+    when "yes"
+      self.verified_at = Time.now unless verified?
+    when "no"
+      self.verified_at = nil if verified?
+    end
+    verify
   end
 
   def subscribed?
@@ -103,6 +117,18 @@ class User < ActiveRecord::Base
 
   private
 
+  def canonicalize_roles
+    if roles.present?
+      self.roles = roles.scan(/\w+/) unless roles.is_a?(Array)
+      if roles.include?("admin")
+        self.roles = "admin"
+      else
+        self.roles = roles.select{ |r| User::ROLES.include?(r) }.sort.join(" ")
+      end
+    end
+    self.roles = nil if roles.blank?
+  end
+
   def update_password_if_present
     if password.present?
       if password.length >= MINIMUM_PASSWORD_LENGTH
@@ -116,17 +142,5 @@ class User < ActiveRecord::Base
         errors.add :password, I18n.t("errors.attributes.password.length", minimum: MINIMUM_PASSWORD_LENGTH)
       end
     end
-  end
-
-  def canonicalize_roles
-    if roles.present?
-      self.roles = roles.scan(/\w+/) unless roles.is_a?(Array)
-      if roles.include?("admin")
-        self.roles = "admin"
-      else
-        self.roles = roles.select{ |r| User::ROLES.include?(r) }.sort.join(" ")
-      end
-    end
-    self.roles = nil if roles.blank?
   end
 end

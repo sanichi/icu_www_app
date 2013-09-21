@@ -34,6 +34,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:password, :expiry, :status, roles: [])
+    params.require(:user).permit(:password, :expiry, :status, :verify, roles: [])
   end
 end

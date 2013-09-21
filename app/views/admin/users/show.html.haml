@@ -22,7 +22,8 @@
       %tr
         %th Verified
         %td
-          %time{datetime: @user.verified_at.to_s(:html5)}= @user.verified_at.to_s(:nosec)
+          - if @user.verified?
+            %time{datetime: @user.verified_at.to_s(:html5)}= @user.verified_at.to_s(:nosec)
       %tr
         %th Created
         %td

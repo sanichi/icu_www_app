@@ -3,10 +3,10 @@ require 'spec_helper'
 feature "Authorization for users" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
   given(:user)            { FactoryGirl.create(:user) }
-  given(:paths)           { [admin_users_path, admin_user_path(user.id), edit_admin_user_path(user.id)] }
+  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("user.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "the admin role can manage users" do
@@ -41,6 +41,7 @@ end
 
 feature "Editing users" do
   given!(:user)        { FactoryGirl.create(:user) }
+  given(:edit_path)    { edit_admin_user_path(user) }
   given(:success)      { "div.alert-success" }
   given(:failure)      { "div.help-block" }
   given(:signed_in_as) { I18n.t("session.signed_in_as") }
@@ -50,10 +51,8 @@ feature "Editing users" do
 
   scenario "change a user's password" do
     old_encrypted_password = user.encrypted_password
-    login("admin")
-    visit admin_users_path
-    click_link user.email
-    click_link "Edit"
+    login "admin"
+    visit edit_path
 
     new_password = "blah"
     page.fill_in "Password", with: new_password
@@ -76,17 +75,16 @@ feature "Editing users" do
     user.reload
     expect(user.encrypted_password).not_to eq(old_encrypted_password)
 
-    login(user, new_password)
+    login user, new_password
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
   end
 
   scenario "change a user's roles" do
-    login("admin")
-    visit admin_users_path
-    click_link user.email
     expect(user.roles).to be_nil
 
-    click_link "Edit"
+    login "admin"
+    visit edit_path
+
     page.select "Editor", from: "Roles"
     click_button "Save"
     expect(page).to have_css(success, text: updated)
@@ -101,7 +99,7 @@ feature "Editing users" do
     expect(page).to have_css(success, text: updated)
     user.reload
     expect(user.roles).to eq("translator treasurer")
-    
+
     click_link "Edit"
     page.unselect "Translator", from: "Roles"
     page.unselect "Treasurer", from: "Roles"
@@ -112,10 +110,8 @@ feature "Editing users" do
   end
 
   scenario "change a user's status" do
-    login("admin")
-    visit admin_users_path
-    click_link user.email
-    click_link "Edit"
+    login "admin"
+    visit edit_path
 
     new_status = ""
     page.fill_in "Status", with: new_status
@@ -130,5 +126,28 @@ feature "Editing users" do
     expect(page).to have_css(success, text: updated)
     user.reload
     expect(user.status).to eq(new_status)
+  end
+
+  scenario "verifying a user" do
+    expect(user.verified_at.to_i).not_to be_within(1).of(Time.now.to_i)
+
+    login "admin"
+    visit edit_path
+    expect(page).to have_no_field("Verify")
+
+    user.verified_at = nil
+    user.save
+    visit edit_path
+    expect(page).to have_field("Verify")
+
+    check "Verify"
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user).to be_verified
+    expect(user.verified_at.to_i).to be_within(1).of(Time.now.to_i)
+
+    visit edit_path
+    expect(page).to have_no_field("Verify")
   end
 end

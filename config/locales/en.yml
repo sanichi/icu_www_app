@@ -54,7 +54,6 @@ en:
       editor: Editor
       translator: Translator
       treasurer: Treasurer
-    unauthorized: You are not authorized to view this page
   player:
     new: New Player
     edit: Edit Player

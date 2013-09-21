@@ -19,6 +19,11 @@
           .col-sm-4= f.select :roles, admin_user_roles(@user.roles), {}, class: "form-control", multiple: true
           .col-sm-5.help-block= @user.errors.messages[:roles].first
 
+        - unless @user.verified?
+          .form-group
+            = f.label :verify, class: "control-label col-sm-3"
+            .col-sm-4= f.check_box :verify, { class: "form-control" }, "yes", "no"
+
         %hr
         = f.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", [:admin, @user], class: "btn btn-default"
