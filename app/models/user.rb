@@ -32,6 +32,11 @@ class User < ActiveRecord::Base
   def subscribed?
     not expires_on.past?
   end
+  
+  def season_ticket
+    t = SeasonTicket.new(icu_id, expires_on)
+    t.valid? ? t.ticket : t.error
+  end
 
   ROLES.each do |role|
     define_method "#{role}?" do

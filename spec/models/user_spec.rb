@@ -150,6 +150,17 @@ describe User do
       expect(user.guest?).to be_false
     end
   end
+
+  context "#season_ticket" do
+    it "should give correct response" do
+      user = FactoryGirl.create(:user)
+      ticket = user.season_ticket
+      expect(ticket).to match(/\A\w{4,}\z/)
+      object = SeasonTicket.new(ticket)
+      expect(object.icu_id).to eq(user.icu_id)
+      expect(object.expires_on).to eq(user.expires_on.to_s)
+    end
+  end
 end
 
 describe User::Guest do
