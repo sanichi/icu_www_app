@@ -13,6 +13,7 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+# General configuration.
 module IcuWwwApp
   class Application < Rails::Application
     # Express preference for double quoted attributes (single quoted is HAML's default).
@@ -20,5 +21,8 @@ module IcuWwwApp
 
     # Autoload these directories.
     config.autoload_paths += %W(#{Rails.root}/lib)
+    
+    # Autoload nested locales for the simple backend.
+    config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.yml")]
   end
 end

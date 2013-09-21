@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
 
   OK = "OK"
   ROLES = %w[admin editor translator treasurer]
+  MINIMUM_PASSWORD_LENGTH = 6
   SessionError = Class.new(RuntimeError)
 
   has_many :logins
@@ -99,15 +100,15 @@ class User < ActiveRecord::Base
 
   def update_password_if_present
     if password.present?
-      if password.length >= 6
+      if password.length >= MINIMUM_PASSWORD_LENGTH
         if password.match(/\d/)
           self.salt = User.random_salt
           self.encrypted_password = User.encrypt_password(password, salt)
         else
-          errors.add :password, "password should contain at least 1 digit"
+          errors.add :password, I18n.t("errors.attributes.password.digits")
         end
       else
-        errors.add :password, "password minimum length is 6"
+        errors.add :password, I18n.t("errors.attributes.password.length", minimum: MINIMUM_PASSWORD_LENGTH)
       end
     end
   end

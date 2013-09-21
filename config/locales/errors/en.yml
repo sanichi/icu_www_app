@@ -1,0 +1,6 @@
+en:
+  errors:
+    attributes:
+      password:
+        length: "minimum length is %{minimum}"
+        digits: "should contain at least 1 digit"

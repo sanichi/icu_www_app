@@ -45,6 +45,8 @@ feature "Editing users" do
   given(:failure)      { "div.help-block" }
   given(:signed_in_as) { I18n.t("session.signed_in_as") }
   given(:updated)      { "User was successfully updated" }
+  given(:min_length)   { I18n.t("errors.attributes.password.length", minimum: User::MINIMUM_PASSWORD_LENGTH) }
+  given(:no_digits)    { I18n.t("errors.attributes.password.digits") }
 
   scenario "change a user's password" do
     old_encrypted_password = user.encrypted_password
@@ -56,18 +58,18 @@ feature "Editing users" do
     new_password = "blah"
     page.fill_in "Password", with: new_password
     click_button "Save"
-    expect(page).to have_css(failure, text: "password minimum length is 6")
+    expect(page).to have_css(failure, text: min_length)
     user.reload
     expect(user.encrypted_password).to eq(old_encrypted_password)
 
     new_password = "blahblah"
     page.fill_in "Password", with: new_password
     click_button "Save"
-    expect(page).to have_css(failure, text: "password should contain at least 1 digit")
+    expect(page).to have_css(failure, text: no_digits)
     user.reload
     expect(user.encrypted_password).to eq(old_encrypted_password)
 
-    new_password = "blah123"
+    new_password = "blah1234"
     page.fill_in "Password", with: new_password
     click_button "Save"
     expect(page).to have_css(success, text: updated)

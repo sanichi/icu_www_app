@@ -34,3 +34,17 @@ IcuWwwApp::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 end
+
+# In the test environment we want missing translations to raise exceptions.
+module I18n
+  class JustRaiseExceptionHandler < ExceptionHandler
+    def call(exception, locale, key, options)
+      if exception.is_a?(MissingTranslation) && key.to_s != "i18n.plural.rule"
+        raise exception.to_exception
+      else
+        super
+      end
+    end
+  end
+end
+I18n.exception_handler = I18n::JustRaiseExceptionHandler.new
