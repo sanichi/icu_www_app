@@ -80,6 +80,37 @@ feature "Editing users" do
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
   end
 
+  scenario "change a user's roles" do
+    login("admin")
+    visit admin_users_path
+    click_link user.email
+    expect(user.roles).to be_nil
+
+    click_link "Edit"
+    page.select "Editor", from: "Roles"
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user.roles).to eq("editor")
+
+    click_link "Edit"
+    page.unselect "Editor", from: "Roles"
+    page.select "Translator", from: "Roles"
+    page.select "Treasurer", from: "Roles"
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user.roles).to eq("translator treasurer")
+    
+    click_link "Edit"
+    page.unselect "Translator", from: "Roles"
+    page.unselect "Treasurer", from: "Roles"
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+    user.reload
+    expect(user.roles).to be_nil
+  end
+
   scenario "change a user's status" do
     login("admin")
     visit admin_users_path
