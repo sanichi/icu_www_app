@@ -151,3 +151,77 @@ feature "Editing users" do
     expect(page).to have_no_field("Verify")
   end
 end
+  
+feature "Search users" do
+  before(:each) do
+    FactoryGirl.create(:user)
+    FactoryGirl.create(:user, roles: "editor")
+    FactoryGirl.create(:user, roles: "translator treasurer")
+    FactoryGirl.create(:user, roles: "translator")
+    FactoryGirl.create(:user, verified_at: nil)
+    FactoryGirl.create(:user, expires_on: Date.today.years_ago(2).end_of_year)
+    FactoryGirl.create(:user, expires_on: Date.today.years_ago(3).end_of_year)
+    FactoryGirl.create(:user, expires_on: Date.today.years_since(10).end_of_year)
+    FactoryGirl.create(:user, status: "Tit")
+    FactoryGirl.create(:user, status: "Twat")
+    @admin = login("admin")
+    @total = User.count
+    @xpath = "//table[@id='results']/tbody/tr"
+    visit admin_users_path
+  end
+
+  scenario "all users" do
+    expect(page).to have_xpath(@xpath, count: @total)
+  end
+
+  scenario "email" do
+    page.fill_in "Email", with: @admin.email
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+  end
+
+  scenario "expired" do
+    page.select "Active", from: "Expiry"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: @total - 2)
+    page.select "Expired", from: "Expiry"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 2)
+    page.select "Extended", from: "Expiry"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+  end
+
+  scenario "status" do
+    page.select "OK", from: "Status"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: @total - 2)
+    page.select "Not OK", from: "Status"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, 2)
+  end
+
+  scenario "verified" do
+    page.select "Verified", from: "Verified"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: @total - 1)
+    page.select "Unverified", from: "Verified"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+  end
+
+  scenario "roles" do
+    page.select "Some Role", from: "Role"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: @total - 7)
+    page.select "No Role", from: "Role"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 7)
+    page.select "Translator", from: "Role"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 2)
+    page.select "Administrator", from: "Role"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+  end
+end
