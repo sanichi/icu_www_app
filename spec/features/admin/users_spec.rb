@@ -225,3 +225,22 @@ feature "Search users" do
     expect(page).to have_xpath(@xpath, count: 1)
   end
 end
+
+feature "View user" do
+  before(:each) do
+    FactoryGirl.create(:user)
+    @admin = login("admin")
+    @xpath = "//table[@id='results']/tbody/tr"
+    visit admin_users_path
+  end
+
+  scenario "back button" do
+    expect(page).to have_xpath(@xpath, count: 2)
+    page.select "Admin", from: "Role"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+    page.click_link @admin.email
+    click_link "Back"
+    expect(page).to have_xpath(@xpath, count: 1)
+  end
+end
