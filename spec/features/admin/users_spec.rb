@@ -234,7 +234,7 @@ feature "View user" do
     visit admin_users_path
   end
 
-  scenario "back button" do
+  scenario "clicking the back button" do
     expect(page).to have_xpath(@xpath, count: 2)
     page.select "Admin", from: "Role"
     click_button "Search"
