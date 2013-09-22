@@ -161,6 +161,14 @@ describe User do
       expect(object.expires_on).to eq(user.expires_on.to_s)
     end
   end
+
+  context "#human_roles" do
+    it "should translate roles" do
+      expect(FactoryGirl.create(:user).human_roles).to eq("")
+      expect(FactoryGirl.create(:user, roles: "admin").human_roles).to eq("Administrator")
+      expect(FactoryGirl.create(:user, roles: "treasurer translator").human_roles).to eq("Translator Treasurer")
+    end
+  end
 end
 
 describe User::Guest do

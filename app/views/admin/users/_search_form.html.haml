@@ -3,6 +3,15 @@
     = label_tag :email, "Email", class: "sr-only"
     = text_field_tag :email, params[:email], class: "form-control", placeholder: "Email", size: 10, type: "search"
   .form-group
+    = label_tag :expiry, "Expiry", class: "sr-only"
+    = select_tag :expiry, admin_user_search_expiry(params[:expiry]), class: "form-control"
+  .form-group
     = label_tag :status, "Status", class: "sr-only"
     = select_tag :status, admin_user_status(params[:status]), class: "form-control"
+  .form-group
+    = label_tag :verify, "Verified", class: "sr-only"
+    = select_tag :verify, admin_user_search_verify(params[:verify]), class: "form-control"
+  .form-group
+    = label_tag :role, "Role", class: "sr-only"
+    = select_tag :role, admin_user_search_role(params[:role]), class: "form-control"
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

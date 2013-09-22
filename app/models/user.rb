@@ -57,6 +57,13 @@ class User < ActiveRecord::Base
       roles.present? && (roles.include?(role) || roles.include?("admin"))
     end
   end
+  
+  def human_roles(options={})
+    return "" if roles.blank?
+    roles.split(" ").map do |role|
+      ROLES.include?(role) ? I18n.t("user.role.#{role}", options) : role
+    end.join(" ")
+  end
 
   def guest?
     false
@@ -83,6 +90,20 @@ class User < ActiveRecord::Base
     matches = matches.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     matches = matches.where(status: User::OK) if params[:status] == "OK"
     matches = matches.where.not(status: User::OK) if params[:status] == "Not OK"
+    case
+    when params[:role] == "some"       then matches = matches.where("roles IS NOT NULL")
+    when params[:role] == "none"       then matches = matches.where("roles IS NULL")
+    when ROLES.include?(params[:role]) then matches = matches.where("roles LIKE ?", "%#{params[:role]}%")
+    end
+    case params[:expiry]
+    when "Active"   then matches = matches.where("expires_on >= ?", Date.today.to_s)
+    when "Expired"  then matches = matches.where("expires_on <  ?", Date.today.to_s)
+    when "Extended" then matches = matches.where("expires_on >= ?", Date.today.years_since(2).end_of_year)
+    end
+    case params[:verify]
+    when "Verified"   then matches = matches.where("verified_at IS NOT NULL")
+    when "Unverified" then matches = matches.where(verified_at: nil)
+    end
     paginate(matches, params, path)
   end
 

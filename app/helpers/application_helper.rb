@@ -12,7 +12,24 @@ module ApplicationHelper
   end
 
   def admin_user_roles(selected)
-    options_for_select User::ROLES.map { |r| [t("user.role.#{r}"), r] }, selected.try(:split)
+    options_for_select User::ROLES.map { |r| [t("user.role.#{r}", locale: "en"), r] }, selected.try(:split)
+  end
+
+  def admin_user_search_role(selected)
+    choices = []
+    choices << ["Any Role",   "any"]
+    choices << ["Some Role", "some"]
+    choices << ["No Role",   "none"]
+    choices.concat(User::ROLES.map { |r| [t("user.role.#{r}", locale: "en"), r] })
+    options_for_select choices, selected
+  end
+
+  def admin_user_search_expiry(selected)
+    options_for_select(["Any Expiry", "Active", "Expired", "Extended"], selected)
+  end
+
+  def admin_user_search_verify(selected)
+    options_for_select(["Any Verified", "Verified", "Unverified"], selected)
   end
   
   def flash_style(name)

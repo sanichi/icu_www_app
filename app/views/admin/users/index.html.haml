@@ -1,16 +1,22 @@
 .row
-  .col-sm-8.col-sm-offset-2
+  .col-sm-10.col-sm-offset-1
     = render "utils/search_panel", form: "admin/users/search_form", title: "Users"
     - if @users.count > 0
       %table{class: "table table-bordered table-striped table-condensed"}
         %thead
           %tr
             %th Email
-            %th Expires
+            %th{class: "text-center"} E
+            %th{class: "text-center"} S
+            %th{class: "text-center"} V
+            %th Roles
         %tbody
           - @users.matches.each do |user|
             %tr
               %td= link_to user.email, [:admin, user]
-              %td
+              %td{class: "text-center"}
                 %date= user.expires_on.year
-          = render "utils/pagination_links", pager: @users, columns: 2
+              %td{class: "text-center"}= user.status_ok? ? "✔" : "✘"
+              %td{class: "text-center"}= user.verified? ? "✔" : "✘"
+              %td= user.human_roles
+          = render "utils/pagination_links", pager: @users, columns: 5
