@@ -5,4 +5,8 @@ class Admin::LoginsController < ApplicationController
     @logins = Login.search(params, admin_logins_path)
     flash.now[:warning] = t("no_matches") if @logins.count == 0
   end
+
+  def show
+    @login = Login.find(params[:id])
+  end
 end

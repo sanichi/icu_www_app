@@ -116,12 +116,14 @@ class User < ActiveRecord::Base
   end
 
   def self.authenticate!(email, password, ip="127.0.0.1")
+    raise SessionError.new("enter_email") if email.blank?
+    raise SessionError.new("enter_password") if password.blank?
     user = User.find_by(email: email)
-    self.add_login(ip, "invalid_details", email) unless user
-    user.add_login(ip, "unverified_email")       unless user.verified?
-    user.add_login(ip, "account_disabled")       unless user.status_ok?
-    user.add_login(ip, "subscription_expired")   unless user.subscribed?
-    user.add_login(ip, "invalid_details")        unless user.valid_password?(password)
+    self.add_login(ip, "invalid_email", email) unless user
+    user.add_login(ip, "unverified_email")     unless user.verified?
+    user.add_login(ip, "account_disabled")     unless user.status_ok?
+    user.add_login(ip, "subscription_expired") unless user.subscribed?
+    user.add_login(ip, "invalid_password")     unless user.valid_password?(password)
     user.add_login(ip)
   end
 
@@ -131,7 +133,7 @@ class User < ActiveRecord::Base
   end
 
   def add_login(ip, error=nil)
-    logins.create(ip: ip, error: error, roles: roles)
+    logins.create(ip: ip, email: email, error: error, roles: roles)
     raise SessionError.new(error) if error
     self
   end

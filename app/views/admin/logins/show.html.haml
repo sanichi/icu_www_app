@@ -1,0 +1,22 @@
+.row
+  .col-sm-6.col-sm-offset-3
+    %table.table.table-bordered
+      %tr
+        %th User
+        %td= link_to @login.user.email, [:admin, @login.user] if @login.user
+      %tr
+        %th Email
+        %td= @login.email
+      %tr
+        %th Time
+        %td= @login.created_at.to_s(:db)
+      %tr
+        %th IP
+        %td= @login.ip
+      %tr
+        %th Roles
+        %td= @login.roles
+      %tr
+        %th Error
+        %td= @login.error
+    = link_to "Back", :back, class: "btn btn-default"

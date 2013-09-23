@@ -29,7 +29,7 @@ feature "Sessions" do
     expect(page).to have_title(I18n.t("icu"))
     expect(page).to have_css("div.alert-success", text: I18n.t("session.signed_in_as"))
     expect(Login.count).to eq(1)
-    expect(user.logins.where(error: nil, email: nil, ip: ip, roles: nil).count).to eq(1)
+    expect(user.logins.where(ip: ip, email: user.email, roles: nil, error: nil).count).to eq(1)
     click_link "Sign out"
     expect(page).to have_title(sign_in_title)
     expect(page).to have_xpath("//form//input[@name='email']")
@@ -41,9 +41,9 @@ feature "Sessions" do
     page.fill_in password_text, with: "password"
     click_button sign_in_button
     expect(page).to have_title(sign_in_title)
-    expect(page).to have_css("div.alert-danger", text: I18n.t("session.invalid_details"))
+    expect(page).to have_css("div.alert-danger", text: I18n.t("session.invalid_email"))
     expect(Login.count).to eq(1)
-    expect(Login.where(user_id: nil, email: bad_email, error: "invalid_details", ip: ip, roles: nil).count).to eq(1)
+    expect(Login.where(ip: ip, user_id: nil, email: bad_email, error: "invalid_email", roles: nil).count).to eq(1)
   end
 
   scenario "entering an invalid password" do
@@ -51,9 +51,9 @@ feature "Sessions" do
     page.fill_in password_text, with: bad_password
     click_button sign_in_button
     expect(page).to have_title(sign_in_title)
-    expect(page).to have_css("div.alert-danger", text: I18n.t("session.invalid_details"))
+    expect(page).to have_css("div.alert-danger", text: I18n.t("session.invalid_password"))
     expect(Login.count).to eq(1)
-    expect(user.logins.where(email: nil, error: "invalid_details", ip: ip, roles: nil).count).to eq(1)
+    expect(user.logins.where(ip: ip, email: user.email, roles: nil, error: "invalid_password").count).to eq(1)
   end
 
   scenario "the user's subscription has expired" do
@@ -64,7 +64,7 @@ feature "Sessions" do
     page.should have_title(sign_in_title)
     page.should have_selector("div.alert-danger", text: I18n.t("session.subscription_expired"))
     expect(Login.count).to eq(1)
-    expect(user.logins.where(email: nil, error: "subscription_expired", ip: ip, roles: nil).count).to eq(1)
+    expect(user.logins.where(ip: ip, email: user.email, roles: nil, error: "subscription_expired").count).to eq(1)
   end
 
   it "recording the user's current role" do

@@ -42,7 +42,10 @@ en:
     sign_out: Sign out
     signed_in_as: Signed in as
     signed_out: Signed out!
-    invalid_details: Invalid email or password
+    enter_email: Please enter an email
+    enter_password: Please enter a password
+    invalid_email: Invalid email or password
+    invalid_password: Invalid email or password
     unverified_email: Unverified email
     account_disabled: Account disabled
     subscription_expired: Subscription expired

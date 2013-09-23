@@ -1,8 +1,17 @@
 = form_tag admin_logins_path, method: :get, class: "form-inline", role: "form" do
   .form-group
+    = label_tag :first_name, "Last Name", class: "sr-only"
+    = text_field_tag :last_name, params[:last_name], class: "form-control", placeholder: "Last name", size: 10, type: "search"
+  .form-group
+    = label_tag :first_name, "First Name", class: "sr-only"
+    = text_field_tag :first_name, params[:first_name], class: "form-control", placeholder: "First name", size: 10, type: "search"
+  .form-group
     = label_tag :email, "Email", class: "sr-only"
-    = text_field_tag :email, params[:email], class: "form-control", placeholder: "Email", size: 15, type: "search"
+    = text_field_tag :email, params[:email], class: "form-control", placeholder: "Email", size: 10, type: "search"
   .form-group
     = label_tag :ip, "IP", class: "sr-only"
-    = text_field_tag :ip, params[:ip], class: "form-control", placeholder: "IP", size: 15, type: "search"
+    = text_field_tag :ip, params[:ip], class: "form-control", placeholder: "IP", size: 10, type: "search"
+  .form-group
+    = label_tag :result, "Result", class: "sr-only"
+    = select_tag :result, result_search_menu(params[:result]), class: "form-control"
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

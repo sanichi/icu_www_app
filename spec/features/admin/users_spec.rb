@@ -51,7 +51,7 @@ feature "Editing users" do
 
   scenario "change a user's password" do
     old_encrypted_password = user.encrypted_password
-    login "admin"
+    login("admin")
     visit edit_path
 
     new_password = "blah"
@@ -75,14 +75,14 @@ feature "Editing users" do
     user.reload
     expect(user.encrypted_password).not_to eq(old_encrypted_password)
 
-    login user, new_password
+    login(user, password: new_password)
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
   end
 
   scenario "change a user's roles" do
     expect(user.roles).to be_nil
 
-    login "admin"
+    login("admin")
     visit edit_path
 
     page.select "Editor", from: "Roles"
@@ -110,7 +110,7 @@ feature "Editing users" do
   end
 
   scenario "change a user's status" do
-    login "admin"
+    login("admin")
     visit edit_path
 
     new_status = ""
@@ -131,7 +131,7 @@ feature "Editing users" do
   scenario "verifying a user" do
     expect(user.verified_at.to_i).not_to be_within(1).of(Time.now.to_i)
 
-    login "admin"
+    login("admin")
     visit edit_path
     expect(page).to have_no_field("Verify")
 

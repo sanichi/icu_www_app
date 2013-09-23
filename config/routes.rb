@@ -9,7 +9,7 @@ IcuWwwApp::Application.routes.draw do
   
   namespace :admin do
     resources :users,  only: [:index, :show, :edit, :update, :destroy]
-    resources :logins, only: [:index]
+    resources :logins, only: [:index, :show]
   end
 
   match "*url", to: "pages#not_found", via: :all

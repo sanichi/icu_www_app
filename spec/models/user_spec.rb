@@ -115,11 +115,11 @@ describe User do
     end
 
     it "invalid password" do
-      expect { User.authenticate!(@addr, "bad") }.to raise_error("invalid_details")
+      expect { User.authenticate!(@addr, "bad") }.to raise_error("invalid_password")
     end
 
     it "unknown email" do
-      expect { User.authenticate!("bad" + @addr, @pass) }.to raise_error("invalid_details")
+      expect { User.authenticate!("bad" + @addr, @pass) }.to raise_error("invalid_email")
     end
 
     it "subscription expired" do
