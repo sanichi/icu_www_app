@@ -162,8 +162,8 @@ feature "Search users" do
     FactoryGirl.create(:user, expires_on: Date.today.years_ago(2).end_of_year)
     FactoryGirl.create(:user, expires_on: Date.today.years_ago(3).end_of_year)
     FactoryGirl.create(:user, expires_on: Date.today.years_since(10).end_of_year)
-    FactoryGirl.create(:user, status: "Tit")
-    FactoryGirl.create(:user, status: "Twat")
+    FactoryGirl.create(:user, status: "Plonker")
+    FactoryGirl.create(:user, status: "Dickhead")
     @admin = login("admin")
     @total = User.count
     @xpath = "//table[@id='results']/tbody/tr"
@@ -226,7 +226,7 @@ feature "Search users" do
   end
 end
 
-feature "View user" do
+feature "View users" do
   before(:each) do
     FactoryGirl.create(:user)
     @admin = login("admin")
@@ -242,5 +242,28 @@ feature "View user" do
     page.click_link @admin.email
     click_link "Back"
     expect(page).to have_xpath(@xpath, count: 1)
+  end
+end
+
+feature "Delete users" do
+  before(:each) do
+    login("admin")
+  end
+    
+  given(:success) { "div.alert-success" }
+  given(:deleted) { "successfully deleted" }
+
+  scenario "login history is retained but nullified", js: true do
+    user = FactoryGirl.create(:user)
+    number = 5
+    number.times { FactoryGirl.create(:login, user: user) }
+    expect(Login.where(user_id: user.id).count).to eq(number)
+    expect(Login.where(email: user.email).count).to eq(number)
+    visit admin_user_path(user)
+    click_link "Delete"
+    page.driver.browser.switch_to.alert.accept
+    expect(page).to have_css(success, text: deleted)
+    expect(Login.where(user_id: user.id).count).to eq(0)
+    expect(Login.where(email: user.email).count).to eq(number)
   end
 end

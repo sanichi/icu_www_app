@@ -8,7 +8,7 @@ IcuWwwApp::Application.routes.draw do
   resources :sessions, only: [:create]
   
   namespace :admin do
-    resources :users,  only: [:index, :show, :edit, :update]
+    resources :users,  only: [:index, :show, :edit, :update, :destroy]
     resources :logins, only: [:index]
   end
 

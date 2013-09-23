@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   MINIMUM_PASSWORD_LENGTH = 6
   SessionError = Class.new(RuntimeError)
 
-  has_many :logins
+  has_many :logins, dependent: :nullify
 
   before_validation :canonicalize_roles, :update_password_if_present
 
@@ -134,6 +134,13 @@ class User < ActiveRecord::Base
     logins.create(ip: ip, error: error, roles: roles)
     raise SessionError.new(error) if error
     self
+  end
+  
+  def reason_to_not_delete
+    case
+    when roles.present? then "has special roles"
+    else false
+    end
   end
 
   private

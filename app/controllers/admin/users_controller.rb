@@ -8,7 +8,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
-    set_user
   end
 
   def edit
@@ -23,8 +22,13 @@ class Admin::UsersController < ApplicationController
   end
 
   def destroy
-    @user.destroy
-    redirect_to admin_users_url, notice: "User was successfully destroyed"
+    email = @user.email
+    if reason = @user.reason_to_not_delete
+      redirect_to admin_user_path(@user), alert: "Can't delete #{email} because this user #{reason}"
+    else
+      @user.destroy
+      redirect_to admin_users_path, notice: "User #{email} was successfully deleted"
+    end
   end
 
   private
