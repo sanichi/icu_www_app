@@ -21,6 +21,10 @@ class Login < ActiveRecord::Base
       when "Disabled"     then matches = matches.where(error: "account_disabled")
       when "Unverified"   then matches = matches.where(error: "unverified_email")
     end
+    case params[:user]
+      when "Has user"     then matches = matches.where.not(user_id: nil)
+      when "No user"      then matches = matches.where(user_id: nil)
+    end
     paginate(matches, params, path)
   end
 end

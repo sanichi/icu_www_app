@@ -68,6 +68,7 @@ feature "Sessions" do
   end
 
   it "recording the user's current role" do
+    FactoryGirl.create(:user, roles: "admin") # so there is a last admin
     page.fill_in email_text, with: user.email
     page.fill_in password_text, with: password
     click_button sign_in_button

@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
   has_many :logins, dependent: :nullify
 
-  before_validation :canonicalize_roles, :update_password_if_present
+  before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /@/ }
   validates :encrypted_password, :expires_on, :status, presence: true
@@ -157,6 +157,15 @@ class User < ActiveRecord::Base
       end
     end
     self.roles = nil if roles.blank?
+  end
+  
+  def dont_remove_the_last_admin
+    if changed?
+      if changed_attributes["roles"] == "admin"
+        count = User.where(roles: "admin").where.not(id: id).count
+        errors.add(:roles, "Can't remove the last #{I18n.t('user.role.admin')}") unless count > 0
+      end
+    end
   end
 
   def update_password_if_present

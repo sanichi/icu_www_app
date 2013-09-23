@@ -109,6 +109,15 @@ feature "Editing users" do
     expect(user.roles).to be_nil
   end
 
+  scenario "the last admin role" do
+    admin = login("admin")
+    visit edit_admin_user_path(admin)
+
+    page.unselect "Administrator", from: "Roles"
+    click_button "Save"
+    expect(page).to have_css(failure)
+  end
+
   scenario "change a user's status" do
     login("admin")
     visit edit_path

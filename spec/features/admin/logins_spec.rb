@@ -61,6 +61,7 @@ feature "Listing logins" do
     page.fill_in "IP", with: @login.ip
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
+    expect(page).to have_content(@user[:ip].email)
   end
 
   scenario "specific results" do
@@ -100,5 +101,17 @@ feature "Listing logins" do
     page.select "Any", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @user.size)
+  end
+
+  scenario "deleted users" do
+    visit admin_user_path(@user[:normal])
+    click_link "Delete"
+    expect(User.count).to eq(@user.size - 1)
+    visit admin_logins_path
+    page.select "Success", from: "Result"
+    page.select "No user", from: "User"
+    click_button "Search"
+    expect(page).to have_xpath(@xpath, count: 1)
+    expect(page).to have_content(@user[:normal].email)
   end
 end
