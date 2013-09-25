@@ -26,4 +26,8 @@ module ApplicationHelper
     links.push(link_to t("pagination.last"), pager.last_page) if pager.before_end
     raw "#{pager.min_and_max} #{t('pagination.of')} #{pager.count} #{links.size > 0 ? '∙' : ''} #{links.join(' ∙ ')}"
   end
+  
+  def last_search
+    session[:last_search]
+  end
 end

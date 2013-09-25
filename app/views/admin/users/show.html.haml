@@ -33,6 +33,8 @@
         %td
           %time{datetime: @user.updated_at.to_s(:html5)}= @user.updated_at.to_s(:nosec)
     = link_to "Edit", edit_admin_user_path(@user), class: "btn btn-primary"
-    = link_to "Back", :back, class: "btn btn-default"
-    = link_to "Users", admin_users_path, class: "btn btn-default"
     = link_to "Delete", admin_user_path(@user), data: { confirm: "Sure you want to delete this user?" }, method: :delete, class: "btn btn-danger"
+    - if last_search
+      = link_to "Last", last_search, class: "btn btn-default"
+    - else
+      = link_to "Users", admin_users_path, class: "btn btn-default"

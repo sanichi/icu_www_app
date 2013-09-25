@@ -243,13 +243,13 @@ feature "View users" do
     visit admin_users_path
   end
 
-  scenario "clicking the back button" do
+  scenario "clicking the 'Last' button" do
     expect(page).to have_xpath(@xpath, count: 2)
     page.select "Admin", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     page.click_link @admin.email
-    click_link "Back"
+    click_link "Last"
     expect(page).to have_xpath(@xpath, count: 1)
   end
 end
