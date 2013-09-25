@@ -14,7 +14,7 @@ feature "Authorization for users" do
     expect(page).to have_css(success, text: signed_in_as)
     paths.each do |path|
       visit path
-      expect(page).not_to have_css(failure)
+      expect(page).not_to have_css(failure, text: unauthorized)
     end
   end
 

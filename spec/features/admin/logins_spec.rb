@@ -2,6 +2,8 @@ require 'spec_helper'
 
 feature "Authorization for logins" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
+  given(:record)          { FactoryGirl.create(:login) }
+  given(:paths)           { [admin_logins_path, admin_login_path(record)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
@@ -11,23 +13,29 @@ feature "Authorization for logins" do
     logout
     login("admin")
     expect(page).to have_css(success, text: signed_in_as)
-    visit admin_logins_path
-    expect(page).not_to have_css(failure)
+    paths.each do |path|
+      visit path
+      expect(page).not_to have_css(failure)
+    end
   end
 
   scenario "non-admin cannot view the logins list" do
     non_admin_roles.each do |role|
       login(role)
       expect(page).to have_css(success, text: signed_in_as)
-      visit admin_logins_path
-      expect(page).to have_css(failure, text: unauthorized)
+      paths.each do |path|
+        visit path
+        expect(page).to have_css(failure, text: unauthorized)
+      end
     end
   end
 
   scenario "guests cannot view the logins list" do
     logout
-    visit admin_logins_path
-    expect(page).to have_css(failure, text: unauthorized)
+    paths.each do |path|
+      visit path
+      expect(page).to have_css(failure, text: unauthorized)
+    end
   end
 end
 
