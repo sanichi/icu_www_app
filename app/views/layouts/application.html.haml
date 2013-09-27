@@ -5,6 +5,8 @@
     %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
     %title= content_for?(:title) ? yield(:title) : t("icu")
     = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    - unless current_user.preferred_theme == "Bootstrap"
+      = stylesheet_link_tag "#{current_user.preferred_theme.downcase}.min", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body

@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :login]
   authorize_resource
 
   def index
@@ -29,6 +29,17 @@ class Admin::UsersController < ApplicationController
     else
       @user.destroy
       redirect_to admin_users_path, notice: "User #{email} was successfully deleted"
+    end
+  end
+
+  def login
+    if @user.id == current_user.id
+      redirect_to admin_user_path(@user), alert: "Can't switch to the current user"
+    elsif @user.admin?
+      redirect_to admin_user_path(@user), alert: "Can't switch to an administrator"
+    else
+      session[:user_id] = @user.id
+      redirect_to home_path, notice: "#{t('session.signed_in_as')} #{@user.email}"
     end
   end
 

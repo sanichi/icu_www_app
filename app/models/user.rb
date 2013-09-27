@@ -5,6 +5,9 @@ class User < ActiveRecord::Base
   OK = "OK"
   ROLES = %w[admin editor translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
+  THEMES = %w[Bootstrap Cerulean Cosmo Cyborg Flatley Journal Readable Simplex Slate Spacelab]
+  DEFAULT_THEME = THEMES[1]
+  LOCALES = %w[en ga]
   SessionError = Class.new(RuntimeError)
 
   has_many :logins, dependent: :nullify
@@ -16,6 +19,8 @@ class User < ActiveRecord::Base
   validates :salt, length: { is: 32 }
   validates :icu_id, numericality: { only_integer: true, greater_than: 0 }
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
+  validates :theme, inclusion: { in: THEMES }, allow_nil: true
+  validates :locale, inclusion: { in: LOCALES }
 
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
@@ -51,6 +56,10 @@ class User < ActiveRecord::Base
     t = SeasonTicket.new(icu_id, expires_on)
     t.valid? ? t.ticket : t.error
   end
+  
+  def preferred_theme
+    theme || DEFAULT_THEME
+  end
 
   ROLES.each do |role|
     define_method "#{role}?" do
@@ -76,6 +85,10 @@ class User < ActiveRecord::Base
 
     def guest?
       true
+    end
+    
+    def preferred_theme
+      DEFAULT_THEME
     end
 
     User::ROLES.each do |role|

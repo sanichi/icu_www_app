@@ -1,0 +1,24 @@
+- content_for :title, "User"
+
+.row
+  .col-md-8.col-md-offset-2
+    %table.table.table-bordered
+      %tr
+        %th= t("user.email")
+        %td= @user.email
+      %tr
+        %th= t("user.expires")
+        %td= @user.expires_on
+      %tr
+        %th= t("user.ticket")
+        %td= @user.season_ticket
+      %tr
+        %th= t("user.roles")
+        %td= @user.human_roles
+      %tr
+        %th= t("user.theme")
+        %td= @user.preferred_theme
+      %tr
+        %th= t("user.locale")
+        %td= t("user.lang.#{@user.locale}")
+    = link_to "Edit", edit_user_path(@user), class: "btn btn-primary"

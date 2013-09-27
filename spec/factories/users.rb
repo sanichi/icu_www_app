@@ -8,5 +8,7 @@ FactoryGirl.define do
     status             User::OK
     verified_at        { Time.now.last_year.at_end_of_year }
     roles              nil
+    theme              nil
+    locale             "en"
   end
 end

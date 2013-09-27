@@ -3,7 +3,7 @@ module Admin::UsersHelper
     options_for_select(["Any Expiry", "Active", "Expired", "Extended"], selected)
   end
 
-  def roles_pick_menu(selected)
+  def roles_menu(selected)
     options_for_select User::ROLES.map { |r| [t("user.role.#{r}", locale: "en"), r] }, selected.try(:split)
   end
 

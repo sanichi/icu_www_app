@@ -18,7 +18,7 @@
 
         .form-group{class: @user.errors[:roles].any? ? "has-error" : ""}
           = f.label :roles, class: "control-label col-sm-3"
-          .col-sm-4= f.select :roles, roles_pick_menu(@user.roles), {}, class: "form-control", multiple: true
+          .col-sm-4= f.select :roles, roles_menu(@user.roles), {}, class: "form-control", multiple: true
           .col-sm-5.help-block= @user.errors.messages[:roles].first
 
         - unless @user.verified?

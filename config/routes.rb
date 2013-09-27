@@ -6,9 +6,12 @@ IcuWwwApp::Application.routes.draw do
   get "sign_out" => "sessions#destroy"
 
   resources :sessions, only: [:create]
+  resources :users,    only: [:show, :edit, :update]
   
   namespace :admin do
-    resources :users,  only: [:index, :show, :edit, :update, :destroy]
+    resources :users,  only: [:index, :show, :edit, :update, :destroy] do
+      get :login, on: :member
+    end
     resources :logins, only: [:index, :show]
   end
 

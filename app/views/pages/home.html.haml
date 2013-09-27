@@ -13,8 +13,8 @@
     %p
       The list below gives an indication of what's been done and what's still left to do.
     %ul
-      %li= render partial: "todo", locals: { topic: "Users", items: {sessions: true, logins: true, admin: true, preferences: false} }
-      %li English/Gaelic
+      %li= render partial: "todo", locals: { topic: "Users", items: {sessions: true, logins: true, admin: true, preferences: true, legacy_sync: true, ratings_sync: false} }
+      %li= render partial: "todo", locals: { topic: "English/Gaelic", items: {database: false, admin: false, user_interface: false, environments: false} }
       %li Members
       %li Shop
       %li Help

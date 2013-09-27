@@ -1,0 +1,21 @@
+- content_for :title, "Edit User"
+
+.row
+  .col-sm-8.col-sm-offset-2
+    = form_for @user, html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @user.email
+
+        .form-group{class: @user.errors[:theme].any? ? "has-error" : ""}
+          = f.label :theme, t("user.theme"), class: "control-label col-sm-3"
+          .col-sm-4= f.select :theme, theme_menu(@user.preferred_theme), {}, class: "form-control"
+          .col-sm-5.help-block= @user.errors.messages[:theme].first
+
+        .form-group{class: @user.errors[:locale].any? ? "has-error" : ""}
+          = f.label :locale, t("user.locale"), class: "control-label col-sm-3"
+          .col-sm-4= f.select :locale, locale_menu(@user.locale), {}, class: "form-control"
+          .col-sm-5.help-block= @user.errors.messages[:theme].first
+
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", @user, class: "btn btn-default"

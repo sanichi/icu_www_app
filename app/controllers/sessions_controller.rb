@@ -6,8 +6,7 @@ class SessionsController < ApplicationController
     begin
       user = User.authenticate!(params[:email], params[:password], request.ip)
       session[:user_id] = user.id
-      flash.notice = "#{t('session.signed_in_as')} #{user.email}"
-      redirect_to home_path
+      redirect_to home_path, notice: "#{t('session.signed_in_as')} #{user.email}"
     rescue User::SessionError => e
       flash.now.alert = t("session.#{e.message}")
       render "new"

@@ -10,7 +10,6 @@
  *
  *= require_self
  *= require bootstrap.min
- *= require bootstrap-flatley.min
  */
 
 .text-done { text-decoration: line-through; }

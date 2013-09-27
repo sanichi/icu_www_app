@@ -3,24 +3,24 @@ require 'spec_helper'
 feature "Authorization for users" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
   given(:user)            { FactoryGirl.create(:user) }
-  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user)] }
+  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), login_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "the admin role can manage users" do
-    login("admin")
+    login "admin"
     expect(page).to have_css(success, text: signed_in_as)
     paths.each do |path|
       visit path
-      expect(page).not_to have_css(failure, text: unauthorized)
+      expect(page).not_to have_css(failure)
     end
   end
 
   scenario "non-admin roles cannot access users" do
     non_admin_roles.each do |role|
-      login(role)
+      login role
       expect(page).to have_css(success, text: signed_in_as)
       paths.each do |path|
         visit path
@@ -51,7 +51,7 @@ feature "Editing users" do
 
   scenario "change a user's password" do
     old_encrypted_password = user.encrypted_password
-    login("admin")
+    login "admin"
     visit edit_path
 
     new_password = "blah"
@@ -75,14 +75,14 @@ feature "Editing users" do
     user.reload
     expect(user.encrypted_password).not_to eq(old_encrypted_password)
 
-    login(user, password: new_password)
+    login user, password: new_password
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
   end
 
   scenario "change a user's roles" do
     expect(user.roles).to be_nil
 
-    login("admin")
+    login "admin"
     visit edit_path
 
     page.select "Editor", from: "Roles"
@@ -110,7 +110,7 @@ feature "Editing users" do
   end
 
   scenario "the last admin role" do
-    admin = login("admin")
+    admin = login "admin"
     visit edit_admin_user_path(admin)
 
     page.unselect "Administrator", from: "Roles"
@@ -119,7 +119,7 @@ feature "Editing users" do
   end
 
   scenario "change a user's status" do
-    login("admin")
+    login"admin"
     visit edit_path
 
     new_status = ""
@@ -140,7 +140,7 @@ feature "Editing users" do
   scenario "verifying a user" do
     expect(user.verified_at.to_i).not_to be_within(1).of(Time.now.to_i)
 
-    login("admin")
+    login "admin"
     visit edit_path
     expect(page).to have_no_field("Verify")
 
@@ -160,7 +160,7 @@ feature "Editing users" do
     expect(page).to have_no_field("Verify")
   end
 end
-  
+
 feature "Search users" do
   before(:each) do
     FactoryGirl.create(:user)
@@ -173,7 +173,7 @@ feature "Search users" do
     FactoryGirl.create(:user, expires_on: Date.today.years_since(10).end_of_year)
     FactoryGirl.create(:user, status: "Plonker")
     FactoryGirl.create(:user, status: "Dickhead")
-    @admin = login("admin")
+    @admin = login "admin"
     @total = User.count
     @xpath = "//table[@id='results']/tbody/tr"
     visit admin_users_path
@@ -238,7 +238,7 @@ end
 feature "View users" do
   before(:each) do
     FactoryGirl.create(:user)
-    @admin = login("admin")
+    @admin = login "admin"
     @xpath = "//table[@id='results']/tbody/tr"
     visit admin_users_path
   end
@@ -255,10 +255,6 @@ feature "View users" do
 end
 
 feature "Delete users" do
-  before(:each) do
-    login("admin")
-  end
-    
   given(:success) { "div.alert-success" }
   given(:deleted) { "successfully deleted" }
 
@@ -268,11 +264,29 @@ feature "Delete users" do
     number.times { FactoryGirl.create(:login, user: user) }
     expect(Login.where(user_id: user.id).count).to eq(number)
     expect(Login.where(email: user.email).count).to eq(number)
+    login "admin"
     visit admin_user_path(user)
     click_link "Delete"
     page.driver.browser.switch_to.alert.accept
     expect(page).to have_css(success, text: deleted)
     expect(Login.where(user_id: user.id).count).to eq(0)
     expect(Login.where(email: user.email).count).to eq(number)
+  end
+end
+
+feature "Login as another user" do
+  given(:success) { "div.alert-success" }
+  given(:message) { I18n.t("session.signed_in_as") }
+  given!(:user)   { FactoryGirl.create(:user) }
+
+  scenario "click the login button" do
+    login "admin"
+    original_count = Login.count
+    visit admin_user_path(user)
+    click_link "Login"
+    expect(page).to have_css(success, text: "#{message} #{user.email}")
+    click_link I18n.t("user.preferences")
+    expect(page).to have_content(user.email)
+    expect(Login.count).to eq(original_count)
   end
 end

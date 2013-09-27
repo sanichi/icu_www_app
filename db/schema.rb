@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130902122830) do
+ActiveRecord::Schema.define(version: 20130925200700) do
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20130902122830) do
     t.datetime "verified_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "theme",              limit: 16
+    t.string   "locale",             limit: 2,  default: "en"
   end
 
 end

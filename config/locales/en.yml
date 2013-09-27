@@ -32,16 +32,17 @@ en:
   user:
     email: Email
     password: Password
+    expires: Expires on
+    ticket: Season ticket
+    theme: Theme
+    preferences: Preferences
+    roles: Roles
     role:
       admin: Administrator
       editor: Editor
       translator: Translator
       treasurer: Treasurer
-  player:
-    new: New Player
-    edit: Edit Player
-  helpers:
-    label:
-      player:
-        first_name: First Name
-        last_name: Last Name
+    locale: Language
+    lang:
+      en: English
+      ga: Irish
