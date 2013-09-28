@@ -30,6 +30,7 @@ en:
     account_disabled: Account disabled
     subscription_expired: Subscription expired
   user:
+    updated: User successfully updated
     email: Email
     password: Password
     expires: Expires on

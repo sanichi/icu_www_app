@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   def update
     authorize! :manage_own_login, @user
     if @user.update(user_params)
-      redirect_to @user, notice: "User was successfully updated"
+      redirect_to @user, notice: t("user.updated")
     else
       render action: "edit"
     end
