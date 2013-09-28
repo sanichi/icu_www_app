@@ -38,6 +38,7 @@ feature "Edit preferences" do
   given(:irish)           { I18n.t("user.lang.ga") }
   given(:locale_label)    { I18n.t("user.locale") }
   given(:preferences)     { I18n.t("user.preferences") }
+  given(:updated)         { I18n.t("user.updated") }
   given(:edit)            { I18n.t("edit") }
   given(:save)            { I18n.t("save") }
 
@@ -48,6 +49,7 @@ feature "Edit preferences" do
     click_link edit
     page.select theme, from: theme_label
     click_button save
+    expect(page).to have_css(success, text: updated)
     expect(page).to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
     expect(page).to have_xpath("//th[.='#{theme_label}']/following-sibling::td[.='#{theme}']")
     user.reload
@@ -61,6 +63,7 @@ feature "Edit preferences" do
     click_link edit
     page.select bootstrap, from: theme_label
     click_button save
+    expect(page).to have_css(success, text: updated)
     User::THEMES.each do |theme|
       expect(page).not_to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
     end
@@ -77,6 +80,7 @@ feature "Edit preferences" do
     click_link edit
     page.select irish, from: locale_label
     click_button save
+    expect(page).to have_css(success, text: updated)
     expect(page).to have_xpath("//th[.='#{locale_label}']/following-sibling::td[.='#{irish}']")
     user.reload
     expect(user.locale).to eq("ga")
