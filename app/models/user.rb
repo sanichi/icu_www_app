@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   def verified?
     verified_at ? true : false
   end
-  
+
   def verify
     verified? ? "yes" : "no"
   end
@@ -51,12 +51,12 @@ class User < ActiveRecord::Base
   def subscribed?
     not expires_on.past?
   end
-  
+
   def season_ticket
     t = SeasonTicket.new(icu_id, expires_on)
     t.valid? ? t.ticket : t.error
   end
-  
+
   def preferred_theme
     theme || DEFAULT_THEME
   end
@@ -66,7 +66,7 @@ class User < ActiveRecord::Base
       roles.present? && (roles.include?(role) || roles.include?("admin"))
     end
   end
-  
+
   def human_roles(options={})
     return "" if roles.blank?
     roles.split(" ").map do |role|
@@ -86,7 +86,7 @@ class User < ActiveRecord::Base
     def guest?
       true
     end
-    
+
     def preferred_theme
       DEFAULT_THEME
     end
@@ -150,7 +150,7 @@ class User < ActiveRecord::Base
     raise SessionError.new(error) if error
     self
   end
-  
+
   def reason_to_not_delete
     case
     when roles.present? then "has special roles"
@@ -171,7 +171,7 @@ class User < ActiveRecord::Base
     end
     self.roles = nil if roles.blank?
   end
-  
+
   def dont_remove_the_last_admin
     if changed?
       if changed_attributes["roles"] == "admin"

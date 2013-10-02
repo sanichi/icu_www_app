@@ -31,7 +31,6 @@ feature "Authorization for users" do
 
   scenario "guests cannot access users" do
     logout
-    visit admin_users_path
     paths.each do |path|
       visit path
       expect(page).to have_css(failure, text: unauthorized)

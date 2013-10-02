@@ -12,7 +12,8 @@ IcuWwwApp::Application.routes.draw do
     resources :users,  only: [:index, :show, :edit, :update, :destroy] do
       get :login, on: :member
     end
-    resources :logins, only: [:index, :show]
+    resources :logins,       only: [:index, :show]
+    resources :translations, only: [:index, :show, :edit, :update, :destroy]
   end
 
   match "*url", to: "pages#not_found", via: :all

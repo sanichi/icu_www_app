@@ -24,5 +24,8 @@ module IcuWwwApp
     
     # Autoload nested locales for the simple backend.
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.yml")]
+
+    # Enable locale fallbacks for I18n for all environments.
+    config.i18n.fallbacks = true
   end
 end

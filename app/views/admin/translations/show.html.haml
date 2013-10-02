@@ -1,0 +1,44 @@
+- content_for :title, "Translation"
+
+.row
+  .col-md-8.col-md-offset-2
+    %table.table.table-bordered
+      %tr
+        %th Key
+        %td= @translation.key
+      - if @translation.updatable?
+        %tr
+          %th Previous English
+          %td= @translation.old_english
+        %tr
+          %th Previous Irish
+          %td= @translation.value
+        %tr
+          %th Current English
+          %td= @translation.english
+        %tr
+          %th Current Irish
+          %td= @translation.value
+      - else
+        %tr
+          %th English
+          %td= @translation.english
+        %tr
+          %th Irish
+          %td= @translation.value
+      %tr
+        %th Last Updated
+        %td
+          %time{datetime: @translation.updated_at.to_s(:html5)}= @translation.updated_at.to_s(:nosec)
+          - if @translation.user
+            by
+            = @translation.user
+      %tr
+        %th Created
+        %td
+          %time{datetime: @translation.created_at.to_s(:html5)}= @translation.created_at.to_s(:nosec)
+    = render "action", translation: @translation
+    - if last_search(:admin, :translation)
+      = link_to t("last_search"), last_search(:admin, :translation), class: "btn btn-default"
+    - else
+      = link_to "Translations", admin_translations_path, class: "btn btn-default"

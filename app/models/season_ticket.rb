@@ -20,7 +20,7 @@ class SeasonTicket
     return false if date && (!valid_date?(date) || date.to_s > expires_on)
     true
   end
-  
+
   def self.icu_config
     return @icu_config unless @icu_config.nil?
     @icu_config = { base: "af1d3f65fe9dd2b10739ae81a846bd8e", shuffle: "395d57908a4ffffca42f04a1db5af010" }.inject(true) do |m, (k,v)|
@@ -68,7 +68,7 @@ class SeasonTicket
       t + base[p]
     end
   end
-  
+
   def pack
     icu_id.to_s + expires_on[2, 2] + expires_on[5, 2] + expires_on[8, 2]
   end

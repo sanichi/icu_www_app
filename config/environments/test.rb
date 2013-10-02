@@ -35,7 +35,7 @@ IcuWwwApp::Application.configure do
   config.active_support.deprecation = :stderr
 end
 
-# In the test environment we want missing translations to raise exceptions.
+# In the test environment only, we want missing translations to raise exceptions.
 module I18n
   class JustRaiseExceptionHandler < ExceptionHandler
     def call(exception, locale, key, options)

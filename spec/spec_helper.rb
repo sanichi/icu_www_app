@@ -14,7 +14,7 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
   config.mock_with :rspec
-  
+
   # To be able to use selenium tests we use database_cleaner with truncation
   # strategy for all tests (slower but more reliable). See Railscasts 257.
   config.use_transactional_fixtures = false

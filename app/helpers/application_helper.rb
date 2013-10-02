@@ -6,7 +6,7 @@ module ApplicationHelper
     boolean = boolean && params[:action] == action if action
     boolean ? active : inactive
   end
-  
+
   def flash_style(name)
     bootstrap_name =
       case name
@@ -17,7 +17,7 @@ module ApplicationHelper
       end
     "alert alert-#{bootstrap_name}"
   end
-  
+
   def pagination_links(pager)
     links = Array.new
     links.push(link_to t("pagination.frst"), pager.frst_page) if pager.after_start
@@ -26,8 +26,9 @@ module ApplicationHelper
     links.push(link_to t("pagination.last"), pager.last_page) if pager.before_end
     raw "#{pager.min_and_max} #{t('pagination.of')} #{pager.count} #{links.size > 0 ? '∙' : ''} #{links.join(' ∙ ')}"
   end
-  
-  def last_search
-    session[:last_search]
+
+  def last_search(*paths)
+    paths.unshift :last_search
+    session[paths.join("_").to_sym]
   end
 end

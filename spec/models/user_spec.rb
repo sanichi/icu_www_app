@@ -183,7 +183,7 @@ describe User::Guest do
       end
     end
   end
-  
+
   context "#guest?" do
     it "should be true" do
       expect(@user.guest?).to be_true

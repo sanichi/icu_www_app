@@ -1,0 +1,20 @@
+- content_for :title, "Edit Translation"
+
+.row
+  .col-sm-2
+  .col-sm-8
+    = form_for [:admin, @translation], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @translation.key
+        - updatable = @translation.updatable?
+        - if updatable
+          = render "edit_panel", heading: "Previous English", body: @translation.old_english
+          = render "edit_panel", heading: "Previous Irish", body: @translation.value
+        = render "edit_panel", heading: updatable ? "New English" : "English", body: @translation.english
+        = render "edit_panel", heading: updatable ? "New Irish" : "Irish", body: f.text_field(:value, class: "form-control")
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", [:admin, @translation], class: "btn btn-default"
+        - if last_search(:admin, :translation)
+          = link_to t("last_search"), last_search(:admin, :translation), class: "btn btn-default"
+        

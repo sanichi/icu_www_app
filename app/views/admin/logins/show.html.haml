@@ -21,7 +21,7 @@
       %tr
         %th Error
         %td= @login.error
-    - if last_search
-      = link_to "Last", last_search, class: "btn btn-default"
+    - if last_search(:admin, :user)
+      = link_to t("last_search"), last_search(:admin, :user), class: "btn btn-default"
     - else
-      = link_to "Logins", admin_logins_path, "btn btn-default"
+      = link_to "Logins", admin_logins_path, class: "btn btn-default"

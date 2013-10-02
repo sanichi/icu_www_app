@@ -2,8 +2,8 @@
   .col-xs-12.text-center
     %h2= t("under_construction")
 .row
-  .col-sm-3
-  .col-sm-6
+  .col-sm-2
+  .col-sm-8
     %p
       This will eventually be the new web site for the ICU. During a transition phase lasting
       from August 2013 to (roughly) June 2014 some functions will be available here and some on the
@@ -14,7 +14,7 @@
       The list below gives an indication of what's been done and what's still left to do.
     %ul
       %li= render partial: "todo", locals: { topic: "Users", items: {sessions: true, logins: true, admin: true, preferences: true, legacy_sync: true, ratings_sync: false, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "English/Irish", items: {database: false, admin: false, user_interface: false, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "English/Irish", items: {database: false, admin: false, routing: false, switching: false, documentation: false} }
       %li Members
       %li Shop
       %li Help

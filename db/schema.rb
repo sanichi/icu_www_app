@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130925200700) do
+ActiveRecord::Schema.define(version: 20130929065653) do
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"
@@ -20,6 +20,18 @@ ActiveRecord::Schema.define(version: 20130925200700) do
     t.string   "roles"
     t.string   "ip",         limit: 39
     t.datetime "created_at"
+  end
+
+  create_table "translations", force: true do |t|
+    t.string   "locale",      limit: 2
+    t.string   "key"
+    t.string   "value"
+    t.string   "english"
+    t.string   "old_english"
+    t.string   "user"
+    t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|
