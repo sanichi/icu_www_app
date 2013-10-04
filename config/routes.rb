@@ -4,10 +4,11 @@ IcuWwwApp::Application.routes.draw do
   get "home"     => "pages#home"
   get "sign_in"  => "sessions#new"
   get "sign_out" => "sessions#destroy"
+  get "redirect" => "redirects#redirect"
 
   resources :sessions, only: [:create]
   resources :users,    only: [:show, :edit, :update]
-  
+
   namespace :admin do
     resources :users,  only: [:index, :show, :edit, :update, :destroy] do
       get :login, on: :member

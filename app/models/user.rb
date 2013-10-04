@@ -151,6 +151,10 @@ class User < ActiveRecord::Base
     self
   end
 
+  def self.locale?(locale)
+    LOCALES.include?(locale.to_s)
+  end
+
   def reason_to_not_delete
     case
     when roles.present? then "has special roles"

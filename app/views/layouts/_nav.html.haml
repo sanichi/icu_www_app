@@ -16,5 +16,7 @@
       - if can?(:manage_own_login, User)
         %li{class: active("users")}= link_to t("user.preferences"), user_path(current_user)
     %ul.nav.navbar-nav.navbar-right
+      - if request.get? && controller_path !~ /^admin\//
+        = render "layouts/locale_switch"
       - text, path = current_user.guest? ? ["in", sign_in_path] : ["out", sign_out_path]
       %li{class: active("sessions")}= link_to t("session.sign_#{text}"), path

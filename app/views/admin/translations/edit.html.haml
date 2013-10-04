@@ -15,6 +15,6 @@
         %hr
         = f.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", [:admin, @translation], class: "btn btn-default"
-        - if last_search(:admin, :translation)
-          = link_to t("last_search"), last_search(:admin, :translation), class: "btn btn-default"
+        - if path = last_search(:admin, :translation)
+          = link_to t("last_search"), path, class: "btn btn-default"
         

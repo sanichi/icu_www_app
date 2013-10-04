@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   def update
     authorize! :manage_own_login, @user
     if @user.update(user_params)
+      switch_locale(@user.locale) if @user.previous_changes[:locale]
       redirect_to @user, notice: t("user.updated")
     else
       render action: "edit"
