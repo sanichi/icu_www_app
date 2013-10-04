@@ -18,7 +18,7 @@
           - @translations.matches.each do |t|
             %tr
               %td= link_to t.key, [:admin, t]
-              %td= t.english.truncate(20)
-              %td= t.value.try(:truncate, 20)
+              %td= t.english.truncate(40)
+              %td= t.value.try(:truncate, 40)
               %td= render "action", translation: t, size: "btn-xs"
           = render "utils/pagination_links", pager: @translations, columns: 4

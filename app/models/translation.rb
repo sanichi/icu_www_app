@@ -11,9 +11,10 @@ class Translation < ActiveRecord::Base
   validates :english, :old_english, presence: true
   validates :user, presence: true, if: Proc.new { |t| t.value.present? }
   validates :value,
-    presence:  { message: "translations should not be blank"},
-    format:    { with: VAL_FORMAT, message: "translations should not contain double quotes" },
+    presence:  { message: "Translations should not be blank"},
+    format:    { with: VAL_FORMAT, message: "Translations should not contain double quotes" },
     allow_nil: true
+  validate  :value_has_same_variables_as_english
 
   def deletable?
     !active
@@ -26,11 +27,11 @@ class Translation < ActiveRecord::Base
   def updatable?
     active && value.present? && english != old_english
   end
-  
+
   def locale_key
     '%s.%s' % [locale, key]
   end
-  
+
   def max_length
     lengths = [english.length, old_english.length]
     lengths.push(value.length) if value
@@ -60,6 +61,7 @@ class Translation < ActiveRecord::Base
 
   def self.[](full_key)
     return unless /\A(#{LOCALES.join('|')})\.(\w+(\.\w+)*)\z/ =~ full_key
+    return if $1 == "en"
     return unless translation = where(locale: $1, key: $2, active: true).where.not(value: nil).first
     '"%s"' % translation.value  # quotes because I18n uses JSON internally
   end
@@ -95,6 +97,16 @@ class Translation < ActiveRecord::Base
   end
 
   private
+  
+  def value_has_same_variables_as_english
+    if value.present?
+      eng = english.scan(/%{[^}]*}/).sort.join
+      val = value.scan(/%{[^}]*}/).sort.join
+      unless eng == val
+        errors.add(:value, "Translation should have same interpolated variables as English")
+      end
+    end
+  end
 
   def self.yaml_files
     Dir.glob(File.join(Rails.root, "config", "locales", "**", "en.yml"))

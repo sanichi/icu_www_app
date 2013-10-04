@@ -48,6 +48,9 @@ feature "Performing translations" do
     @count = Translation.count
   end
 
+  given(:success) { "div.alert-success" }
+  given(:failure) { "div.alert-danger" }
+
   scenario "find and translate an untranslated english phrase" do
     key = "user.role.translator"
     translation = Translation.find_by(key: key)
@@ -117,6 +120,29 @@ feature "Performing translations" do
     expect(page).to have_css("strong span.label.label-success", text: @count - 1)
     expect(page).to_not have_css("strong span.label.label-primary")
     expect(page).to have_xpath("//td[.='#{english}']/following-sibling::td[.='#{irish}']")
+  end
+
+  scenario "translate a phrase with interpolated variables" do
+    key = "errors.attributes.password.length"
+    translation = Translation.find_by(key: key)
+
+    login "translator"
+    visit admin_translations_path
+
+    page.fill_in "Key", with: key
+    click_button "Search"
+    expect(page).to have_link("Translate", count: 1)
+
+    click_link "Translate"
+    page.fill_in "translation_value", with: "Is fhad íosta %{wrong_variable_name}"
+
+    click_button "Save"
+    expect(page).to have_css(failure, text: "Translation should have same interpolated variables as English")
+    
+    page.fill_in "translation_value", with: "Is fhad íosta %{minimum}"
+
+    click_button "Save"
+    expect(page).to have_css(success, text: "Translation #{translation.locale_key} was updated")
   end
 
   scenario "find and delete an inactive translation" do
