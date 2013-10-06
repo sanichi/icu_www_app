@@ -48,6 +48,10 @@ feature "Performing translations" do
     @count = Translation.count
   end
 
+  after(:each) do
+    Translation.cache.flushdb
+  end
+
   given(:success) { "div.alert-success" }
   given(:failure) { "div.alert-danger" }
 
@@ -159,5 +163,26 @@ feature "Performing translations" do
 
     click_link "Delete"
     expect(page).to have_css("div.alert.alert-warning", text: "No matches")
+  end
+
+  scenario "translation errors" do
+    key = "user.role.admin"
+    admin = Translation.find_by(key: key)
+
+    login "translator"
+    visit admin_translations_path
+    page.fill_in "Key", with: key
+    click_button "Search"
+    expect(page).to have_link("Translate", count: 1)
+    
+    click_link "Translate"
+    page.fill_in "translation_value", with: ""
+
+    click_button "Save"
+    expect(page).to have_css(failure, text: "blank")
+    page.fill_in "translation_value", with: '"Dia"'
+
+    click_button "Save"
+    expect(page).to have_css(failure, text: "quote")
   end
 end

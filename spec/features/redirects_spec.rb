@@ -2,6 +2,10 @@
 require 'spec_helper'
 
 feature "Switch locales" do
+  after(:each) do
+    Translation.cache.flushdb
+  end
+
   before(:each) do
     FactoryGirl.create(:translation, locale: "ga", key: "home", english: "Home", value: "Baile")
     FactoryGirl.create(:translation, locale: "ga", key: "user.lang.en", english: "English", value: "Béarla")

@@ -54,6 +54,10 @@ describe Translation do
   end
 
   context "translations" do
+    after(:each) do
+      Translation.cache.flushdb
+    end
+
     it "English translations provided by YAML files" do
       expect(I18n.t("edit", locale: :en)).to eq("Edit")
       expect(I18n.t("session.invalid_email", locale: :en)).to eq("Invalid email or password")
@@ -69,7 +73,7 @@ describe Translation do
       expect { I18n.t("not.here", locale: :ga) }.to raise_exception(/translation missing/)
     end
 
-    it "Irish translations provided by database" do
+    it "Irish translations provided by Redis via database updates" do
       edit = "Cuir"
       invalid = "R-phost neamhbhailí nó ar do phasfhocal"
       FactoryGirl.create(:translation, key: "edit", value: edit, english: "Edit")
@@ -79,31 +83,71 @@ describe Translation do
     end
   end
 
-  context "backend key store API" do
+  context "cache" do
     before(:each) do
-      FactoryGirl.create(:translation, key: "user.role.admin", value: "Riarthóir", english: "Administrator")
-      FactoryGirl.create(:translation, key: "user.role.editor", value: "Eagarthóir", english: "Editor")
-      FactoryGirl.create(:translation, key: "pagination.prev", value: "roimhe seo", english: "previous")
-      FactoryGirl.create(:translation, key: "session.enter_email", value: "Cuir isteach r-phost", english: "Please enter an email", old_english: "Not the same")
-      FactoryGirl.create(:translation, key: "old.unused", value: "Sean", english: "Old", active: false)
-      FactoryGirl.create(:translation, key: "not.yet.set", value: nil, english: "New")
+      @count = Translation.yaml_data.size
+      @cache = Translation.cache
     end
 
-    it "#[]" do
-      expect(Translation["ga.user.role.admin"]).to eq('"Riarthóir"')
-      expect(Translation["ga.old.unused"]).to be_nil
-      expect(Translation["ga.not.yet.set"]).to be_nil
-      expect(Translation["ga.not.there.yet"]).to be_nil
-      expect(Translation["invalid key"]).to be_nil
+    after(:each) do
+      @cache.flushdb
     end
 
-    it "#[]=" do
-      # note that in our case, this method does nothing, but it is defined as it's part of the API
-      expect { Translation["ga.user.role.treasurer"] = "Cisteoir" }.to_not raise_exception
+    def cached
+      @cache.keys.sort.map{ |k| "#{k}:#{@cache.get(k)}" }.join("|")
     end
 
-    it "#keys" do
-      expect(Translation.keys.join(" ")).to eq("ga.pagination.prev ga.session.enter_email ga.user.role.admin ga.user.role.editor")
+    it "is empty for a database with no tanslations" do
+      expect(Translation.count).to eq 0
+      expect(Translation.check_cache(dont_skip_test_env: true)).to eq 0
+      expect(cached).to eq ""
+    end
+
+    it "is empty for a database with no active tanslations" do
+      Translation.update_db
+      expect(Translation.count).to eq @count
+      expect(Translation.check_cache(dont_skip_test_env: true)).to eq 0
+      expect(cached).to eq ""
+    end
+
+    it "is non-empty if there are active translations" do
+      FactoryGirl.create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
+      FactoryGirl.create(:translation, key: "delete", english: "Cancel", value: nil)
+      FactoryGirl.create(:translation, key: "user.role.translator", english: "Translator", value: "Aistritheoir")
+      FactoryGirl.create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
+      FactoryGirl.create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
+      expect(Translation.count).to eq 5
+      @cache.flushdb # reset the cache before calling check_cache for this test
+      expect(Translation.check_cache(dont_skip_test_env: true)).to eq 3
+      expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"|ga.user.role.translator:"Aistritheoir"'
+    end
+
+    it "is affected by creating, updating or deleting translations" do
+      expect(cached).to eq ""
+
+      cancel = FactoryGirl.create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
+      expect(cached).to eq 'ga.cancel:"Cealaigh"'
+
+      admin = FactoryGirl.create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
+      expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
+
+      FactoryGirl.create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
+      expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
+
+      FactoryGirl.create(:translation, key: "delete", english: "Cancel", value: nil)
+      expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
+
+      admin.value = "Riarthóir"
+      admin.old_english = "Administrator"
+      admin.save
+      expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Riarthóir"'
+
+      cancel.active = false
+      cancel.save
+      expect(cached).to eq 'ga.user.role.admin:"Riarthóir"'
+
+      admin.destroy
+      expect(cached).to eq ""
     end
   end
 end

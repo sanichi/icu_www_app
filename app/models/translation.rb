@@ -16,12 +16,23 @@ class Translation < ActiveRecord::Base
     allow_nil: true
   validate  :value_has_same_variables_as_english
 
+  after_save :update_cache
+  after_destroy :cleanup_cache
+
+  def quoted_value
+    %Q["#{value}"]
+  end
+
   def deletable?
     !active
   end
 
   def creatable?
     active && value.blank?
+  end
+
+  def cachable?
+    active && value.present?
   end
 
   def updatable?
@@ -59,19 +70,60 @@ class Translation < ActiveRecord::Base
     where(active: true).where.not(value: nil).where("english != old_english").count
   end
 
-  def self.[](full_key)
-    return unless /\A(#{LOCALES.join('|')})\.(\w+(\.\w+)*)\z/ =~ full_key
-    return if $1 == "en"
-    return unless translation = where(locale: $1, key: $2, active: true).where.not(value: nil).first
-    '"%s"' % translation.value  # quotes because I18n uses JSON internally
+  @@cache = nil
+
+  def self.cache
+    return @@cache if @@cache
+    @@cache = Redis.new(db: ["production", "development", "test"].index(Rails.env) + 1)
+    check_cache
+    @@cache
   end
 
-  def self.[]=(key, value)
-    value
+  def self.check_cache(opt={})
+    count = 0
+    if Rails.env == "test" && !opt[:dont_skip_test_env]
+      @@cache.flushdb
+    else
+      cachable = all.select{ |t| t.cachable? }.each_with_object({}) do |t, h|
+        h[t.locale_key] = t.quoted_value
+      end
+      cached = @@cache.keys.each_with_object({}) do |c, h|
+        h[c] = @@cache.get(c)
+      end
+      cachable.each do |k, v|
+        unless cached[k] && cached[k] == v
+          @@cache.set(k,v)
+          logger.warn "#{cached[k] ? 'upd' : 'cre'}ated cached translation #{k} => #{v}"
+          count += 1
+        end
+      end
+      cached.each do |k, v|
+        unless cachable[k]
+          @@cache.del(k)
+          logger.warn "deleted cached translation #{k} => #{v}"
+          count += 1
+        end
+      end
+      # In normal circumstances 'count' should be zero because the callbacks should keep Redis and MySQL in sync.
+      if count == 0
+        logger.info "no changes to cached translation"
+      else
+        logger.warn "changes to cached translation: #{count}"
+      end
+    end
+    count
   end
 
-  def self.keys
-    where(active: true).where.not(value: nil).order(:locale, :key).to_a.map { |t| "#{t.locale}.#{t.key}" }
+  def update_cache
+    if cachable?
+      @@cache.set(locale_key, quoted_value)
+    else
+      @@cache.del(locale_key)
+    end
+  end
+
+  def cleanup_cache
+    @@cache.del(locale_key)
   end
 
   def self.yaml_data
@@ -97,7 +149,7 @@ class Translation < ActiveRecord::Base
   end
 
   private
-  
+
   def value_has_same_variables_as_english
     if value.present?
       eng = english.scan(/%{[^}]*}/).sort.join

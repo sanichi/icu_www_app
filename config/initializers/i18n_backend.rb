@@ -1,8 +1,8 @@
 # Only works if the translations table already exists.
 if ActiveRecord::Base.connection.table_exists? "translations"
-  # Simple for English and KeyValue for Irish.
-  I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Simple.new, I18n::Backend::KeyValue.new(Translation, false))
-
-  # Except for the test environment, update the DB translations to reflect changes in the YAML files.
+  # Update the DB translations to reflect changes in the YAML files (unless we're in the test env).
   Translation.update_db unless Rails.env == "test"
+
+  # YAML/Simple for English, Redis/KeyValue for Irish.
+  I18n.backend = I18n::Backend::Chain.new(I18n::Backend::Simple.new, I18n::Backend::KeyValue.new(Translation.cache, false))
 end

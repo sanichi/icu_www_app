@@ -10,6 +10,7 @@ gem "therubyracer", "0.11.4", platforms: :ruby
 gem "jquery-rails"
 gem "turbolinks"
 gem "cancan", "~> 1.6"
+gem "redis"
 
 group :development do
   gem "capistrano"
