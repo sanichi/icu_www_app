@@ -74,9 +74,18 @@ class Translation < ActiveRecord::Base
 
   def self.cache
     return @@cache if @@cache
-    @@cache = Redis.new(db: ["production", "development", "test"].index(Rails.env) + 1)
+    reconnect
     check_cache
     @@cache
+  end
+
+  def self.reconnect
+    logger.info "reconnecting to redis" if @@cache
+    @@cache = Redis.new(db: db)
+  end
+
+  def self.db
+    @@db ||= ["production", "development", "test"].index(Rails.env) + 1
   end
 
   def self.check_cache(opt={})
