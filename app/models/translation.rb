@@ -73,15 +73,12 @@ class Translation < ActiveRecord::Base
   @@cache = nil
 
   def self.cache
-    return @@cache if @@cache
-    reconnect
-    check_cache
-    @@cache
+    @@cache ||= Redis.new(db: db)
   end
 
   def self.reconnect
-    logger.info "reconnecting to redis" if @@cache
-    @@cache = Redis.new(db: db)
+    logger.info "preparing to reconnect to redis" if @@cache
+    @@cache = nil
   end
 
   def self.db
@@ -91,24 +88,24 @@ class Translation < ActiveRecord::Base
   def self.check_cache(opt={})
     count = 0
     if Rails.env == "test" && !opt[:dont_skip_test_env]
-      @@cache.flushdb
+      cache.flushdb
     else
       cachable = all.select{ |t| t.cachable? }.each_with_object({}) do |t, h|
         h[t.locale_key] = t.quoted_value
       end
-      cached = @@cache.keys.each_with_object({}) do |c, h|
-        h[c] = @@cache.get(c)
+      cached = cache.keys.each_with_object({}) do |c, h|
+        h[c] = cache.get(c)
       end
       cachable.each do |k, v|
         unless cached[k] && cached[k] == v
-          @@cache.set(k,v)
+          cache.set(k,v)
           logger.warn "#{cached[k] ? 'upd' : 'cre'}ated cached translation #{k} => #{v}"
           count += 1
         end
       end
       cached.each do |k, v|
         unless cachable[k]
-          @@cache.del(k)
+          cache.del(k)
           logger.warn "deleted cached translation #{k} => #{v}"
           count += 1
         end
@@ -120,19 +117,20 @@ class Translation < ActiveRecord::Base
         logger.warn "changes to cached translation: #{count}"
       end
     end
+    @@cache = nil  # don't reuse this initial connection to try and avoid Passenger fork problems
     count
   end
 
   def update_cache
     if cachable?
-      @@cache.set(locale_key, quoted_value)
+      Translation.cache.set(locale_key, quoted_value)
     else
-      @@cache.del(locale_key)
+      Translation.cache.del(locale_key)
     end
   end
 
   def cleanup_cache
-    @@cache.del(locale_key)
+    Translation.cache.del(locale_key)
   end
 
   def self.yaml_data
