@@ -76,8 +76,8 @@ class Translation < ActiveRecord::Base
     @@cache ||= Redis.new(db: db)
   end
 
-  def self.reconnect
-    logger.info "preparing to reconnect to redis" if @@cache
+  def self.reconnect(context)
+    logger.info "preparing to reconnect to redis (#{context})" if @@cache
     @@cache = nil
   end
 
@@ -117,7 +117,7 @@ class Translation < ActiveRecord::Base
         logger.warn "changes to cached translation: #{count}"
       end
     end
-    @@cache = nil  # don't reuse this initial connection to try and avoid Passenger fork problems
+    reconnect("check_cache") # don't reuse this connection for initial work to avoid Passenger fork problems
     count
   end
 
