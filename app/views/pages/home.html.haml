@@ -5,25 +5,20 @@
   .col-sm-2
   .col-sm-8
     %p
-      This will eventually be the new web site for the ICU. During a transition phase lasting
-      from August 2013 to (roughly) June 2014 some functions will be available here and some on the
-      = link_to "old site", "http://www.icu.ie"
-      until everything is finally moved over and the old site can be retired.
-      Right now, there's nothing much to get excited about here but watch this space.
-    %p
-      The list below gives an indication of what's been done and what's still left to do.
+      This will eventually (sometime in 2004) be the new web site for the ICU.
+      The following list indicates what's been done (crossed out) and what's still left to do.
     %ul
       %li= render partial: "todo", locals: { topic: "Users", items: {sessions: true, logins: true, admin: true, preferences: true, legacy_sync: true, ratings_sync: false, documentation: false} }
       %li= render partial: "todo", locals: { topic: "English/Irish", items: {database: true, admin: true, switching: true, caching: true, documentation: false} }
-      %li Clubs
-      %li Members
-      %li Shop
-      %li Help
-      %li Images
-      %li Calendar
-      %li Games
-      %li Tournaments
-      %li News
-      %li Articles
-      %li Juniors
-      %li Voting
+      %li= render partial: "todo", locals: { topic: "Clubs", items: nil }
+      %li= render partial: "todo", locals: { topic: "Members", items: nil }
+      %li= render partial: "todo", locals: { topic: "Shop", items: nil }
+      %li= render partial: "todo", locals: { topic: "Help", items: nil }
+      %li= render partial: "todo", locals: { topic: "Images", items: nil }
+      %li= render partial: "todo", locals: { topic: "Calendar", items: nil }
+      %li= render partial: "todo", locals: { topic: "Games", items: nil }
+      %li= render partial: "todo", locals: { topic: "Tournaments", items: nil }
+      %li= render partial: "todo", locals: { topic: "News", items: nil }
+      %li= render partial: "todo", locals: { topic: "Articles", items: nil }
+      %li= render partial: "todo", locals: { topic: "Juniors", items: nil }
+      %li= render partial: "todo", locals: { topic: "Voting", items: nil }
