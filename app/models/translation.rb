@@ -70,19 +70,17 @@ class Translation < ActiveRecord::Base
     where(active: true).where.not(value: nil).where("english != old_english").count
   end
 
-  @@cache = nil
-
   def self.cache
-    @@cache ||= Redis.new(db: db)
+    @redis ||= Redis.new(db: cache_db)
   end
 
   def self.reconnect(context)
-    logger.info "preparing to reconnect to redis (#{context})" if @@cache
-    @@cache = nil
+    logger.info "preparing to reconnect to redis (#{context})" if @redis
+    @redis = nil
   end
 
-  def self.db
-    @@db ||= ["production", "development", "test"].index(Rails.env) + 1
+  def self.cache_db
+    @redis_db ||= ["production", "development", "test"].index(Rails.env) + 1
   end
 
   def self.check_cache(opt={})
@@ -117,7 +115,7 @@ class Translation < ActiveRecord::Base
         logger.warn "changes to cached translation: #{count}"
       end
     end
-    reconnect("check_cache") # don't reuse this connection for initial work to avoid Passenger fork problems
+    reconnect("check_cache") # don't reuse this connection to avoid Passenger fork problems
     count
   end
 
