@@ -258,6 +258,7 @@ feature "Delete users" do
   given(:deleted) { "successfully deleted" }
 
   scenario "login history is retained but nullified", js: true do
+    pending "upgrade of selenium"
     user = FactoryGirl.create(:user)
     number = 5
     number.times { FactoryGirl.create(:login, user: user) }

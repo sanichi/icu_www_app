@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130929065653) do
+ActiveRecord::Schema.define(version: 20131007113708) do
+
+  create_table "clubs", force: true do |t|
+    t.string   "province",   limit: 10
+    t.string   "county",     limit: 20
+    t.string   "name",       limit: 50
+    t.string   "city",       limit: 50
+    t.string   "district",   limit: 50
+    t.string   "contact",    limit: 50
+    t.string   "email",      limit: 50
+    t.string   "phone",      limit: 50
+    t.string   "address",    limit: 100
+    t.string   "web",        limit: 100
+    t.string   "meetings"
+    t.boolean  "active"
+    t.decimal  "latitude",               precision: 10, scale: 7
+    t.decimal  "longitude",              precision: 10, scale: 7
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"

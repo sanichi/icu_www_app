@@ -15,6 +15,7 @@ IcuWwwApp::Application.routes.draw do
     end
     resources :logins,       only: [:index, :show]
     resources :translations, only: [:index, :show, :edit, :update, :destroy]
+    resources :clubs,        only: [:index, :show, :new, :create, :edit, :update]
   end
 
   match "*url", to: "pages#not_found", via: :all

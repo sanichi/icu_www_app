@@ -1,0 +1,42 @@
+en:
+  ireland:
+    province: Province
+    county: County
+    prov:
+      connaught: Connaught
+      leinster: Leinster
+      munster: Munster
+      ulster: Ulster
+    co:
+      antrim: Antrim
+      armagh: Armagh
+      carlow: Carlow
+      cavan: Cavan
+      clare: Clare
+      cork: Cork
+      derry: Derry
+      donegal: Donegal
+      down: Down
+      dublin: Dublin
+      fermanagh: Fermanagh
+      galway: Galway
+      kerry: Kerry
+      kildare: Kildare
+      kilkenny: Kilkenny
+      laois: Laois
+      leitrim: Leitrim
+      limerick: Limerick
+      longford: Longford
+      louth: Louth
+      mayo: Mayo
+      meath: Meath
+      monaghan: Monaghan
+      offaly: Offaly
+      roscommon: Roscommon
+      sligo: Sligo
+      tipperary: Tipperary
+      tyrone: Tyrone
+      waterford: Waterford
+      westmeath: Westmeath
+      wexford: Wexford
+      wicklow: Wicklow
