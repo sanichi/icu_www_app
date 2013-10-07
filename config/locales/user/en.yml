@@ -1,0 +1,24 @@
+en:
+  user:
+    updated: Preferences successfully updated
+    email: Email
+    password: Password
+    expires: Expires on
+    ticket: Season ticket
+    theme: Theme
+    preferences: Preferences
+    roles: Roles
+    role:
+      admin: Administrator
+      editor: Editor
+      translator: Translator
+      treasurer: Treasurer
+    locale: Language
+    lang:
+      en: English
+      ga: Irish
+  errors:
+    attributes:
+      password:
+        length: minimum length is %{minimum}
+        digits: should contain at least 1 digit

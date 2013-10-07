@@ -18,33 +18,3 @@ en:
     prev: previous
     last: last
     of: of
-  session:
-    sign_in: Sign in
-    sign_out: Sign out
-    signed_in_as: Signed in as
-    signed_out: Signed out!
-    enter_email: Please enter an email
-    enter_password: Please enter a password
-    invalid_email: Invalid email or password
-    invalid_password: Invalid email or password
-    unverified_email: Unverified email
-    account_disabled: Account disabled
-    subscription_expired: Subscription expired
-  user:
-    updated: Preferences successfully updated
-    email: Email
-    password: Password
-    expires: Expires on
-    ticket: Season ticket
-    theme: Theme
-    preferences: Preferences
-    roles: Roles
-    role:
-      admin: Administrator
-      editor: Editor
-      translator: Translator
-      treasurer: Treasurer
-    locale: Language
-    lang:
-      en: English
-      ga: Irish

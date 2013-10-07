@@ -1,8 +1,4 @@
 en:
   errors:
-    attributes:
-      password:
-        length: minimum length is %{minimum}
-        digits: should contain at least 1 digit
     messages:
       unauthorized: You are not authorized to view this page

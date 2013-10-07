@@ -97,22 +97,22 @@ class Translation < ActiveRecord::Base
       cachable.each do |k, v|
         unless cached[k] && cached[k] == v
           cache.set(k,v)
-          logger.warn "#{cached[k] ? 'upd' : 'cre'}ated cached translation #{k} => #{v}"
+          logger.warn "#{cached[k] ? 'upd' : 'cre'}ated redis translation #{k} => #{v}"
           count += 1
         end
       end
       cached.each do |k, v|
         unless cachable[k]
           cache.del(k)
-          logger.warn "deleted cached translation #{k} => #{v}"
+          logger.warn "deleted redis translation #{k} => #{v}"
           count += 1
         end
       end
       # In normal circumstances 'count' should be zero because the callbacks should keep Redis and MySQL in sync.
       if count == 0
-        logger.info "no changes to cached translation"
+        logger.info "no changes to redis translations"
       else
-        logger.warn "changes to cached translation: #{count}"
+        logger.warn "changes to redis translations: #{count}"
       end
     end
     reconnect("check_cache") # don't reuse this connection to avoid Passenger fork problems
