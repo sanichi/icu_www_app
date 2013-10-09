@@ -8,8 +8,15 @@ class Ability
       can :manage, :all
       return
     end
+    
+    if user.editor?
+      can :manage, Club
+    end
+    
+    if user.translator?
+      can :manage, Translation
+    end
 
     can :manage_own_login, User, id: user.id
-    can :manage, Translation if user.translator?
   end
 end

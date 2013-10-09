@@ -38,7 +38,7 @@
         %td
           %time{datetime: @translation.created_at.to_s(:html5)}= @translation.created_at.to_s(:nosec)
     = render "action", translation: @translation
-    - if path = last_search(:admin, :translation)
+    - if path = last_search(:admin, :translations)
       = link_to t("last_search"), path, class: "btn btn-default"
     - else
       = link_to "Translations", admin_translations_path, class: "btn btn-default"

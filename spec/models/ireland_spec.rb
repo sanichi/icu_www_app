@@ -11,6 +11,8 @@ describe Ireland do
     expect(Ireland.counties("leinster")).to have(12).counties
     expect(Ireland.counties(:munster)).to have(6).counties
     expect(Ireland.counties("ulster")).to have(9).counties
+    expect(Ireland.counties("scotland")).to have(0).counties
+    expect(Ireland.counties.join).to eq Ireland.counties.sort.join
   end
 
   it "::has?" do
@@ -31,5 +33,13 @@ describe Ireland do
     expect(Ireland.has?("wales", "glamorgan")).to be_false
     expect(Ireland.has?("", "")).to be_false
     expect(Ireland.has?(nil, nil)).to be_false
+  end
+
+  it "::province" do
+    expect(Ireland.province("down")).to eq "ulster"
+    expect(Ireland.province(:galway)).to eq "connaught"
+    expect(Ireland.province("dublin")).to eq "leinster"
+    expect(Ireland.province(:cork)).to eq "munster"
+    expect(Ireland.province("london")).to be_nil
   end
 end

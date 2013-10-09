@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
   def index
     @users = User.search(params, admin_users_path)
     flash.now[:warning] = t("no_matches") if @users.count == 0
-    save_last_search(:admin, :user)
+    save_last_search(:admin, :users)
   end
 
   def update

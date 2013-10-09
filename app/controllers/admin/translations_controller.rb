@@ -7,7 +7,7 @@ class Admin::TranslationsController < ApplicationController
     @creates = Translation.creates_required
     @updates = Translation.updates_required
     flash.now[:warning] = t("no_matches") if @translations.count == 0
-    save_last_search(:admin, :translation)
+    save_last_search(:admin, :translations)
   end
 
   def update
@@ -25,7 +25,7 @@ class Admin::TranslationsController < ApplicationController
   def destroy
     if @translation.deletable?
       @translation.destroy
-      redirect_to view_context.last_search(:admin, :translation) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
+      redirect_to view_context.last_search(:admin, :translations) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
     else
       redirect_to [:admin, @translation], alert: "Can't destroy active translation #{@translation.locale_key}"
     end

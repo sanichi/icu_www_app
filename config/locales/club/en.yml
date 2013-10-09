@@ -1,0 +1,17 @@
+en:
+  club:
+    active: Active
+    address: Address
+    city: City
+    contact: Contact
+    county: County
+    district: District
+    email: Email
+    inactive: Inactive
+    latitude: Latitude
+    longitude: Longituse
+    meetings: Meetings
+    name: Name
+    phone: Phone
+    province: Province
+    web: Website

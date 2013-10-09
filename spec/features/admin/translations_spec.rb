@@ -2,8 +2,8 @@
 require 'spec_helper'
 
 feature "Authorization for translations" do
-  given(:ok_roles)        { User::ROLES.select { |role| %w[admin translator].include?(role) } }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| %w[admin translator].include?(role) } }
+  given(:ok_roles)        { %w[admin translator] }
+  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
   given(:translation)     { FactoryGirl.create(:translation) }
   given(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
   given(:success)         { "div.alert-success" }

@@ -1,13 +1,13 @@
 en:
   ireland:
-    province: Province
-    county: County
     prov:
+      any: Any province
       connaught: Connaught
       leinster: Leinster
       munster: Munster
       ulster: Ulster
     co:
+      any: Any county
       antrim: Antrim
       armagh: Armagh
       carlow: Carlow

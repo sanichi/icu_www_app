@@ -1,7 +1,11 @@
 class Club < ActiveRecord::Base
+  extend Util::Pagination
+
   WEB_FORMAT = ['https?:\/\/', '[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+']
 
   before_validation :normalize_attributes
+
+  validate :province_has_county, :has_contact_method
 
   validates :name, presence: true, uniqueness: true
   validates :active, inclusion: { in: [true, false] }
@@ -14,8 +18,21 @@ class Club < ActiveRecord::Base
   validates :phone, format: { with: /\d{3}/ }, allow_nil: true
   validates :latitude,  numericality: { greater_than:  51.2, less_than: 55.6 }, allow_nil: true
   validates :longitude, numericality: { greater_than: -10.6, less_than: -5.3 }, allow_nil: true
+  validates :district, :address, :meetings, presence: true, allow_nil: true
 
-  validate :province_has_county, :has_contact_method
+  def self.search(params, path)
+    matches = order(:name)
+    matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
+    matches = matches.where("city LIKE ?", "%#{params[:city]}%") if params[:city].present?
+    matches = matches.where("contact LIKE ?", "%#{params[:contact]}%") if params[:contact].present?
+    matches = matches.where(province: params[:province]) if params[:province].present?
+    matches = matches.where(county: params[:county]) if params[:county].present?
+    case params[:active]
+    when "active", nil then matches = matches.where(active: true)
+    when "inactive"    then matches = matches.where(active: false)
+    end
+    paginate(matches, params, path)
+  end
 
   private
 

@@ -6,6 +6,7 @@ class Ireland
     "munster"   => %w[clare cork kerry limerick tipperary waterford].freeze,
     "ulster"    => %w[antrim armagh cavan derry donegal down fermanagh monaghan tyrone].freeze,
   }.freeze
+  COUNTIES = Hash[PROVINCES.each_with_object([]){|(p,cs),a| cs.each{|c| a << [c,p]}}.sort].freeze
   
   def self.provinces
     PROVINCES.keys
@@ -13,12 +14,16 @@ class Ireland
   
   def self.counties(province=nil)
     if province.blank?
-      PROVINCES.each_with_object([]) { |(k,v), a| a.concat(v) }.sort
+      COUNTIES.keys
     elsif PROVINCES.include?(province.to_s)
       PROVINCES[province.to_s].dup
     else
       []
     end
+  end
+  
+  def self.province(county)
+    COUNTIES[county.to_s]
   end
 
   def self.has?(province, county=nil)

@@ -1,17 +1,21 @@
 en:
-  icu: Irish Chess Union
   ICU: ICU
-  icu_logo: ICU Logo
-  home: Home
-  search: Search
+  any: Any
   cancel: Cancel
   delete: Delete
   edit: Edit
-  save: Save
-  show: Show
+  either: Either
+  home: Home
+  icu: Irish Chess Union
+  icu_logo: ICU Logo
   last_search: Last Search
   no_matches: No matches
+  save: Save
+  search: Search
+  show: Show
   under_construction: Under Construction
+  "no": "No"
+  "yes": "Yes"
   pagination:
     frst: first
     next: next
