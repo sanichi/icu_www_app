@@ -8,6 +8,7 @@ IcuWwwApp::Application.routes.draw do
 
   resources :sessions, only: [:create]
   resources :users,    only: [:show, :edit, :update]
+  resources :clubs,    only: [:index, :show]
 
   namespace :admin do
     resources :users,  only: [:index, :show, :edit, :update, :destroy] do
@@ -15,7 +16,7 @@ IcuWwwApp::Application.routes.draw do
     end
     resources :logins,       only: [:index, :show]
     resources :translations, only: [:index, :show, :edit, :update, :destroy]
-    resources :clubs,        only: [:index, :show, :new, :create, :edit, :update]
+    resources :clubs,        only: [:new, :create, :edit, :update]
   end
 
   match "*url", to: "pages#not_found", via: :all

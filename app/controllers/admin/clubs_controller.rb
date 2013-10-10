@@ -1,12 +1,6 @@
 class Admin::ClubsController < ApplicationController
   authorize_resource
-  before_action :set_club, only: [:show, :edit, :update]
-
-  def index
-    @clubs = Club.search(params, admin_clubs_path)
-    flash.now[:warning] = t("no_matches") if @clubs.count == 0
-    save_last_search(:admin, :clubs)
-  end
+  before_action :set_club, only: [:edit, :update]
 
   def new
     @club = Club.new
