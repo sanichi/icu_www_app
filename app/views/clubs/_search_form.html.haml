@@ -1,0 +1,20 @@
+= form_tag clubs_path, method: :get, class: "form-inline", role: "form" do
+  .form-group
+    = label_tag :name, t("club.name"), class: "sr-only"
+    = text_field_tag :name, params[:name], class: "form-control", placeholder: t("club.name"), size: 10, type: "search"
+  .form-group
+    = label_tag :city, t("club.city"), class: "sr-only"
+    = text_field_tag :city, params[:city], class: "form-control", placeholder: t("club.city"), size: 10, type: "search"
+  .form-group
+    = label_tag :county, t("club.county"), class: "sr-only"
+    = select_tag :county, county_search_menu(params[:county]), class: "form-control"
+  .form-group
+    = label_tag :province, t("club.province"), class: "sr-only"
+    = select_tag :province, province_search_menu(params[:province]), class: "form-control"
+  .form-group
+    = label_tag :contact, t("club.contact"), class: "sr-only"
+    = text_field_tag :contact, params[:contact], class: "form-control", placeholder: t("club.contact"), size: 10, type: "search"
+  .form-group
+    = label_tag :active, t("club.active"), class: "sr-only"
+    = select_tag :active, club_active_search_menu(params[:active]), class: "form-control"
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

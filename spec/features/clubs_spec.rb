@@ -8,7 +8,8 @@ feature "Searching clubs" do
     FactoryGirl.create(:club, name: "Aer Lingus", city: "Dublin", contact: "Gearóidín", province: "leinster", county: "dublin")
     FactoryGirl.create(:club, name: "Cortex", city: "Arklow", contact: "Danny", province: "leinster", county: "wicklow", active: false)
     visit clubs_path
-    @xpath = "//table[@id='results']/tbody/tr"
+    @xpath = "//div[starts-with(@id,'club_')]"
+    @search = "Search"
   end
   
   it "shows all active records by default" do
@@ -16,65 +17,95 @@ feature "Searching clubs" do
   end
 
   it "find records by name" do
-    fill_in "Name", with: "Lingus"
-    click_button "Search"
+    label = I18n.t("club.name")
+    fill_in label, with: "Lingus"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_xpath(@xpath, text: "Aer Lingus")
-    fill_in "Name", with: "b"
-    click_button "Search"
+    fill_in label, with: "b"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 2)
     expect(page).to have_xpath(@xpath, text: "Bangor")
     expect(page).to have_xpath(@xpath, text: "Bray/Greystones")
-    fill_in "Name", with: "/"
-    click_button "Search"
+    fill_in label, with: "/"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_xpath(@xpath, text: "Bray/Greystones")
   end
 
   it "find records by city" do
-    fill_in "City", with: "Dub"
-    click_button "Search"
+    label = I18n.t("club.city")
+    fill_in label, with: "Dub"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 2)
     expect(page).to have_xpath(@xpath, text: "Bray/Greystones")
     expect(page).to have_xpath(@xpath, text: "Aer Lingus")
   end
 
+  it "find records by county" do
+    label = I18n.t("club.county")
+    select "Dublin", from: label
+    click_button @search
+    expect(page).to have_xpath(@xpath, count: 2)
+    expect(page).to have_xpath(@xpath, text: "Bray/Greystones")
+    expect(page).to have_xpath(@xpath, text: "Aer Lingus")
+    select "Down", from: label
+    click_button @search
+    expect(page).to have_xpath(@xpath, count: 1)
+    expect(page).to have_xpath(@xpath, text: "Bangor")
+  end
+
+  it "find records by province" do
+    label = I18n.t("club.province")
+    select "Lein", from: label
+    click_button @search
+    expect(page).to have_xpath(@xpath, count: 2)
+    expect(page).to have_xpath(@xpath, text: "Bray/Greystones")
+    expect(page).to have_xpath(@xpath, text: "Aer Lingus")
+    select "Ulster", from: label
+    click_button @search
+    expect(page).to have_xpath(@xpath, count: 1)
+    expect(page).to have_xpath(@xpath, text: "Bangor")
+  end
+
   it "find records by contact" do
-    fill_in "Contact", with: "óidí"
-    click_button "Search"
+    label = I18n.t("club.contact")
+    fill_in label, with: "óidí"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_xpath(@xpath, text: "Gearóidín")
-    fill_in "Contact", with: "Dan"
-    select "Either", from: "Active"
-    click_button "Search"
+    fill_in label, with: "Dan"
+    select I18n.t("either"), from: I18n.t("club.active")
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_xpath(@xpath, text: "Danny")
   end
 
   it "find records by activity" do
-    select "Either", from: "Active"
-    click_button "Search"
+    label = I18n.t("club.active")
+    select I18n.t("either"), from: label
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 4)
-    select "Active", from: "Active"
-    click_button "Search"
+    select I18n.t("club.active"), from: label
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 3)
-    select "Inactive", from: "Active"
-    click_button "Search"
+    select I18n.t("club.inactive"), from: label
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_xpath(@xpath, text: "Cortex")
   end
 
   it "return no results when appropriate" do
-    fill_in "Contact", with: "Dan"
-    fill_in "Name", with: "Aer"
-    click_button "Search"
+    fill_in I18n.t("club.contact"), with: "Dan"
+    fill_in I18n.t("club.name"), with: "Aer"
+    click_button @search
     expect(page).to_not have_xpath(@xpath)
     expect(page).to have_css("div.alert-warning", text: "No matches")
   end
 
   it "remember last search" do
-    fill_in "Contact", with: "Gear"
-    click_button "Search"
+    fill_in I18n.t("club.contact"), with: "Gear"
+    click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     click_link "Aer Lingus"
     click_link I18n.t("last_search")
@@ -105,7 +136,7 @@ feature "Showing a club" do
       web:       "http://chess.bangor.net",
     }
     bangor = FactoryGirl.create(:club, params)
-    visit admin_club_path(bangor)
+    visit club_path(bangor)
     params.each do |param, value|
       case param
       when :active
@@ -116,6 +147,8 @@ feature "Showing a club" do
         expect(page).to have_css("h1", text: value)
       when :province
         expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t("ireland.prov.#{value}"))
+      when :web
+        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: bangor.web_simple)
       else
         expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: value)
       end

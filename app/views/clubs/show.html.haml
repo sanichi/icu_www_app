@@ -1,0 +1,60 @@
+- content_for :title, "Club"
+
+.row
+  .col-md-8.col-md-offset-2
+    %h1.text-center= @club.name
+    %table.table.table-bordered
+      %tr
+        %th= t("club.web")
+        %td= link_to @club.web_simple, @club.web, target: "club" if @club.web.present?
+      %tr
+        %th= t("club.meetings")
+        %td= @club.meetings
+      %tr
+        %th= t("club.address")
+        %td= @club.address
+      %tr
+        %th= t("club.district")
+        %td= @club.district
+      %tr
+        %th= t("club.city")
+        %td= @club.city
+      %tr
+        %th= t("club.county")
+        %td= t("ireland.co.#{@club.county}")
+      %tr
+        %th= t("club.province")
+        %td= t("ireland.prov.#{@club.province}")
+      %tr
+        %th= t("club.latitude")
+        %td= @club.latitude
+      %tr
+        %th= t("club.longitude")
+        %td= @club.longitude
+      %tr
+        %th= t("club.contact")
+        %td= @club.contact
+      %tr
+        %th= t("club.email")
+        %td= mail_to @club.email, @club.email if @club.email.present?
+      %tr
+        %th= t("club.phone")
+        %td= @club.phone
+      %tr
+        %th= t("club.active")
+        %td= t(@club.active ? "yes" : "no")
+      - if can? :manage, @club
+        %tr
+          %th Created
+          %td
+            %time{datetime: @club.created_at.to_s(:html5)}= @club.created_at.to_s(:nosec)
+        %tr
+          %th Last Updated
+          %td
+            %time{datetime: @club.updated_at.to_s(:html5)}= @club.updated_at.to_s(:nosec)
+    - if can? :manage, @club
+      = link_to "Edit", edit_admin_club_path(@club), class: "btn btn-primary"
+    - if path = last_search(:clubs)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    - else
+      = link_to "Clubs", admin_clubs_path, class: "btn btn-default"

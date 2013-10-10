@@ -4,11 +4,13 @@ en:
     address: Address
     city: City
     contact: Contact
+    co: Co.
     county: County
     district: District
     email: Email
     inactive: Inactive
     latitude: Latitude
+    location: Location
     longitude: Longitude
     meetings: Meetings
     name: Name

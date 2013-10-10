@@ -1,0 +1,39 @@
+- content_for :title, "Clubs"
+
+.row
+  .col-md-12
+    = render "utils/search_panel", form: "search_form", title: "Clubs"
+= render "utils/pagination_links", pager: @clubs
+.row
+  .col-md-1
+  .col-md-10
+    - if @clubs.count > 0
+      - @clubs.matches.each do |club|
+        %div{class: "panel panel-default", id: "club_#{club.id}"}
+          .panel-heading
+            = link_to club.name, club
+            = "(#{t('club.inactive')})" unless club.active
+          %ul.list-group
+            - if club.meetings
+              %li.list-group-item
+                %em= "#{t('club.meetings')}:"
+                = club.meetings
+            %li.list-group-item
+              %em= "#{t('club.location')}:"
+              - location = []
+              - location << club.address                                        if club.address
+              - location << club.district                                       if club.district
+              - location << club.city                                           if club.city
+              - location << t("club.co") + " " + t("ireland.co.#{club.county}") if club.county
+              - location << t("ireland.prov.#{club.province}")                  if club.province
+              = location.join(', ')
+          - if club.contact || club.contactable?
+            %li.list-group-item
+              %em= "#{t('club.contact')}:"
+              - contact = []
+              - contact << club.contact                                         if club.contact && !club.email
+              - contact << mail_to(club.email, club.contact || club.email)      if club.email
+              - contact << club.phone                                           if club.phone
+              - contact << link_to(club.web_simple, club.web, target: "club")   if club.web
+              = contact.join(', ').html_safe
+= render "utils/pagination_links", pager: @clubs
