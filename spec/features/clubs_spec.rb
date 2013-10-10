@@ -68,19 +68,6 @@ feature "Searching clubs" do
     expect(page).to have_xpath(@xpath, text: "Bangor")
   end
 
-  it "find records by contact" do
-    label = I18n.t("club.contact")
-    fill_in label, with: "óidí"
-    click_button @search
-    expect(page).to have_xpath(@xpath, count: 1)
-    expect(page).to have_xpath(@xpath, text: "Gearóidín")
-    fill_in label, with: "Dan"
-    select I18n.t("either"), from: I18n.t("club.active")
-    click_button @search
-    expect(page).to have_xpath(@xpath, count: 1)
-    expect(page).to have_xpath(@xpath, text: "Danny")
-  end
-
   it "find records by activity" do
     label = I18n.t("club.active")
     select I18n.t("either"), from: label
@@ -96,7 +83,7 @@ feature "Searching clubs" do
   end
 
   it "return no results when appropriate" do
-    fill_in I18n.t("club.contact"), with: "Dan"
+    select I18n.t("ireland.prov.ulster"), from: I18n.t("club.province")
     fill_in I18n.t("club.name"), with: "Aer"
     click_button @search
     expect(page).to_not have_xpath(@xpath)
@@ -104,7 +91,7 @@ feature "Searching clubs" do
   end
 
   it "remember last search" do
-    fill_in I18n.t("club.contact"), with: "Gear"
+    fill_in I18n.t("club.name"), with: "Aer"
     click_button @search
     expect(page).to have_xpath(@xpath, count: 1)
     click_link "Aer Lingus"
