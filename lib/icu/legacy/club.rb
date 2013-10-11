@@ -7,18 +7,17 @@ module ICU
         club_id:        :id,
         club_name:      :name,
         club_status:    :active,
-        club_province:  :province,
         club_county:    :county,
         club_city:      :city,
         club_district:  :district,
         club_address:   :address,
-        club_meetings:  :meetings,
+        club_meetings:  :meet,
         club_contact:   :contact,
         club_phone:     :phone,
         club_email:     :email,
         club_web:       :web,
-        club_latitude:  :latitude,
-        club_longitude: :longitude,
+        club_latitude:  :lat,
+        club_longitude: :long,
       }
 
       def synchronize(force=false)
@@ -42,8 +41,8 @@ module ICU
           new_club[new_attr] = old_club[old_attr]
         end
         params[:active] = params[:active] == "active"
-        params[:province].downcase!
         params[:county].downcase!
+        params[:contact] = nil if params[:contact] == "Unknown"
         begin
           ::Club.create!(params)
           puts "created Club #{params[:id]}, #{params[:name]}"

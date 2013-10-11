@@ -8,8 +8,8 @@
         %th= t("club.web")
         %td= link_to @club.web_simple, @club.web, target: "club" if @club.web.present?
       %tr
-        %th= t("club.meetings")
-        %td= @club.meetings
+        %th= t("club.meet")
+        %td= @club.meet
       %tr
         %th= t("club.address")
         %td= @club.address
@@ -26,11 +26,11 @@
         %th= t("club.province")
         %td= t("ireland.prov.#{@club.province}")
       %tr
-        %th= t("club.latitude")
-        %td= @club.latitude
+        %th= t("club.lat")
+        %td= @club.lat
       %tr
-        %th= t("club.longitude")
-        %td= @club.longitude
+        %th= t("club.long")
+        %td= @club.long
       %tr
         %th= t("club.contact")
         %td= @club.contact

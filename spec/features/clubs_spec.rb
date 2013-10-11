@@ -3,10 +3,10 @@ require 'spec_helper'
 
 feature "Searching clubs" do
   before(:each) do
-    FactoryGirl.create(:club, name: "Bangor", city: "Groomsport", contact: "Mark", province: "ulster", county: "down")
-    FactoryGirl.create(:club, name: "Bray/Greystones", city: "Dublin", contact: "Mervyn", province: "leinster", county: "dublin")
-    FactoryGirl.create(:club, name: "Aer Lingus", city: "Dublin", contact: "Gearóidín", province: "leinster", county: "dublin")
-    FactoryGirl.create(:club, name: "Cortex", city: "Arklow", contact: "Danny", province: "leinster", county: "wicklow", active: false)
+    FactoryGirl.create(:club, name: "Bangor", city: "Groomsport", contact: "Mark", county: "down")
+    FactoryGirl.create(:club, name: "Bray/Greystones", city: "Dublin", contact: "Mervyn", county: "dublin")
+    FactoryGirl.create(:club, name: "Aer Lingus", city: "Dublin", contact: "Gearóidín", county: "dublin")
+    FactoryGirl.create(:club, name: "Cortex", city: "Arklow", contact: "Danny", county: "wicklow", active: false)
     visit clubs_path
     @xpath = "//div[starts-with(@id,'club_')]"
     @search = "Search"
@@ -107,35 +107,32 @@ feature "Showing a club" do
   
   it "all fields" do
     params = {
-      active:    true,
-      address:   "McKee Clock",
-      city:      "Bangor",
-      contact:   "Mark Orr",
-      county:    "down",
-      district:  "Marina",
-      email:     "mark@bangor.net",
-      latitude:  54.65654,
-      longitude: -5.67529,
-      meetings:  "7pm Tuesdays and Thursdays",
       name:      "Bangor",
-      phone:     "07968 537010",
-      province:  "ulster",
       web:       "http://chess.bangor.net",
+      meet:      "7pm Tuesdays and Thursdays",
+      address:   "McKee Clock",
+      district:  "Marina",
+      city:      "Bangor",
+      county:    "down",
+      lat:       54.65654,
+      long:      -5.67529,
+      contact:   "Mark Orr",
+      email:     "mark@bangor.net",
+      phone:     "07968 537010",
+      active:    true,
     }
     bangor = FactoryGirl.create(:club, params)
     visit club_path(bangor)
     params.each do |param, value|
       case param
-      when :active
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t(value ? "yes" : "no"))
-      when :county
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t("ireland.co.#{value}"))
       when :name
         expect(page).to have_css("h1", text: value)
-      when :province
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t("ireland.prov.#{value}"))
       when :web
         expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: bangor.web_simple)
+      when :county
+        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t("ireland.co.#{value}"))
+      when :active
+        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t(value ? "yes" : "no"))
       else
         expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: value)
       end

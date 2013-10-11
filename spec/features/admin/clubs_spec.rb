@@ -63,7 +63,6 @@ feature "New clubs" do
     fill_in "District", with: "Groomsport"
     fill_in "City", with: "Bangor"
     select "Down", from: "County"
-    select "Ulster", from: "Province"
     fill_in "Latitude", with: 54.67301
     fill_in "Longitude", with: -5.61431
     fill_in "Contact", with: "Eddie Webb"
@@ -75,14 +74,14 @@ feature "New clubs" do
     club = Club.last
     expect(club.name).to eq "Bangor"
     expect(club.web).to eq "http://www.ulsterchess.org/membership/Clubs/bangor"
-    expect(club.meetings).to eq "Thursdays"
+    expect(club.meet).to eq "Thursdays"
     expect(club.address).to eq "The Pub"
     expect(club.district).to eq "Groomsport"
     expect(club.city).to eq "Bangor"
     expect(club.county).to eq "down"
     expect(club.province).to eq "ulster"
-    expect(club.latitude).to be_within(0.00001).of(54.67301)
-    expect(club.longitude).to be_within(0.00001).of(-5.61431)
+    expect(club.lat).to be_within(0.00001).of(54.67301)
+    expect(club.long).to be_within(0.00001).of(-5.61431)
     expect(club.contact).to eq "Eddie Webb"
     expect(club.email).to eq "eddie.webb@heaven.com"
     expect(club.phone).to eq "02891 1234 567"
@@ -95,21 +94,20 @@ feature "New clubs" do
     fill_in "Name", with: "Millisle"
     fill_in "City", with: "Millisle"
     select "Down", from: "County"
-    select "Ulster", from: "Province"
     select "Inactive", from: "Active"
     click_button "Save"
     expect(page).to have_css(success, text: "created")
     club = Club.last
     expect(club.name).to eq "Millisle"
     expect(club.web).to be_nil
-    expect(club.meetings).to be_nil
+    expect(club.meet).to be_nil
     expect(club.address).to be_nil
     expect(club.district).to be_nil
     expect(club.city).to eq "Millisle"
     expect(club.county).to eq "down"
     expect(club.province).to eq "ulster"
-    expect(club.latitude).to be_nil
-    expect(club.longitude).to be_nil
+    expect(club.lat).to be_nil
+    expect(club.long).to be_nil
     expect(club.contact).to be_nil
     expect(club.email).to be_nil
     expect(club.phone).to be_nil

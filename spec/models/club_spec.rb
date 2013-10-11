@@ -5,60 +5,49 @@ describe Club do
 
   context "latitude and longitude" do
     it "can be blank" do
-      bangor.latitude = nil
-      bangor.longitude = nil
+      bangor.lat = nil
+      bangor.long = nil
       expect{ bangor.save! }.to_not raise_error
     end
 
     it "latitude has upper limit" do
-      bangor.latitude = 60
-      expect{ bangor.save! }.to raise_error(/latitude must be less than/i)
+      bangor.lat = 60
+      expect{ bangor.save! }.to raise_error(/must be between/i)
     end
 
     it "latitude has lower limit" do
-      bangor.latitude = 40
-      expect{ bangor.save! }.to raise_error(/latitude must be greater than/i)
+      bangor.lat = 40
+      expect{ bangor.save! }.to raise_error(/must be between/i)
     end
 
     it "longitude has upper limit" do
-      bangor.longitude = 10
-      expect{ bangor.save! }.to raise_error(/longitude must be less than/i)
+      bangor.long = 10
+      expect{ bangor.save! }.to raise_error(/must be between/i)
     end
 
     it "longitude has lower limit" do
-      bangor.longitude = -20
-      expect{ bangor.save! }.to raise_error(/longitude must be greater than/i)
+      bangor.long = -20
+      expect{ bangor.save! }.to raise_error(/must be between/i)
     end
 
     it "can be saved to 6 decimal places" do
       lat, long = 54.676051, -5.620965
-      bangor.latitude = lat
-      bangor.longitude = long
+      bangor.lat = lat
+      bangor.long = long
       bangor.save!
       bangor.reload
-      expect(bangor.latitude).to be_within(0.000001).of(lat)
-      expect(bangor.longitude).to be_within(0.000001).of(long)
+      expect(bangor.lat).to be_within(0.000001).of(lat)
+      expect(bangor.long).to be_within(0.000001).of(long)
     end
 
     it "can be given as strings" do
       lat, long = "54.676051", "-5.620965"
-      bangor.latitude = lat
-      bangor.longitude = long
+      bangor.lat = lat
+      bangor.long = long
       bangor.save!
       bangor.reload
-      expect(bangor.latitude).to be_within(0.000001).of(lat.to_f)
-      expect(bangor.longitude).to be_within(0.000001).of(long.to_f)
-    end
-  end
-
-  context "province" do
-    let(:bangor) { FactoryGirl.create(:club) }
-
-    it "must not be blank or invalid" do
-      [nil, "", "scotand", "Ulster"].each do |province|
-        bangor.province = province
-        expect{ bangor.save! }.to raise_error(/invalid province/i)
-      end
+      expect(bangor.lat).to be_within(0.000001).of(lat.to_f)
+      expect(bangor.long).to be_within(0.000001).of(long.to_f)
     end
   end
 
@@ -70,18 +59,6 @@ describe Club do
         bangor.county = county
         expect{ bangor.save! }.to raise_error(/invalid county/i)
       end
-    end
-  end
-
-  context "province and county" do
-    let(:bangor) { FactoryGirl.create(:club) }
-
-    it "should be consistent" do
-      bangor.province = "ulster"
-      bangor.county = "limerick"
-      expect{ bangor.save! }.to raise_error(/Limerick.*Ulster/)
-      bangor.county = "down"
-      expect{ bangor.save! }.to_not raise_error
     end
   end
 
@@ -107,19 +84,19 @@ describe Club do
       expect(bangor.web).to eq "http://example.club.com/home"
     end
   end
-  
+
   context "blank attributes" do
     it "are normalised" do
-      club = FactoryGirl.create(:club, active: false, meetings: "", district: " ", address: "\s", contact: "", phone: "", email: "", web: "", latitude: "", longitude: "")      
-      expect(club.meetings).to be_nil
+      club = FactoryGirl.create(:club, web: "", meet: "", address: "\s", district: " ", lat: "", long: "", contact: "", email: "", phone: "", active: false)
+      expect(club.meet).to be_nil
       expect(club.district).to be_nil
       expect(club.address).to be_nil
       expect(club.contact).to be_nil
       expect(club.phone).to be_nil
       expect(club.email).to be_nil
       expect(club.web).to be_nil
-      expect(club.latitude).to be_nil
-      expect(club.longitude).to be_nil
+      expect(club.lat).to be_nil
+      expect(club.long).to be_nil
     end
   end
 end

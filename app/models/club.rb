@@ -5,20 +5,23 @@ class Club < ActiveRecord::Base
 
   before_validation :normalize_attributes
 
-  validate :county_belongs_to_province, :has_contact_method
+  validate :has_contact_method
 
   validates :name, presence: true, uniqueness: true
-  validates :active, inclusion: { in: [true, false] }
-  validates :county, inclusion: { in: Ireland.counties, message: "invalid county" }
-  validates :province, inclusion: { in: Ireland.provinces, message: "invalid province" }
-  validates :city, presence: true
-  validates :contact, presence: true, allow_nil: true
   validates :web, format: { with: /\A#{WEB_FORMAT[0]}#{WEB_FORMAT[1]}\z/ }, allow_nil: true
+  validates :meet, :address, :district, presence: true, allow_nil: true
+  validates :city, presence: true
+  validates :county, inclusion: { in: Ireland.counties, message: "invalid county" }
+  validates :lat,  numericality: { greater_than:  51.2, less_than: 55.6, message: "must be between 51.2 and 55.6" }, allow_nil: true
+  validates :long, numericality: { greater_than: -10.6, less_than: -5.3, message: "must be between -10.6 and -5.3" }, allow_nil: true
+  validates :contact, presence: true, allow_nil: true
   validates :email, format: { with: /\A[^\s]+@[^\s]+\z/ }, allow_nil: true
   validates :phone, format: { with: /\d{3}/ }, allow_nil: true
-  validates :latitude,  numericality: { greater_than:  51.2, less_than: 55.6 }, allow_nil: true
-  validates :longitude, numericality: { greater_than: -10.6, less_than: -5.3 }, allow_nil: true
-  validates :district, :address, :meetings, presence: true, allow_nil: true
+  validates :active, inclusion: { in: [true, false] }
+  
+  def province
+    Ireland.province(county)
+  end
   
   def contactable?
     phone.present? || email.present? || web.present?
@@ -36,9 +39,9 @@ class Club < ActiveRecord::Base
     matches = order(:name)
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("city LIKE ?", "%#{params[:city]}%") if params[:city].present?
+    matches = matches.where(county: params[:county]) if Ireland.county?(params[:county])
+    matches = matches.where("county IN (?)", Ireland.counties(params[:province])) if Ireland.province?(params[:province])
     matches = matches.where("contact LIKE ?", "%#{params[:contact]}%") if params[:contact].present?
-    matches = matches.where(province: params[:province]) if params[:province].present?
-    matches = matches.where(county: params[:county]) if params[:county].present?
     case params[:active]
     when "true", nil then matches = matches.where(active: true)
     when "false"     then matches = matches.where(active: false)
@@ -48,18 +51,6 @@ class Club < ActiveRecord::Base
 
   private
 
-  def county_belongs_to_province
-    if Ireland.province?(province) && Ireland.county?(county)
-      unless Ireland.has?(province, county)
-        names = []
-        names << I18n.t("ireland.co.#{county}")
-        names << I18n.t("ireland.prov.#{Ireland.province(county)}")
-        names << I18n.t("ireland.prov.#{province}")
-        errors.add(:county, "%s is in %s, not %s" % names)
-      end
-    end
-  end
-
   def has_contact_method
     if active && !contactable?
       errors[:base] << "An active club must have at least one contact method (phone, email or web)"
@@ -68,7 +59,7 @@ class Club < ActiveRecord::Base
 
   def normalize_attributes
     # Note: 'active' is normalised automatically.
-    [:name, :web, :meetings, :address, :district, :city, :latitude, :longitude, :contact, :email, :phone].each do |atr|
+    [:name, :web, :meet, :address, :district, :city, :lat, :long, :contact, :email, :phone].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
     if web.present? && web.match(/\A#{WEB_FORMAT[1]}/)

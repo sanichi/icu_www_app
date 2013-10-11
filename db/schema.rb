@@ -14,7 +14,6 @@
 ActiveRecord::Schema.define(version: 20131007113708) do
 
   create_table "clubs", force: true do |t|
-    t.string   "province",   limit: 10
     t.string   "county",     limit: 20
     t.string   "name",       limit: 50
     t.string   "city",       limit: 50
@@ -24,10 +23,10 @@ ActiveRecord::Schema.define(version: 20131007113708) do
     t.string   "phone",      limit: 50
     t.string   "address",    limit: 100
     t.string   "web",        limit: 100
-    t.string   "meetings"
+    t.string   "meet"
     t.boolean  "active"
-    t.decimal  "latitude",               precision: 10, scale: 7
-    t.decimal  "longitude",              precision: 10, scale: 7
+    t.decimal  "lat",                    precision: 10, scale: 7
+    t.decimal  "long",                   precision: 10, scale: 7
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -14,18 +14,18 @@
             = link_to club.name, club
             = "(#{t('club.inactive')})" unless club.active
           %ul.list-group
-            - if club.meetings
+            - if club.meet
               %li.list-group-item
-                %em= "#{t('club.meetings')}:"
-                = club.meetings
+                %em= "#{t('club.meet')}:"
+                = club.meet
             %li.list-group-item
               %em= "#{t('club.location')}:"
               - location = []
               - location << club.address                                        if club.address
               - location << club.district                                       if club.district
               - location << club.city                                           if club.city
-              - location << t("club.co") + " " + t("ireland.co.#{club.county}") if club.county
-              - location << t("ireland.prov.#{club.province}")                  if club.province
+              - location << t("club.co") + " " + t("ireland.co.#{club.county}")
+              - location << t("ireland.prov.#{club.province}")
               = location.join(', ')
           - if club.contact || club.contactable?
             %li.list-group-item

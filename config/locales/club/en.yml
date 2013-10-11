@@ -10,10 +10,10 @@ en:
     district: District
     email: Email
     inactive: Inactive
-    latitude: Latitude
+    lat: Latitude
     location: Location
-    longitude: Longitude
-    meetings: Meetings
+    long: Longitude
+    meet: Meetings
     name: Name
     phone: Phone
     province: Province
