@@ -1,0 +1,27 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @club], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @club.new_record? ? "New club" : "Edit #{@club.name}"
+        - locals = { form: f, object: @club, col: "sm", pad: 2, width: 4 }
+        = render "utils/text_field_for", locals.merge(param: :name, text: t("club.name"))
+        = render "utils/text_field_for", locals.merge(param: :web, text: t("club.web"), width: 6)
+        = render "utils/text_field_for", locals.merge(param: :meetings, text: t("club.meetings"), width: 6)
+        = render "utils/text_field_for", locals.merge(param: :address, text: t("club.address"))
+        = render "utils/text_field_for", locals.merge(param: :district, text: t("club.district"))
+        = render "utils/text_field_for", locals.merge(param: :city, text: t("club.city"))
+        = render "utils/select_for", locals.merge(param: :county, text: t("club.county"), width: 3, menu: club_county_menu(@club.county, "please_select"))
+        = render "utils/select_for", locals.merge(param: :province, text: t("club.province"), width: 3, menu: club_province_menu(@club.province, "please_select"))
+        = render "utils/text_field_for", locals.merge(param: :latitude, text: t("club.latitude"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :longitude, text: t("club.longitude"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :contact, text: t("club.contact"))
+        = render "utils/text_field_for", locals.merge(param: :email, text: t("club.email"))
+        = render "utils/text_field_for", locals.merge(param: :phone, text: t("club.phone"))
+        = render "utils/select_for", locals.merge(param: :active, text: t("club.active"), width: 3, menu: club_active_menu(@club.active, nil))
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:clubs)
+        = link_to "Cancel", @club.new_record? ? last_path || clubs_path : @club, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

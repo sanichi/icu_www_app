@@ -51,14 +51,30 @@ describe Club do
     end
   end
 
-  context "province and county" do
+  context "province" do
     let(:bangor) { FactoryGirl.create(:club) }
 
-    it "must not be blank" do
-      bangor.province = nil
-      bangor.county = nil
-      expect{ bangor.save! }.to raise_error(/not included/i)
+    it "must not be blank or invalid" do
+      [nil, "", "scotand", "Ulster"].each do |province|
+        bangor.province = province
+        expect{ bangor.save! }.to raise_error(/invalid province/i)
+      end
     end
+  end
+
+  context "county" do
+    let(:bangor) { FactoryGirl.create(:club) }
+
+    it "must not be blank or invalid" do
+      [nil, "", "somerset", "Down"].each do |county|
+        bangor.county = county
+        expect{ bangor.save! }.to raise_error(/invalid county/i)
+      end
+    end
+  end
+
+  context "province and county" do
+    let(:bangor) { FactoryGirl.create(:club) }
 
     it "should be consistent" do
       bangor.province = "ulster"

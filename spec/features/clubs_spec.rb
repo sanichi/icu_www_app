@@ -68,7 +68,7 @@ feature "Searching clubs" do
     expect(page).to have_xpath(@xpath, text: "Bangor")
   end
 
-  it "find records by activity" do
+  it "find records by whether active or not" do
     label = I18n.t("club.active")
     select I18n.t("either"), from: label
     click_button @search

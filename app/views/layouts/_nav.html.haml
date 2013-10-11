@@ -13,7 +13,9 @@
         %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
       - if can?(:manage, Translation)
         %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
-      %li{class: active("admin/clubs")}= link_to "Clubs", clubs_path
+      %li{class: active("admin/clubs")}= link_to t("club.clubs"), clubs_path
+      - if can?(:manage, Club)
+        %li= link_to "New Club", new_admin_club_path
       - if can?(:manage_own_login, User)
         %li{class: active("users")}= link_to t("user.preferences"), user_path(current_user)
     %ul.nav.navbar-nav.navbar-right

@@ -20,6 +20,7 @@ class Admin::ClubsController < ApplicationController
     if @club.update(club_params)
       redirect_to @club, notice: "Club was successfully updated"
     else
+      flash.now.alert = @club.errors[:base].first if @club.errors[:base].any?
       render action: 'edit'
     end
   end
@@ -31,6 +32,6 @@ class Admin::ClubsController < ApplicationController
   end
 
   def club_params
-    params[:club]
+    params[:club].permit(:name, :web, :meetings, :address, :district, :city, :county, :province, :latitude, :longitude, :contact, :email, :phone, :active)
   end
 end

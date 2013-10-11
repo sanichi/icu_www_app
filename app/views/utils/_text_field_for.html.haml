@@ -1,0 +1,4 @@
+.form-group{class: object.errors[param].any? ? "has-error" : ""}
+  = form.label param, text, class: "control-label col-#{col}-#{pad}"
+  %div{class: "col-#{col}-#{width}"}= form.text_field param, class: "form-control"
+  %div{class: "col-#{col}-#{12-pad-width} help-block"}= object.errors[param].first
