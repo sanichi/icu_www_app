@@ -1,0 +1,8 @@
+- unless defined? size
+  - size = 10
+- unless defined? type
+  - type = "search"
+
+.form-group
+  = label_tag param, text, class: "sr-only"
+  = text_field_tag param, params[param], class: "form-control", placeholder: text, size: size, type: type

@@ -4,15 +4,9 @@
   .col-sm-8.col-sm-offset-2
     = form_tag sessions_path, class: "form-horizontal", role: "form" do
       %fieldset
-
-        .form-group
-          = label_tag :email, t("user.email"), class: "control-label col-sm-3"
-          .col-sm-5= email_field_tag :email, params[:email], class: "form-control"
-
-        .form-group
-          = label_tag :password, t("user.password"), class: "control-label col-sm-3"
-          .col-sm-5= password_field_tag :password, nil, class: "form-control"
-
+        - locals = { col: "sm", pad: 4, width: 4 }
+        = render "utils/text_field_tag", locals.merge(param: :email, text: t("user.email"))
+        = render "utils/text_field_tag", locals.merge(param: :password, text: t("user.password"), type: "password")
         %hr
         = submit_tag t("session.sign_in"), class: "btn btn-primary"
         = link_to t("cancel"), home_path, class: "btn btn-default"

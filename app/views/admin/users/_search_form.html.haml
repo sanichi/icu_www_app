@@ -1,17 +1,7 @@
 = form_tag admin_users_path, method: :get, class: "form-inline", role: "form" do
-  .form-group
-    = label_tag :email, "Email", class: "sr-only"
-    = text_field_tag :email, params[:email], class: "form-control", placeholder: "Email", size: 10, type: "search"
-  .form-group
-    = label_tag :expiry, "Expiry", class: "sr-only"
-    = select_tag :expiry, expiry_search_menu(params[:expiry]), class: "form-control"
-  .form-group
-    = label_tag :status, "Status", class: "sr-only"
-    = select_tag :status, status_search_menu(params[:status]), class: "form-control"
-  .form-group
-    = label_tag :verify, "Verified", class: "sr-only"
-    = select_tag :verify, verify_search_menu(params[:verify]), class: "form-control"
-  .form-group
-    = label_tag :role, "Role", class: "sr-only"
-    = select_tag :role, roles_search_menu(params[:role]), class: "form-control"
+  = render "utils/inline_text_field", param: :email, text: "Email"
+  = render "utils/inline_select", param: :expiry, text: "Expiry", menu: expiry_search_menu(params[:expiry])
+  = render "utils/inline_select", param: :status, text: "Status", menu: status_search_menu(params[:status])
+  = render "utils/inline_select", param: :verify, text: "Verified", menu: verify_search_menu(params[:verify])
+  = render "utils/inline_select", param: :role, text: "Role", menu: roles_search_menu(params[:role])
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

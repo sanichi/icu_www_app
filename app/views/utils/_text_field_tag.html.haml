@@ -1,0 +1,6 @@
+- unless defined? type
+  - type = "text"
+
+.form-group
+  = label_tag param, text, class: "control-label col-#{col}-#{pad}"
+  %div{class: "col-#{col}-#{width}"}= text_field_tag param, params[param], class: "form-control", type: type

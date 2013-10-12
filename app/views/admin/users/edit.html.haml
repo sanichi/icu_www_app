@@ -5,27 +5,12 @@
     = form_for [:admin, @user], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
         %legend= @user.email
-
-        .form-group{class: @user.errors[:status].any? ? "has-error" : ""}
-          = f.label :status, class: "control-label col-sm-3"
-          .col-sm-4= f.text_field :status, class: "form-control"
-          .col-sm-5.help-block= @user.errors.messages[:status].first
-
-        .form-group{class: @user.errors[:password].any? ? "has-error" : ""}
-          = f.label :password, class: "control-label col-sm-3"
-          .col-sm-4= f.password_field :password, class: "form-control", value: ""
-          .col-sm-5.help-block= @user.errors.messages[:password].first
-
-        .form-group{class: @user.errors[:roles].any? ? "has-error" : ""}
-          = f.label :roles, class: "control-label col-sm-3"
-          .col-sm-4= f.select :roles, roles_menu(@user.roles), {}, class: "form-control", multiple: true
-          .col-sm-5.help-block= @user.errors.messages[:roles].first
-
+        - locals = { form: f, object: @user, col: "sm", pad: 3, width: 4 }
+        = render "utils/text_field_for", locals.merge(param: :status, text: "Status")
+        = render "utils/text_field_for", locals.merge(param: :password, text: "Password")
+        = render "utils/select_for", locals.merge(param: :roles, text: "Roles", menu: roles_menu(@user.roles), multiple: true, width: 3)
         - unless @user.verified?
-          .form-group
-            = f.label :verify, class: "control-label col-sm-3"
-            .col-sm-4= f.check_box :verify, { class: "form-control" }, "yes", "no"
-
+          = render "utils/check_box_for", locals.merge(param: :verify, text: "Verifyx", on: "yes", off: "no", width: 1)
         %hr
         = f.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", [:admin, @user], class: "btn btn-default"

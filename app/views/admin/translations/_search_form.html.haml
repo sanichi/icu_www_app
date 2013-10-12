@@ -1,17 +1,7 @@
 = form_tag admin_translations_path, method: :get, class: "form-inline", role: "form" do
-  .form-group
-    = label_tag :key, "Key", class: "sr-only"
-    = text_field_tag :key, params[:key], class: "form-control", placeholder: "Key", size: 10, type: "search"
-  .form-group
-    = label_tag :english, "English", class: "sr-only"
-    = text_field_tag :english, params[:english], class: "form-control", placeholder: "English", size: 10, type: "search"
-  .form-group
-    = label_tag :value, "Irish", class: "sr-only"
-    = text_field_tag :value, params[:value], class: "form-control", placeholder: "Irish", size: 10, type: "search"
-  .form-group
-    = label_tag :user, "User", class: "sr-only"
-    = text_field_tag :user, params[:user], class: "form-control", placeholder: "User", size: 10, type: "search"
-  .form-group
-    = label_tag :category, "Category", class: "sr-only"
-    = select_tag :category, active_search_menu(params[:category]), class: "form-control"
+  = render "utils/inline_text_field", param: :key, text: "Key"
+  = render "utils/inline_text_field", param: :english, text: "English"
+  = render "utils/inline_text_field", param: :value, text: "Irish"
+  = render "utils/inline_text_field", param: :user, text: "User"
+  = render "utils/inline_select", param: :category, text: "Category", menu: active_search_menu(params[:category])
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
