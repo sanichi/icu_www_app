@@ -142,7 +142,7 @@ feature "Performing translations" do
 
     click_button "Save"
     expect(page).to have_css(failure, text: "Translation should have same interpolated variables as English")
-    
+
     fill_in "translation_value", with: "Is fhad íosta %{minimum}"
 
     click_button "Save"
@@ -174,7 +174,7 @@ feature "Performing translations" do
     fill_in "Key", with: key
     click_button "Search"
     expect(page).to have_link("Translate", count: 1)
-    
+
     click_link "Translate"
     fill_in "translation_value", with: ""
 

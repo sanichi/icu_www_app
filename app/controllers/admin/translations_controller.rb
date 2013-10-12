@@ -9,6 +9,12 @@ class Admin::TranslationsController < ApplicationController
     flash.now[:warning] = t("no_matches") if @translations.count == 0
     save_last_search(:admin, :translations)
   end
+  
+  def show
+    if @translation.deletable?
+      flash.now.notice = "This translation is no longer in use and may be deleted or kept for reference"
+    end
+  end
 
   def update
     @translation.user = current_user.email
