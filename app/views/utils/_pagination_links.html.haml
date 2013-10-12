@@ -1,4 +1,4 @@
-- if pager.multi_page
+- if pager.multi_page?
   - if defined?(columns)
     %tr
       %td{colspan: columns, class: "text-center"}= pagination_links(pager)

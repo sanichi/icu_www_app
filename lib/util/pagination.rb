@@ -22,15 +22,15 @@ module Util
       @count    = count
     end
     
-    def multi_page
+    def multi_page?
       @count > @per_page
     end
 
-    def before_end
+    def before_end?
       @page * @per_page < @count
     end
 
-    def after_start
+    def after_start?
       @page > 1
     end
 
