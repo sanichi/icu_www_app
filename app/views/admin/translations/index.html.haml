@@ -1,11 +1,11 @@
 - content_for :title, "Translations"
 
+- title = "Translations"
+- title += ' <span class="label label-success">%d</span>' % @creates if @creates > 0
+- title += ' <span class="label label-primary">%d</span>' % @updates if @updates > 0
+= render "utils/search_panel", form: "admin/translations/search_form", title: title.html_safe
 .row
   .col-sm-12
-    - title = "Translations"
-    - title += ' <span class="label label-success">%d</span>' % @creates if @creates > 0
-    - title += ' <span class="label label-primary">%d</span>' % @updates if @updates > 0
-    = render "utils/search_panel", form: "admin/translations/search_form", title: title.html_safe
     - if @translations.count > 0
       %table{class: "table table-bordered table-striped table-condensed", id: "results"}
         %thead

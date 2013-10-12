@@ -1,12 +1,9 @@
 - content_for :title, "Clubs"
 
-.row
-  .col-md-12
-    = render "utils/search_panel", form: "search_form", title: "Clubs"
+= render "utils/search_panel", form: "search_form", title: "Clubs", col: "md"
 = render "utils/pagination_links", pager: @clubs
 .row
-  .col-md-1
-  .col-md-10
+  .col-md-10.col-md-offset-1
     - if @clubs.count > 0
       - @clubs.matches.each do |club|
         %div{class: "panel panel-default", id: "club_#{club.id}"}

@@ -1,4 +1,11 @@
-.panel.panel-default
-  .panel-heading.text-center
-    %strong= title
-  .panel-body= render form
+- unless defined? pad
+  - pad = 0
+- unless defined? col
+  - col = "sm"
+
+.row
+  %div{class: "col-#{col}-#{12-pad-pad} col-#{col}-offset-#{pad}"}
+    .panel.panel-default
+      .panel-heading.text-center
+        %strong= title
+      .panel-body= render form
