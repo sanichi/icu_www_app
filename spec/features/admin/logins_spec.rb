@@ -57,56 +57,56 @@ feature "Listing logins" do
   end
 
   scenario "specific email" do
-    page.select "Success", from: "Result"
-    page.fill_in "Email", with: @user[:normal].email
+    select "Success", from: "Result"
+    fill_in "Email", with: @user[:normal].email
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     click_link @user[:normal].email
   end
 
   scenario "specific IP" do
-    page.select "Success", from: "Result"
-    page.fill_in "IP", with: @login.ip
+    select "Success", from: "Result"
+    fill_in "IP", with: @login.ip
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:ip].email)
   end
 
   scenario "specific results" do
-    page.select "Failure", from: "Result"
+    select "Failure", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 5)
 
-    page.select "Bad email", from: "Result"
+    select "Bad email", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content("wrong@example.com")
 
-    page.select "Bad password", from: "Result"
+    select "Bad password", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:password].email)
 
-    page.select "Disabled", from: "Result"
+    select "Disabled", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:status].email)
 
-    page.select "Unverified", from: "Result"
+    select "Unverified", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:unverified].email)
 
-    page.select "Expired", from: "Result"
+    select "Expired", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:expired].email)
 
-    page.select "Success", from: "Result"
+    select "Success", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 4)
 
-    page.select "Any", from: "Result"
+    select "Any", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @user.size)
   end
@@ -116,8 +116,8 @@ feature "Listing logins" do
     click_link "Delete"
     expect(User.count).to eq(@user.size - 1)
     visit admin_logins_path
-    page.select "Success", from: "Result"
-    page.select "No user", from: "User"
+    select "Success", from: "Result"
+    select "No user", from: "User"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
     expect(page).to have_content(@user[:normal].email)

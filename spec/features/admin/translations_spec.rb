@@ -65,12 +65,12 @@ feature "Performing translations" do
     expect(page).to have_css("strong span.label.label-success", text: @count)
     expect(page).to have_link("Translate", count: Translation::PAGE_SIZE)
 
-    page.fill_in "Key", with: key
+    fill_in "Key", with: key
     click_button "Search"
     expect(page).to have_link("Translate", count: 1)
 
     click_link "Translate"
-    page.fill_in "translation_value", with: irish
+    fill_in "translation_value", with: irish
 
     click_button "Save"
     expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key}']")
@@ -101,7 +101,7 @@ feature "Performing translations" do
     expect(page).to have_css("strong span.label.label-success", text: @count - 1)
     expect(page).to have_css("strong span.label.label-primary", text: 1)
 
-    page.fill_in "English", with: translation.english
+    fill_in "English", with: translation.english
     click_button "Search"
     expect(page).to have_link("Retranslate", count: 1)
 
@@ -113,7 +113,7 @@ feature "Performing translations" do
     expect(page).to have_xpath("//th[.='Current Irish']/following-sibling::td[.='#{old_irish}']")
 
     click_link "Retranslate"
-    page.fill_in "translation_value", with: irish
+    fill_in "translation_value", with: irish
     click_button "Save"
     expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key}']")
     expect(page).to have_xpath("//th[.='English']/following-sibling::td[.='#{translation.english}']")
@@ -133,17 +133,17 @@ feature "Performing translations" do
     login "translator"
     visit admin_translations_path
 
-    page.fill_in "Key", with: key
+    fill_in "Key", with: key
     click_button "Search"
     expect(page).to have_link("Translate", count: 1)
 
     click_link "Translate"
-    page.fill_in "translation_value", with: "Is fhad íosta %{wrong_variable_name}"
+    fill_in "translation_value", with: "Is fhad íosta %{wrong_variable_name}"
 
     click_button "Save"
     expect(page).to have_css(failure, text: "Translation should have same interpolated variables as English")
     
-    page.fill_in "translation_value", with: "Is fhad íosta %{minimum}"
+    fill_in "translation_value", with: "Is fhad íosta %{minimum}"
 
     click_button "Save"
     expect(page).to have_css(success, text: "Translation #{translation.locale_key} was updated")
@@ -157,7 +157,7 @@ feature "Performing translations" do
     visit admin_translations_path
     expect(page).to have_css("strong span.label.label-success", text: @count)
 
-    page.select "No longer used", from: "category"
+    select "No longer used", from: "category"
     click_button "Search"
     expect(page).to have_link("Delete", count: 1)
 
@@ -171,16 +171,16 @@ feature "Performing translations" do
 
     login "translator"
     visit admin_translations_path
-    page.fill_in "Key", with: key
+    fill_in "Key", with: key
     click_button "Search"
     expect(page).to have_link("Translate", count: 1)
     
     click_link "Translate"
-    page.fill_in "translation_value", with: ""
+    fill_in "translation_value", with: ""
 
     click_button "Save"
     expect(page).to have_css(failure, text: "blank")
-    page.fill_in "translation_value", with: '"Dia"'
+    fill_in "translation_value", with: '"Dia"'
 
     click_button "Save"
     expect(page).to have_css(failure, text: "quote")

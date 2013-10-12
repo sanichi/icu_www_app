@@ -25,8 +25,8 @@ feature "Sessions" do
   end
 
   scenario "signing in and signing out" do
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: password
     click_button sign_in_button
     expect(page).to have_title(I18n.t("icu"))
     expect(page).to have_css(success, text: I18n.t("session.signed_in_as"))
@@ -39,8 +39,8 @@ feature "Sessions" do
 
   scenario "entering an invalid email" do
     bad_email = "bad." + user.email
-    page.fill_in email_text, with: bad_email
-    page.fill_in password_text, with: "password"
+    fill_in email_text, with: bad_email
+    fill_in password_text, with: "password"
     click_button sign_in_button
     expect(page).to have_title(sign_in_title)
     expect(page).to have_css(failure, text: I18n.t("session.invalid_email"))
@@ -49,8 +49,8 @@ feature "Sessions" do
   end
 
   scenario "entering an invalid password" do
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: bad_password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: bad_password
     click_button sign_in_button
     expect(page).to have_title(sign_in_title)
     expect(page).to have_css(failure, text: I18n.t("session.invalid_password"))
@@ -60,35 +60,35 @@ feature "Sessions" do
 
   scenario "the user's subscription has expired" do
     user = FactoryGirl.create(:user, expires_on: 1.year.ago.at_end_of_year)
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: "password"
+    fill_in email_text, with: user.email
+    fill_in password_text, with: "password"
     click_button sign_in_button
-    page.should have_title(sign_in_title)
-    page.should have_selector(failure, text: I18n.t("session.subscription_expired"))
+    expect(page).to have_title(sign_in_title)
+    expect(page).to have_selector(failure, text: I18n.t("session.subscription_expired"))
     expect(Login.count).to eq(1)
     expect(user.logins.where(ip: ip, email: user.email, roles: nil, error: "subscription_expired").count).to eq(1)
   end
 
   it "recording the user's current role" do
     FactoryGirl.create(:user, roles: "admin") # so there is a last admin
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: password
     click_button sign_in_button
     visit "/sign_out"
     user.roles = admin_role
     user.save
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: password
     click_button sign_in_button
     visit "/sign_out"
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: password
     click_button sign_in_button
     visit "/sign_out"
     user.roles = non_admin_roles
     user.save
-    page.fill_in email_text, with: user.email
-    page.fill_in password_text, with: password
+    fill_in email_text, with: user.email
+    fill_in password_text, with: password
     click_button sign_in_button
     expect(Login.count).to eq(4)
     expect(user.logins.count).to eq(4)

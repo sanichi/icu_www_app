@@ -54,21 +54,21 @@ feature "Editing users" do
     visit edit_path
 
     new_password = "blah"
-    page.fill_in "Password", with: new_password
+    fill_in "Password", with: new_password
     click_button "Save"
     expect(page).to have_css(failure, text: min_length)
     user.reload
     expect(user.encrypted_password).to eq(old_encrypted_password)
 
     new_password = "blahblah"
-    page.fill_in "Password", with: new_password
+    fill_in "Password", with: new_password
     click_button "Save"
     expect(page).to have_css(failure, text: no_digits)
     user.reload
     expect(user.encrypted_password).to eq(old_encrypted_password)
 
     new_password = "blah1234"
-    page.fill_in "Password", with: new_password
+    fill_in "Password", with: new_password
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
@@ -84,24 +84,24 @@ feature "Editing users" do
     login "admin"
     visit edit_path
 
-    page.select "Editor", from: "Roles"
+    select "Editor", from: "Roles"
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
     expect(user.roles).to eq("editor")
 
     click_link "Edit"
-    page.unselect "Editor", from: "Roles"
-    page.select "Translator", from: "Roles"
-    page.select "Treasurer", from: "Roles"
+    unselect "Editor", from: "Roles"
+    select "Translator", from: "Roles"
+    select "Treasurer", from: "Roles"
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
     expect(user.roles).to eq("translator treasurer")
 
     click_link "Edit"
-    page.unselect "Translator", from: "Roles"
-    page.unselect "Treasurer", from: "Roles"
+    unselect "Translator", from: "Roles"
+    unselect "Treasurer", from: "Roles"
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
@@ -112,7 +112,7 @@ feature "Editing users" do
     admin = login "admin"
     visit edit_admin_user_path(admin)
 
-    page.unselect "Administrator", from: "Roles"
+    unselect "Administrator", from: "Roles"
     click_button "Save"
     expect(page).to have_css(failure)
   end
@@ -122,14 +122,14 @@ feature "Editing users" do
     visit edit_path
 
     new_status = ""
-    page.fill_in "Status", with: new_status
+    fill_in "Status", with: new_status
     click_button "Save"
     expect(page).to have_css(failure, text: "can't be blank")
     user.reload
     expect(user.status).not_to eq(new_status)
 
     new_status = "banned for being an asshole"
-    page.fill_in "Status", with: new_status
+    fill_in "Status", with: new_status
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
@@ -183,52 +183,52 @@ feature "Search users" do
   end
 
   scenario "email" do
-    page.fill_in "Email", with: @admin.email
+    fill_in "Email", with: @admin.email
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
   scenario "expired" do
-    page.select "Active", from: "Expiry"
+    select "Active", from: "Expiry"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 2)
-    page.select "Expired", from: "Expiry"
+    select "Expired", from: "Expiry"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 2)
-    page.select "Extended", from: "Expiry"
+    select "Extended", from: "Expiry"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
   scenario "status" do
-    page.select "OK", from: "Status"
+    select "OK", from: "Status"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 2)
-    page.select "Not OK", from: "Status"
+    select "Not OK", from: "Status"
     click_button "Search"
     expect(page).to have_xpath(@xpath, 2)
   end
 
   scenario "verified" do
-    page.select "Verified", from: "Verified"
+    select "Verified", from: "Verified"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 1)
-    page.select "Unverified", from: "Verified"
+    select "Unverified", from: "Verified"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
   scenario "roles" do
-    page.select "Some Role", from: "Role"
+    select "Some Role", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 7)
-    page.select "No Role", from: "Role"
+    select "No Role", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 7)
-    page.select "Translator", from: "Role"
+    select "Translator", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 2)
-    page.select "Administrator", from: "Role"
+    select "Administrator", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
   end
@@ -244,10 +244,10 @@ feature "View users" do
 
   scenario "clicking the 'Last' button" do
     expect(page).to have_xpath(@xpath, count: 2)
-    page.select "Admin", from: "Role"
+    select "Admin", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
-    page.click_link @admin.email
+    click_link @admin.email
     click_link "Last"
     expect(page).to have_xpath(@xpath, count: 1)
   end
@@ -258,7 +258,6 @@ feature "Delete users" do
   given(:deleted) { "successfully deleted" }
 
   scenario "login history is retained but nullified", js: true do
-    pending "upgrade of selenium"
     user = FactoryGirl.create(:user)
     number = 5
     number.times { FactoryGirl.create(:login, user: user) }
@@ -267,6 +266,7 @@ feature "Delete users" do
     login "admin"
     visit admin_user_path(user)
     click_link "Delete"
+    sleep 0.2
     page.driver.browser.switch_to.alert.accept
     expect(page).to have_css(success, text: deleted)
     expect(Login.where(user_id: user.id).count).to eq(0)
