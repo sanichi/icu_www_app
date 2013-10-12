@@ -8,9 +8,9 @@
     %ul.nav.navbar-nav
       %li{class: active("pages", "home")}= link_to t("home"), home_path
       %li{class: active("clubs")}= link_to t("club.clubs"), clubs_path
-      - if can?(:manage_own_login, User)
+      - if can?(:manage_preferences, User)
         %li{class: active("users")}= link_to t("user.preferences"), user_path(current_user)
     %ul.nav.navbar-nav.navbar-right
-      = render "layouts/admin_menu"
       = render "layouts/locale_switch"
+      = render "layouts/admin_menu"
       = render "layouts/sign_in_out"

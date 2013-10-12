@@ -2,15 +2,15 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
 
   def show
-    authorize! :manage_own_login, @user
+    authorize! :manage_preferences, @user
   end
 
   def edit
-    authorize! :manage_own_login, @user
+    authorize! :manage_preferences, @user
   end
 
   def update
-    authorize! :manage_own_login, @user
+    authorize! :manage_preferences, @user
     if @user.update(user_params)
       switch_locale(@user.locale) if @user.previous_changes[:locale]
       redirect_to @user, notice: t("user.updated")

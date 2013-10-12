@@ -17,6 +17,6 @@ class Ability
       can :manage, Translation
     end
 
-    can :manage_own_login, User, id: user.id
+    can :manage_preferences, User, id: user.id
   end
 end

@@ -18,11 +18,3 @@
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
         - if clubs
           %li{class: active("admin/clubs")}= link_to "New Club", new_admin_club_path
-  
-/ %li.dropdown
-/   = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
-/     = t("user.locale")
-/     %b.caret
-/   %ul.dropdown-menu
-/     - User::LOCALES.each do |locale|
-/       %li= link_to t("user.lang.#{locale}"), redirect_path(locale: locale, path: request.fullpath)
