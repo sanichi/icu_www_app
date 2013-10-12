@@ -86,6 +86,10 @@ class User < ActiveRecord::Base
     def guest?
       true
     end
+    
+    def roles
+      nil
+    end
 
     def preferred_theme
       DEFAULT_THEME

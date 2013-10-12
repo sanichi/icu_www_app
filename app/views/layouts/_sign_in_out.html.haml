@@ -1,0 +1,2 @@
+- text, path = current_user.guest? ? ["in", sign_in_path] : ["out", sign_out_path]
+%li{class: active("sessions")}= link_to t("session.sign_#{text}"), path

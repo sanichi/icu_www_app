@@ -7,19 +7,10 @@
   .collapse.navbar-collapse.navbar-ex1-collapse
     %ul.nav.navbar-nav
       %li{class: active("pages", "home")}= link_to t("home"), home_path
-      - if can?(:manage, User)
-        %li{class: active("admin/users")}= link_to "Users", admin_users_path
-      - if can?(:manage, Login)
-        %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
-      - if can?(:manage, Translation)
-        %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
-      %li{class: active("admin/clubs")}= link_to t("club.clubs"), clubs_path
-      - if can?(:manage, Club)
-        %li= link_to "New Club", new_admin_club_path
+      %li{class: active("clubs")}= link_to t("club.clubs"), clubs_path
       - if can?(:manage_own_login, User)
         %li{class: active("users")}= link_to t("user.preferences"), user_path(current_user)
     %ul.nav.navbar-nav.navbar-right
-      - if request.get? && controller_path !~ /^admin\//
-        = render "layouts/locale_switch"
-      - text, path = current_user.guest? ? ["in", sign_in_path] : ["out", sign_out_path]
-      %li{class: active("sessions")}= link_to t("session.sign_#{text}"), path
+      = render "layouts/admin_menu"
+      = render "layouts/locale_switch"
+      = render "layouts/sign_in_out"

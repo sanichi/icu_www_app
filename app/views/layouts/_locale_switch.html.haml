@@ -1,7 +1,8 @@
-%li.dropdown
-  = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
-    = t("user.locale")
-    %b.caret
-  %ul.dropdown-menu
-    - User::LOCALES.each do |locale|
-      %li= link_to t("user.lang.#{locale}"), redirect_path(locale: locale, path: request.fullpath)
+- if request.get? && controller_path !~ /^admin\//
+  %li.dropdown
+    = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
+      = t("user.locale")
+      %b.caret
+    %ul.dropdown-menu
+      - User::LOCALES.each do |locale|
+        %li= link_to t("user.lang.#{locale}"), redirect_path(locale: locale, path: request.fullpath)
