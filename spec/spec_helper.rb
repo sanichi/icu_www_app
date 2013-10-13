@@ -53,3 +53,8 @@ end
 def logout
   visit sign_out_path
 end
+
+# Wait for the browser to catch up (typically required for js alerts).
+def wait_for_browser(delay=0.2)
+  sleep(delay)
+end

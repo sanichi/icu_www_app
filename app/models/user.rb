@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
   validates :theme, inclusion: { in: THEMES }, allow_nil: true
   validates :locale, inclusion: { in: LOCALES }
+  
+  def name
+    email # this will do until we link to the player's table
+  end
 
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
@@ -81,6 +85,10 @@ class User < ActiveRecord::Base
   class Guest
     def id
       "guest"
+    end
+    
+    def name
+      "Guest"
     end
 
     def guest?

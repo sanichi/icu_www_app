@@ -10,17 +10,13 @@
             %th Name
             %th Email
             %th{class: "text-center"} IP
-            %th{class: "text-center"} Err
+            %th{class: "text-center"} OK
             %th Ago
         %tbody
           - @logins.matches.each do |login|
             %tr
-              %td
-              %td
-                - if login.user
-                  = link_to login.user.email, [:admin, login.user]
-                - else
-                  = login.email
+              %td= login.user.name if login.user
+              %td= link_to_if login.user, login.email, [:admin, login.user]
               %td{class: "text-center"}= login.ip
               %td{class: "text-center"}= login.error ? "✘" : "✔"
               %td= link_to time_ago_in_words(login.created_at, include_seconds: true), [:admin, login]

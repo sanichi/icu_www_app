@@ -27,10 +27,12 @@ class Admin::UsersController < ApplicationController
   end
 
   def login
-    if @user.id == current_user.id
+    if !current_user.admin?
+      redirect_to admin_user_path(@user), alert: "Only administrators can switch user"
+    elsif @user.id == current_user.id
       redirect_to admin_user_path(@user), alert: "Can't switch to the current user"
     elsif @user.admin?
-      redirect_to admin_user_path(@user), alert: "Can't switch to an administrator"
+      redirect_to admin_user_path(@user), alert: "Can't switch to another administrator"
     else
       session[:user_id] = @user.id
       redirect_to home_path, notice: "#{t('session.signed_in_as')} #{@user.email}"
