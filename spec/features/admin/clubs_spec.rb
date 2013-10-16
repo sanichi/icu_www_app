@@ -7,7 +7,7 @@ feature "Authorization for clubs" do
   given(:club)            { FactoryGirl.create(:club) }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:header)          { "//h1[.='#{club.name}']" }
+  given(:header)          { "//th[.='Name']/following-sibling::td[.='#{club.name}']" }
   given(:button)          { I18n.t("edit") }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }

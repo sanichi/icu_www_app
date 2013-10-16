@@ -2,8 +2,11 @@
 
 .row
   .col-md-8.col-md-offset-2
-    %h1.text-center= @club.name
+    %h1.text-center= t("club.club")
     %table.table.table-bordered
+      %tr
+        %th= t("club.name")
+        %td= @club.name
       %tr
         %th= t("club.web")
         %td= link_to @club.web_simple, @club.web, target: "club" if @club.web.present?

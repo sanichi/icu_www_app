@@ -126,7 +126,7 @@ feature "Showing a club" do
     params.each do |param, value|
       case param
       when :name
-        expect(page).to have_css("h1", text: value)
+        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: bangor.name)
       when :web
         expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: bangor.web_simple)
       when :county
