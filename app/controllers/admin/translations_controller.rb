@@ -14,12 +14,14 @@ class Admin::TranslationsController < ApplicationController
     if @translation.deletable?
       flash.now.notice = "This translation is no longer in use and may be deleted or kept for reference"
     end
+    @entries = @translation.journal_entries if current_user.roles.present?
   end
 
   def update
     @translation.user = current_user.email
     @translation.old_english = @translation.english
     if @translation.update(translation_params)
+      @translation.journal(:update, current_user.name, request.ip)
       redirect_to [:admin, @translation], notice: "Translation #{@translation.locale_key} was updated"
     else
       logger.error(@translation.errors.inspect)
@@ -30,6 +32,7 @@ class Admin::TranslationsController < ApplicationController
 
   def destroy
     if @translation.deletable?
+      @translation.journal(:destroy, current_user.name, request.ip)
       @translation.destroy
       redirect_to view_context.last_search(:admin, :translations) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
     else

@@ -7,5 +7,6 @@ class ClubsController < ApplicationController
 
   def show
     @club = Club.find(params[:id])
+    @entries = @club.journal_entries if current_user.roles.present?
   end
 end

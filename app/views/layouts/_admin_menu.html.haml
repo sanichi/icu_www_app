@@ -1,9 +1,10 @@
 - unless current_user.guest? || current_user.roles.nil?
   - items = 0
-  - items += 1 if users  = can?(:manage, User)
-  - items += 1 if logins = can?(:manage, Login)
-  - items += 1 if trans  = can?(:manage, Translation)
-  - items += 1 if clubs  = can?(:manage, Club)
+  - items += 1 if logins  = can?(:manage, Login)
+  - items += 1 if entries = can?(:index, JournalEntry)
+  - items += 1 if users   = can?(:manage, User)
+  - items += 1 if trans   = can?(:manage, Translation)
+  - items += 1 if clubs   = can?(:manage, Club)
   - if items > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
@@ -12,6 +13,8 @@
       %ul.dropdown-menu
         - if logins
           %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
+        - if entries
+          %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
         - if users
           %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if trans

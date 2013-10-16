@@ -1,0 +1,10 @@
+= form_tag admin_journal_entries_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_select", param: :type, text: "Type", menu: type_search_menu(params[:type])
+  = render "utils/inline_text_field", param: :id, text: "ID", size: 3
+  = render "utils/inline_select", param: :je_action, text: "Action", menu: jl_action_search_menu(params[:je_action])
+  = render "utils/inline_text_field", param: :column, text: "Column", size: 6
+  = render "utils/inline_text_field", param: :from, text: "From", size: 6
+  = render "utils/inline_text_field", param: :to, text: "To", size: 6
+  = render "utils/inline_text_field", param: :by, text: "By", size: 6
+  = render "utils/inline_text_field", param: :ip, text: "IP", size: 6
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

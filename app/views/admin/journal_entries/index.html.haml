@@ -1,0 +1,13 @@
+- content_for :title, "Journal"
+
+= render "utils/search_panel", form: "admin/journal_entries/search_form", title: "Journal"
+- if @entries.count > 0
+  .row
+    .col-sm-12
+      %table{class: "table table-bordered table-striped table-condensed", id: "results"}
+        %thead
+          = render "journal_header"
+        %tbody
+          - @entries.matches.each do |entry|
+            = render "journal_entry", entry: entry
+          = render "utils/pagination_links", pager: @entries, columns: 9

@@ -10,18 +10,20 @@ class Admin::ClubsController < ApplicationController
     @club = Club.new(club_params)
 
     if @club.save
+      @club.journal(:create, current_user.name, request.ip)
       redirect_to @club, notice: "Club was successfully created"
     else
-      render action: 'new'
+      render action: "new"
     end
   end
 
   def update
     if @club.update(club_params)
+      @club.journal(:update, current_user.name, request.ip)
       redirect_to @club, notice: "Club was successfully updated"
     else
       flash.now.alert = @club.errors[:base].first if @club.errors[:base].any?
-      render action: 'edit'
+      render action: "edit"
     end
   end
 

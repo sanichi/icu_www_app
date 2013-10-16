@@ -1,0 +1,33 @@
+- content_for :title, "Journal Entry"
+
+.row
+  .col-sm-12
+    %table.table.table-bordered
+      %tr
+        %th Object
+        %td= link_to_if @entry.journalable_exists?, @entry.journalable_type_id, @entry.journalable_path
+      %tr
+        %th Action
+        %td= @entry.action
+      %tr
+        %th Column
+        %td= @entry.column
+      %tr
+        %th From
+        %td= @entry.from
+      %tr
+        %th To
+        %td= @entry.to
+      %tr
+        %th By
+        %td= @entry.by
+      %tr
+        %th At
+        %td= @entry.created_at.to_s(:db)
+      %tr
+        %th IP
+        %td= @entry.ip
+    - if path = last_search(:admin, :journal_entries)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    - else
+      = link_to "Journal Entries", admin_journal_entries_path, class: "btn btn-default"

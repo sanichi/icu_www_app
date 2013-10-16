@@ -42,3 +42,4 @@
       = link_to t("last_search"), path, class: "btn btn-default"
     - else
       = link_to "Translations", admin_translations_path, class: "btn btn-default"
+= render "admin/journal_entries/changes", entries: @entries

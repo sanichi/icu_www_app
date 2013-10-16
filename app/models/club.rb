@@ -1,6 +1,9 @@
 class Club < ActiveRecord::Base
   extend Util::Pagination
 
+  include Journalable
+  journalize "/clubs/%d"
+
   WEB_FORMAT = ['https?:\/\/', '[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+']
 
   before_validation :normalize_attributes

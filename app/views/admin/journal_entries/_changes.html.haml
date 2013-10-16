@@ -1,0 +1,11 @@
+- if entries.present? && entries.any? && can?(:show, entries.first)
+  %hr
+  .row
+    .col-sm-12
+      %h4.text-center Changes
+      %table{class: "table table-bordered table-striped table-condensed", id: "changes"}
+        %thead
+          = render "admin/journal_entries/journal_header", full: false
+        %tbody
+          - entries.each do |entry|
+            = render "admin/journal_entries/journal_entry", entry: entry, full: false

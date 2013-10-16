@@ -15,6 +15,7 @@ class Ability
     
     if user.translator?
       can :manage, Translation
+      can :show, JournalEntry, journalable_type: "Translation"
     end
 
     can :manage_preferences, User, id: user.id

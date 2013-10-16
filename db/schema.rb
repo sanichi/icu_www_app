@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131007113708) do
+ActiveRecord::Schema.define(version: 20131013154451) do
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
@@ -30,6 +30,20 @@ ActiveRecord::Schema.define(version: 20131007113708) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "journal_entries", force: true do |t|
+    t.integer  "journalable_id"
+    t.string   "journalable_type", limit: 50
+    t.string   "action",           limit: 50
+    t.string   "column",           limit: 50
+    t.string   "by",               limit: 50
+    t.string   "ip",               limit: 50
+    t.string   "from"
+    t.string   "to"
+    t.datetime "created_at"
+  end
+
+  add_index "journal_entries", ["journalable_id", "journalable_type"], name: "index_journal_entries_on_journalable_id_and_journalable_type", using: :btree
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"

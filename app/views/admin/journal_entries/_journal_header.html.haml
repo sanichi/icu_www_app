@@ -1,0 +1,15 @@
+- unless defined? full
+  - full = true
+
+%tr
+  - if full
+    %th Type
+    %th ID
+  %th Action
+  %th Column
+  %th From
+  %th To
+  %th By
+  - if full
+    %th IP
+  %th At
