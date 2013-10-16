@@ -1,22 +1,23 @@
 en:
   user:
-    updated: Preferences successfully updated
     email: Email
-    password: Password
     expires: Expires on
-    ticket: Season ticket
-    theme: Theme
+    locale: Language
+    password: Password
     preferences: Preferences
     roles: Roles
+    theme: Theme
+    ticket: Season ticket
+    updated: Preferences successfully updated
+    user: User
+    lang:
+      en: English
+      ga: Irish
     role:
       admin: Administrator
       editor: Editor
       translator: Translator
       treasurer: Treasurer
-    locale: Language
-    lang:
-      en: English
-      ga: Irish
   errors:
     attributes:
       password:

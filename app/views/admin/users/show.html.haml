@@ -42,3 +42,4 @@
     - else
       = link_to "Users", admin_users_path, class: "btn btn-default"
     = link_to "Login", login_admin_user_path(@user), class: "btn btn-info"
+= render "admin/journal_entries/changes", entries: @entries

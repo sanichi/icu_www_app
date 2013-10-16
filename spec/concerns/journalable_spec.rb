@@ -14,4 +14,11 @@ describe Journalable do
       expect(Translation.journalable_path).to eq "/admin/translations/%d"
     end
   end
+
+  context User do
+    it "should be setup correctly" do
+      expect(User.journalable_columns).to eq Set.new(%w[status encrypted_password roles])
+      expect(User.journalable_path).to eq "/admin/users/%d"
+    end
+  end
 end

@@ -2,6 +2,7 @@
 
 .row
   .col-md-8.col-md-offset-2
+    %h1.text-center= t("user.user")
     %table.table.table-bordered
       %tr
         %th= t("user.email")
@@ -15,6 +16,8 @@
       %tr
         %th= t("user.roles")
         %td= @user.human_roles
+    %h1.text-center= t("user.preferences")
+    %table.table.table-bordered
       %tr
         %th= t("user.theme")
         %td= @user.preferred_theme

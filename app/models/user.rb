@@ -2,6 +2,9 @@ class User < ActiveRecord::Base
   extend Util::Pagination
   attr_accessor :password
 
+  include Journalable
+  journalize "/admin/users/%d", only: [:status, :encrypted_password, :roles]
+
   OK = "OK"
   ROLES = %w[admin editor translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
@@ -21,9 +24,9 @@ class User < ActiveRecord::Base
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
   validates :theme, inclusion: { in: THEMES }, allow_nil: true
   validates :locale, inclusion: { in: LOCALES }
-  
+
   def name
-    email # this will do until we link to the player's table
+    email # this will do until we can link to the player's table
   end
 
   def valid_password?(password)
@@ -86,7 +89,7 @@ class User < ActiveRecord::Base
     def id
       "guest"
     end
-    
+
     def name
       "Guest"
     end
@@ -94,7 +97,7 @@ class User < ActiveRecord::Base
     def guest?
       true
     end
-    
+
     def roles
       nil
     end

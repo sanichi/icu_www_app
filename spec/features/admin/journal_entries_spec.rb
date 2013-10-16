@@ -21,12 +21,22 @@ feature JournalEntry do
     [Translation.find_by(value: "bruscar"), JournalEntry.find_by(journalable_type: "Translation", action: "update", to: "bruscar")]
   end
 
+  def edit_user
+    user = FactoryGirl.create(:user) # users aren't created via the web app
+    visit admin_user_path(user)
+    click_link "Edit"
+    fill_in "Status", with: "banned"
+    click_button "Save"
+    [User.find_by(status: "banned"), JournalEntry.find_by(journalable_type: "User", action: "update", to: "banned")]
+  end
+
   before(:each) do
     @admin = login "admin"
     @name = @admin.name[0,10]
     @ip = "127.0.0.1"
     @club, @club_creation = create_club
     @translation, @translation_change = edit_translation
+    @user, @user_change = edit_user
   end
 
   given(:success)      { "div.alert-success" }
@@ -57,10 +67,16 @@ feature JournalEntry do
     expect(page).to have_xpath(xpath("changes"), count: 1)
     expect(page).to have_xpath(xpath("changes", "update", "value", "bruscar", @name), count: 1)
 
+    visit admin_user_path(@user)
+    expect(page).to have_css("h4", text: "Changes")
+    expect(page).to have_xpath(xpath("changes"), count: 1)
+    expect(page).to have_xpath(xpath("changes", "update", "status", "banned", @name), count: 1)
+
     visit admin_journal_entries_path
-    expect(page).to have_xpath(xpath("results"), count: 2)
-    expect(page).to have_xpath(xpath("results", "Translation", @translation.id, "update", "value", "bruscar", @name, @ip), count: 1)
+    expect(page).to have_xpath(xpath("results"), count: 3)
     expect(page).to have_xpath(xpath("results", "Club", @club.id, "create", @name, @ip), count: 1)
+    expect(page).to have_xpath(xpath("results", "Translation", @translation.id, "update", "value", "bruscar", @name, @ip), count: 1)
+    expect(page).to have_xpath(xpath("results", "User", @user.id, "update", "status", "banned", @name, @ip), count: 1)
   end
 
   scenario "editor view" do
@@ -80,6 +96,9 @@ feature JournalEntry do
     expect(page).to have_css(failure, text: unauthorized)
 
     visit admin_journal_entry_path(@translation_change)
+    expect(page).to have_css(failure, text: unauthorized)
+
+    visit admin_user_path(@user_change)
     expect(page).to have_css(failure, text: unauthorized)
   end
 
@@ -102,6 +121,9 @@ feature JournalEntry do
 
     visit admin_journal_entry_path(@translation_change)
     expect(page).to_not have_css(failure)
+
+    visit admin_user_path(@user_change)
+    expect(page).to have_css(failure, text: unauthorized)
   end
 
   scenario "treasurer view" do
@@ -121,6 +143,9 @@ feature JournalEntry do
     expect(page).to have_css(failure, text: unauthorized)
 
     visit admin_journal_entry_path(@translation_change)
+    expect(page).to have_css(failure, text: unauthorized)
+
+    visit admin_user_path(@user_change)
     expect(page).to have_css(failure, text: unauthorized)
   end
 end
