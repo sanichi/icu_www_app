@@ -2,7 +2,7 @@ class Translation < ActiveRecord::Base
   extend Util::Pagination
 
   include Journalable
-  journalize "/admin/translations/%d", only: :value
+  journalize :value, "/admin/translations/%d"
 
   LOCALES = %w[ga]
   KEY_FORMAT = /\A\w+(\.\w+)*\z/

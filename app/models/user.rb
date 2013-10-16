@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
 
   include Journalable
-  journalize "/admin/users/%d", only: [:status, :encrypted_password, :roles]
+  journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
 
   OK = "OK"
   ROLES = %w[admin editor translator treasurer]

@@ -25,21 +25,9 @@ module Journalable
   module ClassMethods
     attr_reader :journalable_columns, :journalable_path
 
-    def journalize(path, opt={})
+    def journalize(columns, path)
+      @journalable_columns = Set.new(Array(columns).map(&:to_s))
       @journalable_path = path
-      only = Array(opt[:only]).map(&:to_s)
-      except = Array(opt[:except]).map(&:to_s).concat(%w[id created_at updated_at])
-      @journalable_columns = column_names.each_with_object(Set.new) do |column, columns|
-        if only.any?
-          if only.include?(column)
-            columns << column
-          end
-        else
-          unless except.include?(column)
-            columns << column
-          end
-        end
-      end
     end
   end
 end

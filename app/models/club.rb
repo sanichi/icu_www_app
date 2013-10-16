@@ -2,7 +2,7 @@ class Club < ActiveRecord::Base
   extend Util::Pagination
 
   include Journalable
-  journalize "/clubs/%d"
+  journalize %w[name web meet address district city county lat long contact email phone active], "/clubs/%d"
 
   WEB_FORMAT = ['https?:\/\/', '[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+']
 
