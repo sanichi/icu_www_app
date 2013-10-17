@@ -8,7 +8,7 @@
         - locals = { form: f, object: @user, col: "sm", pad: 3, width: 4 }
         = render "utils/text_field_for", locals.merge(param: :status, text: "Status")
         = render "utils/text_field_for", locals.merge(param: :password, text: "Password")
-        = render "utils/select_for", locals.merge(param: :roles, text: "Roles", menu: roles_menu(@user.roles), multiple: true, width: 3)
+        = render "utils/select_for", locals.merge(param: :roles, text: "Roles", menu: user_roles_menu(@user.roles), multiple: true, width: 3)
         - unless @user.verified?
           = render "utils/check_box_for", locals.merge(param: :verify, text: "Verifyx", on: "yes", off: "no", width: 1)
         %hr

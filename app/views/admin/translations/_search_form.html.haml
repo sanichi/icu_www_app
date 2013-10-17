@@ -3,5 +3,5 @@
   = render "utils/inline_text_field", param: :english, text: "English"
   = render "utils/inline_text_field", param: :value, text: "Irish"
   = render "utils/inline_text_field", param: :user, text: "User"
-  = render "utils/inline_select", param: :category, text: "Category", menu: active_search_menu(params[:category])
+  = render "utils/inline_select", param: :category, text: "Category", menu: translation_active_menu(params[:category])
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
