@@ -56,12 +56,17 @@ class Player < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    matches = where(player_id: nil)
+    matches = all
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
     matches = matches.where("first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
     matches = matches.where("last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
     matches = matches.where(gender: params[:gender]) if params[:gender].present?
     matches = matches.where(status: params[:status]) if STATUSES.include?(params[:status])
+    if params[:status] == "duplicate"
+      matches = matches.where.not(player_id: nil)
+    else
+      matches = matches.where(player_id: nil)
+    end
     if (yob = params[:yob].to_i).to_s.match(/\A\s*(19|20)\d\d\s*\z/)
       case params[:relation]
       when "="
