@@ -1,0 +1,40 @@
+en:
+  player:
+    age: Age
+    any_gender: Any gender
+    deceased: Deceased
+    dob: Date of birth
+    duplicate: Duplicate
+    duplicate_of: Duplicate of
+    first_name: First name
+    id: ICU ID
+    id_order: ID order
+    joined: Join date
+    last_name: Last name
+    master_id: Master ID
+    name: Name
+    player: Player
+    players: Players
+    yob: Year of birth
+    abbrev:
+      id: ID
+      dob: DOB
+      yob: YOB
+      gender: G
+      F: F
+      M: M
+    gender:
+      gender: Gender
+      F: Female
+      M: Male
+    source:
+      source: Source
+      archive: Archive
+      import: Import
+      officer: Officer
+      subscription: Subscription
+    status:
+      status: Status
+      active: Active
+      foreign: Foreign
+      inactive: Inactive

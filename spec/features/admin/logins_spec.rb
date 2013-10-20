@@ -15,7 +15,7 @@ feature "Authorization for logins" do
     expect(page).to have_css(success, text: signed_in_as)
     paths.each do |path|
       visit path
-      expect(page).not_to have_css(failure)
+      expect(page).to_not have_css(failure)
     end
   end
 

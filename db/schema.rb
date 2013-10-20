@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131013154451) do
+ActiveRecord::Schema.define(version: 20131018113203) do
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
@@ -53,6 +53,24 @@ ActiveRecord::Schema.define(version: 20131013154451) do
     t.string   "ip",         limit: 39
     t.datetime "created_at"
   end
+
+  create_table "players", force: true do |t|
+    t.string   "first_name", limit: 50
+    t.string   "last_name",  limit: 50
+    t.string   "status",     limit: 25
+    t.string   "source",     limit: 25
+    t.integer  "player_id"
+    t.boolean  "deceased"
+    t.string   "gender",     limit: 1
+    t.date     "dob"
+    t.date     "joined"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree
+  add_index "players", ["first_name"], name: "index_players_on_first_name", using: :btree
+  add_index "players", ["last_name"], name: "index_players_on_last_name", using: :btree
 
   create_table "translations", force: true do |t|
     t.string   "locale",      limit: 2

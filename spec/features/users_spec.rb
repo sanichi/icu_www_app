@@ -14,7 +14,7 @@ feature "Authorization for preferences" do
     expect(page).to have_css(success, text: signed_in_as)
     paths.each do |path|
       visit path
-      expect(page).not_to have_css(failure)
+      expect(page).to_not have_css(failure)
     end
   end
 
@@ -65,7 +65,7 @@ feature "Edit preferences" do
     click_button save
     expect(page).to have_css(success, text: updated)
     User::THEMES.each do |theme|
-      expect(page).not_to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
+      expect(page).to_not have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
     end
     expect(page).to have_xpath("//th[.='#{theme_label}']/following-sibling::td[.='#{bootstrap}']")
     user.reload

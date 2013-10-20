@@ -14,7 +14,7 @@ feature "Authorization for users" do
     expect(page).to have_css(success, text: signed_in_as)
     paths.each do |path|
       visit path
-      expect(page).not_to have_css(failure)
+      expect(page).to_not have_css(failure)
     end
   end
 
@@ -72,7 +72,7 @@ feature "Editing users" do
     click_button "Save"
     expect(page).to have_css(success, text: updated)
     user.reload
-    expect(user.encrypted_password).not_to eq(old_encrypted_password)
+    expect(user.encrypted_password).to_not eq(old_encrypted_password)
 
     login user, password: new_password
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
@@ -126,7 +126,7 @@ feature "Editing users" do
     click_button "Save"
     expect(page).to have_css(failure, text: "can't be blank")
     user.reload
-    expect(user.status).not_to eq(new_status)
+    expect(user.status).to_not eq(new_status)
 
     new_status = "banned for being an asshole"
     fill_in "Status", with: new_status
@@ -137,7 +137,7 @@ feature "Editing users" do
   end
 
   scenario "verifying a user" do
-    expect(user.verified_at.to_i).not_to be_within(1).of(Time.now.to_i)
+    expect(user.verified_at.to_i).to_not be_within(1).of(Time.now.to_i)
 
     login "admin"
     visit edit_path

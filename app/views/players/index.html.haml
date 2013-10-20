@@ -1,0 +1,21 @@
+- content_for :title, "Players"
+
+= render "utils/search_panel", form: "search_form", title: t("player.players"), col: "md"
+- if @players.count > 0
+  .row
+    .col-sm-8.col-sm-offset-2
+      %table{class: "table table-striped table-condensed", id: "results"}
+        %thead
+          %tr
+            %th.col-sm-1= t("player.abbrev.id")
+            %th.col-sm-9= t("player.name")
+            %th.col-sm-1= t("player.abbrev.gender")
+            %th.col-sm-1= t("player.abbrev.yob")
+        %tbody
+          - @players.matches.each do |player|
+            %tr
+              %td= player.id
+              %td= link_to player.name(:reversed), player
+              %td= t("player.abbrev.#{player.gender}") if player.gender
+              %td= player.dob.year if player.dob
+          = render "utils/pagination_links", pager: @players, columns: 3

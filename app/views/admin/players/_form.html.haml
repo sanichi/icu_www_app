@@ -1,0 +1,27 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @player], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @player.new_record? ? "New Player" : "Edit Player #{@player.id}"
+        - locals = { form: f, object: @player, col: "sm", pad: 2, width: 4 }
+        = render "utils/text_field_for", locals.merge(param: :first_name, text: t("player.first_name"))
+        = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"))
+        = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 2, placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 2, placeholder: "YYYY-MM-DD")
+        = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender"), width: 2, menu: player_gender_menu(@player.gender, "please_select"))
+        - if @player.new_record?
+          = hidden_field :player, :status
+          = hidden_field :player, :deceased
+          = hidden_field :player, :player_id
+        - else
+          = render "utils/select_for", locals.merge(param: :status, text: t("player.status"), width: 2, menu: player_status_menu(@player.status))
+          = render "utils/check_box_for", locals.merge(param: :deceased, text: t("player.deceased"), width: 1)
+          = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.master_id"), width: 2)
+        = hidden_field :player, :source
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:players)
+        = link_to "Cancel", @player.new_record? ? last_path || players_path : @player, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

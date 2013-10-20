@@ -1,3 +1,8 @@
+- unless defined? on
+  - on = 1
+- unless defined? off
+  - off = 0
+
 .form-group{class: object.errors[param].any? ? "has-error" : ""}
   = form.label param, text, class: "control-label col-#{col}-#{pad}"
   %div{class: "col-#{col}-#{width}"}= form.check_box param, { class: "form-control" }, on, off

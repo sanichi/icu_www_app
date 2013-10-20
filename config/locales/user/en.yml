@@ -16,6 +16,7 @@ en:
     role:
       admin: Administrator
       editor: Editor
+      membership: Membership Officer
       translator: Translator
       treasurer: Treasurer
   errors:

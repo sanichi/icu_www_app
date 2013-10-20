@@ -1,6 +1,6 @@
-- content_for :title, "Clubs"
+- content_for :title, t("club.clubs")
 
-= render "utils/search_panel", form: "search_form", title: "Clubs", col: "md"
+= render "utils/search_panel", form: "search_form", title: t("club.clubs"), col: "md"
 = render "utils/pagination_links", pager: @clubs
 .row
   .col-md-10.col-md-offset-1

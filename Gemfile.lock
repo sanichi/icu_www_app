@@ -75,6 +75,7 @@ GEM
     highline (1.6.19)
     hike (1.2.3)
     i18n (0.6.5)
+    icu_name (1.1.1)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -156,6 +157,7 @@ GEM
     thread_safe (0.1.2)
       atomic
     tilt (1.4.1)
+    timeliness (0.3.7)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -165,6 +167,8 @@ GEM
     uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    validates_timeliness (3.0.14)
+      timeliness (~> 0.3.6)
     websocket (1.0.7)
     wirble (0.1.3)
     xpath (2.0.0)
@@ -183,6 +187,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.0)
   faker
   haml-rails
+  icu_name
   jquery-rails
   launchy
   mysql2
@@ -194,4 +199,5 @@ DEPENDENCIES
   therubyracer (= 0.11.4)
   turbolinks
   uglifier (>= 1.3.0)
+  validates_timeliness (~> 3.0)
   wirble

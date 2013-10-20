@@ -1,0 +1,55 @@
+- content_for :title, t("player.player")
+
+.row
+  .col-md-8.col-md-offset-2
+    %h1.text-center
+      = @player.name
+      - if @player.deceased
+        %span.label.label-default= t("player.deceased")
+      - if @player.duplicate?
+        %span.label.label-danger= t("player.duplicate")
+    %table.table.table-bordered
+      - if @player.duplicate?
+        %tr
+          %th= t("player.duplicate_of")
+          %td= link_to @player.player_id, player_path(@player.player_id)
+      %tr
+        %th= t("player.id")
+        %td= @player.id
+      %tr
+        %th= t("player.last_name")
+        %td= @player.last_name
+      %tr
+        %th= t("player.first_name")
+        %td= @player.first_name
+      %tr
+        %th= t("player.dob")
+        %td= @player.dob
+      %tr
+        %th= t("player.gender.gender")
+        %td= t("player.gender.#{@player.gender}") if @player.gender.present?
+      %tr
+        %th= t("player.joined")
+        %td= @player.joined
+      %tr
+        %th= t("player.status.status")
+        %td= t("player.status.#{@player.status}")
+      %tr
+        %th= t("player.source.source")
+        %td= t("player.source.#{@player.source}")
+      - if can? :manage, @player
+        %tr
+          %th Created
+          %td
+            %time{datetime: @player.created_at.to_s(:html5)}= @player.created_at.to_s(:nosec)
+        %tr
+          %th Last Updated
+          %td
+            %time{datetime: @player.updated_at.to_s(:html5)}= @player.updated_at.to_s(:nosec)
+    - if can? :manage, @player
+      = link_to "Edit", edit_admin_player_path(@player), class: "btn btn-primary"
+    - if path = last_search(:players)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    - else
+      = link_to "Players", admin_players_path, class: "btn btn-default"
+/ = render "admin/journal_entries/changes", entries: @entries

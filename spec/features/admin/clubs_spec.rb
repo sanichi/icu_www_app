@@ -12,22 +12,26 @@ feature "Authorization for clubs" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "the admin and editor roles can edit clubs" do
+  scenario "the admin and editor roles can manage clubs" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
+      visit new_admin_club_path
+      expect(page).to_not have_css(failure)
       visit edit_admin_club_path(club)
-      expect(page).not_to have_css(failure)
+      expect(page).to_not have_css(failure)
       visit club_path(club)
       expect(page).to have_xpath(header)
       expect(page).to have_link(button)
     end
   end
 
-  scenario "other roles cannot edit clubs" do
+  scenario "other roles cannot manage clubs" do
     not_ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
+      visit new_admin_club_path
+      expect(page).to have_css(failure, text: unauthorized)
       visit edit_admin_club_path(club)
       expect(page).to have_css(failure, text: unauthorized)
       visit club_path(club)
@@ -36,8 +40,10 @@ feature "Authorization for clubs" do
     end
   end
 
-  scenario "guests cannot edit users" do
+  scenario "guests cannot manage clubs" do
     logout
+    visit new_admin_club_path
+    expect(page).to have_css(failure, text: unauthorized)
     visit edit_admin_club_path(club)
     expect(page).to have_css(failure, text: unauthorized)
     visit club_path(club)
@@ -54,7 +60,6 @@ feature "New clubs" do
   given(:success) { "div.alert-success" }
 
   scenario "sucessful creation with all attributes" do
-    click_link "Clubs"
     click_link "New Club"
     fill_in "Name", with: "Bangor"
     fill_in "Website", with: "www.ulsterchess.org/membership/Clubs/bangor"
@@ -89,7 +94,6 @@ feature "New clubs" do
   end
 
   scenario "sucessful creation with minimal attributes" do
-    click_link "Clubs"
     click_link "New Club"
     fill_in "Name", with: "Millisle"
     fill_in "City", with: "Millisle"

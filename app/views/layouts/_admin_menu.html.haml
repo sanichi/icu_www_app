@@ -4,6 +4,7 @@
   - items += 1 if entries = can?(:index, JournalEntry)
   - items += 1 if users   = can?(:manage, User)
   - items += 1 if trans   = can?(:manage, Translation)
+  - items += 1 if players = can?(:manage, Player)
   - items += 1 if clubs   = can?(:manage, Club)
   - if items > 0
     %li.dropdown
@@ -19,5 +20,7 @@
           %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if trans
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
+        - if players
+          %li{class: active("admin/players")}= link_to "New Player", new_admin_player_path
         - if clubs
           %li{class: active("admin/clubs")}= link_to "New Club", new_admin_club_path

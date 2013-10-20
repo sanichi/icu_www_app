@@ -12,12 +12,17 @@ class Ability
     if user.editor?
       can :manage, Club
     end
+
+    if user.membership?
+      can :manage, Player
+    end
     
     if user.translator?
       can :manage, Translation
       can :show, JournalEntry, journalable_type: "Translation"
     end
 
+    can :show, Player, id: user.icu_id
     can :manage_preferences, User, id: user.id
   end
 end

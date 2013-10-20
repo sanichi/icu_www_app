@@ -11,6 +11,8 @@ gem "jquery-rails"
 gem "turbolinks"
 gem "cancan", "~> 1.6"
 gem "redis"
+gem "icu_name"
+gem "validates_timeliness", "~> 3.0"
 
 group :development do
   gem "capistrano"
