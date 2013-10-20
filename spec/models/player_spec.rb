@@ -8,11 +8,10 @@ describe Player do
       expect(player.last_name).to eq "O'Toole"
     end
 
-    it "player_id, deceased, gender, dob, joined" do
-      player = FactoryGirl.create(:player, player_id: "", gender: "", deceased: "", dob: "", joined: "", status: "active", source: "import")
+    it "player_id, gender, dob, joined" do
+      player = FactoryGirl.create(:player, player_id: "", gender: "", dob: "", joined: "", status: "active", source: "import")
       expect(player.player_id).to be_nil
       expect(player.gender).to be_nil
-      expect(player.deceased).to be_false
       expect(player.dob).to be_nil
       expect(player.joined).to be_nil
     end

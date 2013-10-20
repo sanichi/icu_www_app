@@ -17,7 +17,6 @@ module PlayersHelper
 
   def player_status_menu(selected, opt={})
     statuses = Player::STATUSES.map { |g| [t("player.status.#{g}"), g] }
-    statuses.push [t("player.deceased"), "deceased"] if opt[:deceased]
     statuses.push [t("any"), ""] if opt[:any]
     options_for_select(statuses, selected)
   end

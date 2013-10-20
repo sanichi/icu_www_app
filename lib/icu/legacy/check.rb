@@ -27,11 +27,6 @@ module ICU
           actives << id if player.player_id && player.status == "active"
         end
         report("Duplicates with active status", active_duplicates)
-
-        active_dead_people = @player.each_with_object([]) do |(id, player), goners|
-          goners << id if player.deceased && player.status == "active"
-        end
-        report("Deceased players with active status", active_dead_people)
       end
 
       def check_user_players

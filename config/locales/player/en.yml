@@ -2,7 +2,6 @@ en:
   player:
     age: Age
     any_gender: Any gender
-    deceased: Deceased
     dob: Date of birth
     duplicate: Duplicate
     duplicate_of: Duplicate of
@@ -36,5 +35,6 @@ en:
     status:
       status: Status
       active: Active
+      deceased: Deceased
       foreign: Foreign
       inactive: Inactive

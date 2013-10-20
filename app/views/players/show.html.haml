@@ -4,8 +4,8 @@
   .col-md-8.col-md-offset-2
     %h1.text-center
       = @player.name
-      - if @player.deceased
-        %span.label.label-default= t("player.deceased")
+      - if !@player.active?
+        %span.label.label-default= t("player.status.#{@player.status}")
       - if @player.duplicate?
         %span.label.label-danger= t("player.duplicate")
     %table.table.table-bordered

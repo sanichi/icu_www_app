@@ -6,7 +6,7 @@ class Player < ActiveRecord::Base
 
   GENDERS = %w[M F]
   SOURCES = %w[import archive subscription officer]
-  STATUSES = %w[active inactive foreign]
+  STATUSES = %w[active inactive foreign deceased]
 
   before_validation :normalize_attributes, :conditional_adjustment
 
@@ -43,6 +43,10 @@ class Player < ActiveRecord::Base
   def active?
     status == "active"
   end
+
+  def deceased?
+    status == "deceased"
+  end
     
   def age(today=Date.today)
     return unless dob
@@ -58,7 +62,6 @@ class Player < ActiveRecord::Base
     matches = matches.where("last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
     matches = matches.where(gender: params[:gender]) if params[:gender].present?
     matches = matches.where(status: params[:status]) if STATUSES.include?(params[:status])
-    matches = matches.where(deceased: true) if params[:status] == "deceased"
     if (yob = params[:yob].to_i).to_s.match(/\A\s*(19|20)\d\d\s*\z/)
       case params[:relation]
       when "="
@@ -87,7 +90,6 @@ class Player < ActiveRecord::Base
     %w[player_id gender dob joined].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
-    self.deceased = false if deceased.blank?
     name = ICU::Name.new(first_name, last_name)
     self.first_name = name.first
     self.last_name = name.last
@@ -119,6 +121,7 @@ class Player < ActiveRecord::Base
   end
 
   def duplication
+    return if source == "import"
     return unless player_id.present?
     duplicate = player_id.to_i
     error = nil
@@ -136,10 +139,8 @@ class Player < ActiveRecord::Base
   end
 
   def conditional_adjustment
-    if active?
-      if duplicate? || deceased
-        self.status = "inactive"
-      end
+    if active? && duplicate?
+      self.status = "inactive"
     end
   end
 end

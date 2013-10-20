@@ -89,7 +89,6 @@ feature "Create players" do
     expect(player.dob.to_s).to eq "1955-11-09"
     expect(player.gender).to eq "M"
     expect(player.joined.to_s).to eq "2013-10-20"
-    expect(player.deceased).to be_false
     expect(player.source).to eq "officer"
     expect(player.status).to eq "active"
     expect(player.player_id).to be_nil
@@ -109,7 +108,6 @@ feature "Create players" do
     expect(player.dob.to_s).to eq "1964-06-10"
     expect(player.gender).to eq "F"
     expect(player.joined.to_s).to eq Date.today.to_s
-    expect(player.deceased).to be_false
     expect(player.source).to eq "officer"
     expect(player.status).to eq "active"
     expect(player.player_id).to be_nil
@@ -155,27 +153,25 @@ feature "Edit players" do
   given(:gender)     { I18n.t("player.gender.gender") }
   given(:male)       { I18n.t("player.gender.M") }
   given(:female)     { I18n.t("player.gender.F") }
-  given(:deceased)   { I18n.t("player.deceased") }
   given(:master_id)  { I18n.t("player.master_id") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
+  given(:deceased)   { I18n.t("player.status.deceased") }
   given(:save)       { I18n.t("save") }
   given(:edit)       { I18n.t("edit") }
   given(:please)     { I18n.t("please_select") }
 
   scenario "marking a player as deceased" do
-    expect(player.deceased).to be_false
     expect(player.status).to eq "active"
     visit player_path(player)
     click_link edit
-    check deceased
+    select deceased, from: status
     click_button save
     expect(page).to have_css(success, text: "updated")
-    expect(page).to have_css("h1 span", text: I18n.t("player.deceased"))
-    expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: I18n.t("player.status.inactive"))
+    expect(page).to have_css("h1 span", text: I18n.t("player.status.deceased"))
+    expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: I18n.t("player.status.deceased"))
     player.reload
-    expect(player.deceased).to be_true
-    expect(player.status).to eq "inactive"
+    expect(player.status).to eq "deceased"
   end
 
   scenario "marking a player as a duplicate" do

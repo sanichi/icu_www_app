@@ -60,7 +60,6 @@ ActiveRecord::Schema.define(version: 20131018113203) do
     t.string   "status",     limit: 25
     t.string   "source",     limit: 25
     t.integer  "player_id"
-    t.boolean  "deceased"
     t.string   "gender",     limit: 1
     t.date     "dob"
     t.date     "joined"

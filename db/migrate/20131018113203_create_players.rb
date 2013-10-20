@@ -4,7 +4,6 @@ class CreatePlayers < ActiveRecord::Migration
       t.string   :first_name, :last_name, limit: 50
       t.string   :status, :source, limit: 25
       t.integer  :player_id
-      t.boolean  :deceased
       t.string   :gender, limit: 1
       t.date     :dob, :joined
 
