@@ -15,7 +15,7 @@
           - @players.matches.each do |player|
             %tr
               %td= player.id
-              %td= link_to player.name(:reversed), player
+              %td= link_to_if can?(:show, player), player.name(:reversed), [:admin, player]
               %td= t("player.abbrev.#{player.gender}") if player.gender
               %td= player.dob.year if player.dob
-          = render "utils/pagination_links", pager: @players, columns: 3
+          = render "utils/pagination_links", pager: @players, columns: 4

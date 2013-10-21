@@ -22,13 +22,13 @@ feature "Authorization for players" do
       expect(page).to_not have_css(failure)
       visit players_path
       expect(page).to_not have_css(failure)
-      visit player_path(player)
+      visit admin_player_path(player)
       expect(page).to have_css(header, text: player.name)
       expect(page).to have_link(button)
     end
   end
 
-  scenario "other roles can only read players" do
+  scenario "other roles can only index players" do
     not_ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -38,13 +38,12 @@ feature "Authorization for players" do
       expect(page).to have_css(failure, text: unauthorized)
       visit players_path
       expect(page).to_not have_css(failure)
-      visit player_path(player)
-      expect(page).to have_css(header, text: player.name)
-      expect(page).to_not have_link(button)
+      visit admin_player_path(player)
+      expect(page).to have_css(failure, text: unauthorized)
     end
   end
 
-  scenario "guests can only read players" do
+  scenario "guests can only index players" do
     logout
     visit new_admin_player_path
     expect(page).to have_css(failure, text: unauthorized)
@@ -52,9 +51,8 @@ feature "Authorization for players" do
     expect(page).to have_css(failure, text: unauthorized)
     visit players_path
     expect(page).to_not have_css(failure)
-    visit player_path(player)
-    expect(page).to have_css(header, text: player.name)
-    expect(page).to_not have_link(button)
+    visit admin_player_path(player)
+    expect(page).to have_css(failure, text: unauthorized)
   end
 end
 
@@ -163,7 +161,7 @@ feature "Edit players" do
 
   scenario "marking a player as deceased" do
     expect(player.status).to eq "active"
-    visit player_path(player)
+    visit admin_player_path(player)
     click_link edit
     select deceased, from: status
     click_button save

@@ -1,6 +1,10 @@
 class Admin::PlayersController < ApplicationController
   authorize_resource
-  before_action :set_player, only: [:edit, :update]
+  before_action :set_player, only: [:show, :edit, :update]
+
+  def show
+    #@entries = @player.journal_entries if current_user.roles.present?
+  end
 
   def new
     @player = Player.new(source: "officer", status: "active", joined: Date.today.to_s)
@@ -11,7 +15,7 @@ class Admin::PlayersController < ApplicationController
 
     if @player.save
       #@player.journal(:create, current_user.name, request.ip)
-      redirect_to @player, notice: "Player was successfully created"
+      redirect_to [:admin, @player], notice: "Player was successfully created"
     else
       logger.error @player.errors.inspect
       render action: "new"
@@ -21,7 +25,7 @@ class Admin::PlayersController < ApplicationController
   def update
     if @player.update(player_params)
       #@player.journal(:update, current_user.name, request.ip)
-      redirect_to @player, notice: "Player was successfully updated"
+      redirect_to [:admin, @player], notice: "Player was successfully updated"
     else
       flash.now.alert = @player.errors[:base].first if @player.errors[:base].any?
       render action: "edit"

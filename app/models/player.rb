@@ -1,5 +1,6 @@
 class Player < ActiveRecord::Base
   extend Util::Pagination
+  extend Util::Params
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   has_many   :duplicates, class_name: "Player"
@@ -56,6 +57,8 @@ class Player < ActiveRecord::Base
   end
 
   def self.search(params, path)
+    params[:status] = "active" if params[:status].blank?
+    params[:order] = "id" if params[:oreder].blank?
     matches = all
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
     matches = matches.where("first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
@@ -85,7 +88,7 @@ class Player < ActiveRecord::Base
     when "id"
       matches = matches.order(:id)
     end
-    [:id, :first_name, :last_name, :yob].each { |key| params[key] = "" if params.has_key?(key) && params[key].blank? }
+    clear_whitespace_to_reveal_placeholders(params, :id, :first_name, :last_name, :yob)
     paginate(matches, params, path)
   end
 

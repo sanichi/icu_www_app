@@ -15,14 +15,14 @@
       - if @player.duplicate?
         %tr
           %th= t("player.duplicate_of")
-          %td= link_to @player.player_id, player_path(@player.player_id)
+          %td= link_to @player.player_id, admin_player_path(@player.player_id)
       - if (duplicates = @player.duplicates).any?
         %tr
           %th= t("player.duplicates")
           %td
             - duplicates.each_with_index do |duplicate, n|
               = succeed(n == duplicates.size - 1 ? "" : ", ") do
-                = link_to duplicate.id, player_path(duplicate.id)
+                = link_to duplicate.id, admin_player_path(duplicate.id)
       %tr
         %th= t("player.last_name")
         %td= @player.last_name

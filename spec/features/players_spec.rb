@@ -23,6 +23,7 @@ feature "Search players" do
 
   given(:search)    { I18n.t("search") }
   given(:result)    { "//table[@id='results']/tbody/tr" }
+  given(:link)      { "//table[@id='results']/tbody/tr/td/a[starts-with(@href,'/admin/players/')]" }
   given(:male)      { I18n.t("player.gender.M") }
   given(:female)    { I18n.t("player.gender.F") }
   given(:deceased)  { I18n.t("player.status.deceased") }
@@ -33,6 +34,9 @@ feature "Search players" do
   scenario "default" do
     click_button search
     expect(page).to have_xpath(result, count: 5)
+    login("membership")
+    visit players_path
+    expect(page).to have_xpath(link, count: 5)
   end
 
   scenario "id" do

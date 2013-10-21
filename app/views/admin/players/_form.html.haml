@@ -20,6 +20,6 @@
         %hr
         = f.submit "Save", class: "btn btn-primary"
         - last_path = last_search(:players)
-        = link_to "Cancel", @player.new_record? ? last_path || players_path : @player, class: "btn btn-default"
+        = link_to "Cancel", @player.new_record? ? last_path || players_path : [:admin, @player], class: "btn btn-default"
         - if last_path
           = link_to t("last_search"), last_path, class: "btn btn-default"

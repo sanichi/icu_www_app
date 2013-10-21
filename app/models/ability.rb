@@ -22,7 +22,6 @@ class Ability
       can :show, JournalEntry, journalable_type: "Translation"
     end
 
-    can :show, Player, id: user.icu_id
     can :manage_preferences, User, id: user.id
   end
 end
