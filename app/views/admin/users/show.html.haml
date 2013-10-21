@@ -27,14 +27,7 @@
         %td
           - if @user.verified?
             %time{datetime: @user.verified_at.to_s(:html5)}= @user.verified_at.to_s(:nosec)
-      %tr
-        %th Created
-        %td
-          %time{datetime: @user.created_at.to_s(:html5)}= @user.created_at.to_s(:nosec)
-      %tr
-        %th Last Updated
-        %td
-          %time{datetime: @user.updated_at.to_s(:html5)}= @user.updated_at.to_s(:nosec)
+      = render "utils/timestamps", object: @user
     = link_to "Edit", edit_admin_user_path(@user), class: "btn btn-primary"
     = link_to "Delete", admin_user_path(@user), data: { confirm: "Sure you want to delete this user?" }, method: :delete, class: "btn btn-danger"
     - if path = last_search(:admin, :users)

@@ -2,6 +2,7 @@ en:
   ICU: ICU
   any: Any
   cancel: Cancel
+  created_at: Created
   delete: Delete
   edit: Edit
   either: Either
@@ -16,6 +17,7 @@ en:
   search: Search
   show: Show
   under_construction: Under Construction
+  updated_at: Last updated
   "no": "No"
   "yes": "Yes"
   pagination:

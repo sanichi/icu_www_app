@@ -1,0 +1,10 @@
+- unless defined? by
+  - by = nil
+
+%tr
+  %th= text
+  %td
+    %time{datetime: datetime.to_s(:html5)}= datetime.to_s(:nosec)
+    - if by
+      = "by"
+      = by

@@ -44,15 +44,7 @@
       %tr
         %th= t("player.source.source")
         %td= t("player.source.#{@player.source}")
-      - if can? :manage, @player
-        %tr
-          %th Created
-          %td
-            %time{datetime: @player.created_at.to_s(:html5)}= @player.created_at.to_s(:nosec)
-        %tr
-          %th Last Updated
-          %td
-            %time{datetime: @player.updated_at.to_s(:html5)}= @player.updated_at.to_s(:nosec)
+      = render "utils/timestamps", object: @player, ability: :manage
     - if can? :manage, @player
       = link_to "Edit", edit_admin_player_path(@player), class: "btn btn-primary"
     - if path = last_search(:players)

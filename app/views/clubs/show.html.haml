@@ -46,15 +46,7 @@
       %tr
         %th= t("club.active")
         %td= t(@club.active ? "yes" : "no")
-      - if can? :manage, @club
-        %tr
-          %th Created
-          %td
-            %time{datetime: @club.created_at.to_s(:html5)}= @club.created_at.to_s(:nosec)
-        %tr
-          %th Last Updated
-          %td
-            %time{datetime: @club.updated_at.to_s(:html5)}= @club.updated_at.to_s(:nosec)
+      = render "utils/timestamps", object: @club, ability: :manage
     - if can? :manage, @club
       = link_to "Edit", edit_admin_club_path(@club), class: "btn btn-primary"
     - if path = last_search(:clubs)

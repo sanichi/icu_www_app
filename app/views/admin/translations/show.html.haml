@@ -27,17 +27,7 @@
         %tr
           %th Irish
           %td= @translation.value
-      %tr
-        %th Last Updated
-        %td
-          %time{datetime: @translation.updated_at.to_s(:html5)}= @translation.updated_at.to_s(:nosec)
-          - if @translation.user
-            by
-            = @translation.user
-      %tr
-        %th Created
-        %td
-          %time{datetime: @translation.created_at.to_s(:html5)}= @translation.created_at.to_s(:nosec)
+      = render "utils/timestamps", object: @translation, updated_by: @translation.user
     = render "action", translation: @translation
     - if path = last_search(:admin, :translations)
       = link_to t("last_search"), path, class: "btn btn-default"
