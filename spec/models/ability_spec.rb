@@ -2,88 +2,90 @@ require 'spec_helper'
 require 'cancan/matchers'
 
 describe Ability do
-  let(:ability) { Ability.new(user) }
+  context "class abilities" do
+    actions = [:index, :show, :new, :edit, :destroy]
+    no_show = actions.reject { |a| a == :show }
+    class_abilities = {
+      "admin" => [
+        [:all, :manage]
+      ],
+      "editor" => [
+        [Club, :manage],
+        [Player, :show, no_show],
+        [Translation, nil, actions],
+        [User, nil, actions],
+      ],
+      "membership" => [
+        [Club, nil, actions],
+        [Player, :manage],
+        [Translation, nil, actions],
+        [User, nil, actions],
+      ],
+      "translator" => [
+        [Player, :show, no_show],
+        [Translation, :manage],
+        [User, nil, actions],
+      ],
+      "treasurer" => [
+        [Player, :show, no_show],
+        [Translation, nil, actions],
+        [User, nil, actions],
+      ],
+      "user" => [
+        [Player, :show, no_show],
+        [Translation, nil, actions],
+        [User, nil, actions],
+      ],
+      "guest" => [
+        [Player, nil, actions],
+        [Translation, nil, actions],
+        [User, nil, actions],
+      ],
+    }
 
-  context "admin" do
-    let(:user) { FactoryGirl.create(:user, roles: "admin") }
+    class_abilities.each do |role, allowances|
+      user =
+      case role
+      when "guest"
+        User::Guest.new
+      when "user"
+        FactoryGirl.create(:user)
+      else
+        FactoryGirl.create(:user, roles: role)
+      end
+      ability = Ability.new(user)
 
-    it "all" do
-      ability.should be_able_to :manage, :all
+      allowances.each do |allowance|
+        target, can, cant = *allowance
+
+        can = Array(can)
+        can.each do |action|
+          it "#{role} can #{action} #{target}" do
+            ability.should be_able_to action, target
+          end
+        end
+
+        cant = Array(cant)
+        cant.each do |action|
+          it "#{role} cannot #{action} #{target}" do
+            ability.should_not be_able_to action, target
+          end
+        end
+      end
     end
   end
-
-  context "editor" do
-    let(:user) { FactoryGirl.create(:user, roles: "editor") }
-
-    it "clubs" do
-      ability.should be_able_to :manage, Club
-    end
-
-    it "journal entries" do
-      ability.should_not be_able_to :read, JournalEntry
-    end
-
-    it "logins" do
-      ability.should_not be_able_to :read, Login
-    end
-
-    it "translations" do
-      ability.should_not be_able_to :read, Translation
-    end
-
-    it "users" do
-      ability.should_not be_able_to :read, User
-    end
-  end
-
-  context "translator" do
-    let(:user) { FactoryGirl.create(:user, roles: "translator") }
-    subject    { ability }
-
-    it "clubs" do
-      ability.should_not be_able_to :manage, Club
-    end
-
-    it "journal entries" do
-      ability.should_not be_able_to :index, JournalEntry
-      ability.should_not be_able_to :show, JournalEntry.new(journalable_type: "Club")
-      ability.should be_able_to :show, JournalEntry.new(journalable_type: "Translation")
-    end
-
-    it "logins" do
-      ability.should_not be_able_to :read, Login
-    end
-
-    it "translations" do
-      ability.should be_able_to :manage, Translation
-    end
-
-    it "users" do
-      ability.should_not be_able_to :read, User
-    end
-  end
-
-  context "treasurer" do
-    let(:user) { FactoryGirl.create(:user, roles: "treasurer") }
-
-    it "clubs" do
-      ability.should_not be_able_to :manage, Club
-    end
-
-    it "journal entries" do
-      ability.should_not be_able_to :read, JournalEntry
-    end
-
-    it "logins" do
-      ability.should_not be_able_to :read, Login
-    end
-
-    it "translations" do
-      ability.should_not be_able_to :read, Translation
-    end
-
-    it "users" do
-      ability.should_not be_able_to :read, User
+  
+  context "instance abilities" do
+    let(:player) { FactoryGirl.create(:player) }
+    let(:ability) { Ability.new(user) }
+    
+    context "user" do
+      let(:user) { FactoryGirl.create(:user) }
+    
+      it "can show only own player" do
+        ability.should be_able_to :show, user.player
+        ability.should_not be_able_to :show, player
+      end
     end
   end
 end

@@ -3,6 +3,7 @@ class Admin::PlayersController < ApplicationController
   before_action :set_player, only: [:show, :edit, :update]
 
   def show
+    authorize! :show, @player # this shouldn't be necessary but it doesn't work without it
     #@entries = @player.journal_entries if current_user.roles.present?
   end
 

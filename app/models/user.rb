@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   SessionError = Class.new(RuntimeError)
 
   has_many :logins, dependent: :nullify
+  belongs_to :player, foreign_key: "icu_id"
 
   before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 

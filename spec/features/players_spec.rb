@@ -36,7 +36,7 @@ feature "Search players" do
     expect(page).to have_xpath(result, count: 5)
     login("membership")
     visit players_path
-    expect(page).to have_xpath(link, count: 5)
+    expect(page).to have_xpath(link, count: 6) # one extra for the membership officer's player
   end
 
   scenario "id" do
