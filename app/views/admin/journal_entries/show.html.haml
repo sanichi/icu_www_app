@@ -10,15 +10,16 @@
       %tr
         %th Action
         %td= @entry.action
-      %tr
-        %th Column
-        %td= @entry.column
-      %tr
-        %th From
-        %td= @entry.from
-      %tr
-        %th To
-        %td= @entry.to
+      - if @entry.action == "update"
+        %tr
+          %th Column
+          %td= @entry.column
+        %tr
+          %th From
+          %td= @entry.from
+        %tr
+          %th To
+          %td= @entry.to
       %tr
         %th By
         %td= @entry.by

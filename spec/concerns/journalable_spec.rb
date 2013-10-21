@@ -13,6 +13,13 @@ describe Journalable do
     end
   end
 
+  context Player do
+    it "should be setup correctly" do
+      expect(invalid(Player)).to be_blank
+      expect(Player.journalable_path).to eq "/admin/players/%d"
+    end
+  end
+
   context Translation do
     it "should be setup correctly" do
       expect(invalid(Translation)).to be_blank

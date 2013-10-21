@@ -2,6 +2,9 @@ class Player < ActiveRecord::Base
   extend Util::Pagination
   extend Util::Params
 
+  include Journalable
+  journalize %w[first_name last_name dob gender joined status player_id], "/admin/players/%d"
+
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   has_many   :duplicates, class_name: "Player"
 
