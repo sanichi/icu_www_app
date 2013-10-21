@@ -14,14 +14,14 @@ class User < ActiveRecord::Base
   SessionError = Class.new(RuntimeError)
 
   has_many :logins, dependent: :nullify
-  belongs_to :player, foreign_key: "icu_id"
+  belongs_to :player
 
   before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /\A[^\s]+@[^\s]+\z/ }
   validates :encrypted_password, :expires_on, :status, presence: true
   validates :salt, length: { is: 32 }
-  validates :icu_id, numericality: { only_integer: true, greater_than: 0 }
+  validates :player_id, numericality: { only_integer: true, greater_than: 0 }
   validates :roles, format: { with: /\A(#{ROLES.join('|')})( (#{ROLES.join('|')}))*\z/ }, allow_nil: true
   validates :theme, inclusion: { in: THEMES }, allow_nil: true
   validates :locale, inclusion: { in: LOCALES }
@@ -61,7 +61,7 @@ class User < ActiveRecord::Base
   end
 
   def season_ticket
-    t = SeasonTicket.new(icu_id, expires_on)
+    t = SeasonTicket.new(player_id, expires_on)
     t.valid? ? t.ticket : t.error
   end
 

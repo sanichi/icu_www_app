@@ -5,7 +5,7 @@ module ICU
 
       MAP = {
         mem_id:       :id,
-        mem_icu_id:   :icu_id,
+        mem_icu_id:   :player_id,
         mem_email:    :email,
         mem_password: :encrypted_password,
         mem_salt:     :salt,
@@ -57,8 +57,8 @@ module ICU
         case user_attr
         when :id
           error = "ID (#{params[:id]}) must be positive integer" unless params[:id].present? && params[:id] > 0
-        when :icu_id
-          error = "missing or invalid ICU ID (#{params[:icu_id]}) for ID #{params[:id]}" unless params[:icu_id].present? && params[:icu_id] > 0
+        when :player_id
+          error = "missing or invalid ICU ID (#{params[:player_id]}) for ID #{params[:id]}" unless params[:player_id].present? && params[:player_id] > 0
         when :email
           error = "missing email for ID #{params[:id]}" unless params[:email].present?
         when :encrypted_password
@@ -78,8 +78,8 @@ module ICU
           unless error
             ticket = SeasonTicket.new(params[:season_ticket])
             if ticket.valid?
-              if ticket.icu_id != params[:icu_id]
-                error = "mismatched ICU ID between ticket (#{ticket.icu_id}) and record (#{params[:icu_id]}) for ID #{params[:id]}"
+              if ticket.icu_id != params[:player_id]
+                error = "mismatched ICU ID between ticket (#{ticket.icu_id}) and record (#{params[:player_id]}) for ID #{params[:id]}"
               elsif ticket.expires_on != params[:expires_on].to_s
                 error = "mismatched expiry date between ticket (#{ticket.expires_on}) and record (#{params[:expires_on]}) for ID #{params[:id]}"
               end

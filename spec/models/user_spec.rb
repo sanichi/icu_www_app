@@ -25,8 +25,8 @@ describe User do
     end
 
     it "ICU ID should be positive" do
-      expect { FactoryGirl.create(:user, icu_id: nil) }.to raise_error(/icu.*not.*number/i)
-      expect { FactoryGirl.create(:user, icu_id: 0) }.to raise_error(/icu.*greater.*than.*0/i)
+      expect { FactoryGirl.create(:user, player_id: nil) }.to raise_error(/not.*number/i)
+      expect { FactoryGirl.create(:user, player_id: 0) }.to raise_error(/greater.*than.*0/i)
     end
   end
 
@@ -157,7 +157,7 @@ describe User do
       ticket = user.season_ticket
       expect(ticket).to match(/\A\w{4,}\z/)
       object = SeasonTicket.new(ticket)
-      expect(object.icu_id).to eq(user.icu_id)
+      expect(object.icu_id).to eq(user.player_id)
       expect(object.expires_on).to eq(user.expires_on.to_s)
     end
   end

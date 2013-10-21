@@ -23,6 +23,6 @@ class Ability
     end
 
     can :manage_preferences, User, id: user.id
-    can :show, Player, id: user.icu_id
+    can :show, Player, id: user.player_id
   end
 end

@@ -35,12 +35,12 @@ module ICU
         end
 
         missing_players = @user.each_with_object([]) do |(id, user), missing|
-          missing << id if user.icu_id.blank?
+          missing << id if user.player_id.blank?
         end
         report("Users with missing player", missing_players)
 
         invalid_players = @user.each_with_object([]) do |(id, user), invalids|
-          invalids << id if user.icu_id && !@player[user.icu_id]
+          invalids << id if user.player_id && !@player[user.player_id]
         end
         report("Users with invalid player", invalid_players)
       end

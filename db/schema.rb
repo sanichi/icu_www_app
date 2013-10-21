@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131018113203) do
+ActiveRecord::Schema.define(version: 20131021115356) do
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 20131018113203) do
     t.string   "encrypted_password", limit: 32
     t.string   "salt",               limit: 32
     t.string   "status",                        default: "OK"
-    t.integer  "icu_id"
+    t.integer  "player_id"
     t.date     "expires_on"
     t.datetime "verified_at"
     t.datetime "created_at"
