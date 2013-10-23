@@ -5,6 +5,7 @@ feature "Search players" do
     @p = []
     @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09")
     @p << FactoryGirl.create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15")
+    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08")
     @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07", player_id: @p.last.id)
@@ -33,10 +34,10 @@ feature "Search players" do
 
   scenario "default" do
     click_button search
-    expect(page).to have_xpath(result, count: 5)
+    expect(page).to have_xpath(result, count: 6)
     login("membership")
     visit players_path
-    expect(page).to have_xpath(link, count: 6) # one extra for the membership officer's player
+    expect(page).to have_xpath(link, count: 7) # one extra for the membership officer's player
   end
 
   scenario "id" do
@@ -58,12 +59,15 @@ feature "Search players" do
     fill_in "first_name", with: "mark"
     click_button search
     expect(page).to have_xpath(result, count: 2)
+    fill_in "first_name", with: "padraig"
+    click_button search
+    expect(page).to have_xpath(result, count: 2) # matches Pat and Patrick via icu_name
   end
 
   scenario "gender" do
     select male, from: "gender"
     click_button search
-    expect(page).to have_xpath(result, count: 4)
+    expect(page).to have_xpath(result, count: 5)
     select female, from: "gender"
     click_button search
     expect(page).to have_xpath(result, count: 1)
@@ -81,7 +85,7 @@ feature "Search players" do
     expect(page).to have_xpath(result, count: 2)
     select "<", from: "relation"
     click_button search
-    expect(page).to have_xpath(result, count: 3)
+    expect(page).to have_xpath(result, count: 4)
   end
   
   scenario "status" do

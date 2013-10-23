@@ -1,6 +1,7 @@
 class Player < ActiveRecord::Base
   extend Util::Pagination
   extend Util::Params
+  extend ICU::Util::AlternativeNames
 
   include Journalable
   journalize %w[first_name last_name dob gender joined status player_id], "/admin/players/%d"
@@ -64,8 +65,8 @@ class Player < ActiveRecord::Base
     params[:order] = "id" if params[:oreder].blank?
     matches = all
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
-    matches = matches.where("first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
-    matches = matches.where("last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
+    matches = matches.where(first_name_like(params[:first_name], params[:last_name])) if params[:first_name].present?
+    matches = matches.where(last_name_like(params[:last_name], params[:first_name])) if params[:last_name].present?
     matches = matches.where(gender: params[:gender]) if params[:gender].present?
     matches = matches.where(status: params[:status]) if STATUSES.include?(params[:status])
     if params[:status] == "duplicate"
