@@ -30,6 +30,17 @@ feature JournalEntry do
     [User.find_by(status: "banned"), JournalEntry.find_by(journalable_type: "User", action: "update", to: "banned")]
   end
 
+  def xpath(id, *tds)
+    xpath = "//table[@id='#{id}']/tbody/tr"
+    if tds.any?
+      xpath += "/td[starts-with(.,'#{tds.shift.to_s[0,10]}')]"
+      tds.each do |text|
+        xpath += "/following-sibling::td[starts-with(.,'#{text.to_s[0,10]}')]"
+      end
+    end
+    xpath
+  end
+
   before(:each) do
     @admin = login "admin"
     @name = @admin.signature[0,10]
@@ -42,17 +53,6 @@ feature JournalEntry do
   given(:success)      { "div.alert-success" }
   given(:failure)      { "div.alert-danger" }
   given(:unauthorized) { I18n.t("errors.messages.unauthorized") }
-
-  def xpath(id, *tds)
-    xpath = "//table[@id='#{id}']/tbody/tr"
-    if tds.any?
-      xpath += "/td[starts-with(.,'#{tds.shift.to_s[0,10]}')]"
-      tds.each do |text|
-        xpath += "/following-sibling::td[starts-with(.,'#{text.to_s[0,10]}')]"
-      end
-    end
-    xpath
-  end
 
   scenario "admin view" do
     login "admin"
@@ -147,5 +147,17 @@ feature JournalEntry do
 
     visit admin_user_path(@user_change)
     expect(page).to have_css(failure, text: unauthorized)
+  end
+
+  scenario "delete parent object" do
+    expect(JournalEntry.where(journalable_type: "Translation").count).to eq 1
+
+    @translation.active = false
+    @translation.save
+    login "admin"
+    visit admin_translation_path(@translation)
+    click_link "Delete"
+
+    expect(JournalEntry.where(journalable_type: "Translation").count).to eq 0
   end
 end
