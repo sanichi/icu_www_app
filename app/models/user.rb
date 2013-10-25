@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   end
 
   def signature
-    "#{name} (#{email})"
+    "#{name} (#{email}/#{id})"
   end
 
   def valid_password?(password)
