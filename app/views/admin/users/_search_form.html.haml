@@ -6,4 +6,4 @@
   = render "utils/inline_select", param: :status, text: "Status", menu: user_status_menu(params[:status])
   = render "utils/inline_select", param: :verify, text: "Verified", menu: user_verify_menu(params[:verify])
   = render "utils/inline_select", param: :role, text: "Role", menu: user_roles_search_menu(params[:role])
-  = button_tag "Search", type: "submit", class: "btn btn-default"
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
