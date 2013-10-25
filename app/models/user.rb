@@ -159,12 +159,17 @@ class User < ActiveRecord::Base
     raise SessionError.new("enter_email") if email.blank?
     raise SessionError.new("enter_password") if password.blank?
     user = User.find_by(email: email)
-    raise SessionError.new("invalid_email")    unless user
+    self.bad_login(ip, email, password)        unless user
     user.add_login(ip, "invalid_password")     unless user.valid_password?(password)
     user.add_login(ip, "unverified_email")     unless user.verified?
     user.add_login(ip, "account_disabled")     unless user.status_ok?
     user.add_login(ip, "subscription_expired") unless user.subscribed?
     user.add_login(ip)
+  end
+
+  def self.bad_login(ip, email, password)
+    BadLogin.new_record(email, password, ip)
+    raise SessionError.new("invalid_email")
   end
 
   def add_login(ip, error=nil)

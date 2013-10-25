@@ -9,7 +9,7 @@
           %tr
             %th Player
             %th User
-            %th{class: "text-center"} IP
+            %th IP
             %th{class: "text-center"} OK
             %th Ago
         %tbody
@@ -17,7 +17,7 @@
             %tr
               %td= link_to login.user.player.name, [:admin, login.user.player]
               %td= link_to login.user.email, [:admin, login.user]
-              %td{class: "text-center"}= login.ip
+              %td= login.ip
               %td{class: "text-center"}= login.error ? "✘" : "✔"
-              %td= link_to time_ago_in_words(login.created_at, include_seconds: true), [:admin, login]
+              %td{title: login.created_at.to_s(:db)}= link_to time_ago_in_words(login.created_at, include_seconds: true), [:admin, login]
           = render "utils/pagination_links", pager: @logins, columns: 5

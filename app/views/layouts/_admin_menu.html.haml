@@ -1,6 +1,7 @@
 - unless current_user.guest? || current_user.roles.nil?
   - items = 0
   - items += 1 if logins  = can?(:manage, Login)
+  - items += 1 if bdlgns  = can?(:manage, BadLogin)
   - items += 1 if entries = can?(:index, JournalEntry)
   - items += 1 if users   = can?(:manage, User)
   - items += 1 if trans   = can?(:manage, Translation)
@@ -14,6 +15,8 @@
       %ul.dropdown-menu
         - if logins
           %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
+        - if bdlgns
+          %li{class: active("admin/bad_logins")}= link_to "Bad Logins", admin_bad_logins_path
         - if entries
           %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
         - if users

@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131025091232) do
+ActiveRecord::Schema.define(version: 20131025140415) do
+
+  create_table "bad_logins", force: true do |t|
+    t.string   "email"
+    t.string   "encrypted_password", limit: 32
+    t.string   "ip",                 limit: 50
+    t.datetime "created_at"
+  end
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20

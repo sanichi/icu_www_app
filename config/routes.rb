@@ -12,14 +12,15 @@ IcuWwwApp::Application.routes.draw do
   resources :players,  only: [:index]
 
   namespace :admin do
-    resources :users,  only: [:index, :show, :edit, :update, :destroy] do
-      get :login, on: :member
-    end
+    resources :bad_logins,      only: [:index]
+    resources :clubs,           only: [:new, :create, :edit, :update]
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
-    resources :translations,    only: [:index, :show, :edit, :update, :destroy]
-    resources :clubs,           only: [:new, :create, :edit, :update]
     resources :players,         only: [:show, :new, :create, :edit, :update]
+    resources :translations,    only: [:index, :show, :edit, :update, :destroy]
+    resources :users,           only: [:index, :show, :edit, :update, :destroy] do
+      get :login, on: :member
+    end
   end
 
   match "*url", to: "pages#not_found", via: :all

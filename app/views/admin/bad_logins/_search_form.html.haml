@@ -1,0 +1,5 @@
+= form_tag admin_bad_logins_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :email, text: "Email", size: 18
+  = render "utils/inline_text_field", param: :ip, text: "IP", size: 14
+  = render "utils/inline_text_field", param: :time, text: "Time", size: 18
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

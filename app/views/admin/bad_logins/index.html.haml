@@ -1,0 +1,21 @@
+- content_for :title, "Bad Logins"
+
+= render "utils/search_panel", form: "admin/bad_logins/search_form", title: "Bad Logins", pad: 1
+- if @bad_logins.count > 0
+  .row
+    .col-sm-10.col-sm-offset-1
+      %table{class: "table table-bordered table-striped table-condensed", id: "results"}
+        %thead
+          %tr
+            %th Email
+            %th Encrypted password
+            %th IP
+            %th Time (Ago)
+        %tbody
+          - @bad_logins.matches.each do |login|
+            %tr
+              %td= login.email
+              %td= login.encrypted_password
+              %td= login.ip
+              %td= "#{login.created_at.to_s(:db)} (#{time_ago_in_words(login.created_at, include_seconds: true)})"
+          = render "utils/pagination_links", pager: @bad_logins, columns: 4
