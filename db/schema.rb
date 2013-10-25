@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131024202721) do
+ActiveRecord::Schema.define(version: 20131025091232) do
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(version: 20131024202721) do
     t.string   "journalable_type", limit: 50
     t.string   "action",           limit: 50
     t.string   "column",           limit: 50
-    t.string   "by",               limit: 50
+    t.string   "by"
     t.string   "ip",               limit: 50
     t.string   "from"
     t.string   "to"

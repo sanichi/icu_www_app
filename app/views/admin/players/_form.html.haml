@@ -7,8 +7,8 @@
         - locals = { form: f, object: @player, col: "sm", pad: 2, width: 4 }
         = render "utils/text_field_for", locals.merge(param: :first_name, text: t("player.first_name"))
         = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"))
-        = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 2, placeholder: "YYYY-MM-DD")
-        = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 2, placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 3, placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: "YYYY-MM-DD")
         = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender"), width: 2, menu: player_gender_menu(@player.gender, "please_select"))
         - if @player.new_record?
           = hidden_field :player, :status

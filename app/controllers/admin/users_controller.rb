@@ -15,7 +15,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      @user.journal(:update, current_user.name, request.ip)
+      @user.journal(:update, current_user, request.ip)
       redirect_to [:admin, @user], notice: "User was successfully updated"
     else
       render action: "edit"
@@ -27,7 +27,7 @@ class Admin::UsersController < ApplicationController
     if reason = @user.reason_to_not_delete
       redirect_to admin_user_path(@user), alert: "Can't delete #{email} because this user #{reason}"
     else
-      @user.journal(:destroy, current_user.name, request.ip)
+      @user.journal(:destroy, current_user, request.ip)
       @user.destroy
       redirect_to admin_users_path, notice: "User #{email} was successfully deleted"
     end

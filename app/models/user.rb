@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
     player.name
   end
 
+  def signature
+    "#{name} (#{email})"
+  end
+
   def valid_password?(password)
     encrypted_password == User.encrypt_password(password, salt)
   end

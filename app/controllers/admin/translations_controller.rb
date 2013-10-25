@@ -21,7 +21,7 @@ class Admin::TranslationsController < ApplicationController
     @translation.user = current_user.email
     @translation.old_english = @translation.english
     if @translation.update(translation_params)
-      @translation.journal(:update, current_user.name, request.ip)
+      @translation.journal(:update, current_user, request.ip)
       redirect_to [:admin, @translation], notice: "Translation #{@translation.locale_key} was updated"
     else
       logger.error(@translation.errors.inspect)
@@ -32,7 +32,7 @@ class Admin::TranslationsController < ApplicationController
 
   def destroy
     if @translation.deletable?
-      @translation.journal(:destroy, current_user.name, request.ip)
+      @translation.journal(:destroy, current_user, request.ip)
       @translation.destroy
       redirect_to view_context.last_search(:admin, :translations) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
     else

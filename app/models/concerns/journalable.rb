@@ -7,6 +7,7 @@ module Journalable
 
   def journal(action, by, ip)
     action = action.to_s.downcase
+    by = by.signature if by.respond_to?(:signature)
     if action == "create" || action == "destroy"
       journal_entries.create!(action: action, by: by, ip: ip)
     else

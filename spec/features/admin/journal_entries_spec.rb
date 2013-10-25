@@ -32,7 +32,7 @@ feature JournalEntry do
 
   before(:each) do
     @admin = login "admin"
-    @name = @admin.name[0,10]
+    @name = @admin.signature[0,10]
     @ip = "127.0.0.1"
     @club, @club_creation = create_club
     @translation, @translation_change = edit_translation
