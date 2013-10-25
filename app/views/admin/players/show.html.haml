@@ -45,6 +45,14 @@
         %th= t("player.source.source")
         %td= t("player.source.#{@player.source}")
       = render "utils/timestamps", object: @player, ability: :manage
+      - if @player.users.count > 0
+        %tr
+          %th= t("player.logins")
+          %td
+            - @player.users.each_with_index do |user, n|
+              - if n > 0
+                %br
+              = link_to_if can?(:manage, @user), user.email, [:admin, user]
     - if can? :manage, @player
       = link_to "Edit", edit_admin_player_path(@player), class: "btn btn-primary"
     - if path = last_search(:players)

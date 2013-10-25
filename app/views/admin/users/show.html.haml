@@ -8,8 +8,8 @@
         %th Email
         %td= @user.email
       %tr
-        %th ICU #
-        %td= @user.player_id
+        %th Player
+        %td= link_to @user.name, [:admin, @user.player]
       %tr
         %th Expires On
         %td= @user.expires_on

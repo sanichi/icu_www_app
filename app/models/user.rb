@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   has_many :logins, dependent: :destroy
   belongs_to :player
 
+  default_scope { order(:email) }
+
   before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 
   validates :email, uniqueness: { case_sensitive: false }, format: { with: /\A[^\s]+@[^\s]+\z/ }
@@ -115,7 +117,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    matches = order(:email).includes(:player).references(:players)
+    matches = includes(:player).references(:players)
     if params[:last_name].present? || params[:first_name].present?
       matches = matches.joins(:player)
       matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?

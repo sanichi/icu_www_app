@@ -11,6 +11,7 @@ en:
     id_order: ID order
     joined: Join date
     last_name: Last name
+    logins: Login accounts
     master_id: Master ID
     name: Name
     player: Player

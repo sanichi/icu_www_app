@@ -1,8 +1,9 @@
 class Admin::PlayersController < ApplicationController
   authorize_resource
-  before_action :set_player, only: [:show, :edit, :update]
+  before_action :set_player, only: [:edit, :update]
 
   def show
+    @player = Player.includes(:users).find(params[:id])
     authorize! :show, @player # this shouldn't be necessary but it doesn't work without it
     @entries = @player.journal_entries if current_user.roles.present?
   end
