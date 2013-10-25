@@ -47,7 +47,6 @@ feature "Listing logins" do
     @user[:expired]    = login FactoryGirl.create(:user, expires_on: Date.today.years_ago(2).end_of_year)
     @user[:unverified] = login FactoryGirl.create(:user, verified_at: nil)
     @user[:status]     = login FactoryGirl.create(:user, status: "Undesirable")
-    @user[:email]      = login FactoryGirl.create(:user), email: "wrong@example.com"
     @user[:password]   = login FactoryGirl.create(:user), password: "wrong password"
     @user[:ip]         = FactoryGirl.create(:user)
     @login             = FactoryGirl.create(:login, user: @user[:ip], ip: "198.168.0.1")
@@ -75,12 +74,7 @@ feature "Listing logins" do
   scenario "specific results" do
     select "Failure", from: "Result"
     click_button "Search"
-    expect(page).to have_xpath(@xpath, count: 5)
-
-    select "Bad email", from: "Result"
-    click_button "Search"
-    expect(page).to have_xpath(@xpath, count: 1)
-    expect(page).to have_content("wrong@example.com")
+    expect(page).to have_xpath(@xpath, count: 4)
 
     select "Bad password", from: "Result"
     click_button "Search"
@@ -109,17 +103,5 @@ feature "Listing logins" do
     select "Any", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @user.size)
-  end
-
-  scenario "deleted users" do
-    visit admin_user_path(@user[:normal])
-    click_link "Delete"
-    expect(User.count).to eq(@user.size - 1)
-    visit admin_logins_path
-    select "Success", from: "Result"
-    select "No user", from: "User"
-    click_button "Search"
-    expect(page).to have_xpath(@xpath, count: 1)
-    expect(page).to have_content(@user[:normal].email)
   end
 end

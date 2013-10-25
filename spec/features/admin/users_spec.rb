@@ -255,22 +255,47 @@ end
 
 feature "Delete users" do
   given(:success) { "div.alert-success" }
+  given(:failure) { "div.alert-danger" }
   given(:deleted) { "successfully deleted" }
+  given(:logins)  { "login" }
+  given(:roles)   { "role" }
 
-  scenario "login history is retained but nullified", js: true do
+  [true, false].each do |js|
+    scenario "can if they have no logins or roles (with#{js ? '' : 'out'} js)", js: js do
+      user = FactoryGirl.create(:user)
+      expect(Login.where(user_id: user.id).count).to eq 0
+      login "admin"
+      visit admin_user_path(user)
+      click_link "Delete"
+      if js
+        wait_for_browser
+        page.driver.browser.switch_to.alert.accept
+      end
+      expect(page).to have_css(success, text: deleted)
+      expect(User.where(id: user.id).count).to eq 0
+    end
+  end
+
+  scenario "can't if they have a login history" do
     user = FactoryGirl.create(:user)
     number = 5
     number.times { FactoryGirl.create(:login, user: user) }
-    expect(Login.where(user_id: user.id).count).to eq(number)
-    expect(Login.where(email: user.email).count).to eq(number)
+    expect(Login.where(user_id: user.id).count).to eq number
     login "admin"
     visit admin_user_path(user)
     click_link "Delete"
-    wait_for_browser
-    page.driver.browser.switch_to.alert.accept
-    expect(page).to have_css(success, text: deleted)
-    expect(Login.where(user_id: user.id).count).to eq(0)
-    expect(Login.where(email: user.email).count).to eq(number)
+    expect(page).to have_css(failure, text: logins)
+    expect(User.where(id: user.id).count).to eq 1
+    expect(Login.where(user_id: user.id).count).to eq number
+  end
+
+  scenario "can't if they have any roles" do
+    user = FactoryGirl.create(:user, roles: "translator")
+    login "admin"
+    visit admin_user_path(user)
+    click_link "Delete"
+    expect(page).to have_css(failure, text: roles)
+    expect(User.where(id: user.id).count).to eq 1
   end
 end
 

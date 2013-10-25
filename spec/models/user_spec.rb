@@ -126,21 +126,18 @@ describe User do
       @user.expires_on = Date.yesterday
       @user.save
       expect { User.authenticate!(@addr, @pass) }.to raise_error("subscription_expired")
-      expect { User.authenticate!(@addr, "bad") }.to raise_error("subscription_expired")
     end
 
     it "unverified email" do
       @user.verified_at = nil
       @user.save
       expect { User.authenticate!(@addr, @pass) }.to raise_error("unverified_email")
-      expect { User.authenticate!(@addr, "bad") }.to raise_error("unverified_email")
     end
 
     it "bad status" do
       @user.status = "Banned"
       @user.save
       expect { User.authenticate!(@addr, @pass) }.to raise_error("account_disabled")
-      expect { User.authenticate!(@addr, "bad") }.to raise_error("account_disabled")
     end
   end
 

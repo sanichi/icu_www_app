@@ -1,8 +1,7 @@
 = form_tag admin_logins_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :last_name, text: "Last name"
-  = render "utils/inline_text_field", param: :first_name, text: "First name"
-  = render "utils/inline_text_field", param: :email, text: "Email", size: 15
+  = render "utils/inline_text_field", param: :last_name, text: "Last", size: 6
+  = render "utils/inline_text_field", param: :first_name, text: "First", size: 6
+  = render "utils/inline_text_field", param: :email, text: "Email", size: 6
   = render "utils/inline_text_field", param: :ip, text: "IP", size: 8
   = render "utils/inline_select", param: :result, text: "Result", menu: login_result_menu(params[:result])
-  = render "utils/inline_select", param: :user, text: "User", menu: login_user_menu(params[:user])
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
+  = button_tag "Search", type: "submit", class: "btn btn-default"

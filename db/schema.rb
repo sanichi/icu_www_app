@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131021115356) do
+ActiveRecord::Schema.define(version: 20131024202721) do
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
@@ -47,10 +47,9 @@ ActiveRecord::Schema.define(version: 20131021115356) do
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"
-    t.string   "email"
     t.string   "error"
     t.string   "roles"
-    t.string   "ip",         limit: 39
+    t.string   "ip",         limit: 50
     t.datetime "created_at"
   end
 

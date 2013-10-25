@@ -1,22 +1,22 @@
 - content_for :title, "Logins"
 
-= render "utils/search_panel", form: "admin/logins/search_form", title: "Logins"
+= render "utils/search_panel", form: "admin/logins/search_form", title: "Logins", pad: 1
 - if @logins.count > 0
   .row
-    .col-sm-12
+    .col-sm-10.col-sm-offset-1
       %table{class: "table table-bordered table-striped table-condensed", id: "results"}
         %thead
           %tr
-            %th Name
-            %th Email
+            %th Player
+            %th User
             %th{class: "text-center"} IP
             %th{class: "text-center"} OK
             %th Ago
         %tbody
           - @logins.matches.each do |login|
             %tr
-              %td= login.user.name if login.user
-              %td= link_to_if login.user, login.email, [:admin, login.user]
+              %td= link_to login.user.player.name, [:admin, login.user.player]
+              %td= link_to login.user.email, [:admin, login.user]
               %td{class: "text-center"}= login.ip
               %td{class: "text-center"}= login.error ? "✘" : "✔"
               %td= link_to time_ago_in_words(login.created_at, include_seconds: true), [:admin, login]

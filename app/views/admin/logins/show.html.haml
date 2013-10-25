@@ -6,10 +6,7 @@
     %table.table.table-bordered
       %tr
         %th User
-        %td= link_to @login.user.email, [:admin, @login.user] if @login.user
-      %tr
-        %th Email
-        %td= @login.email
+        %td= link_to @login.user.email, [:admin, @login.user]
       %tr
         %th Time
         %td= @login.created_at.to_s(:db)

@@ -1,13 +1,14 @@
 - content_for :title, "Users"
 
-= render "utils/search_panel", form: "admin/users/search_form", title: "Users", pad: 1
+= render "utils/search_panel", form: "admin/users/search_form", title: "Users"
 - if @users.count > 0
   .row
-    .col-sm-10.col-sm-offset-1
+    .col-sm-12
       %table{class: "table table-bordered table-striped table-condensed", id: "results"}
         %thead
           %tr
-            %th Email
+            %th User
+            %th Player
             %th{class: "text-center"} Exp
             %th{class: "text-center"} Stat
             %th{class: "text-center"} Vrfd
@@ -16,9 +17,9 @@
           - @users.matches.each do |user|
             %tr
               %td= link_to user.email, [:admin, user]
-              %td{class: "text-center"}
-                %date= user.expires_on.year
+              %td= link_to user.name, [:admin, user.player] if user.player
+              %td{class: "text-center"}= user.expires_on.year
               %td{class: "text-center"}= user.status_ok? ? "✔" : "✘"
               %td{class: "text-center"}= user.verified? ? "✔" : "✘"
               %td= user.human_roles
-          = render "utils/pagination_links", pager: @users, columns: 5
+          = render "utils/pagination_links", pager: @users, columns: 6
