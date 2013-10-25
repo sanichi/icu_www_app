@@ -104,8 +104,8 @@ class Player < ActiveRecord::Base
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
     name = ICU::Name.new(first_name, last_name)
-    self.first_name = name.first
-    self.last_name = name.last
+    self.first_name = name.first(chars: "US-ASCII")
+    self.last_name = name.last(chars: "US-ASCII")
   end
 
   def strict?

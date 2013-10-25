@@ -101,8 +101,8 @@ feature "Create players" do
     click_button save
     expect(page).to have_css(success, text: "created")
     player = Player.last
-    expect(player.first_name).to eq "Gearóidín"
-    expect(player.last_name).to eq "Uí Laighléis"
+    expect(player.first_name).to eq "Gearoidin"
+    expect(player.last_name).to eq "Ui Laighleis"
     expect(player.dob.to_s).to eq "1964-06-10"
     expect(player.gender).to eq "F"
     expect(player.joined.to_s).to eq Date.today.to_s
