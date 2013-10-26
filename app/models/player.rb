@@ -63,7 +63,7 @@ class Player < ActiveRecord::Base
 
   def self.search(params, path)
     params[:status] = "active" if params[:status].blank?
-    params[:order] = "id" if params[:oreder].blank?
+    params[:order] = "id" if params[:order].blank?
     matches = all
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
     matches = matches.where(first_name_like(params[:first_name], params[:last_name])) if params[:first_name].present?
