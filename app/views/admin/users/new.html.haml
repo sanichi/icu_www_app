@@ -1,17 +1,2 @@
 - content_for :title, "New User"
-
-.row
-  .col-sm-8.col-sm-offset-2
-    = form_for [:admin, @user], html: { class: "form-horizontal", role: "form" } do |f|
-      %fieldset
-        %legend= "New user for #{@player.name}"
-        - locals = { form: f, object: @user, col: "sm", pad: 3, width: 4 }
-        = render "utils/text_field_for", locals.merge(param: :email, text: "Email")
-        = render "utils/text_field_for", locals.merge(param: :password, text: "Password")
-        = render "utils/text_field_for", locals.merge(param: :expires_on, text: "Expires on", placeholder: "YYYY-MM-DD")
-        = render "utils/select_for", locals.merge(param: :roles, text: "Roles", menu: user_roles_menu(@user.roles), multiple: true, width: 4, size: User::ROLES.size)
-        = hidden_field :user, :player_id
-        %hr
-        = f.submit "Save", class: "btn btn-primary"
-        = link_to "Cancel", [:admin, @player], class: "btn btn-default"
-
+= render "form"
