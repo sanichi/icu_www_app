@@ -174,7 +174,6 @@ DEPENDENCIES
   capistrano
   capistrano-maintenance
   capybara
-  coffee-rails (~> 4.0.0)
   database_cleaner
   factory_girl_rails (~> 4.0)
   faker
