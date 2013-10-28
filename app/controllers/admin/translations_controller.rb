@@ -18,7 +18,7 @@ class Admin::TranslationsController < ApplicationController
   end
 
   def update
-    @translation.user = current_user.email
+    @translation.user = current_user.signature
     @translation.old_english = @translation.english
     if @translation.update(translation_params)
       @translation.journal(:update, current_user, request.ip)
