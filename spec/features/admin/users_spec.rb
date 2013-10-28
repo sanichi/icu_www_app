@@ -203,6 +203,21 @@ feature "Editing users" do
     visit edit_path
     expect(page).to have_no_field("Verify")
   end
+
+  scenario "changing the expiry date" do
+    expiry = user.expires_on
+
+    login "admin"
+    visit edit_path
+    expect(page).to have_field("Expires on")
+
+    fill_in "Expires on", with: Date.new(expiry.year + 1, expiry.month, expiry.day).to_s
+    click_button "Save"
+    expect(page).to have_css(success, text: updated)
+
+    user.reload
+    expect(user.expires_on).to eq expiry.years_since(1)
+  end
 end
 
 feature "Search users" do

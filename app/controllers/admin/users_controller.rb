@@ -72,7 +72,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def user_params(new_record=false)
-    extra = new_record ? [:email, :player_id, :expires_on] : [:status, :verify]
-    params.require(:user).permit(*extra, :password, roles: [])
+    extra = new_record ? [:email, :player_id] : [:status, :verify]
+    params.require(:user).permit(*extra, :expires_on, :password, roles: [])
   end
 end
