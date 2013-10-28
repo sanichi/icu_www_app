@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/brianmario/mysql2.git
+  revision: ecb675b5494f4347817547e7fcb5441f4378cffc
+  ref: ecb675b5494f4347817547e7fcb5441f4378cffc
+  specs:
+    mysql2 (0.3.13)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -89,7 +96,6 @@ GEM
     mini_portile (0.5.1)
     minitest (4.7.5)
     multi_json (1.8.2)
-    mysql2 (0.3.13)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -189,7 +195,7 @@ DEPENDENCIES
   icu_name
   jquery-rails
   launchy
-  mysql2
+  mysql2!
   rails (= 4.0.0)
   redis
   rspec-rails
