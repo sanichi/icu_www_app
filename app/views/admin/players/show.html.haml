@@ -59,4 +59,6 @@
       = link_to t("last_search"), path, class: "btn btn-default"
     - else
       = link_to "Players", admin_players_path, class: "btn btn-default"
+    - if can? :manage, User
+      = link_to "New user", new_admin_user_path(player_id: @player.id), class: "btn btn-info"
 = render "admin/journal_entries/changes", entries: @entries

@@ -18,7 +18,7 @@ IcuWwwApp::Application.routes.draw do
     resources :logins,          only: [:index, :show]
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :translations,    only: [:index, :show, :edit, :update, :destroy]
-    resources :users,           only: [:index, :show, :edit, :update, :destroy] do
+    resources :users do
       get :login, on: :member
     end
   end

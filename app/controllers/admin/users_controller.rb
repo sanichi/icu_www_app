@@ -8,6 +8,25 @@ class Admin::UsersController < ApplicationController
     save_last_search(:admin, :users)
   end
 
+  def new
+    @player = Player.find(params[:player_id]) # always invoked from a player
+    @user = User.new(player_id: @player.id)
+  end
+
+  def create
+    @user = User.new(user_params(:new))
+    @user.status = "OK"
+    @user.verified_at = DateTime.now
+
+    if @user.save
+      @user.journal(:create, current_user, request.ip)
+      redirect_to [:admin, @user], notice: "User was successfully created"
+    else
+      @player = Player.find(@user.player_id)
+      render action: "new"
+    end
+  end
+
   def show
     @user = User.includes(:player).find(params[:id])
     @entries = @user.journal_entries if current_user.roles.present?
@@ -52,7 +71,8 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def user_params
-    params.require(:user).permit(:password, :expiry, :status, :verify, roles: [])
+  def user_params(new_record=false)
+    extra = new_record ? [:email, :player_id, :expires_on] : [:status, :verify]
+    params.require(:user).permit(*extra, :password, roles: [])
   end
 end

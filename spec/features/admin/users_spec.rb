@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Authorization for users" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
   given(:user)            { FactoryGirl.create(:user) }
-  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), login_admin_user_path(user)] }
+  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
@@ -35,6 +35,46 @@ feature "Authorization for users" do
       visit path
       expect(page).to have_css(failure, text: unauthorized)
     end
+  end
+end
+
+feature "Creating users" do
+  given(:player)       { FactoryGirl.create(:player) }
+  given(:player_path)  { admin_player_path(player) }
+  given(:new_user)     { "New user" }
+  given(:email)        { "joe@example.com" }
+  given(:password)     { "new passw0rd" }
+  given(:expires_on)   { Date.today.years_since(1).end_of_year }
+  given(:role)         { "translator" }
+  given(:success)      { "div.alert-success" }
+  given(:created)      { "User was successfully created" }
+  given(:signed_in_as) { I18n.t("session.signed_in_as") }
+
+  scenario "add a user to a player" do
+    login "admin"
+    visit player_path
+
+    click_link new_user
+    new_password = "blah"
+    fill_in "Email", with: email
+    fill_in "Password", with: password
+    fill_in "Expires on", with: expires_on
+    select I18n.t("user.role.#{role}"), from: "Roles"
+    
+    click_button "Save"
+    expect(page).to have_css(success, text: created)
+    
+    user = User.find_by(email: email)
+    expect(user.roles).to eq role
+    expect(user.player_id).to eq player.id
+    expect(user.status).to eq User::OK
+    expect(user.verified?).to be_true
+    
+    click_link I18n.t("session.sign_out")
+    fill_in I18n.t("user.email"), with: email
+    fill_in I18n.t("user.password"), with: password
+    click_button I18n.t("session.sign_in")
+    expect(page).to have_css(success, text: signed_in_as)
   end
 end
 
