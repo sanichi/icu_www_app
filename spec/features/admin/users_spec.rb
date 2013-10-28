@@ -40,6 +40,7 @@ end
 
 feature "Creating users" do
   given(:player)       { FactoryGirl.create(:player) }
+  given(:user)         { FactoryGirl.create(:user) }
   given(:player_path)  { admin_player_path(player) }
   given(:new_user)     { "New user" }
   given(:email)        { "joe@example.com" }
@@ -47,6 +48,7 @@ feature "Creating users" do
   given(:expires_on)   { Date.today.years_since(1).end_of_year }
   given(:role)         { "translator" }
   given(:success)      { "div.alert-success" }
+  given(:failure)      { "div.help-block" }
   given(:created)      { "User was successfully created" }
   given(:signed_in_as) { I18n.t("session.signed_in_as") }
 
@@ -55,20 +57,23 @@ feature "Creating users" do
     visit player_path
 
     click_link new_user
-    new_password = "blah"
-    fill_in "Email", with: email
+    fill_in "Email", with: user.email
     fill_in "Password", with: password
     fill_in "Expires on", with: expires_on
     select I18n.t("user.role.#{role}"), from: "Roles"
     
     click_button "Save"
+    expect(page).to have_css(failure, text: "taken")
+    
+    fill_in "Email", with: email
+    click_button "Save"
     expect(page).to have_css(success, text: created)
     
-    user = User.find_by(email: email)
-    expect(user.roles).to eq role
-    expect(user.player_id).to eq player.id
-    expect(user.status).to eq User::OK
-    expect(user.verified?).to be_true
+    new_user = User.find_by(email: email)
+    expect(new_user.roles).to eq role
+    expect(new_user.player_id).to eq player.id
+    expect(new_user.status).to eq User::OK
+    expect(new_user.verified?).to be_true
     
     click_link I18n.t("session.sign_out")
     fill_in I18n.t("user.email"), with: email
