@@ -70,6 +70,8 @@ feature "Create players" do
   given(:gender)     { I18n.t("player.gender.gender") }
   given(:male)       { I18n.t("player.gender.M") }
   given(:female)     { I18n.t("player.gender.F") }
+  given(:status)     { I18n.t("player.status.status") }
+  given(:inactive)   { I18n.t("player.status.inactive") }
   given(:save)       { I18n.t("save") }
 
   scenario "sucessful creation with set join date" do
@@ -131,6 +133,24 @@ feature "Create players" do
     select female, from: gender
     click_button save
     expect(page).to have_css(help, text: "future")
+  end
+  
+  scenario "create a guest user" do
+    click_link "New Player"
+    fill_in first_name, with: "Guest"
+    fill_in last_name, with: "User"
+    select inactive, from: status
+    click_button save
+    expect(page).to have_css(success, text: "created")
+    player = Player.last
+    expect(player.first_name).to eq "Guest"
+    expect(player.last_name).to eq "User"
+    expect(player.dob).to be_nil
+    expect(player.gender).to be_nil
+    expect(player.joined.to_s).to eq Date.today.to_s
+    expect(player.source).to eq "officer"
+    expect(player.status).to eq "inactive"
+    expect(player.player_id).to be_nil
   end
 end
 
