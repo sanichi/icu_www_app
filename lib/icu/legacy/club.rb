@@ -30,8 +30,8 @@ module ICU
           club_count += 1
           create_club(club)
         end
-        puts "old Club records processed: #{club_count}"
-        puts "new Club records created: #{::Club.count}"
+        puts "old club records processed: #{club_count}"
+        puts "new club records created: #{::Club.count}"
       end
 
       private
@@ -45,7 +45,7 @@ module ICU
         params[:contact] = nil if params[:contact] == "Unknown"
         begin
           ::Club.create!(params)
-          puts "created Club #{params[:id]}, #{params[:name]}"
+          puts "created club #{params[:id]}, #{params[:name]}"
         rescue => e
           report_error "could not create club ID #{params[:id]} (#{params[:name]}): #{e.message}"
         end

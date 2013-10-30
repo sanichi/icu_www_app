@@ -26,8 +26,8 @@ module ICU
           player_count += 1
           create_player(player)
         end
-        puts "old Player records processed: #{player_count}"
-        puts "new Player records created: #{::Player.count}"
+        puts "old player records processed: #{player_count}"
+        puts "new player records created: #{::Player.count}"
         dump_stats
       end
 
@@ -43,7 +43,7 @@ module ICU
           adjust(params, old_player)
           player = ::Player.create!(params)
           gather_stats(player, params)
-          puts "created Player #{params[:id]}, #{params[:first_name]} #{params[:last_name]}"
+          puts "created player #{params[:id]}, #{params[:first_name]} #{params[:last_name]}"
         rescue => e
           report_error "could not create player ID #{params[:id]} (#{params[:first_name]} #{params[:last_name]}): #{e.message}"
         end

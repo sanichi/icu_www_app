@@ -46,7 +46,7 @@ module ICU
           when 634 then params[:roles] = "translator"  # Una
           end
           User.create!(params)
-          puts "created User #{params[:id]}, #{params[:email]}"
+          puts "created user #{params[:id]}, #{params[:email]}"
         rescue => e
           report_error "could not create user ID #{params[:id]}: #{e.message}"
         end
