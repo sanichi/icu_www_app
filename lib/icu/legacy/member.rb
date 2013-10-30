@@ -17,7 +17,7 @@ module ICU
 
       def synchronize(force=false)
         if existing_users?(force)
-          report_error "can't synchronize legacy members unless the users table is empty or force is used"
+          report_error "can't synchronize when users or user journal entries exist unless force is used"
           return
         end
         member_count = 0
@@ -25,8 +25,8 @@ module ICU
           member_count += 1
           create_user(member)
         end
-        puts "old Member records processed: #{member_count}"
-        puts "new User records created: #{User.count}"
+        puts "old member records processed: #{member_count}"
+        puts "new user records created: #{User.count}"
       end
 
       private
@@ -96,12 +96,15 @@ module ICU
 
       def existing_users?(force)
         count = User.count
+        changes = JournalEntry.users.count
         case
-        when count == 0
+        when count == 0 && changes == 0
           false
         when force
           deleted = User.delete_all
-          puts "old User records deleted: #{deleted}"
+          puts "old user records deleted: #{deleted}"
+          deleted = JournalEntry.users.delete_all
+          puts "old user journal entries deleted: #{deleted}"
           false
         else
           true

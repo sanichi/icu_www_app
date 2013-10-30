@@ -22,7 +22,7 @@ module ICU
 
       def synchronize(force=false)
         if existing_clubs?(force)
-          report_error "can't synchronize legacy clubs unless the clubs table is empty or force is used"
+          report_error "can't synchronize when clubs or club journal entries exist unless force is used"
           return
         end
         club_count = 0
@@ -53,12 +53,15 @@ module ICU
 
       def existing_clubs?(force)
         count = ::Club.count
+        changes = JournalEntry.clubs.count
         case
-        when count == 0
+        when count == 0 && changes == 0
           false
         when force
           deleted = ::Club.delete_all
-          puts "old Club records deleted: #{deleted}"
+          puts "old club records deleted: #{deleted}"
+          deleted = JournalEntry.clubs.delete_all
+          puts "old club journal entries deleted: #{deleted}"
           false
         else
           true

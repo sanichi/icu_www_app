@@ -17,7 +17,7 @@ module ICU
 
       def synchronize(force=false)
         if existing_players?(force)
-          report_error "can't synchronize legacy players unless the players table is empty or force is used"
+          report_error "can't synchronize when players or player journal entries exist unless force is used"
           return
         end
         player_count = 0
@@ -59,12 +59,15 @@ module ICU
 
       def existing_players?(force)
         count = ::Player.count
+        changes = JournalEntry.players.count
         case
-        when count == 0
+        when count == 0 && changes == 0
           false
         when force
           deleted = ::Player.delete_all
-          puts "old Player records deleted: #{deleted}"
+          puts "old player records deleted: #{deleted}"
+          deleted = JournalEntry.players.delete_all
+          puts "old player journal entries deleted: #{deleted}"
           false
         else
           true

@@ -2,13 +2,19 @@ class JournalEntry < ActiveRecord::Base
   extend Util::Pagination
 
   belongs_to :journalable, polymorphic: true
+
   default_scope { order(created_at: :desc) }
+  %w[Club Player User].each do |model|
+    scope model.downcase.pluralize.to_sym, -> { where(journalable_type: model) }
+  end
 
   ACTIONS = %w[create update destroy]
 
   validates :action, inclusion: { in: ACTIONS }
-  validates :journalable_type, :journalable_id, :by, :ip, presence: true
+  validates :journalable_type, :journalable_id, :by, presence: true
   validates :column, presence: true, if: Proc.new { |e| e.action == "update" }
+  validates :ip, presence: true, unless: Proc.new { |e| e.source == "www1" }
+  validates :source, inclusion: { in: %w[www1 www2] }
   
   def journalable_type_id
     "#{journalable_type} #{journalable_id}"

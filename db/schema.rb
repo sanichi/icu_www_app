@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131025140415) do
+ActiveRecord::Schema.define(version: 20131030123246) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20131025140415) do
     t.string   "from"
     t.string   "to"
     t.datetime "created_at"
+    t.string   "source",           limit: 8,  default: "www2"
   end
 
   add_index "journal_entries", ["journalable_id", "journalable_type"], name: "index_journal_entries_on_journalable_id_and_journalable_type", using: :btree
