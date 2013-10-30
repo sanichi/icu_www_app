@@ -29,6 +29,9 @@
       %tr
         %th IP
         %td= @entry.ip
+      %tr
+        %th Source
+        %td= @entry.source
     - if can?(:index, JournalEntry)
       - if path = last_search(:admin, :journal_entries)
         = link_to t("last_search"), path, class: "btn btn-default"
