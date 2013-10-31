@@ -11,6 +11,13 @@ module ClubsHelper
     options_for_select(counties, selected)
   end
 
+  def club_menu(selected, opt={})
+    clubs = Club.all.map { |c| [c.name, c.id] }
+    clubs.unshift [t("none"), 0] if opt[:none]
+    clubs.unshift [t("player.any_club"), ""] if opt[:any]
+    options_for_select(clubs, selected)
+  end
+
   def club_province_menu(selected, default="ireland.prov.any")
     provinces = Ireland.provinces.map { |p| [t("ireland.prov.#{p}"), p] }
     provinces.unshift [t(default), ""]

@@ -4,7 +4,7 @@ class Admin::PlayersController < ApplicationController
 
   def show
     @player = Player.includes(:users).find(params[:id])
-    authorize! :show, @player # this shouldn't be necessary but it doesn't work without it
+    authorize! :show, @player # surprisingly, this is needed to ensure a player can only view their own data
     @entries = @player.journal_entries if current_user.roles.present?
   end
 
@@ -41,6 +41,6 @@ class Admin::PlayersController < ApplicationController
   end
 
   def player_params
-    params[:player].permit(:first_name, :last_name, :player_id, :gender, :dob, :joined, :source, :status)
+    params[:player].permit(:first_name, :last_name, :player_id, :gender, :dob, :joined, :club_id, :source, :status)
   end
 end

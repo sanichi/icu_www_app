@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131030123246) do
+ActiveRecord::Schema.define(version: 20131031115905) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -72,6 +72,7 @@ ActiveRecord::Schema.define(version: 20131030123246) do
     t.date     "joined"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "club_id"
   end
 
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree

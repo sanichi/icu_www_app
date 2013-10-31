@@ -11,10 +11,6 @@
             = link_to club.name, club
             = "(#{t('club.inactive')})" unless club.active
           %ul.list-group
-            - if club.meet
-              %li.list-group-item
-                %em= "#{t('club.meet')}:"
-                = club.meet
             %li.list-group-item
               %em= "#{t('club.location')}:"
               - location = []
@@ -24,13 +20,17 @@
               - location << t("club.co") + " " + t("ireland.co.#{club.county}")
               - location << t("ireland.prov.#{club.province}")
               = location.join(', ')
-          - if club.contact || club.contactable?
-            %li.list-group-item
-              %em= "#{t('club.contact')}:"
-              - contact = []
-              - contact << club.contact                                         if club.contact && !club.email
-              - contact << mail_to(club.email, club.contact || club.email)      if club.email
-              - contact << club.phone                                           if club.phone
-              - contact << link_to(club.web_simple, club.web, target: "club")   if club.web
-              = contact.join(', ').html_safe
+            - if club.meet
+              %li.list-group-item
+                %em= "#{t('club.meet')}:"
+                = club.meet
+            - if club.contact || club.contactable?
+              %li.list-group-item
+                %em= "#{t('club.contact')}:"
+                - contact = []
+                - contact << club.contact                                         if club.contact && !club.email
+                - contact << mail_to(club.email, club.contact || club.email)      if club.email
+                - contact << club.phone                                           if club.phone
+                - contact << link_to(club.web_simple, club.web, target: "club")   if club.web
+                = contact.join(', ').html_safe
 = render "utils/pagination_links", pager: @clubs

@@ -10,6 +10,7 @@
         = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 3, placeholder: "YYYY-MM-DD")
         = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: "YYYY-MM-DD")
         = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender"), width: 2, menu: player_gender_menu(@player.gender, "please_select"))
+        = render "utils/select_for", locals.merge(param: :club_id, text: t("club.club"), width: 2, menu: club_menu(@player.club_id, none: true))
         = render "utils/select_for", locals.merge(param: :status, text: t("player.status"), width: 2, menu: player_status_menu(@player.status))
         - if @player.new_record?
           = hidden_field :player, :player_id

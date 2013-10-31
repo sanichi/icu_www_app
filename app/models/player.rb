@@ -4,20 +4,24 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined status player_id], "/admin/players/%d"
+  journalize %w[first_name last_name dob gender joined status player_id club_id], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
+  belongs_to :club
   has_many :duplicates, class_name: "Player"
   has_many :users
 
   GENDERS = %w[M F]
   SOURCES = %w[import archive subscription officer]
   STATUSES = %w[active inactive foreign deceased]
+  
+  default_scope { includes(:club) }
 
   before_validation :normalize_attributes, :conditional_adjustment
 
   validates :first_name, :last_name, presence: true
   validates :player_id, numericality: { greater_than: 0 }, allow_nil: true
+  validates :club_id, numericality: { greater_than: 0 }, allow_nil: true
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
 
@@ -53,7 +57,7 @@ class Player < ActiveRecord::Base
   def deceased?
     status == "deceased"
   end
-    
+
   def age(today=Date.today)
     return unless dob
     age = today.year - dob.year
@@ -62,7 +66,7 @@ class Player < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    params[:status] = "active" if params[:status].blank?
+    params[:status] = "active" unless params.has_key?(:status)
     params[:order] = "id" if params[:order].blank?
     matches = all
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
@@ -85,6 +89,10 @@ class Player < ActiveRecord::Base
         matches = matches.where("dob < '#{yob}-01-01'")
       end
     end
+    if params[:club_id].present?
+      club_id = params[:club_id].to_i
+      matches = matches.where(club_id: club_id > 0 ? club_id : nil)
+    end
     case params[:order]
     when "last_name"
       matches = matches.order(:last_name, :first_name, :id)
@@ -103,6 +111,7 @@ class Player < ActiveRecord::Base
     %w[player_id gender dob joined].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
+    self.club_id = nil unless club_id.to_s.to_i > 0
     name = ICU::Name.new(first_name, last_name)
     self.first_name = name.first(chars: "US-ASCII")
     self.last_name = name.last(chars: "US-ASCII")

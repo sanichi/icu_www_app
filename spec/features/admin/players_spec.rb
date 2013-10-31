@@ -171,6 +171,8 @@ feature "Edit players" do
   given(:gender)     { I18n.t("player.gender.gender") }
   given(:male)       { I18n.t("player.gender.M") }
   given(:female)     { I18n.t("player.gender.F") }
+  given(:club)       { I18n.t("club.club")}
+  given(:none)       { I18n.t("none")}
   given(:master_id)  { I18n.t("player.master_id") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
@@ -190,6 +192,28 @@ feature "Edit players" do
     expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: I18n.t("player.status.deceased"))
     player.reload
     expect(player.status).to eq "deceased"
+  end
+
+  scenario "changing club" do
+    expect(player.club_id).to be_nil
+    FactoryGirl.create(:club, name: "Bangor")
+    FactoryGirl.create(:club, name: "Hollywood")
+    FactoryGirl.create(:club, name: "Carrickfergus")
+    visit admin_player_path(player)
+
+    click_link edit
+    select "Hollywood", from: club
+    click_button save
+    expect(page).to have_css(success, text: "updated")
+    expect(page).to have_xpath("//th[.='#{I18n.t("club.club")}']/following-sibling::td", text: "Hollywood")
+    player.reload
+    expect(player.club.name).to eq "Hollywood"
+
+    click_link edit
+    select none, from: club
+    click_button save
+    player.reload
+    expect(player.club_id).to be_nil
   end
 
   scenario "marking a player as a duplicate" do

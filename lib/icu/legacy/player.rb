@@ -13,6 +13,7 @@ module ICU
         plr_date_joined: :joined,
         plr_date_died:   nil,
         plr_deceased:    :status,
+        plr_club_id:     :club_id,
       }
 
       def synchronize(force=false)
@@ -54,6 +55,7 @@ module ICU
         params[:joined] = nil if params[:joined].to_s == "1975-01-01"
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
+        params[:club_id] = nil unless params[:club_id].to_s.to_i > 0
         # TODO: add date died to note
       end
 
@@ -86,6 +88,7 @@ module ICU
         add_stat(:deceased_players, player.id) if player.deceased?
         add_stat(:duplicate_players, player.id) if player.duplicate?
         add_stat(:female_players, player.id) if player.gender == "F"
+        add_stat(:club_players, player.id) if player.club_id.present?
       end
 
       def dump_stats

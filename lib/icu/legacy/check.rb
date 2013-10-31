@@ -4,6 +4,7 @@ module ICU
       def check
         check_duplicate_players
         check_user_players
+        check_club_players
       end
 
       private
@@ -43,6 +44,17 @@ module ICU
           invalids << id if user.player_id && !@player[user.player_id]
         end
         report("Users with invalid player", invalid_players)
+      end
+
+      def check_club_players
+        @club = ::Club.all.each_with_object({}) do |club, hash|
+          hash[club.id] = club
+        end
+
+        invalid_clubs = @player.each_with_object([]) do |(id, player), invalids|
+          invalids << id if player.club_id && !@club[player.club_id]
+        end
+        report("Players with invalid club", invalid_clubs)
       end
 
       def report(topic, ids)

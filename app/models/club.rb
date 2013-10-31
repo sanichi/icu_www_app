@@ -4,7 +4,11 @@ class Club < ActiveRecord::Base
   include Journalable
   journalize %w[name web meet address district city county lat long contact email phone active], "/clubs/%d"
 
+  has_many :players
+
   WEB_FORMAT = ['https?:\/\/', '[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+']
+
+  default_scope { order(:name) }
 
   before_validation :normalize_attributes
 
@@ -21,15 +25,15 @@ class Club < ActiveRecord::Base
   validates :email, format: { with: /\A[^\s]+@[^\s]+\z/ }, allow_nil: true
   validates :phone, format: { with: /\d{3}/ }, allow_nil: true
   validates :active, inclusion: { in: [true, false] }
-  
+
   def province
     Ireland.province(county)
   end
-  
+
   def contactable?
     phone.present? || email.present? || web.present?
   end
-  
+
   def web_simple
     return unless web
     simple = web.dup
@@ -39,7 +43,7 @@ class Club < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    matches = order(:name)
+    matches = all
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("city LIKE ?", "%#{params[:city]}%") if params[:city].present?
     matches = matches.where(county: params[:county]) if Ireland.county?(params[:county])

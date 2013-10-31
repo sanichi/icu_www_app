@@ -2,6 +2,7 @@ en:
   player:
     age: Age
     any_gender: Any gender
+    any_club: Any club
     dob: Date of birth
     duplicate: Duplicate
     duplicates: Duplicates
