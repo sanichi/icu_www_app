@@ -48,8 +48,8 @@
         %td= t(@club.active ? "yes" : "no")
       %tr
         %th= t("player.players")
-        - clubs = @club.players.count
-        %td= link_to_if clubs > 0, clubs, players_path(club_id: @club.id, status: "")
+        - clubs = @club.players.where(status: "active").count
+        %td= link_to_if clubs > 0, clubs, players_path(club_id: @club.id, status: "active")
       = render "utils/timestamps", object: @club, ability: :manage
     - if can? :manage, @club
       = link_to "Edit", edit_admin_club_path(@club), class: "btn btn-primary"
