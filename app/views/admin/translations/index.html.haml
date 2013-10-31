@@ -1,9 +1,9 @@
 - content_for :title, "Translations"
 
-- title = "Translations"
-- title += ' <span class="label label-success">%d</span>' % @creates if @creates > 0
-- title += ' <span class="label label-primary">%d</span>' % @updates if @updates > 0
-= render "utils/search_panel", form: "admin/translations/search_form", title: title.html_safe
+- title = ["Translations"]
+- title << link_to(@creates, admin_translations_path(category: "creatable"), class: "btn btn-success btn-xs", role: "button") if @creates > 0
+- title << link_to(@updates, admin_translations_path(category: "updatable"), class: "btn btn-primary btn-xs", role: "button") if @updates > 0
+= render "utils/search_panel", form: "admin/translations/search_form", title: title.join(" ").html_safe
 .row
   .col-sm-12
     - if @translations.count > 0

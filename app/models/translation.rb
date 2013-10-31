@@ -3,6 +3,11 @@ class Translation < ActiveRecord::Base
 
   include Journalable
   journalize :value, "/admin/translations/%d"
+  
+  scope :deletable, -> { where(active: false) }
+  scope :creatable, -> { where(active: true, value: nil) }
+  scope :updatable, -> { where(active: true).where.not(value: nil).where("english != old_english") }
+  scope :editable,  -> { where(active: true).where.not(value: nil).where("english = old_english") }
 
   LOCALES = %w[ga]
   KEY_FORMAT = /\A\w+(\.\w+)*\z/
@@ -57,10 +62,8 @@ class Translation < ActiveRecord::Base
     [:key, :english, :value, :user].each do |param|
       matches = matches.where("translations.#{param} LIKE ?", "%#{params[param]}%") if params[param].present?
     end
-    case params[:category]
-    when "Action required" then matches = matches.where(active: true).where("value IS NULL OR english != old_english")
-    when "In use"          then matches = matches.where(active: true)
-    when "No longer used"  then matches = matches.where(active: false)
+    if (category = params[:category].to_s).match(/\A(delet|creat|updat|edit)able\z/)
+      matches = matches.send(category)
     end
     paginate(matches, params, path, PAGE_SIZE)
   end

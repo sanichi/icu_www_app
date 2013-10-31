@@ -52,8 +52,10 @@ feature "Performing translations" do
     Translation.cache.flushdb
   end
 
-  given(:success) { "div.alert-success" }
-  given(:failure) { "div.alert-danger" }
+  given(:success)   { "div.alert-success" }
+  given(:failure)   { "div.alert-danger" }
+  given(:creatable) { "a.btn.btn-success" }
+  given(:updatable) { "a.btn.btn-primary" }
 
   scenario "find and translate an untranslated english phrase" do
     key = "user.role.translator"
@@ -62,7 +64,7 @@ feature "Performing translations" do
 
     login "translator"
     visit admin_translations_path
-    expect(page).to have_css("strong span.label.label-success", text: @count)
+    expect(page).to have_css(creatable, text: @count)
     expect(page).to have_link("Translate", count: Translation::PAGE_SIZE)
 
     fill_in "Key", with: key
@@ -79,7 +81,7 @@ feature "Performing translations" do
 
     click_link I18n.t("last_search")
     expect(page).to have_link("Edit", count: 1)
-    expect(page).to have_css("strong span.label.label-success", text: @count - 1)
+    expect(page).to have_css(creatable, text: @count - 1)
   end
 
   scenario "find and retranslate an updated english phrase" do
@@ -98,8 +100,8 @@ feature "Performing translations" do
 
     login "translator"
     visit admin_translations_path
-    expect(page).to have_css("strong span.label.label-success", text: @count - 1)
-    expect(page).to have_css("strong span.label.label-primary", text: 1)
+    expect(page).to have_css(creatable, text: @count - 1)
+    expect(page).to have_css(updatable, text: 1)
 
     fill_in "English", with: translation.english
     click_button "Search"
@@ -121,8 +123,8 @@ feature "Performing translations" do
 
     click_link I18n.t("last_search")
     expect(page).to have_link("Edit", count: 1)
-    expect(page).to have_css("strong span.label.label-success", text: @count - 1)
-    expect(page).to_not have_css("strong span.label.label-primary")
+    expect(page).to have_css(creatable, text: @count - 1)
+    expect(page).to_not have_css(updatable)
     expect(page).to have_xpath("//td[.='#{english}']/following-sibling::td[.='#{irish}']")
   end
 
@@ -155,9 +157,9 @@ feature "Performing translations" do
 
     login "translator"
     visit admin_translations_path
-    expect(page).to have_css("strong span.label.label-success", text: @count)
+    expect(page).to have_css(creatable, text: @count)
 
-    select "No longer used", from: "category"
+    select "Deletable", from: "category"
     click_button "Search"
     expect(page).to have_link("Delete", count: 1)
 

@@ -9,8 +9,12 @@ describe Translation do
 
     it "initialize an empty table" do
       Translation.update_db
-      expect(Translation.count).to eq(@count)
-      expect(Translation.where(value: nil, active: true, user: nil).count).to eq(@count)
+      expect(Translation.count).to eq @count
+      expect(Translation.where(value: nil, active: true, user: nil).count).to eq @count
+      expect(Translation.creatable.count).to eq @count
+      expect(Translation.updatable.count).to eq 0
+      expect(Translation.deletable.count).to eq 0
+      expect(Translation.editable.count).to eq 0
     end
 
     it "update a partly filled table" do
@@ -23,19 +27,23 @@ describe Translation do
       @t[:to_active]           = FactoryGirl.create(:translation, key: "user.role.editor", value: "Eagarthóir", english: "Editor", active: false)
       @t[:translation_missing] = FactoryGirl.create(:translation, key: "user.role.treasurer", value: nil, english: "Treasurer", user: nil)
       Translation.update_db
-      expect(Translation.count).to eq(@count + 2)
-      expect(Translation.where(active: true).count).to eq(@count)
-      expect(Translation.where(active: false).count).to eq(2)
-      expect(Translation.where(active: true).where("english != old_english").count).to eq(2)
-      expect(Translation.where(value: nil, active: true, user: nil).count).to eq(@count - 3)
+      expect(Translation.count).to eq @count + 2
+      expect(Translation.where(active: true).count).to eq @count
+      expect(Translation.where(active: false).count).to eq 2
+      expect(Translation.where(active: true).where("english != old_english").count).to eq 2
+      expect(Translation.where(value: nil, active: true, user: nil).count).to eq @count - 3
       @t.each_value { |t| t.reload }
       expect(@t[:to_inactive].active).to be_false
       expect(@t[:already_inactive].active).to be_false
       expect(@t[:to_active].active).to be_true
-      expect(@t[:to_update_no_val].english).to eq("Save")
-      expect(@t[:to_update_no_val].old_english).to eq("Store")
-      expect(@t[:to_update_with_val].english).to eq("Administrator")
-      expect(@t[:to_update_with_val].old_english).to eq("God")
+      expect(@t[:to_update_no_val].english).to eq "Save"
+      expect(@t[:to_update_no_val].old_english).to eq "Store"
+      expect(@t[:to_update_with_val].english).to eq "Administrator"
+      expect(@t[:to_update_with_val].old_english).to eq "God"
+      expect(Translation.creatable.count).to eq @count - 3
+      expect(Translation.updatable.count).to eq 1
+      expect(Translation.deletable.count).to eq 2
+      expect(Translation.editable.count).to eq 2
     end
   end
 
@@ -59,13 +67,13 @@ describe Translation do
     end
 
     it "English translations provided by YAML files" do
-      expect(I18n.t("edit", locale: :en)).to eq("Edit")
-      expect(I18n.t("session.invalid_email", locale: :en)).to eq("Invalid email or password")
+      expect(I18n.t("edit", locale: :en)).to eq "Edit"
+      expect(I18n.t("session.invalid_email", locale: :en)).to eq "Invalid email or password"
     end
 
     it "revert to English if there isn't an Irish translation" do
-      expect(I18n.t("edit", locale: :ga)).to eq("Edit")
-      expect(I18n.t("session.invalid_email", locale: :ga)).to eq("Invalid email or password")
+      expect(I18n.t("edit", locale: :ga)).to eq "Edit"
+      expect(I18n.t("session.invalid_email", locale: :ga)).to eq "Invalid email or password"
     end
 
     it "throw an exception in the test environment for missing translations" do
@@ -78,8 +86,8 @@ describe Translation do
       invalid = "R-phost neamhbhailí nó ar do phasfhocal"
       FactoryGirl.create(:translation, key: "edit", value: edit, english: "Edit")
       FactoryGirl.create(:translation, key: "session.invalid_email", value: invalid, english: "Invalid email or password")
-      expect(I18n.t("edit", locale: "ga")).to eq(edit)
-      expect(I18n.t("session.invalid_email", locale: "ga")).to eq(invalid)
+      expect(I18n.t("edit", locale: "ga")).to eq edit
+      expect(I18n.t("session.invalid_email", locale: "ga")).to eq invalid
     end
   end
 

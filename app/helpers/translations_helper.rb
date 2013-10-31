@@ -1,5 +1,10 @@
 module TranslationsHelper
   def translation_active_menu(selected)
-    options_for_select(["All translations", "Action required", "In use", "No longer used"], selected)
+    categories = [["All translations", ""]]
+    categories << ["Translatable", "creatable"]
+    categories << ["Retranslatable", "updatable"]
+    categories << ["Editable", "editable"]
+    categories << ["Deletable", "deletable"]
+    options_for_select(categories, selected)
   end
 end
