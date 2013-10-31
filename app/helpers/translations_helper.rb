@@ -1,5 +1,5 @@
 module TranslationsHelper
-  def translation_active_menu(selected)
+  def translation_category_menu(selected)
     categories = [["All translations", ""]]
     categories << ["Translatable", "creatable"]
     categories << ["Retranslatable", "updatable"]
