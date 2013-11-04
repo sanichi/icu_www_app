@@ -11,6 +11,9 @@
         = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: "YYYY-MM-DD")
         = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender"), width: 2, menu: player_gender_menu(@player.gender, "please_select"))
         = render "utils/select_for", locals.merge(param: :fed, text: t("player.federation"), width: 2, menu: player_federation_menu(@player.fed, "please_select"))
+        = render "utils/select_for", locals.merge(param: :player_title, text: t("player.title.player"), width: 2, menu: player_title_player_menu(@player.player_title))
+        = render "utils/select_for", locals.merge(param: :arbiter_title, text: t("player.title.arbiter"), width: 2, menu: player_title_arbiter_menu(@player.arbiter_title))
+        = render "utils/select_for", locals.merge(param: :trainer_title, text: t("player.title.trainer"), width: 2, menu: player_title_trainer_menu(@player.trainer_title))
         = render "utils/select_for", locals.merge(param: :club_id, text: t("club.club"), width: 2, menu: club_menu(@player.club_id, none: true))
         = render "utils/select_for", locals.merge(param: :status, text: t("player.status"), width: 2, menu: player_status_menu(@player.status))
         - if @player.new_record?

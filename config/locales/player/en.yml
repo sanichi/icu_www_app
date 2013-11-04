@@ -4,6 +4,7 @@ en:
     any_club: Any club
     any_federation: Any federation
     any_gender: Any gender
+    any_title: Any title
     dob: Date of birth
     duplicate: Duplicate
     duplicates: Duplicates
@@ -21,6 +22,7 @@ en:
     not_foreign: Not foreign
     player: Player
     players: Players
+    some_title: Some title
     yob: Year of birth
     abbrev:
       id: ID
@@ -28,6 +30,7 @@ en:
       yob: YOB
       federation: Fed
       gender: G
+      title: Ttl
       F: F
       M: M
     gender:
@@ -46,3 +49,9 @@ en:
       deceased: Deceased
       foreign: Foreign
       inactive: Inactive
+    title:
+      title: Title
+      titles: Titles
+      arbiter: Arbiter title
+      player: Player title
+      trainer: Trainer title

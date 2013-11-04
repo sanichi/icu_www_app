@@ -15,6 +15,7 @@ module ICU
         plr_deceased:    :status,
         plr_club_id:     :club_id,
         plr_fed:         :fed,
+        plr_title:       :player_title,
       }
 
       def synchronize(force=false)
@@ -48,6 +49,7 @@ module ICU
           puts "created player #{params[:id]}, #{params[:first_name]} #{params[:last_name]}"
         rescue => e
           report_error "could not create player ID #{params[:id]} (#{params[:first_name]} #{params[:last_name]}): #{e.message}"
+          add_stat(:problem_ids, params[:id])
         end
       end
 
@@ -56,6 +58,19 @@ module ICU
         params[:joined] = nil if params[:joined].to_s == "1975-01-01"
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
+        params[:arbiter_title] = case params[:id]
+                                 when 507  then "FA" # Gerry
+                                 when 1538 then "NA" # Brian
+                                 when 1733 then "NA" # Pat
+                                 when 1875 then "FA" # Ted
+                                 when 5160 then "FA" # Rory
+                                 when 5983 then "NA" # Pete
+                                 else nil
+                                 end
+        params[:trainer_title] = case params[:id]
+                                 when 3000 then "FST" # Kevin
+                                 else nil
+                                 end
         # TODO: add date died to note
       end
 

@@ -12,7 +12,8 @@
             %th.col-sm-1= t("player.abbrev.gender")
             %th.col-sm-1= t("player.abbrev.yob")
             %th.col-sm-1= t("player.abbrev.federation")
-            %th.col-sm-4= t("club.club")
+            %th.col-sm-1= t("player.abbrev.title")
+            %th.col-sm-3= t("club.club")
         %tbody
           - @players.matches.each do |player|
             %tr
@@ -21,5 +22,6 @@
               %td= t("player.abbrev.#{player.gender}") if player.gender
               %td= player.dob.year if player.dob
               %td= player.fed if player.fed
+              %td= player.titles
               %td= link_to player.club.name, player.club if player.club
-          = render "utils/pagination_links", pager: @players, columns: 4
+          = render "utils/pagination_links", pager: @players, columns: 7

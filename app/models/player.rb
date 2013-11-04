@@ -14,6 +14,9 @@ class Player < ActiveRecord::Base
   GENDERS = %w[M F]
   SOURCES = %w[import archive subscription officer]
   STATUSES = %w[active inactive foreign deceased]
+  PLAYER_TITLES = %w[GM IM FM CM NM WGM WIM WFM WCM]
+  ARBITER_TITLES = %w[IA FA NA]
+  TRAINER_TITLES = %w[FST FT FI NI DI]
   
   default_scope { includes(:club) }
 
@@ -22,6 +25,9 @@ class Player < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   validates :player_id, numericality: { greater_than: 0 }, allow_nil: true
   validates :club_id, numericality: { greater_than: 0 }, allow_nil: true
+  validates :player_title, inclusion: { in: PLAYER_TITLES }, allow_nil:true
+  validates :arbiter_title, inclusion: { in: ARBITER_TITLES }, allow_nil:true
+  validates :trainer_title, inclusion: { in: TRAINER_TITLES }, allow_nil:true
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
   validates :fed, format: { with: /\A[A-Z]{3}\z/ }, allow_nil: true
@@ -73,6 +79,14 @@ class Player < ActiveRecord::Base
     federation
   end
 
+  def titles
+    titles = []
+    titles << player_title if player_title
+    titles << arbiter_title if arbiter_title
+    titles << trainer_title if trainer_title
+    titles.join(" ")
+  end
+
   def self.search(params, path)
     params[:status] = "active" unless params.has_key?(:status)
     params[:order] = "id" if params[:order].blank?
@@ -92,6 +106,23 @@ class Player < ActiveRecord::Base
         matches = matches.where("fed IS  NULL OR fed = 'IRL'")
       else
         matches = matches.where(fed: params[:fed])
+      end
+    end
+    if params[:title].present?
+      if params[:title] == "XX"
+        matches = matches.where("player_title IS NOT NULL OR arbiter_title IS NOT NULL OR trainer_title IS NOT NULL")
+      elsif params[:title] == "PP"
+        matches = matches.where.not(player_title: nil)
+      elsif params[:title] == "AA"
+        matches = matches.where.not(arbiter_title: nil)
+      elsif params[:title] == "TT"
+        matches = matches.where.not(trainer_title: nil)
+      elsif PLAYER_TITLES.include?(params[:title])
+        matches = matches.where(player_title: params[:title])
+      elsif ARBITER_TITLES.include?(params[:title])
+        matches = matches.where(arbiter_title: params[:title])
+      elsif TRAINER_TITLES.include?(params[:title])
+        matches = matches.where(trainer_title: params[:title])
       end
     end
     if params[:status] == "duplicate"
@@ -128,7 +159,7 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[dob gender joined].each do |atr|
+    %w[dob gender joined player_title arbiter_title trainer_title].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end
     %w[club_id player_id].each do |atr|

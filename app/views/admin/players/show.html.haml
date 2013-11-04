@@ -42,6 +42,9 @@
         %th= t("player.federation")
         %td= @player.federation(:with_code)
       %tr
+        %th= t("player.title.titles")
+        %td= @player.titles
+      %tr
         %th= t("club.club")
         %td= @player.club.name if @player.club
       %tr

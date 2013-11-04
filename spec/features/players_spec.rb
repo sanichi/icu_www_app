@@ -3,13 +3,13 @@ require 'spec_helper'
 feature "Search players" do
   before(:each) do
     @p = []
-    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09")
-    @p << FactoryGirl.create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15")
-    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08", fed: nil)
-    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08")
+    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09", player_title: "IM", trainer_title: "FST")
+    @p << FactoryGirl.create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15", arbiter_title: "IA")
+    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08", fed: nil, arbiter_title: "FA")
+    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08", player_title: "IM")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07", player_id: @p.last.id)
-    @p << FactoryGirl.create(:player, first_name: "Debbie", last_name: "Quinn", dob: "1969-11-20", gender: "F")
+    @p << FactoryGirl.create(:player, first_name: "Debbie", last_name: "Quinn", dob: "1969-11-20", gender: "F", player_title: "WCM")
     @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Yound", dob: "1965-01-24", status: "inactive")
     @p << FactoryGirl.create(:player, first_name: "Glen", last_name: "Adams", dob: "1975-03-04", status: "inactive")
     @p << FactoryGirl.create(:player, first_name: "Tom", last_name: "Clarke", dob: "1959-04-17", status: "deceased")
@@ -92,6 +92,27 @@ feature "Search players" do
     select "Ireland", from: "fed"
     click_button search
     expect(page).to have_xpath(result, count: 5)
+  end
+
+  scenario "titles" do
+    select "IM", from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 2)
+    select I18n.t("player.title.player"), from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 3)
+    select "IA", from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 1)
+    select I18n.t("player.title.arbiter"), from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 2)
+    select "FST", from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 1)
+    select I18n.t("player.title.trainer"), from: "title"
+    click_button search
+    expect(page).to have_xpath(result, count: 1)
   end
   
   scenario "status" do
