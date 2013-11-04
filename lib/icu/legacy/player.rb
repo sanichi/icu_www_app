@@ -59,16 +59,23 @@ module ICU
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
         params[:arbiter_title] = case params[:id]
-                                 when 507  then "FA" # Gerry
-                                 when 1538 then "NA" # Brian
-                                 when 1733 then "NA" # Pat
-                                 when 1875 then "FA" # Ted
-                                 when 5160 then "FA" # Rory
-                                 when 5983 then "NA" # Pete
+                                 when 507  then "FA" # GG
+                                 when 1538 then "FA" # BS
+                                 when 1733 then "NA" # PF
+                                 when 1875 then "FA" # TJ
+                                 when 1393 then "IA" # JQ
+                                 when 3000 then "IA" # KOC
+                                 when 5160 then "FA" # RD
+                                 when 5983 then "NA" # PM
                                  else nil
                                  end
         params[:trainer_title] = case params[:id]
-                                 when 3000 then "FST" # Kevin
+                                 when 3000  then "FST" # KOC
+                                 when 5193  then "FI"  # KOF
+                                 when 5601  then "FI"  # GM
+                                 when 10499 then "DI"  # MT
+                                 when 12165 then "FI"  # BB
+                                 when 12275 then "DI"  # COM
                                  else nil
                                  end
         # TODO: add date died to note
