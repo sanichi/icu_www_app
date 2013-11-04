@@ -5,6 +5,7 @@
   = render "utils/inline_select", param: :gender, text: t("player.gender.gender"), menu: player_gender_menu(params[:gender], "player.any_gender")
   = render "utils/inline_select", param: :relation, text: "", menu: player_relation_menu(params[:relation])
   = render "utils/inline_text_field", param: :yob, text: t("player.abbrev.yob"), size: 4
+  = render "utils/inline_select", param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed])
   = render "utils/inline_select", param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true)
   - unless current_user.guest?
     = render "utils/inline_select", param: :status, text: t("player.status"), menu: player_status_menu(params[:status], any: true, duplicate: true)

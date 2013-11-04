@@ -83,6 +83,7 @@ GEM
     hike (1.2.3)
     i18n (0.6.5)
     icu_name (1.2.2)
+    icu_utils (1.0.1)
     jquery-rails (3.0.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
@@ -193,6 +194,7 @@ DEPENDENCIES
   faker
   haml-rails
   icu_name
+  icu_utils
   jquery-rails
   launchy
   mysql2!

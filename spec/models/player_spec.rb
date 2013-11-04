@@ -63,8 +63,8 @@ describe Player do
     end
   end
 
-  context "#age" do
-    it "age" do
+  context "extra methods" do
+    it "#age" do
       player = FactoryGirl.create(:player, dob: Date.new(1955, 11, 9))
       expect(player.age(Date.new(2013, 11, 8))).to eq 57
       expect(player.age(Date.new(2013, 11, 9))).to eq 58
@@ -74,6 +74,18 @@ describe Player do
       expect(player.age(Date.new(2012, 2, 28))).to eq 55
       expect(player.age(Date.new(2012, 2, 29))).to eq 56
       expect(player.age(Date.new(2012, 3,  1))).to eq 56
+    end
+
+    it "#federation" do
+      player = FactoryGirl.create(:player, fed: "IRL")
+      expect(player.federation).to eq "Ireland"
+      expect(player.federation(true)).to eq "Ireland (IRL)"
+      player = FactoryGirl.create(:player, fed: nil)
+      expect(player.federation).to be_nil
+      expect(player.federation(true)).to be_nil
+      player.update_column(:fed, "XYZ")
+      expect(player.federation).to eq "Unknown"
+      expect(player.federation(true)).to eq "Unknown (XYZ)"
     end
   end
 end

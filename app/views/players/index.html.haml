@@ -8,9 +8,10 @@
         %thead
           %tr
             %th.col-sm-1= t("player.abbrev.id")
-            %th.col-sm-5= t("player.name")
+            %th.col-sm-4= t("player.name")
             %th.col-sm-1= t("player.abbrev.gender")
             %th.col-sm-1= t("player.abbrev.yob")
+            %th.col-sm-1= t("player.abbrev.federation")
             %th.col-sm-4= t("club.club")
         %tbody
           - @players.matches.each do |player|
@@ -19,5 +20,6 @@
               %td= link_to_if can?(:show, player), player.name(:reversed), [:admin, player]
               %td= t("player.abbrev.#{player.gender}") if player.gender
               %td= player.dob.year if player.dob
+              %td= player.fed if player.fed
               %td= link_to player.club.name, player.club if player.club
           = render "utils/pagination_links", pager: @players, columns: 4

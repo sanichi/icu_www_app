@@ -21,4 +21,17 @@ module PlayersHelper
     statuses.push [t("any"), ""] if opt[:any]
     options_for_select(statuses, selected)
   end
+
+  def player_federation_menu(selected, type="search")
+    menu = ICU::Federation.menu(top: "IRL")
+    if type == "search"
+      menu.unshift([t("player.any_federation"), ""])
+      menu.insert(2, [t("unknown"), "???"])
+      menu.insert(2, [t("player.not_foreign"), "NNN"])
+      menu.insert(2, [t("player.foreign"), "FFF"])
+    else
+      menu.unshift([t("unknown"), ""])
+    end
+    options_for_select(menu, selected)
+  end
 end

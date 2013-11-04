@@ -6,6 +6,7 @@ FactoryGirl.define do
     gender          "M"
     dob             Date.new(1955, 11, 9)
     joined          Date.new(1976, 9, 1)
+    fed             "IRL"
     source          "officer"
     status          "active"
   end

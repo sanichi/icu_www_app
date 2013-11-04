@@ -1,13 +1,16 @@
 en:
   player:
     age: Age
-    any_gender: Any gender
     any_club: Any club
+    any_federation: Any federation
+    any_gender: Any gender
     dob: Date of birth
     duplicate: Duplicate
     duplicates: Duplicates
     duplicate_of: Duplicate of
+    federation: Federation
     first_name: First name
+    foreign: Foreign
     id: ICU ID
     id_order: ID order
     joined: Join date
@@ -15,6 +18,7 @@ en:
     logins: Login accounts
     master_id: Master ID
     name: Name
+    not_foreign: Not foreign
     player: Player
     players: Players
     yob: Year of birth
@@ -22,6 +26,7 @@ en:
       id: ID
       dob: DOB
       yob: YOB
+      federation: Fed
       gender: G
       F: F
       M: M

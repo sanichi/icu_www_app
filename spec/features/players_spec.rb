@@ -5,7 +5,7 @@ feature "Search players" do
     @p = []
     @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09")
     @p << FactoryGirl.create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15")
-    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08")
+    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08", fed: nil)
     @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07")
     @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07", player_id: @p.last.id)
@@ -17,7 +17,7 @@ feature "Search players" do
     @p << FactoryGirl.create(:player, first_name: "Sam", last_name: "Lynne", dob: "1938-12-12", status: "deceased")
     @p << FactoryGirl.create(:player, first_name: "Kasper", last_name: "Agaard", dob: nil, status: "foreign")
     @p << FactoryGirl.create(:player, first_name: "Robert", last_name: "Zysk", dob: nil, status: "foreign")
-    @p << FactoryGirl.create(:player, first_name: "Zulhasrifal", last_name: "Zulhasrifal", dob: nil, status: "foreign")
+    @p << FactoryGirl.create(:player, first_name: "Magomed", last_name: "Zulfugarli", dob: nil, status: "foreign", fed: "AZE")
     @p << FactoryGirl.create(:player, first_name: "Jure", last_name: "Zorko", dob: nil, status: "foreign")
     visit players_path
   end
@@ -87,6 +87,12 @@ feature "Search players" do
     click_button search
     expect(page).to have_xpath(result, count: 4)
   end
+
+  scenario "federation" do
+    select "Ireland", from: "fed"
+    click_button search
+    expect(page).to have_xpath(result, count: 5)
+  end
   
   scenario "status" do
     expect(page).to_not have_select("status")
@@ -104,5 +110,8 @@ feature "Search players" do
     select foreign, from: "status"
     click_button search
     expect(page).to have_xpath(result, count: 4)
+    select "Azerbaijan", from: "fed"
+    click_button search
+    expect(page).to have_xpath(result, count: 1)
   end
 end

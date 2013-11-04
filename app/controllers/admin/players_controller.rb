@@ -41,6 +41,6 @@ class Admin::PlayersController < ApplicationController
   end
 
   def player_params
-    params[:player].permit(:first_name, :last_name, :player_id, :gender, :dob, :joined, :club_id, :source, :status)
+    params[:player].permit(:first_name, :last_name, :player_id, :gender, :dob, :joined, :club_id, :fed, :source, :status)
   end
 end

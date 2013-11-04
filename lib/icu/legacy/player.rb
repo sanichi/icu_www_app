@@ -14,6 +14,7 @@ module ICU
         plr_date_died:   nil,
         plr_deceased:    :status,
         plr_club_id:     :club_id,
+        plr_fed:         :fed,
       }
 
       def synchronize(force=false)
@@ -55,7 +56,6 @@ module ICU
         params[:joined] = nil if params[:joined].to_s == "1975-01-01"
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
-        params[:club_id] = nil unless params[:club_id].to_s.to_i > 0
         # TODO: add date died to note
       end
 
@@ -81,23 +81,30 @@ module ICU
       end
 
       def gather_stats(player, params)
-        add_stat(:name_adjustments, player.id) unless player.first_name == params[:first_name] && player.last_name == params[:last_name]
-        add_stat(:unknown_dob, player.id) if player.dob.blank?
-        add_stat(:unknown_join_date, player.id) if player.joined.blank?
-        add_stat(:unknown_gender, player.id) if player.gender.blank?
-        add_stat(:deceased_players, player.id) if player.deceased?
-        add_stat(:duplicate_players, player.id) if player.duplicate?
-        add_stat(:female_players, player.id) if player.gender == "F"
-        add_stat(:club_players, player.id) if player.club_id.present?
+        add_stat(:name_adjustments,    player.id) unless player.first_name == params[:first_name] && player.last_name == params[:last_name]
+        add_stat(:unknown_dob,         player.id) if player.dob.nil?
+        add_stat(:unknown_join_date,   player.id) if player.joined.nil?
+        add_stat(:unknown_gender,      player.id) if player.gender.nil?
+        add_stat(:unknown_federation,  player.id) if player.fed.nil?
+        add_stat(:deceased_players,    player.id) if player.deceased?
+        add_stat(:duplicate_players,   player.id) if player.duplicate?
+        add_stat(:female_players,      player.id) if player.gender == "F"
+        add_stat(:club_players,        player.id) if player.club_id.present?
+        add_stat(:irish_players,       player.id) if player.fed.present? && player.fed == "IRL"
+        add_stat(:foreign_players,     player.id) if player.fed.present? && player.fed != "IRL"
+        add_stat(:federation_changes,  player.id) if params[:fed].present? && player.fed.present? && params[:fed] != player.fed
+        add_stat(:federation_deletes,  player.id) if params[:fed].present? && player.fed.nil?
       end
 
       def dump_stats
-        puts "stats:"
-        @stats.each do |name, ids|
+        max = @stats.keys.inject(0) { |m, k| m = k.length if k.length > m; m }
+        puts "stats (#{max}):"
+        @stats.keys.sort.each do |name|
+          ids = @stats[name]
           size = ids.size
           ids = ids.sort
           ids = ids.sort[0,10] << "..." << ids[-10,10] if size > 20
-          puts "  #{name} (#{size}): #{ids.join(',')}"
+          puts "  %-#{max}s %5d: %s" % [name, size, ids.join(',')]
         end
       end
 

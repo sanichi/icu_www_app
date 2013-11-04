@@ -4,7 +4,7 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined status player_id club_id], "/admin/players/%d"
+  journalize %w[first_name last_name dob gender joined fed status player_id club_id], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   belongs_to :club
@@ -24,6 +24,7 @@ class Player < ActiveRecord::Base
   validates :club_id, numericality: { greater_than: 0 }, allow_nil: true
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
+  validates :fed, format: { with: /\A[A-Z]{3}\z/ }, allow_nil: true
 
   validates_date :dob, on_or_after: "1900-01-01",
                        on_or_after_message: "too far in the past",
@@ -64,6 +65,13 @@ class Player < ActiveRecord::Base
     age -= 1 if today.month < dob.month || (today.month == dob.month && today.day < dob.day)
     age
   end
+  
+  def federation(code=false)
+    return unless fed.present?
+    federation = ICU::Federation.find(fed).try(:name) || "Unknown"
+    federation += " (#{fed})" if code
+    federation
+  end
 
   def self.search(params, path)
     params[:status] = "active" unless params.has_key?(:status)
@@ -74,6 +82,18 @@ class Player < ActiveRecord::Base
     matches = matches.where(last_name_like(params[:last_name], params[:first_name])) if params[:last_name].present?
     matches = matches.where(gender: params[:gender]) if params[:gender].present?
     matches = matches.where(status: params[:status]) if STATUSES.include?(params[:status])
+    if params[:fed].present?
+      case params[:fed]
+      when "???"
+        matches = matches.where(fed: nil)
+      when "FFF"
+        matches = matches.where("fed IS NOT NULL AND fed != 'IRL'")
+      when "NNN"
+        matches = matches.where("fed IS  NULL OR fed = 'IRL'")
+      else
+        matches = matches.where(fed: params[:fed])
+      end
+    end
     if params[:status] == "duplicate"
       matches = matches.where.not(player_id: nil)
     else
@@ -108,10 +128,13 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[player_id gender dob joined].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
+    %w[dob gender joined].each do |atr|
+      self.send("#{atr}=", nil) unless self.send(atr).present?
     end
-    self.club_id = nil unless club_id.to_s.to_i > 0
+    %w[club_id player_id].each do |atr|
+      self.send("#{atr}=", nil) unless self.send(atr).to_s.to_i > 0
+    end
+    self.fed = ICU::Federation.find(fed).try(:code)
     name = ICU::Name.new(first_name, last_name)
     self.first_name = name.first(chars: "US-ASCII")
     self.last_name = name.last(chars: "US-ASCII")
