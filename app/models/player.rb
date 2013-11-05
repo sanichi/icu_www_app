@@ -4,7 +4,7 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined fed email player_title arbiter_title trainer_title status player_id club_id], "/admin/players/%d"
+  journalize %w[first_name last_name dob gender joined fed email address player_title arbiter_title trainer_title status player_id club_id], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   belongs_to :club
@@ -160,7 +160,7 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[dob gender joined email player_title arbiter_title trainer_title].each do |atr|
+    %w[dob gender joined email address player_title arbiter_title trainer_title].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end
     %w[club_id player_id].each do |atr|

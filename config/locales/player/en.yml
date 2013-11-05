@@ -1,5 +1,6 @@
 en:
   player:
+    address: Address
     age: Age
     any_club: Any club
     any_federation: Any federation

@@ -17,6 +17,10 @@ module ICU
         plr_fed:         :fed,
         plr_title:       :player_title,
         plr_email:       :email,
+        plr_address1:    nil,
+        plr_address2:    nil,
+        plr_address3:    nil,
+        plr_address4:    nil,
       }
 
       def synchronize(force=false)
@@ -79,6 +83,7 @@ module ICU
                                  when 12275 then "DI"  # COM
                                  else nil
                                  end
+        params[:address] = (1..4).map{ |n| old_player["plr_address#{n}".to_sym] }.reject{ |v| v.blank? }.map{ |s| s.strip }.join(", ")
         # TODO: add date died to note
       end
 
@@ -116,6 +121,7 @@ module ICU
         add_stat(:irish_players,       player.id) if player.fed.present? && player.fed == "IRL"
         add_stat(:foreign_players,     player.id) if player.fed.present? && player.fed != "IRL"
         add_stat(:player_emails,       player.id) if player.email.present?
+        add_stat(:player_addresses,    player.id) if player.address.present?
         add_stat(:federation_changes,  player.id) if params[:fed].present? && player.fed.present? && params[:fed] != player.fed
         add_stat(:federation_deletes,  player.id) if params[:fed].present? && player.fed.nil?
       end

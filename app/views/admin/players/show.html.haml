@@ -51,6 +51,9 @@
         %th= t("club.club")
         %td= @player.club.name if @player.club
       %tr
+        %th= t("player.address")
+        %td= @player.address
+      %tr
         %th= t("player.status.status")
         %td= t("player.status.#{@player.status}")
       %tr

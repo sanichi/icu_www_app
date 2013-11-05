@@ -72,6 +72,7 @@ feature "Create players" do
   given(:female)     { I18n.t("player.gender.F") }
   given(:federation) { I18n.t("player.federation") }
   given(:email)      { I18n.t("player.email") }
+  given(:address)    { I18n.t("player.address") }
   given(:title)      { I18n.t("player.title.player") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
@@ -84,6 +85,7 @@ feature "Create players" do
     fill_in dob, with: "1955/11/09"
     fill_in joined, with: "2013.10.20"
     fill_in email, with: "mark.j.l.orr@googlemail.com"
+    fill_in address, with: "13/6 Rennie's Isle, Edinburgh"
     select male, from: gender
     select "Ireland", from: federation
     select "IM", from: title
@@ -97,6 +99,7 @@ feature "Create players" do
     expect(player.joined.to_s).to eq "2013-10-20"
     expect(player.fed).to eq "IRL"
     expect(player.email).to eq "mark.j.l.orr@googlemail.com"
+    expect(player.address).to eq "13/6 Rennie's Isle, Edinburgh"
     expect(player.player_title).to eq "IM"
     expect(player.arbiter_title).to be_nil
     expect(player.trainer_title).to be_nil
