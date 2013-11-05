@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131104200808) do
+ActiveRecord::Schema.define(version: 20131105190551) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20131104200808) do
     t.string   "player_title",  limit: 3
     t.string   "arbiter_title", limit: 3
     t.string   "trainer_title", limit: 3
+    t.string   "email",         limit: 50
   end
 
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree

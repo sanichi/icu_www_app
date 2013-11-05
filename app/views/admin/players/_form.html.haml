@@ -9,6 +9,7 @@
         = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"))
         = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 3, placeholder: "YYYY-MM-DD")
         = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :email, text: t("player.email"))
         = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender"), width: 2, menu: player_gender_menu(@player.gender, "please_select"))
         = render "utils/select_for", locals.merge(param: :fed, text: t("player.federation"), width: 2, menu: player_federation_menu(@player.fed, "please_select"))
         = render "utils/select_for", locals.merge(param: :player_title, text: t("player.title.player"), width: 2, menu: player_title_player_menu(@player.player_title))

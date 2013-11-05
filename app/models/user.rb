@@ -127,7 +127,7 @@ class User < ActiveRecord::Base
       matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
       matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
     end
-    matches = matches.where("email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    matches = matches.where("users.email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     matches = matches.where(status: User::OK) if params[:status] == "OK"
     matches = matches.where.not(status: User::OK) if params[:status] == "Not OK"
     case

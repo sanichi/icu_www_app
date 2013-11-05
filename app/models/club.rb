@@ -22,7 +22,7 @@ class Club < ActiveRecord::Base
   validates :lat,  numericality: { greater_than:  51.2, less_than: 55.6, message: "must be between 51.2 and 55.6" }, allow_nil: true
   validates :long, numericality: { greater_than: -10.6, less_than: -5.3, message: "must be between -10.6 and -5.3" }, allow_nil: true
   validates :contact, presence: true, allow_nil: true
-  validates :email, format: { with: /\A[^\s]+@[^\s]+\z/ }, allow_nil: true
+  validates :email, format: { with: /\A[^\s@]+@[^\s@]+\z/ }, allow_nil: true
   validates :phone, format: { with: /\d{3}/ }, allow_nil: true
   validates :active, inclusion: { in: [true, false] }
 

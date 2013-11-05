@@ -16,6 +16,7 @@ module ICU
         plr_club_id:     :club_id,
         plr_fed:         :fed,
         plr_title:       :player_title,
+        plr_email:       :email,
       }
 
       def synchronize(force=false)
@@ -114,6 +115,7 @@ module ICU
         add_stat(:club_players,        player.id) if player.club_id.present?
         add_stat(:irish_players,       player.id) if player.fed.present? && player.fed == "IRL"
         add_stat(:foreign_players,     player.id) if player.fed.present? && player.fed != "IRL"
+        add_stat(:player_emails,       player.id) if player.email.present?
         add_stat(:federation_changes,  player.id) if params[:fed].present? && player.fed.present? && params[:fed] != player.fed
         add_stat(:federation_deletes,  player.id) if params[:fed].present? && player.fed.nil?
       end
