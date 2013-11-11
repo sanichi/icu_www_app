@@ -39,6 +39,15 @@ en:
       gender: Gender
       F: Female
       M: Male
+    phone:
+      phones: Phones
+      home: Home phone
+      mobile: Mobile phone
+      work: Work phone
+      one_letter:
+          home: h
+          mobile: m
+          work: w
     source:
       source: Source
       archive: Archive

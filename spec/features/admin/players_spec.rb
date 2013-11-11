@@ -73,6 +73,9 @@ feature "Create players" do
   given(:federation) { I18n.t("player.federation") }
   given(:email)      { I18n.t("player.email") }
   given(:address)    { I18n.t("player.address") }
+  given(:home)       { I18n.t("player.phone.home") }
+  given(:mobile)     { I18n.t("player.phone.mobile") }
+  given(:work)       { I18n.t("player.phone.work") }
   given(:title)      { I18n.t("player.title.player") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
@@ -86,6 +89,9 @@ feature "Create players" do
     fill_in joined, with: "2013.10.20"
     fill_in email, with: "mark.j.l.orr@googlemail.com"
     fill_in address, with: "13/6 Rennie's Isle, Edinburgh"
+    fill_in home, with: "+44 131 55 39 051"
+    fill_in mobile, with: "+44 7968 537 010"
+    fill_in work, with: "+44 0131 653 1250"
     select male, from: gender
     select "Ireland", from: federation
     select "IM", from: title
@@ -100,6 +106,9 @@ feature "Create players" do
     expect(player.fed).to eq "IRL"
     expect(player.email).to eq "mark.j.l.orr@googlemail.com"
     expect(player.address).to eq "13/6 Rennie's Isle, Edinburgh"
+    expect(player.home_phone).to eq "0044 131 5539051"
+    expect(player.mobile_phone).to eq "0044 7968 537010"
+    expect(player.work_phone).to eq "0044 131 6531250"
     expect(player.player_title).to eq "IM"
     expect(player.arbiter_title).to be_nil
     expect(player.trainer_title).to be_nil

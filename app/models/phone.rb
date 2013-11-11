@@ -24,9 +24,9 @@ class Phone
   def canonical
     if parsed?
       if @int_code == "353"
-        "(0#{@local_code}) #{@number}"
+        "0#{@local_code} #{@number}"
       else
-        "+#{@int_code} #{@local_code} #{@number}"
+        "00#{@int_code} #{@local_code} #{@number}"
       end
     end
   end

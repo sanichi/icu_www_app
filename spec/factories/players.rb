@@ -9,6 +9,9 @@ FactoryGirl.define do
     fed             "IRL"
     email           { Faker::Internet.email }
     address         nil
+    home_phone      nil
+    mobile_phone    nil
+    work_phone      nil
     player_title    nil
     arbiter_title   nil
     trainer_title   nil

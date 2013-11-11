@@ -4,7 +4,7 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined fed email address player_title arbiter_title trainer_title status player_id club_id], "/admin/players/%d"
+  journalize %w[first_name last_name dob gender joined fed email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title status player_id club_id], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   belongs_to :club
@@ -44,7 +44,7 @@ class Player < ActiveRecord::Base
                           on_or_before_message: "too far in the future",
                           allow_nil: true
 
-  validate :conditional_validations, :dob_and_joined, :duplication
+  validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones
 
   def name(reversed=false)
     if reversed
@@ -86,6 +86,15 @@ class Player < ActiveRecord::Base
     titles << arbiter_title if arbiter_title
     titles << trainer_title if trainer_title
     titles.join(" ")
+  end
+  
+  def phones
+    %w[home mobile work].each_with_object([]) do |type, numbers|
+      number = send("#{type}_phone")
+      if number.present?
+        numbers << I18n.t("player.phone.one_letter.#{type}") + ": " + number
+      end
+    end.join(", ")
   end
 
   def self.search(params, path)
@@ -160,7 +169,7 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[dob gender joined email address player_title arbiter_title trainer_title].each do |atr|
+    %w[dob gender joined email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end
     %w[club_id player_id].each do |atr|
@@ -218,6 +227,39 @@ class Player < ActiveRecord::Base
   def conditional_adjustment
     if active? && duplicate?
       self.status = "inactive"
+    end
+  end
+  
+  def validate_phones
+    mob = {}
+    err = 0
+
+    # Canonicalize or reject using the Phone class.
+    %w[home mobile work].each do |type|
+      atr = "#{type}_phone"
+      val = self.send(atr)
+      unless val.nil?
+        phone = Phone.new(val)
+        if phone.blank?
+          self.send("#{atr}=", nil)
+        elsif phone.parsed?
+          self.send("#{atr}=", phone.canonical)
+          mob[atr] = phone.mobile?
+        else
+          errors.add(atr.to_sym, "invalid")
+          err += 1
+        end
+      end
+    end
+
+    # If possible, make sure the mobile phone is in the right database column.
+    if err == 0 && !mob["mobile_phone"]
+      mobile = %w[home work].map{ |type| "#{type}_phone" }.find{ |atr| mob[atr] }
+      if mobile
+        tmp = self.mobile_phone
+        self.mobile_phone = self.send(mobile)
+        self.send("#{mobile}=", tmp)
+      end
     end
   end
 end

@@ -10,7 +10,7 @@ describe Phone do
     let(:canonical) { array[4] }
 
     context "dublin" do
-      let(:array) { ["353", "1", "2449745", false, "(01) 2449745"] }
+      let(:array) { ["353", "1", "2449745", false, "01 2449745"] }
 
       [
         "(00)(353)(01) 2449745",
@@ -37,7 +37,7 @@ describe Phone do
     end
 
     context "non-dublin" do
-      let(:array) { ["353", "43", "35921", false, "(043) 35921"] }
+      let(:array) { ["353", "43", "35921", false, "043 35921"] }
 
       [
         "043 35921",
@@ -58,7 +58,7 @@ describe Phone do
     end
 
     context "mobile" do
-      let(:array) { ["353", "87", "2388673", true, "(087) 2388673"] }
+      let(:array) { ["353", "87", "2388673", true, "087 2388673"] }
 
       [
         "00353-087-2388673",
@@ -80,7 +80,7 @@ describe Phone do
     end
 
     context "uk mobile" do
-      let(:array) { ["44", "7968", "537010", true, "+44 7968 537010"] }
+      let(:array) { ["44", "7968", "537010", true, "0044 7968 537010"] }
 
       [
         "(00)44(0)7968 537010",
@@ -101,7 +101,7 @@ describe Phone do
     end
 
     context "uk number" do
-      let(:array) { ["44", "131", "5539051", false, "+44 131 5539051"] }
+      let(:array) { ["44", "131", "5539051", false, "0044 131 5539051"] }
 
       [
         "(00)44 0131 5539051",
@@ -121,7 +121,7 @@ describe Phone do
     end
 
     context "recover from bad input" do
-      let(:array) { ["353", "91", "794849", false, "(091) 794849"] }
+      let(:array) { ["353", "91", "794849", false, "091 794849"] }
 
       [
         "(091) 794849 Father of 6695",

@@ -63,6 +63,20 @@ describe Player do
     end
   end
 
+  context "phones" do
+    let(:params) { FactoryGirl.attributes_for(:player) }
+    let(:master) { FactoryGirl.create(:player) }
+
+    it "mobile correction" do
+      player = FactoryGirl.create(:player, home_phone: "087 123 4567", mobile_phone: "01 456 7890")
+      expect(player.home_phone).to eq "01 4567890"
+      expect(player.mobile_phone).to eq "087 1234567"
+      player = FactoryGirl.create(:player, home_phone: "087 123 4567")
+      expect(player.home_phone).to be_nil
+      expect(player.mobile_phone).to eq "087 1234567"
+    end
+  end
+
   context "extra methods" do
     it "#age" do
       player = FactoryGirl.create(:player, dob: Date.new(1955, 11, 9))
@@ -86,6 +100,15 @@ describe Player do
       player.update_column(:fed, "XYZ")
       expect(player.federation).to eq "Unknown"
       expect(player.federation(true)).to eq "Unknown (XYZ)"
+    end
+
+    it "#phones" do
+      player = FactoryGirl.create(:player, home_phone: "+44 131 553 9051", mobile_phone: "0044 7968 537010")
+      expect(player.phones).to eq "h: 0044 131 5539051, m: 0044 7968 537010"
+      player = FactoryGirl.create(:player, home_phone: "01 8304991", mobile_phone: "086 854 0597", work_phone: "01-6477406")
+      expect(player.phones).to eq "h: 01 8304991, m: 086 8540597, w: 01 6477406"
+      player = FactoryGirl.create(:player)
+      expect(player.phones).to eq ""
     end
   end
 end

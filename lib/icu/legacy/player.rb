@@ -4,23 +4,26 @@ module ICU
       include Database
 
       MAP = {
-        plr_id:          :id,
-        plr_id_dup:      :player_id,
-        plr_first_name:  :first_name,
-        plr_last_name:   :last_name,
-        plr_sex:         :gender,
-        plr_date_born:   :dob,
-        plr_date_joined: :joined,
-        plr_date_died:   nil,
-        plr_deceased:    :status,
-        plr_club_id:     :club_id,
-        plr_fed:         :fed,
-        plr_title:       :player_title,
-        plr_email:       :email,
-        plr_address1:    nil,
-        plr_address2:    nil,
-        plr_address3:    nil,
-        plr_address4:    nil,
+        plr_id:           :id,
+        plr_id_dup:       :player_id,
+        plr_first_name:   :first_name,
+        plr_last_name:    :last_name,
+        plr_sex:          :gender,
+        plr_date_born:    :dob,
+        plr_date_joined:  :joined,
+        plr_date_died:    nil,
+        plr_deceased:     :status,
+        plr_club_id:      :club_id,
+        plr_fed:          :fed,
+        plr_title:        :player_title,
+        plr_email:        :email,
+        plr_address1:     nil,
+        plr_address2:     nil,
+        plr_address3:     nil,
+        plr_address4:     nil,
+        plr_phone_home:   :home_phone,
+        plr_phone_mobile: :mobile_phone,
+        plr_phone_work:   :work_phone,
       }
 
       def synchronize(force=false)
@@ -84,6 +87,15 @@ module ICU
                                  else nil
                                  end
         params[:address] = (1..4).map{ |n| old_player["plr_address#{n}".to_sym] }.reject{ |v| v.blank? }.map{ |s| s.strip }.join(", ")
+        # Chuck out invalid phone numbers. Leave it to validation to canonicalize the good ones.
+        %w[home mobile work].each do |type|
+          param = "#{type}_phone".to_sym
+          phone = Phone.new(params[param])
+          unless phone.parsed?
+            params[param] = nil
+            add_stat(:phones_bad, params[:id]) unless phone.blank?
+          end
+        end
         # TODO: add date died to note
       end
 
@@ -124,6 +136,10 @@ module ICU
         add_stat(:player_addresses,    player.id) if player.address.present?
         add_stat(:federation_changes,  player.id) if params[:fed].present? && player.fed.present? && params[:fed] != player.fed
         add_stat(:federation_deletes,  player.id) if params[:fed].present? && player.fed.nil?
+        add_stat(:phones_home,         player.id) if player.home_phone.present?
+        add_stat(:phones_mobile,       player.id) if player.mobile_phone.present?
+        add_stat(:phones_work,         player.id) if player.work_phone.present?
+        add_stat(:phones_none,         player.id) if player.home_phone.blank? && player.mobile_phone.blank? && player.work_phone.blank?
       end
 
       def dump_stats
