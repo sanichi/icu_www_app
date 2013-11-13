@@ -13,8 +13,8 @@ module Journalable
     else
       journalable_columns = self.class.journalable_columns
       previous_changes.each do |column, changes|
-        from, to = Util::Diff.new(*changes).difference
         if journalable_columns.include?(column)
+          from, to = Util::Diff.new(*changes).difference
           journal_entries.create!(action: action, column: column, from: from, to: to, by: by, ip: ip)
         end
       end

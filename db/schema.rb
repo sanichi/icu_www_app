@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131111102355) do
+ActiveRecord::Schema.define(version: 20131111165828) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 20131111102355) do
     t.string   "home_phone",    limit: 30
     t.string   "mobile_phone",  limit: 30
     t.string   "work_phone",    limit: 30
+    t.text     "note"
   end
 
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree

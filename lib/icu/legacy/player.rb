@@ -24,6 +24,7 @@ module ICU
         plr_phone_home:   :home_phone,
         plr_phone_mobile: :mobile_phone,
         plr_phone_work:   :work_phone,
+        plr_note:         :note,
       }
 
       def synchronize(force=false)
@@ -66,27 +67,30 @@ module ICU
         params[:joined] = nil if params[:joined].to_s == "1975-01-01"
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
-        params[:arbiter_title] = case params[:id]
-                                 when 507  then "FA" # GG
-                                 when 1538 then "FA" # BS
-                                 when 1733 then "NA" # PF
-                                 when 1875 then "FA" # TJ
-                                 when 1393 then "IA" # JQ
-                                 when 3000 then "IA" # KOC
-                                 when 5160 then "FA" # RD
-                                 when 5983 then "NA" # PM
-                                 else nil
-                                 end
-        params[:trainer_title] = case params[:id]
-                                 when 3000  then "FST" # KOC
-                                 when 5193  then "FI"  # KOF
-                                 when 5601  then "FI"  # GM
-                                 when 10499 then "DI"  # MT
-                                 when 12165 then "FI"  # BB
-                                 when 12275 then "DI"  # COM
-                                 else nil
-                                 end
+        params[:arbiter_title] =
+          case params[:id]
+          when 507  then "FA" # GG
+          when 1538 then "FA" # BS
+          when 1733 then "NA" # PF
+          when 1875 then "FA" # TJ
+          when 1393 then "IA" # JQ
+          when 3000 then "IA" # KOC
+          when 5160 then "FA" # RD
+          when 5983 then "NA" # PM
+          else nil
+          end
+        params[:trainer_title] =
+          case params[:id]
+          when 3000  then "FST" # KOC
+          when 5193  then "FI"  # KOF
+          when 5601  then "FI"  # GM
+          when 10499 then "DI"  # MT
+          when 12165 then "FI"  # BB
+          when 12275 then "DI"  # COM
+          else nil
+          end
         params[:address] = (1..4).map{ |n| old_player["plr_address#{n}".to_sym] }.reject{ |v| v.blank? }.map{ |s| s.strip }.join(", ")
+
         # Chuck out invalid phone numbers. Leave it to validation to canonicalize the good ones.
         %w[home mobile work].each do |type|
           param = "#{type}_phone".to_sym
@@ -96,7 +100,23 @@ module ICU
             add_stat(:phones_bad, params[:id]) unless phone.blank?
           end
         end
-        # TODO: add date died to note
+
+        # Get rid of stuff we don't want in notes.
+        if params[:note].present?
+          params[:note].sub!(/From Access database.+\z/m, "")  # very old notes
+          params[:note].sub!(/ which has problems:\n.*/, "")   # warnings about old subscription name clashes
+          params[:note].strip!
+        end
+
+        # Add DOD which we want to put in notes.
+        if old_player[:plr_date_died].present?
+          addition = "Died #{old_player[:plr_date_died]}."
+          if params[:note].present?
+            params[:note] = "#{addition}\n\n#{params[:note]}"
+          else
+            params[:note] = addition
+          end
+        end
       end
 
       def existing_players?(force)
@@ -140,6 +160,8 @@ module ICU
         add_stat(:phones_mobile,       player.id) if player.mobile_phone.present?
         add_stat(:phones_work,         player.id) if player.work_phone.present?
         add_stat(:phones_none,         player.id) if player.home_phone.blank? && player.mobile_phone.blank? && player.work_phone.blank?
+        add_stat(:notes,               player.id) if player.note.present?
+        add_stat(:irih_titles,         player.id) if player.titles.present? && player.fed == "IRL"
       end
 
       def dump_stats

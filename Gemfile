@@ -13,6 +13,7 @@ gem "therubyracer", "0.11.4", platforms: :ruby # 0.12.0 requires requires gcc 4.
 gem "icu_name"
 gem "icu_utils"
 gem "validates_timeliness", "~> 3.0"
+gem "redcarpet"
 
 group :development do
   gem "capistrano"

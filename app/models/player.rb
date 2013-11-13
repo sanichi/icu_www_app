@@ -4,7 +4,7 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined fed email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title status player_id club_id], "/admin/players/%d"
+  journalize %w[first_name last_name dob gender joined fed email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title note status player_id club_id], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   belongs_to :club
@@ -97,6 +97,12 @@ class Player < ActiveRecord::Base
     end.join(", ")
   end
 
+  def note_html
+    return unless note.present?
+    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new, no_intra_emphasis: true, autolink: true, strikethrough: true, underline: true)
+    markdown.render(note).html_safe
+  end
+
   def self.search(params, path)
     params[:status] = "active" unless params.has_key?(:status)
     params[:order] = "id" if params[:order].blank?
@@ -169,7 +175,7 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[dob gender joined email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title].each do |atr|
+    %w[dob gender joined email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title note].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end
     %w[club_id player_id].each do |atr|
