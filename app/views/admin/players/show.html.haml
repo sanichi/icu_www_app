@@ -73,7 +73,7 @@
               = link_to_if can?(:manage, @user), user.email, [:admin, user]
       - if @player.note.present?
         %tr
-          %th{colspan: 2, class: "text-center"}= t("player.notes")
+          %th{colspan: 2, class: "text-center"}= t("player.note")
         %tr
           %td{colspan: 2}= @player.note_html
     - if can? :manage, @player

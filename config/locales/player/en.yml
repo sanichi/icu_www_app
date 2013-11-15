@@ -22,7 +22,7 @@ en:
     master_id: Master ID
     name: Name
     not_foreign: Not foreign
-    notes: Notes
+    note: Notes
     player: Player
     players: Players
     some_title: Some title

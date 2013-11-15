@@ -6,9 +6,9 @@ module Util
     end
 
     # Show where the difference is between two strings within a certain limit.
-    def difference(limit=256, context=10)
+    def difference(limit=255, context=10)
       if (@a.length <= limit && @b.length <= limit) || @a == @b
-        [@a, @b]
+        [@a.truncate(limit), @b.truncate(limit)]
       else
         find_diff(limit, context)
       end

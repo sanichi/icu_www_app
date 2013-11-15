@@ -99,7 +99,8 @@ class Player < ActiveRecord::Base
 
   def note_html
     return unless note.present?
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new, no_intra_emphasis: true, autolink: true, strikethrough: true, underline: true)
+    renderer = Redcarpet::Render::HTML.new(filter_html: true)
+    markdown = Redcarpet::Markdown.new(renderer, no_intra_emphasis: true, autolink: true, strikethrough: true, underline: true)
     markdown.render(note).html_safe
   end
 

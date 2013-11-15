@@ -79,6 +79,7 @@ feature "Create players" do
   given(:title)      { I18n.t("player.title.player") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
+  given(:notes)      { I18n.t("player.note") }
   given(:save)       { I18n.t("save") }
 
   scenario "sucessful creation with set join date" do
@@ -95,6 +96,7 @@ feature "Create players" do
     select male, from: gender
     select "Ireland", from: federation
     select "IM", from: title
+    fill_in notes, with: "ICU web developer and system manager."
     click_button save
     expect(page).to have_css(success, text: "created")
     player = Player.last
@@ -114,6 +116,7 @@ feature "Create players" do
     expect(player.trainer_title).to be_nil
     expect(player.source).to eq "officer"
     expect(player.status).to eq "active"
+    expect(player.note).to eq "ICU web developer and system manager."
     expect(player.player_id).to be_nil
   end
 

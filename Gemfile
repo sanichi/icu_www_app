@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "rails", "4.0.0"
-gem "mysql2", git: "https://github.com/brianmario/mysql2.git", :ref => "ecb675b5494f4347817547e7fcb5441f4378cffc"
+gem "mysql2"
 gem "haml-rails"
 gem "sass-rails", "~> 4.0.0"
 gem "uglifier", ">= 1.3.0"
