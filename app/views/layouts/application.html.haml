@@ -10,6 +10,8 @@
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body
+    - if current_user.admin? && Rails.root.join("public", "system", "maintenance.html").exist?
+      #maintenance Maintenance Mode
     .jumbotron
       .container
         = render "layouts/header"
