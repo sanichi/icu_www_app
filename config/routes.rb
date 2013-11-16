@@ -1,7 +1,9 @@
 IcuWwwApp::Application.routes.draw do
   root to: "pages#home"
 
-  get "home"     => "pages#home"
+  %w[home system_info].each do |page|
+    get page => "pages##{p}"
+  end
   get "sign_in"  => "sessions#new"
   get "sign_out" => "sessions#destroy"
   get "redirect" => "redirects#redirect"

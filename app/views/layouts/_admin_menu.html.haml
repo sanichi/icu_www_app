@@ -7,6 +7,7 @@
   - items += 1 if trans   = can?(:manage, Translation)
   - items += 1 if players = can?(:manage, Player)
   - items += 1 if clubs   = can?(:manage, Club)
+  - items += 1 if sysinfo = can?(:system_info, Page)
   - if items > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
@@ -27,3 +28,5 @@
           %li{class: active("admin/players")}= link_to "New Player", new_admin_player_path
         - if clubs
           %li{class: active("admin/clubs")}= link_to "New Club", new_admin_club_path
+        - if sysinfo
+          %li{class: active("pages")}= link_to "System Info", system_info_path

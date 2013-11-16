@@ -1,0 +1,15 @@
+- content_for :title, "System Info"
+
+%h2{class: "text-center"} Environment Variables
+
+%table{class: "table table-striped"}
+  %tr
+    %th Name
+    %th Value
+  - @env.each_pair do |key, value|
+    %tr
+      %td= key
+      %td
+        - value.split(/\n/).each_with_index do |val, i|
+          = raw("<br/>") unless i == 0
+          %code= truncate(val, length: 150)
