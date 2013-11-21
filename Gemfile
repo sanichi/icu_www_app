@@ -9,7 +9,7 @@ gem "jquery-rails"
 gem "turbolinks"
 gem "cancan", "~> 1.6"
 gem "redis"
-gem "therubyracer", "0.11.4", platforms: :ruby # 0.12.0 requires requires gcc 4.4 to compile v8 (ratalacha has 4.1)
+gem "therubyracer", "0.12.0", :require => "v8"
 gem "icu_name"
 gem "icu_utils"
 gem "validates_timeliness", "~> 3.0"
