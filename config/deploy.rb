@@ -9,6 +9,8 @@ set :deploy_to, "/var/apps/www"
 set :linked_files, %w{config/database.yml config/app_config.yml}
 set :linked_dirs, %w{log tmp/pids public/system}  # capistrano/rails adds public/assets
 
+set :maintenance_file, "public/system/maintenance.html"
+
 # set :application, 'my_app_name'
 # set :repo_url, 'git@example.com:me/my_repo.git'
 
