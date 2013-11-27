@@ -198,7 +198,7 @@ feature "Edit players" do
   given(:male)       { I18n.t("player.gender.M") }
   given(:female)     { I18n.t("player.gender.F") }
   given(:club)       { I18n.t("club.club")}
-  given(:none)       { I18n.t("none")}
+  given(:none)       { I18n.t("player.no_club")}
   given(:master_id)  { I18n.t("player.master_id") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }

@@ -13,7 +13,7 @@ module ClubsHelper
 
   def club_menu(selected, opt={})
     clubs = Club.all.map { |c| [c.name, c.id] }
-    clubs.unshift [t("none"), 0] if opt[:none]
+    clubs.unshift [t("player.no_club"), 0] if opt[:none]
     clubs.unshift [t("player.any_club"), ""] if opt[:any]
     options_for_select(clubs, selected)
   end
