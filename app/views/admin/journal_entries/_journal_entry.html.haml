@@ -11,5 +11,5 @@
   %td= entry.to.try(:truncate, 15)
   %td= entry.by.truncate(15)
   - if full
-    %td= entry.ip.truncate(15)
+    %td= entry.ip.try(:truncate, 15)
   %td= link_to time_ago_in_words(entry.created_at, include_seconds: true), [:admin, entry]
