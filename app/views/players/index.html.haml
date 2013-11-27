@@ -1,6 +1,7 @@
 - content_for :title, "Players"
 
 = render "utils/search_panel", form: "search_form", title: t("player.players"), col: "md"
+
 - if @players.count > 0
   .row
     .col-sm-8.col-sm-offset-2
