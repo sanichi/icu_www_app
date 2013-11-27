@@ -31,7 +31,7 @@ end
 feature "Edit preferences" do
   given!(:user)           { FactoryGirl.create(:user) }
   given(:success)         { "div.alert-success" }
-  given(:theme)           { User::THEMES.sample(User::THEMES.size).detect{ |theme| theme != "Bootstrap" } }
+  given(:theme)           { User::THEMES.sample }
   given(:bootstrap)       { "Bootstrap" }
   given(:theme_label)     { I18n.t("user.theme") }
   given(:english)         { I18n.t("user.lang.en") }
@@ -54,22 +54,6 @@ feature "Edit preferences" do
     expect(page).to have_xpath("//th[.='#{theme_label}']/following-sibling::td[.='#{theme}']")
     user.reload
     expect(user.theme).to eq(theme)
-  end
-
-  scenario "no stylesheet for the special Bootstrap theme" do
-    expect(user.theme).to be_nil
-    login user
-    click_link preferences
-    click_link edit
-    select bootstrap, from: theme_label
-    click_button save
-    expect(page).to have_css(success, text: updated)
-    User::THEMES.each do |theme|
-      expect(page).to_not have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
-    end
-    expect(page).to have_xpath("//th[.='#{theme_label}']/following-sibling::td[.='#{bootstrap}']")
-    user.reload
-    expect(user.theme).to eq(bootstrap)
   end
 
   scenario "change locale" do

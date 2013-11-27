@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   OK = "OK"
   ROLES = %w[admin editor membership translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
-  THEMES = %w[Bootstrap Cerulean Cosmo Cyborg Flatley Journal Readable Simplex Slate Spacelab]
+  THEMES = %w[Bootstrap Cerulean Cosmo Cyborg Flatly Journal Readable Simplex Slate Spacelab]
   DEFAULT_THEME = "Flatley"
   LOCALES = %w[en ga]
   SessionError = Class.new(RuntimeError)
