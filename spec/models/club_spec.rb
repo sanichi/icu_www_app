@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Club do
-  let(:bangor) { FactoryGirl.create(:club) }
+  let(:bangor) { create(:club) }
 
   context "latitude and longitude" do
     it "can be blank" do
@@ -52,7 +52,7 @@ describe Club do
   end
 
   context "county" do
-    let(:bangor) { FactoryGirl.create(:club) }
+    let(:bangor) { create(:club) }
 
     it "must not be blank or invalid" do
       [nil, "", "somerset", "Down"].each do |county|
@@ -63,7 +63,7 @@ describe Club do
   end
 
   context "web" do
-    let(:bangor) { FactoryGirl.create(:club) }
+    let(:bangor) { create(:club) }
 
     it "can be blank" do
       bangor.web = nil
@@ -87,7 +87,7 @@ describe Club do
 
   context "blank attributes" do
     it "are normalised" do
-      club = FactoryGirl.create(:club, web: "", meet: "", address: "\s", district: " ", lat: "", long: "", contact: "", email: "", phone: "", active: false)
+      club = create(:club, web: "", meet: "", address: "\s", district: " ", lat: "", long: "", contact: "", email: "", phone: "", active: false)
       expect(club.meet).to be_nil
       expect(club.district).to be_nil
       expect(club.address).to be_nil

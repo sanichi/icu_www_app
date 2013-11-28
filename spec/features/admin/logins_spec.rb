@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature "Authorization for logins" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
-  given(:record)          { FactoryGirl.create(:login) }
+  given(:record)          { create(:login) }
   given(:paths)           { [admin_logins_path, admin_login_path(record)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
@@ -43,13 +43,13 @@ feature "Listing logins" do
   before(:each) do
     @user = {}
     @user[:normal]     = login "user"
-    @user[:roles]      = login FactoryGirl.create(:user, roles: "translator")
-    @user[:expired]    = login FactoryGirl.create(:user, expires_on: Date.today.years_ago(2).end_of_year)
-    @user[:unverified] = login FactoryGirl.create(:user, verified_at: nil)
-    @user[:status]     = login FactoryGirl.create(:user, status: "Undesirable")
-    @user[:password]   = login FactoryGirl.create(:user), password: "wrong password"
-    @user[:ip]         = FactoryGirl.create(:user)
-    @login             = FactoryGirl.create(:login, user: @user[:ip], ip: "198.168.0.1")
+    @user[:roles]      = login create(:user, roles: "translator")
+    @user[:expired]    = login create(:user, expires_on: Date.today.years_ago(2).end_of_year)
+    @user[:unverified] = login create(:user, verified_at: nil)
+    @user[:status]     = login create(:user, status: "Undesirable")
+    @user[:password]   = login create(:user), password: "wrong password"
+    @user[:ip]         = create(:user)
+    @login             = create(:login, user: @user[:ip], ip: "198.168.0.1")
     @user[:admin]      = login "admin"
     visit admin_logins_path
     @xpath = "//table[@id='results']/tbody/tr"

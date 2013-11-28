@@ -5,7 +5,7 @@ feature "Sessions" do
     visit "/sign_in"
   end
 
-  given(:user)            { FactoryGirl.create(:user) }
+  given(:user)            { create(:user) }
   given(:password)        { "password" }
   given(:bad_password)    { "drowssap" }
   given(:ip)              { "127.0.0.1" }
@@ -58,7 +58,7 @@ feature "Sessions" do
   end
 
   scenario "the user's subscription has expired" do
-    user = FactoryGirl.create(:user, expires_on: 1.year.ago.at_end_of_year)
+    user = create(:user, expires_on: 1.year.ago.at_end_of_year)
     fill_in email_text, with: user.email
     fill_in password_text, with: "password"
     click_button sign_in_button
@@ -69,7 +69,7 @@ feature "Sessions" do
   end
 
   it "recording the user's current role" do
-    FactoryGirl.create(:user, roles: "admin") # so there is a last admin
+    create(:user, roles: "admin") # so there is a last admin
     fill_in email_text, with: user.email
     fill_in password_text, with: password
     click_button sign_in_button

@@ -3,22 +3,22 @@ require 'spec_helper'
 feature "Search players" do
   before(:each) do
     @p = []
-    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09", player_title: "IM", trainer_title: "FST")
-    @p << FactoryGirl.create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15", arbiter_title: "IA")
-    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08", fed: nil, arbiter_title: "FA")
-    @p << FactoryGirl.create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08", player_title: "IM")
-    @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07")
-    @p << FactoryGirl.create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07", player_id: @p.last.id)
-    @p << FactoryGirl.create(:player, first_name: "Debbie", last_name: "Quinn", dob: "1969-11-20", gender: "F", player_title: "WCM")
-    @p << FactoryGirl.create(:player, first_name: "Patrick", last_name: "Yound", dob: "1965-01-24", status: "inactive")
-    @p << FactoryGirl.create(:player, first_name: "Glen", last_name: "Adams", dob: "1975-03-04", status: "inactive")
-    @p << FactoryGirl.create(:player, first_name: "Tom", last_name: "Clarke", dob: "1959-04-17", status: "deceased")
-    @p << FactoryGirl.create(:player, first_name: "Arthur", last_name: "Cootes", dob: nil, status: "deceased")
-    @p << FactoryGirl.create(:player, first_name: "Sam", last_name: "Lynne", dob: "1938-12-12", status: "deceased")
-    @p << FactoryGirl.create(:player, first_name: "Kasper", last_name: "Agaard", dob: nil, status: "foreign")
-    @p << FactoryGirl.create(:player, first_name: "Robert", last_name: "Zysk", dob: nil, status: "foreign")
-    @p << FactoryGirl.create(:player, first_name: "Magomed", last_name: "Zulfugarli", dob: nil, status: "foreign", fed: "AZE")
-    @p << FactoryGirl.create(:player, first_name: "Jure", last_name: "Zorko", dob: nil, status: "foreign")
+    @p << create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09", player_title: "IM", trainer_title: "FST")
+    @p << create(:player, first_name: "Pat", last_name: "Reynolds", dob: "1955-08-15", arbiter_title: "IA")
+    @p << create(:player, first_name: "Patrick", last_name: "Bell", dob: "1950-08-08", fed: nil, arbiter_title: "FA")
+    @p << create(:player, first_name: "Mark", last_name: "Quinn", dob: "1976-08-08", player_title: "IM")
+    @p << create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07")
+    @p << create(:player, first_name: "Ciaran", last_name: "Quinn", dob: "1960-10-07", player_id: @p.last.id)
+    @p << create(:player, first_name: "Debbie", last_name: "Quinn", dob: "1969-11-20", gender: "F", player_title: "WCM")
+    @p << create(:player, first_name: "Patrick", last_name: "Yound", dob: "1965-01-24", status: "inactive")
+    @p << create(:player, first_name: "Glen", last_name: "Adams", dob: "1975-03-04", status: "inactive")
+    @p << create(:player, first_name: "Tom", last_name: "Clarke", dob: "1959-04-17", status: "deceased")
+    @p << create(:player, first_name: "Arthur", last_name: "Cootes", dob: nil, status: "deceased")
+    @p << create(:player, first_name: "Sam", last_name: "Lynne", dob: "1938-12-12", status: "deceased")
+    @p << create(:player, first_name: "Kasper", last_name: "Agaard", dob: nil, status: "foreign")
+    @p << create(:player, first_name: "Robert", last_name: "Zysk", dob: nil, status: "foreign")
+    @p << create(:player, first_name: "Magomed", last_name: "Zulfugarli", dob: nil, status: "foreign", fed: "AZE")
+    @p << create(:player, first_name: "Jure", last_name: "Zorko", dob: nil, status: "foreign")
     visit players_path
   end
 

@@ -3,10 +3,10 @@ require 'spec_helper'
 
 feature "Searching clubs" do
   before(:each) do
-    FactoryGirl.create(:club, name: "Bangor", city: "Groomsport", contact: "Mark", county: "down")
-    FactoryGirl.create(:club, name: "Bray/Greystones", city: "Dublin", contact: "Mervyn", county: "dublin")
-    FactoryGirl.create(:club, name: "Aer Lingus", city: "Dublin", contact: "Gearóidín", county: "dublin")
-    FactoryGirl.create(:club, name: "Cortex", city: "Arklow", contact: "Danny", county: "wicklow", active: false)
+    create(:club, name: "Bangor", city: "Groomsport", contact: "Mark", county: "down")
+    create(:club, name: "Bray/Greystones", city: "Dublin", contact: "Mervyn", county: "dublin")
+    create(:club, name: "Aer Lingus", city: "Dublin", contact: "Gearóidín", county: "dublin")
+    create(:club, name: "Cortex", city: "Arklow", contact: "Danny", county: "wicklow", active: false)
     visit clubs_path
     @xpath = "//div[starts-with(@id,'club_')]"
     @search = "Search"
@@ -121,7 +121,7 @@ feature "Showing a club" do
       phone:     "07968 537010",
       active:    true,
     }
-    bangor = FactoryGirl.create(:club, params)
+    bangor = create(:club, params)
     visit club_path(bangor)
     params.each do |param, value|
       case param

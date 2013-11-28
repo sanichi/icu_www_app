@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 feature "Authorization for preferences" do
-  given!(:user)           { FactoryGirl.create(:user) }
-  given!(:other_user)     { FactoryGirl.create(:user) }
+  given!(:user)           { create(:user) }
+  given!(:other_user)     { create(:user) }
   given(:paths)           { [user_path(user), edit_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
@@ -29,7 +29,7 @@ feature "Authorization for preferences" do
 end
 
 feature "Edit preferences" do
-  given!(:user)           { FactoryGirl.create(:user) }
+  given!(:user)           { create(:user) }
   given(:success)         { "div.alert-success" }
   given(:theme)           { User::THEMES.sample }
   given(:bootstrap)       { "Bootstrap" }

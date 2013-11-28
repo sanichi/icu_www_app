@@ -13,7 +13,7 @@ feature JournalEntry do
   end
 
   def edit_translation
-    translation = FactoryGirl.create(:translation) # translations aren't created via the web app
+    translation = create(:translation) # translations aren't created via the web app
     visit admin_translation_path(translation)
     click_link "Edit"
     fill_in "translation_value", with: "bruscar"
@@ -22,7 +22,7 @@ feature JournalEntry do
   end
 
   def edit_user
-    user = FactoryGirl.create(:user) # users aren't created via the web app
+    user = create(:user) # users aren't created via the web app
     visit admin_user_path(user)
     click_link "Edit"
     fill_in "Status", with: "banned"

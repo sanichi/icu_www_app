@@ -14,6 +14,7 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
   config.mock_with :rspec
+  config.include FactoryGirl::Syntax::Methods
 
   # To be able to use selenium tests we use database_cleaner with truncation
   # strategy for all tests (slower but more reliable). See Railscasts 257.
@@ -41,7 +42,7 @@ end
 # Create and login a user with a given role or roles.
 def login(user_or_roles, options={})
   user, roles = user_or_roles.instance_of?(User) ? [user_or_roles, nil] : [nil, user_or_roles]
-  user ||= FactoryGirl.create(:user, roles: roles)
+  user ||= create(:user, roles: roles)
   visit sign_out_path
   fill_in I18n.t("user.email"), with: options[:email] || user.email
   fill_in I18n.t("user.password"), with: options[:password] || "password"

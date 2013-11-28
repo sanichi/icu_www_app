@@ -19,13 +19,13 @@ describe Translation do
 
     it "update a partly filled table" do
       @t = {}
-      @t[:to_inactive]         = FactoryGirl.create(:translation, key: "foo.bar", value: "barra", english: "bar")
-      @t[:already_inactive]    = FactoryGirl.create(:translation, key: "foo.baz", value: "base", english: "baz", active: false)
-      @t[:no_change]           = FactoryGirl.create(:translation, key: "edit", value: "Cuir", english: "Edit")
-      @t[:to_update_no_val]    = FactoryGirl.create(:translation, key: "save", value: nil, english: "Store", user: nil)
-      @t[:to_update_with_val]  = FactoryGirl.create(:translation, key: "user.role.admin", value: "Riarthóir", english: "God")
-      @t[:to_active]           = FactoryGirl.create(:translation, key: "user.role.editor", value: "Eagarthóir", english: "Editor", active: false)
-      @t[:translation_missing] = FactoryGirl.create(:translation, key: "user.role.treasurer", value: nil, english: "Treasurer", user: nil)
+      @t[:to_inactive]         = create(:translation, key: "foo.bar", value: "barra", english: "bar")
+      @t[:already_inactive]    = create(:translation, key: "foo.baz", value: "base", english: "baz", active: false)
+      @t[:no_change]           = create(:translation, key: "edit", value: "Cuir", english: "Edit")
+      @t[:to_update_no_val]    = create(:translation, key: "save", value: nil, english: "Store", user: nil)
+      @t[:to_update_with_val]  = create(:translation, key: "user.role.admin", value: "Riarthóir", english: "God")
+      @t[:to_active]           = create(:translation, key: "user.role.editor", value: "Eagarthóir", english: "Editor", active: false)
+      @t[:translation_missing] = create(:translation, key: "user.role.treasurer", value: nil, english: "Treasurer", user: nil)
       Translation.update_db
       expect(Translation.count).to eq @count + 2
       expect(Translation.where(active: true).count).to eq @count
@@ -84,8 +84,8 @@ describe Translation do
     it "Irish translations provided by Redis via database updates" do
       edit = "Cuir"
       invalid = "R-phost neamhbhailí nó ar do phasfhocal"
-      FactoryGirl.create(:translation, key: "edit", value: edit, english: "Edit")
-      FactoryGirl.create(:translation, key: "session.invalid_email", value: invalid, english: "Invalid email or password")
+      create(:translation, key: "edit", value: edit, english: "Edit")
+      create(:translation, key: "session.invalid_email", value: invalid, english: "Invalid email or password")
       expect(I18n.t("edit", locale: "ga")).to eq edit
       expect(I18n.t("session.invalid_email", locale: "ga")).to eq invalid
     end
@@ -119,11 +119,11 @@ describe Translation do
     end
 
     it "is non-empty if there are active translations" do
-      FactoryGirl.create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
-      FactoryGirl.create(:translation, key: "delete", english: "Cancel", value: nil)
-      FactoryGirl.create(:translation, key: "user.role.translator", english: "Translator", value: "Aistritheoir")
-      FactoryGirl.create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
-      FactoryGirl.create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
+      create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
+      create(:translation, key: "delete", english: "Cancel", value: nil)
+      create(:translation, key: "user.role.translator", english: "Translator", value: "Aistritheoir")
+      create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
+      create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
       expect(Translation.count).to eq 5
       @cache.flushdb # reset the cache before calling check_cache for this test
       expect(Translation.check_cache(dont_skip_test_env: true)).to eq 3
@@ -133,16 +133,16 @@ describe Translation do
     it "is affected by creating, updating or deleting translations" do
       expect(cached).to eq ""
 
-      cancel = FactoryGirl.create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
+      cancel = create(:translation, key: "cancel", english: "Cancel", value: "Cealaigh")
       expect(cached).to eq 'ga.cancel:"Cealaigh"'
 
-      admin = FactoryGirl.create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
+      admin = create(:translation, key: "user.role.admin", english: "Administrator", old_english: "God", value: "Dia")
       expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
 
-      FactoryGirl.create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
+      create(:translation, key: "not.used", english: "not used", value: "nach n-úsáidtear", active: false)
       expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
 
-      FactoryGirl.create(:translation, key: "delete", english: "Cancel", value: nil)
+      create(:translation, key: "delete", english: "Cancel", value: nil)
       expect(cached).to eq 'ga.cancel:"Cealaigh"|ga.user.role.admin:"Dia"'
 
       admin.value = "Riarthóir"

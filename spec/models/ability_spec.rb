@@ -76,11 +76,11 @@ describe Ability do
   end
   
   context "instance abilities" do
-    let(:player) { FactoryGirl.create(:player) }
+    let(:player) { create(:player) }
     let(:ability) { Ability.new(user) }
     
     context "user" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { create(:user) }
     
       it "can show only own player" do
         ability.should be_able_to :show, user.player

@@ -3,30 +3,30 @@ require 'spec_helper'
 describe User do
   context "model validation" do
     it "the default factory user should be valid" do
-      expect { FactoryGirl.create(:user) }.to_not raise_error
+      expect { create(:user) }.to_not raise_error
     end
 
     it "duplicate emails not allowed (case insensitive)" do
-      user = FactoryGirl.create(:user)
-      expect { FactoryGirl.create(:user, email: user.email) }.to raise_error(/email.*already.*taken/i)
-      expect { FactoryGirl.create(:user, email: user.email.upcase) }.to raise_error(/email.*already.*taken/i)
+      user = create(:user)
+      expect { create(:user, email: user.email) }.to raise_error(/email.*already.*taken/i)
+      expect { create(:user, email: user.email.upcase) }.to raise_error(/email.*already.*taken/i)
     end
 
     it "encrypted password should be present" do
-      expect { FactoryGirl.create(:user, encrypted_password: "") }.to raise_error(/password.*blank/i)
+      expect { create(:user, encrypted_password: "") }.to raise_error(/password.*blank/i)
     end
 
     it "salt should have 32 characters" do
-      expect { FactoryGirl.create(:user, salt: "abc") }.to raise_error(/salt.*length/i)
+      expect { create(:user, salt: "abc") }.to raise_error(/salt.*length/i)
     end
 
     it "expiry date should be present" do
-      expect { FactoryGirl.create(:user, expires_on: nil) }.to raise_error(/expires.*blank/i)
+      expect { create(:user, expires_on: nil) }.to raise_error(/expires.*blank/i)
     end
 
     it "ICU ID should be positive" do
-      expect { FactoryGirl.create(:user, player_id: nil) }.to raise_error(/not.*number/i)
-      expect { FactoryGirl.create(:user, player_id: 0) }.to raise_error(/greater.*than.*0/i)
+      expect { create(:user, player_id: nil) }.to raise_error(/not.*number/i)
+      expect { create(:user, player_id: 0) }.to raise_error(/greater.*than.*0/i)
     end
   end
 
@@ -38,21 +38,21 @@ describe User do
     end
 
     it "should be canonicalized" do
-      expect(FactoryGirl.create(:user, roles: User::ROLES).roles).to eq("admin")
-      expect(FactoryGirl.create(:user, roles: @roles_without_admin).roles).to eq(@non_admin_roles)
-      expect(FactoryGirl.create(:user, roles: @roles_without_admin.shuffle.join("-")).roles).to eq(@non_admin_roles)
-      expect(FactoryGirl.create(:user, roles: @non_admin_role).roles).to eq(@non_admin_role)
-      expect(FactoryGirl.create(:user, roles: " ").roles).to be_nil
-      expect(FactoryGirl.create(:user, roles: "").roles).to be_nil
-      expect(FactoryGirl.create(:user, roles: nil).roles).to be_nil
-      expect(FactoryGirl.create(:user, roles: "rubbish").roles).to be_nil
-      expect(FactoryGirl.create(:user, roles: "rubbish invalid").roles).to be_nil
-      expect(FactoryGirl.create(:user, roles: "rubbish invalid #{@non_admin_role}").roles).to eq(@non_admin_role)
-      expect(FactoryGirl.create(:user, roles: " rubbish  invalid  #{@non_admin_role} ").roles).to eq(@non_admin_role)
+      expect(create(:user, roles: User::ROLES).roles).to eq("admin")
+      expect(create(:user, roles: @roles_without_admin).roles).to eq(@non_admin_roles)
+      expect(create(:user, roles: @roles_without_admin.shuffle.join("-")).roles).to eq(@non_admin_roles)
+      expect(create(:user, roles: @non_admin_role).roles).to eq(@non_admin_role)
+      expect(create(:user, roles: " ").roles).to be_nil
+      expect(create(:user, roles: "").roles).to be_nil
+      expect(create(:user, roles: nil).roles).to be_nil
+      expect(create(:user, roles: "rubbish").roles).to be_nil
+      expect(create(:user, roles: "rubbish invalid").roles).to be_nil
+      expect(create(:user, roles: "rubbish invalid #{@non_admin_role}").roles).to eq(@non_admin_role)
+      expect(create(:user, roles: " rubbish  invalid  #{@non_admin_role} ").roles).to eq(@non_admin_role)
     end
 
     it "none for the default factory user" do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       expect(user.roles).to be_nil
       User::ROLES.each do |role|
         expect(user.send("#{role}?")).to be_false
@@ -60,7 +60,7 @@ describe User do
     end
 
     it "all for the admin user" do
-      user = FactoryGirl.create(:user, roles: "admin")
+      user = create(:user, roles: "admin")
       expect(user.roles).to eq("admin")
       User::ROLES.each do |role|
         expect(user.send("#{role}?")).to be_true
@@ -68,7 +68,7 @@ describe User do
     end
 
     it "multiple non-admin" do
-      user = FactoryGirl.create(:user, roles: @roles_without_admin.shuffle.join(" "))
+      user = create(:user, roles: @roles_without_admin.shuffle.join(" "))
       expect(user.roles).to eq(@non_admin_roles)
       expect(user.admin?).to be_false
       @roles_without_admin.each do |role|
@@ -77,7 +77,7 @@ describe User do
     end
 
     it "single non-admin" do
-      user = FactoryGirl.create(:user, roles: @non_admin_role)
+      user = create(:user, roles: @non_admin_role)
       expect(user.roles).to eq(@non_admin_role)
       expect(user.admin?).to be_false
       @roles_without_admin.each do |role|
@@ -88,7 +88,7 @@ describe User do
 
   context "#valid_password?" do
     it "default factory password should pass" do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       expect(user.valid_password?("password")).to be_true
       expect(user.valid_password?("drowssap")).to be_false
     end
@@ -97,7 +97,7 @@ describe User do
       password = "password" + rand(1000).to_s
       salt = User.random_salt
       encrypted_password = User.encrypt_password(password, salt)
-      user = FactoryGirl.create(:user, encrypted_password: encrypted_password, salt: salt)
+      user = create(:user, encrypted_password: encrypted_password, salt: salt)
       expect(user.valid_password?(password)).to be_true
       expect(user.valid_password?(password.upcase)).to be_false
     end
@@ -105,7 +105,7 @@ describe User do
 
   context "#authenticate!" do
     before(:each) do
-      @user = FactoryGirl.create(:user)
+      @user = create(:user)
       @addr = @user.email
       @pass = "password"
     end
@@ -143,14 +143,14 @@ describe User do
 
   context "#guest?" do
     it "should be false" do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       expect(user.guest?).to be_false
     end
   end
 
   context "#season_ticket" do
     it "should give correct response" do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       ticket = user.season_ticket
       expect(ticket).to match(/\A\w{4,}\z/)
       object = SeasonTicket.new(ticket)
@@ -161,9 +161,9 @@ describe User do
 
   context "#human_roles" do
     it "should translate roles" do
-      expect(FactoryGirl.create(:user).human_roles).to eq("")
-      expect(FactoryGirl.create(:user, roles: "admin").human_roles).to eq("Administrator")
-      expect(FactoryGirl.create(:user, roles: "treasurer translator").human_roles).to eq("Translator Treasurer")
+      expect(create(:user).human_roles).to eq("")
+      expect(create(:user, roles: "admin").human_roles).to eq("Administrator")
+      expect(create(:user, roles: "treasurer translator").human_roles).to eq("Translator Treasurer")
     end
   end
 end

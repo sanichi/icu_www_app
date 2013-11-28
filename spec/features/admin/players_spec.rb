@@ -4,7 +4,7 @@ require 'spec_helper'
 feature "Authorization for players" do
   given(:ok_roles)        { %w[admin membership] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:player)          { FactoryGirl.create(:player) }
+  given(:player)          { create(:player) }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:header)          { "h1" }
@@ -187,9 +187,9 @@ feature "Edit players" do
 
   given(:success)    { "div.alert-success" }
   given(:help)       { "div.help-block" }
-  given(:player)     { FactoryGirl.create(:player) }
-  given(:master)     { FactoryGirl.create(:player) }
-  given(:duplicate)  { FactoryGirl.create(:player, player_id: master.id) }
+  given(:player)     { create(:player) }
+  given(:master)     { create(:player) }
+  given(:duplicate)  { create(:player, player_id: master.id) }
   given(:first_name) { I18n.t("player.first_name") }
   given(:last_name)  { I18n.t("player.last_name") }
   given(:dob)        { I18n.t("player.dob") }
@@ -222,9 +222,9 @@ feature "Edit players" do
 
   scenario "changing club" do
     expect(player.club_id).to be_nil
-    FactoryGirl.create(:club, name: "Bangor")
-    FactoryGirl.create(:club, name: "Hollywood")
-    FactoryGirl.create(:club, name: "Carrickfergus")
+    create(:club, name: "Bangor")
+    create(:club, name: "Hollywood")
+    create(:club, name: "Carrickfergus")
     visit admin_player_path(player)
 
     click_link edit

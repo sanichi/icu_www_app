@@ -7,17 +7,17 @@ feature "Switch locales" do
   end
 
   before(:each) do
-    FactoryGirl.create(:translation, locale: "ga", key: "home", english: "Home", value: "Baile")
-    FactoryGirl.create(:translation, locale: "ga", key: "user.lang.en", english: "English", value: "Béarla")
-    FactoryGirl.create(:translation, locale: "ga", key: "user.lang.ga", english: "Irish", value: "Gaeilge")
-    FactoryGirl.create(:translation, locale: "ga", key: "session.sign_in", english: "Sign in", value: "Sínigh isteach")
-    FactoryGirl.create(:translation, locale: "ga", key: "session.sign_out", english: "Sign out", value: "Cláraigh amach")
-    FactoryGirl.create(:translation, locale: "ga", key: "user.preferences", english: "Preferences", value: "Roghanna")
+    create(:translation, locale: "ga", key: "home", english: "Home", value: "Baile")
+    create(:translation, locale: "ga", key: "user.lang.en", english: "English", value: "Béarla")
+    create(:translation, locale: "ga", key: "user.lang.ga", english: "Irish", value: "Gaeilge")
+    create(:translation, locale: "ga", key: "session.sign_in", english: "Sign in", value: "Sínigh isteach")
+    create(:translation, locale: "ga", key: "session.sign_out", english: "Sign out", value: "Cláraigh amach")
+    create(:translation, locale: "ga", key: "user.preferences", english: "Preferences", value: "Roghanna")
   end
 
-  let(:user) { FactoryGirl.create(:user) }
-  let(:una)  { FactoryGirl.create(:user, roles: "translator", locale: "ga") }
-  let(:mark) { FactoryGirl.create(:user, roles: "admin") }
+  let(:user) { create(:user) }
+  let(:una)  { create(:user, roles: "translator", locale: "ga") }
+  let(:mark) { create(:user, roles: "admin") }
 
   scenario "quest user" do
     visit root_path

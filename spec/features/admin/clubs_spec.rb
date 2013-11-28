@@ -4,7 +4,7 @@ require 'spec_helper'
 feature "Authorization for clubs" do
   given(:ok_roles)        { %w[admin editor] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:club)            { FactoryGirl.create(:club) }
+  given(:club)            { create(:club) }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:header)          { "//th[.='Name']/following-sibling::td[.='#{club.name}']" }
@@ -121,7 +121,7 @@ end
 
 feature "Editing clubs" do
   before(:each) do
-    @bangor = FactoryGirl.create(:club)
+    @bangor = create(:club)
     login("editor")
     visit edit_admin_club_path(@bangor)
   end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature "Authorization for users" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
-  given(:user)            { FactoryGirl.create(:user) }
+  given(:user)            { create(:user) }
   given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
@@ -39,8 +39,8 @@ feature "Authorization for users" do
 end
 
 feature "Creating users" do
-  given(:player)       { FactoryGirl.create(:player) }
-  given(:user)         { FactoryGirl.create(:user) }
+  given(:player)       { create(:player) }
+  given(:user)         { create(:user) }
   given(:player_path)  { admin_player_path(player) }
   given(:new_user)     { "New user" }
   given(:email)        { "joe@example.com" }
@@ -84,7 +84,7 @@ feature "Creating users" do
 end
 
 feature "Editing users" do
-  given!(:user)        { FactoryGirl.create(:user) }
+  given!(:user)        { create(:user) }
   given(:edit_path)    { edit_admin_user_path(user) }
   given(:success)      { "div.alert-success" }
   given(:failure)      { "div.help-block" }
@@ -222,16 +222,16 @@ end
 
 feature "Search users" do
   before(:each) do
-    FactoryGirl.create(:user)
-    FactoryGirl.create(:user, roles: "editor")
-    FactoryGirl.create(:user, roles: "translator treasurer")
-    FactoryGirl.create(:user, roles: "translator")
-    FactoryGirl.create(:user, verified_at: nil)
-    FactoryGirl.create(:user, expires_on: Date.today.years_ago(2).end_of_year)
-    FactoryGirl.create(:user, expires_on: Date.today.years_ago(3).end_of_year)
-    FactoryGirl.create(:user, expires_on: Date.today.years_since(10).end_of_year)
-    FactoryGirl.create(:user, status: "Plonker")
-    FactoryGirl.create(:user, status: "Dickhead")
+    create(:user)
+    create(:user, roles: "editor")
+    create(:user, roles: "translator treasurer")
+    create(:user, roles: "translator")
+    create(:user, verified_at: nil)
+    create(:user, expires_on: Date.today.years_ago(2).end_of_year)
+    create(:user, expires_on: Date.today.years_ago(3).end_of_year)
+    create(:user, expires_on: Date.today.years_since(10).end_of_year)
+    create(:user, status: "Plonker")
+    create(:user, status: "Dickhead")
     @admin = login "admin"
     @total = User.count
     @xpath = "//table[@id='results']/tbody/tr"
@@ -296,7 +296,7 @@ end
 
 feature "View users" do
   before(:each) do
-    FactoryGirl.create(:user)
+    create(:user)
     @admin = login "admin"
     @xpath = "//table[@id='results']/tbody/tr"
     visit admin_users_path
@@ -322,7 +322,7 @@ feature "Delete users" do
 
   [true, false].each do |js|
     scenario "can if they have no logins or roles (with#{js ? '' : 'out'} js)", js: js do
-      user = FactoryGirl.create(:user)
+      user = create(:user)
       expect(Login.where(user_id: user.id).count).to eq 0
       login "admin"
       visit admin_user_path(user)
@@ -337,9 +337,9 @@ feature "Delete users" do
   end
 
   scenario "can't if they have a login history" do
-    user = FactoryGirl.create(:user)
+    user = create(:user)
     number = 5
-    number.times { FactoryGirl.create(:login, user: user) }
+    number.times { create(:login, user: user) }
     expect(Login.where(user_id: user.id).count).to eq number
     login "admin"
     visit admin_user_path(user)
@@ -350,7 +350,7 @@ feature "Delete users" do
   end
 
   scenario "can't if they have any roles" do
-    user = FactoryGirl.create(:user, roles: "translator")
+    user = create(:user, roles: "translator")
     login "admin"
     visit admin_user_path(user)
     click_link "Delete"
@@ -362,7 +362,7 @@ end
 feature "Login as another user" do
   given(:success) { "div.alert-success" }
   given(:message) { I18n.t("session.signed_in_as") }
-  given!(:user)   { FactoryGirl.create(:user) }
+  given!(:user)   { create(:user) }
 
   scenario "click the login button" do
     login "admin"

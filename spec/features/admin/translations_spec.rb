@@ -4,7 +4,7 @@ require 'spec_helper'
 feature "Authorization for translations" do
   given(:ok_roles)        { %w[admin translator] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:translation)     { FactoryGirl.create(:translation) }
+  given(:translation)     { create(:translation) }
   given(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
@@ -153,7 +153,7 @@ feature "Performing translations" do
 
   scenario "find and delete an inactive translation" do
     key = "user.role.wago"
-    FactoryGirl.create(:translation, key: key, english: "WogoWago", active: false)
+    create(:translation, key: key, english: "WogoWago", active: false)
 
     login "translator"
     visit admin_translations_path
