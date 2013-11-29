@@ -166,7 +166,7 @@ module ICU
 
       def dump_stats
         max = @stats.keys.inject(0) { |m, k| m = k.length if k.length > m; m }
-        puts "stats (#{max}):"
+        puts "stats:"
         @stats.keys.sort.each do |name|
           ids = @stats[name]
           size = ids.size

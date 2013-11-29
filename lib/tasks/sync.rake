@@ -19,6 +19,11 @@ namespace :sync do
     ICU::Legacy::Change.new.synchronize(args[:force])
   end
 
+  desc "Update player status (only do this once)"
+  task :status, [:force] => :environment do |task, args|
+    ICU::Legacy::Status.new.update(args[:force])
+  end
+
   desc "Check all synchronized data"
   task :check => :environment do |task, args|
     ICU::Legacy::Check.new.check
