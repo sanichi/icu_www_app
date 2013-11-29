@@ -26,6 +26,7 @@ module ICU
         high_legacy_games
         active_exceptions
         foreign_exceptions
+        forced_foreign
 
         # Now do some calculations.
         inactive_players
@@ -84,14 +85,16 @@ module ICU
       def foreign_players
         @foreign_players = {}
         @players.keys.each do |id|
-          next if @players[id].fed == "IRL"
-          next if @players[id].club_id.present?
-          next if @players[id].dob.present?
-          next if id < 7300
-          next if @subscribers[id]
-          next if @high_legacy_tournaments[id]
-          next if @high_legacy_games[id]
-          next if @foreign_exceptions[id]
+          unless @forced_foreign[id]
+            next if @players[id].fed == "IRL"
+            next if @players[id].club_id.present?
+            next if @players[id].dob.present?
+            next if id < 7300
+            next if @subscribers[id]
+            next if @high_legacy_tournaments[id]
+            next if @high_legacy_games[id]
+            next if @foreign_exceptions[id]
+          end
           @foreign_players[id] = true
         end
         add_stat(:players_foreign, @foreign_players.length)
@@ -163,6 +166,20 @@ module ICU
         {
         }
         add_stat(:exceptions_foreign, @foreign_exceptions.length)
+      end
+
+      def forced_foreign
+        @forced_foreign = {}
+        rat_database.query(forced_foreign_sql).each do |player|
+          name = ICU::Name.new(player[:first_name], player[:last_name])
+          fed = player[:fed]
+          candidates = @players.values.select do |player|
+            player.last_name == name.last && fed != "IRL" && player.fed == fed && name.match(player.first_name, player.last_name)
+          end
+          match = candidates[0] if candidates.length == 1
+          @forced_foreign[match.id] = true if match
+        end
+        add_stat(:forced_foreign, @forced_foreign.length)
       end
 
       def existing_players?
@@ -286,6 +303,22 @@ module ICU
           ) AS game_players
         WHERE
           counts > 1
+        EOS
+      end
+
+      def forced_foreign_sql
+        <<-EOS
+        SELECT
+          last_name,
+          first_name,
+          fed
+        FROM
+          players
+        WHERE
+          category = 'foreign_player'
+        ORDER BY
+          last_name,
+          first_name
         EOS
       end
     end
