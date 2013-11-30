@@ -21,7 +21,7 @@ module ICU
           return
         end
         member_count = 0
-        old_database.query("SELECT #{MAP.keys.join(", ")} FROM members").each do |member|
+        old_database.query("SELECT #{MAP.keys.join(", ")} FROM members WHERE mem_status = 'ok'").each do |member|
           member_count += 1
           create_user(member)
         end
