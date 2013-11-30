@@ -41,6 +41,12 @@ en:
       gender: Gender
       F: Female
       M: Male
+    legacy_rating:
+      rating: Legacy rating
+      games: Legacy games
+      type: Legacy rating type
+      full: Full
+      provisional: Provisional
     phone:
       phones: Phones
       home: Home phone

@@ -58,6 +58,15 @@
         %th= t("player.phone.phones")
         %td= @player.phones
       %tr
+        %th= t("player.legacy_rating.rating")
+        %td= @player.legacy_rating
+      %tr
+        %th= t("player.legacy_rating.type")
+        %td= t("player.legacy_rating.#{@player.legacy_rating_type}") if @player.legacy_rating_type.present?
+      %tr
+        %th= t("player.legacy_rating.games")
+        %td= @player.legacy_games
+      %tr
         %th= t("player.status.status")
         %td= t("player.status.#{@player.status}")
       %tr

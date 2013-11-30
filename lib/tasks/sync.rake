@@ -18,6 +18,11 @@ namespace :sync do
     ICU::Legacy::Player.new.synchronize(args[:force])
   end
 
+  desc "Convert old_players from the ratings database to players in this application"
+  task :archive, [:force] => :environment do |task, args|
+    ICU::Legacy::Archive.new.synchronize(args[:force])
+  end
+
   desc "Convert icu_player_changes from the old ICU database to journal_entries in this application"
   task :changes, [:force] => :environment do |task, args|
     ICU::Legacy::Change.new.synchronize(args[:force])
@@ -34,5 +39,5 @@ namespace :sync do
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => [:clubs, :players, :changes, :status, :members, :check]
+  task :all, [:force] => [:clubs, :players, :changes, :status, :archive, :members, :check]
 end

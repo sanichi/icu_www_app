@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131111165828) do
+ActiveRecord::Schema.define(version: 20131130163115) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -62,27 +62,30 @@ ActiveRecord::Schema.define(version: 20131111165828) do
   end
 
   create_table "players", force: true do |t|
-    t.string   "first_name",    limit: 50
-    t.string   "last_name",     limit: 50
-    t.string   "status",        limit: 25
-    t.string   "source",        limit: 25
+    t.string   "first_name",         limit: 50
+    t.string   "last_name",          limit: 50
+    t.string   "status",             limit: 25
+    t.string   "source",             limit: 25
     t.integer  "player_id"
-    t.string   "gender",        limit: 1
+    t.string   "gender",             limit: 1
     t.date     "dob"
     t.date     "joined"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "club_id"
-    t.string   "fed",           limit: 3
-    t.string   "player_title",  limit: 3
-    t.string   "arbiter_title", limit: 3
-    t.string   "trainer_title", limit: 3
-    t.string   "email",         limit: 50
+    t.string   "fed",                limit: 3
+    t.string   "player_title",       limit: 3
+    t.string   "arbiter_title",      limit: 3
+    t.string   "trainer_title",      limit: 3
+    t.string   "email",              limit: 50
     t.string   "address"
-    t.string   "home_phone",    limit: 30
-    t.string   "mobile_phone",  limit: 30
-    t.string   "work_phone",    limit: 30
+    t.string   "home_phone",         limit: 30
+    t.string   "mobile_phone",       limit: 30
+    t.string   "work_phone",         limit: 30
     t.text     "note"
+    t.integer  "legacy_rating",      limit: 2
+    t.string   "legacy_rating_type", limit: 20
+    t.integer  "legacy_games",       limit: 2
   end
 
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree

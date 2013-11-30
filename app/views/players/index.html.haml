@@ -8,13 +8,16 @@
       %table{class: "table table-striped table-condensed", id: "results"}
         %thead
           %tr
-            %th.col-sm-1= t("player.abbrev.id")
-            %th.col-sm-4= t("player.name")
-            %th.col-sm-1= t("player.abbrev.gender")
-            %th.col-sm-1= t("player.abbrev.yob")
-            %th.col-sm-1= t("player.abbrev.federation")
-            %th.col-sm-1= t("player.abbrev.title")
-            %th.col-sm-3= t("club.club")
+            %th= t("player.abbrev.id")
+            %th= t("player.name")
+            %th= t("player.abbrev.gender")
+            %th= t("player.abbrev.yob")
+            %th= t("player.abbrev.federation")
+            %th= t("player.abbrev.title")
+            %th= t("club.club")
+            - unless current_user.guest?
+              %th= t("player.status.status")
+              %th= t("player.source.source")
         %tbody
           - @players.matches.each do |player|
             %tr
@@ -25,4 +28,8 @@
               %td= player.fed if player.fed
               %td= player.titles
               %td= link_to player.club.name, player.club if player.club
+              - unless current_user.guest?
+                %td= t("player.status.#{player.status}")
+                %td= t("player.source.#{player.source}")
+              
           = render "utils/pagination_links", pager: @players, columns: 7

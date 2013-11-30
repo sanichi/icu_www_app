@@ -51,6 +51,14 @@ describe Player do
       expect{Player.create!(params.merge(gender: "F"))}.to_not raise_error
       expect{Player.create!(params.merge(gender: "W"))}.to raise_error(/invalid/)
     end
+
+    it "legacy ratings" do
+      expect{Player.create!(params.merge(legacy_rating: 2000, legacy_rating_type: "full", legacy_games: 10))}.to_not raise_error
+      expect{Player.create!(params.merge(legacy_rating: nil, legacy_rating_type: nil, legacy_games: nil))}.to_not raise_error
+      expect{Player.create!(params.merge(legacy_rating: 1000, legacy_rating_type: nil, legacy_games: nil))}.to raise_error(/all.*none/)
+      expect{Player.create!(params.merge(legacy_rating: nil, legacy_rating_type: "provisional", legacy_games: nil))}.to raise_error(/all.*none/)
+      expect{Player.create!(params.merge(legacy_rating: nil, legacy_rating_type: nil, legacy_games: 0))}.to raise_error(/all.*none/)
+    end
   end
 
   context "conditional adjustment" do

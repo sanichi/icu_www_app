@@ -17,6 +17,7 @@ class Player < ActiveRecord::Base
   PLAYER_TITLES = %w[GM IM FM CM NM WGM WIM WFM WCM]
   ARBITER_TITLES = %w[IA FA NA]
   TRAINER_TITLES = %w[FST FT FI NI DI]
+  RATING_TYPES = %w[full provisional]
   
   default_scope { includes(:club) }
 
@@ -32,6 +33,9 @@ class Player < ActiveRecord::Base
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
   validates :fed, format: { with: /\A[A-Z]{3}\z/ }, allow_nil: true
+  validates :legacy_rating, numericality: { only_integer: true }, allow_nil: true
+  validates :legacy_rating_type, inclusion: { in: RATING_TYPES }, allow_nil: true
+  validates :legacy_games, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
   validates_date :dob, on_or_after: "1900-01-01",
                        on_or_after_message: "too far in the past",
@@ -44,7 +48,7 @@ class Player < ActiveRecord::Base
                           on_or_before_message: "too far in the future",
                           allow_nil: true
 
-  validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones
+  validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones, :validate_legacy_rating
 
   def name(reversed=false)
     if reversed
@@ -176,7 +180,11 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[dob gender joined email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title note].each do |atr|
+    nillable = %w[dob gender joined email address note]
+    nillable+= %w[home_phone mobile_phone work_phone]
+    nillable+= %w[player_title arbiter_title trainer_title]
+    nillable+= %w[legacy_rating legacy_rating_type legacy_games]
+    nillable.each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end
     %w[club_id player_id].each do |atr|
@@ -267,6 +275,18 @@ class Player < ActiveRecord::Base
         self.mobile_phone = self.send(mobile)
         self.send("#{mobile}=", tmp)
       end
+    end
+  end
+  
+  # Either all legacy rating attributes are nil or none are.
+  def validate_legacy_rating
+    atrs = %w[rating rating_type games]
+    nil_count = atrs.reduce(0) do |count, atr|
+      count += self.send("legacy_#{atr}").nil? ? 1 : 0
+    end
+    return if nil_count == 0 || nil_count == atrs.size
+    atrs.map{ |atr| "legacy_#{atr}".to_sym }.each do |fatt|
+      errors.add(fatt, "need all legacy rating data or none") if self.send(fatt).nil?
     end
   end
 end
