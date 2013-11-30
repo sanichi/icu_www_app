@@ -32,14 +32,22 @@ module ICU
           report_error "can't synchronize when players or player journal entries exist unless force is used"
           return
         end
-        player_count = 0
+
         @stats = Hash.new { Array.new }
+
+        get_legacy_ratings
+
+        player_count = 0
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM icu_players").each do |player|
           player_count += 1
           create_player(player)
         end
+
         puts "old player records processed: #{player_count}"
         puts "new player records created: #{::Player.count}"
+
+        @legacy_ratings.keys.each { |id| add_stat(:legacy_ratings_unused, id) }
+
         dump_stats
       end
 
@@ -62,13 +70,22 @@ module ICU
         end
       end
 
+      def get_legacy_ratings
+        @legacy_ratings = {}
+        rat_database.query(legacy_ratings_sql).each do |player|
+          @legacy_ratings[player[:icu_id]] = [player[:rating], player[:games], player[:full] == 1 ? "full" : "provisional"]
+          add_stat("legacy_ratings_#{@legacy_ratings[player[:icu_id]].last}".to_sym, player[:icu_id])
+        end
+      end
+
       def adjust(params, old_player)
         params[:dob] = nil if params[:dob].to_s == "1950-01-01"
         params[:joined] = nil if params[:joined].to_s == "1975-01-01"
         params[:source] = "import"
         params[:status] = params[:status] == "Yes" ? "deceased" : "active"
+        id = params[:id]
         params[:arbiter_title] =
-          case params[:id]
+          case id
           when 507  then "FA" # GG
           when 1538 then "FA" # BS
           when 1733 then "NA" # PF
@@ -80,7 +97,7 @@ module ICU
           else nil
           end
         params[:trainer_title] =
-          case params[:id]
+          case id
           when 3000  then "FST" # KOC
           when 5193  then "FI"  # KOF
           when 5601  then "FI"  # GM
@@ -97,7 +114,7 @@ module ICU
           phone = Phone.new(params[param])
           unless phone.parsed?
             params[param] = nil
-            add_stat(:phones_bad, params[:id]) unless phone.blank?
+            add_stat(:phones_bad, id) unless phone.blank?
           end
         end
 
@@ -116,6 +133,11 @@ module ICU
           else
             params[:note] = addition
           end
+        end
+
+        # Add legacy ratings if we have any.
+        if @legacy_ratings[id]
+          params[:legacy_rating], params[:legacy_games], params[:legacy_rating_type] = @legacy_ratings.delete(id)
         end
       end
 
@@ -161,7 +183,7 @@ module ICU
         add_stat(:phones_work,         player.id) if player.work_phone.present?
         add_stat(:phones_none,         player.id) if player.home_phone.blank? && player.mobile_phone.blank? && player.work_phone.blank?
         add_stat(:notes,               player.id) if player.note.present?
-        add_stat(:irih_titles,         player.id) if player.titles.present? && player.fed == "IRL"
+        add_stat(:irish_titles,        player.id) if player.titles.present? && player.fed == "IRL"
       end
 
       def dump_stats
@@ -178,6 +200,18 @@ module ICU
 
       def report_error(msg)
         puts "ERROR: #{msg}"
+      end
+
+      def legacy_ratings_sql
+        <<-EOS
+        SELECT
+          icu_id,
+          rating,
+          games,
+          full
+        FROM
+          old_ratings
+        EOS
       end
     end
   end

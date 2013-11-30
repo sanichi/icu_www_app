@@ -34,7 +34,7 @@ module ICU
 
         puts "old player records processed: #{player_count}"
         puts "new player records created: #{::Player.where(source: "archive").count}"
-        
+
         dump_stats
       end
 
@@ -49,7 +49,7 @@ module ICU
         begin
           adjust(params, old_player)
           player = ::Player.create!(params)
-          puts "unarchived player #{params[:id]}, #{params[:first_name]} #{params[:last_name]}"
+          puts "created archive player #{params[:id]}, #{params[:first_name]} #{params[:last_name]}"
         rescue => e
           report_error "could not create player ID #{params[:id]} (#{params[:first_name]} #{params[:last_name]}): #{e.message}"
           add_stat(:problem_records, params[:id])
@@ -62,7 +62,7 @@ module ICU
         params[:status] = "inactive"
         params[:fed] = "IRL"
         params[:legacy_rating_type] = "full"
-        
+
         # Turn club name to ID.
         if params[:club_id].present?
           if @club[params[:club_id]]
@@ -76,7 +76,7 @@ module ICU
           add_stat(:missing_clubs, params[:id])
           params[:club_id] = nil
         end
-        
+
         # Update links in note.
         if params[:note].present?
           params[:note].gsub!(/\[(\d+)\]\(\/icu_players\/\d+\)/, '[\1](/admin/players/\1)')
@@ -118,11 +118,11 @@ module ICU
           true
         end
       end
-      
+
       def add_stat(key, id)
         @stats[key] = @stats[key] << id
       end
-      
+
       def dump_stats
         max = @stats.keys.inject(0) { |m, k| m = k.length if k.length > m; m }
         puts "stats:"
