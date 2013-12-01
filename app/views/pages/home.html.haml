@@ -11,8 +11,8 @@
       %li= render partial: "todo", locals: { topic: "Users", items: { sessions: true, logins: true, admin: true, preferences: true, legacy_sync: true, ratings_sync: false, documentation: false } }
       %li= render partial: "todo", locals: { topic: "English/Irish", items: { database: true, admin: true, switching: true, caching: true, translations: true, documentation: false } }
       %li= render partial: "todo", locals: { topic: "Clubs", items: { database: true, admin: true, legacy_sync: true, maps: false, ducumentation: false } }
-      %li= render partial: "todo", locals: { topic: "Players", items: { database: true, admin: true, legacy_sync: false, ratings_sync: false, documentation: false } }
-      %li= render partial: "todo", locals: { topic: "Shop", items: nil }
+      %li= render partial: "todo", locals: { topic: "Players", items: { database: true, admin: true, legacy_sync: true, ratings_sync: false, documentation: false } }
+      %li= render partial: "todo", locals: { topic: "Shop", items: { database: false, admin: false, user: false, payments: false, documentation: false} }
       %li= render partial: "todo", locals: { topic: "Help", items: nil }
       %li= render partial: "todo", locals: { topic: "Images", items: nil }
       %li= render partial: "todo", locals: { topic: "Calendar", items: nil }
