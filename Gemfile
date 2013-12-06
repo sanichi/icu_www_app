@@ -1,12 +1,11 @@
 source "https://rubygems.org"
 
-gem "rails", "4.0.1"
+gem "rails", "4.0.2"
 gem "mysql2"
 gem "haml-rails"
 gem "sass-rails", "~> 4.0.0"
 gem "uglifier", ">= 1.3.0"
 gem "jquery-rails"
-gem "turbolinks"
 gem "cancan", "~> 1.6"
 gem "redis"
 gem "therubyracer", "0.12.0", :require => "v8"
