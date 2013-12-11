@@ -1,0 +1,13 @@
+en:
+  fee:
+    amount: Amount
+    subscription:
+      season: Season
+      category:
+        category: Category
+        standard: Standard
+        over_65: Over 65
+        unemployed: Unemployed
+        under_18: Under 18
+        under_12: Under 12
+        new_under_18: New under 18

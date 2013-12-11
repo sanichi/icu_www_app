@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131130163115) do
+ActiveRecord::Schema.define(version: 20131206114034) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -91,6 +91,17 @@ ActiveRecord::Schema.define(version: 20131130163115) do
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree
   add_index "players", ["first_name"], name: "index_players_on_first_name", using: :btree
   add_index "players", ["last_name"], name: "index_players_on_last_name", using: :btree
+
+  create_table "subscription_fees", force: true do |t|
+    t.string   "category",     limit: 20
+    t.decimal  "amount",                  precision: 6, scale: 2
+    t.string   "season_desc",  limit: 7
+    t.date     "sale_start"
+    t.date     "sale_end"
+    t.date     "age_ref_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "translations", force: true do |t|
     t.string   "locale",      limit: 2

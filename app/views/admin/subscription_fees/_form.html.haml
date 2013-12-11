@@ -1,0 +1,13 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @fee], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @fee.new_record? ? "New fee" : "Edit fee"
+        - locals = { form: f, object: @fee, col: "sm", pad: 3, width: 2 }
+        = render "utils/select_for", locals.merge(param: :category, text: t("fee.subscription.category.category"), menu: subscription_fee_category_menu(@fee.category))
+        = render "utils/text_field_for", locals.merge(param: :season_desc, text: t("fee.subscription.season"), placeholder: "YYYY-YY")
+        = render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"))
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", @fee.new_record? ? admin_subscription_fees_path : [:admin, @fee], class: "btn btn-default"

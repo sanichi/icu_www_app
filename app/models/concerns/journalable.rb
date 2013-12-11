@@ -2,7 +2,7 @@ module Journalable
   extend ActiveSupport::Concern
 
   included do
-    has_many :journal_entries, as: :journalable, dependent: :destroy
+    has_many :journal_entries, as: :journalable
   end
 
   def journal(action, by, ip)

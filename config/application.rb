@@ -21,7 +21,10 @@ module IcuWwwApp
 
     # Autoload these directories.
     config.autoload_paths += %W(#{Rails.root}/lib)
-    
+
+    # Avoid deprecation message: http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning
+    I18n.config.enforce_available_locales = false
+
     # Autoload nested locales for the simple backend.
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.yml")]
 

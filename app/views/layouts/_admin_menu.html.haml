@@ -4,6 +4,7 @@
   - items += 1 if bdlgns  = can?(:manage, BadLogin)
   - items += 1 if entries = can?(:index, JournalEntry)
   - items += 1 if users   = can?(:manage, User)
+  - items += 1 if fees    = can?(:manage, SubscriptionFee)
   - items += 1 if trans   = can?(:manage, Translation)
   - items += 1 if players = can?(:manage, Player)
   - items += 1 if clubs   = can?(:manage, Club)
@@ -22,6 +23,8 @@
           %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
         - if users
           %li{class: active("admin/users")}= link_to "Users", admin_users_path
+        - if fees
+          %li{class: active("admin/subscription_fees")}= link_to "Subscription Fees", admin_subscription_fees_path
         - if trans
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
         - if players

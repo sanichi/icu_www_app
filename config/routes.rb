@@ -14,12 +14,13 @@ IcuWwwApp::Application.routes.draw do
   resources :players,  only: [:index]
 
   namespace :admin do
-    resources :bad_logins,      only: [:index]
-    resources :clubs,           only: [:new, :create, :edit, :update]
-    resources :journal_entries, only: [:index, :show]
-    resources :logins,          only: [:index, :show]
-    resources :players,         only: [:show, :new, :create, :edit, :update]
-    resources :translations,    only: [:index, :show, :edit, :update, :destroy]
+    resources :bad_logins,        only: [:index]
+    resources :clubs,             only: [:new, :create, :edit, :update]
+    resources :journal_entries,   only: [:index, :show]
+    resources :logins,            only: [:index, :show]
+    resources :players,           only: [:show, :new, :create, :edit, :update]
+    resources :subscription_fees
+    resources :translations,      only: [:index, :show, :edit, :update, :destroy]
     resources :users do
       get :login, on: :member
     end

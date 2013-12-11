@@ -8,7 +8,7 @@ class Ability
       can :manage, :all
       return
     end
-    
+
     if user.editor?
       can :manage, Club
     end
@@ -16,10 +16,14 @@ class Ability
     if user.membership?
       can :manage, Player
     end
-    
+
     if user.translator?
       can :manage, Translation
       can :show, JournalEntry, journalable_type: "Translation"
+    end
+
+    if user.treasurer?
+      can :manage, SubscriptionFee
     end
 
     can :manage_preferences, User, id: user.id

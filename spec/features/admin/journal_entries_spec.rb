@@ -158,6 +158,6 @@ feature JournalEntry do
     visit admin_translation_path(@translation)
     click_link "Delete"
 
-    expect(JournalEntry.where(journalable_type: "Translation").count).to eq 0
+    expect(JournalEntry.where(journalable_type: "Translation").count).to eq 2
   end
 end
