@@ -30,4 +30,22 @@ describe SubscriptionFee do
       expect(fee.season.desc).to eq fee.season_desc
     end
   end
+
+  context "rollover" do
+    it "#rolloverable?" do
+      expect(fee.rolloverable?).to be_true
+      rof = fee.rollover
+      expect(fee.rolloverable?).to be_false
+    end
+
+    it "#rollover" do
+      rof = fee.rollover
+      expect(rof.category).to eq fee.category
+      expect(rof.amount).to eq fee.amount
+      expect(rof.season_desc).to eq fee.season.next
+      expect(rof.sale_start).to eq fee.sale_start.years_since(1)
+      expect(rof.sale_end).to eq fee.sale_end.years_since(1)
+      expect(rof.age_ref_date).to eq fee.age_ref_date.years_since(1)
+    end
+  end
 end

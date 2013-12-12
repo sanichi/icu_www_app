@@ -10,7 +10,7 @@ class SubscriptionFee < ActiveRecord::Base
   
   after_save :reset_season
 
-  default_scope { order(season_desc: :desc, amount: :desc, category: :asc) }
+  scope :ordered, -> { order(season_desc: :desc, amount: :desc, category: :asc) }
 
   def description
     "#{season_desc} #{I18n.t("fee.subscription.category.#{category}")}"
@@ -18,6 +18,16 @@ class SubscriptionFee < ActiveRecord::Base
   
   def season
     @season ||= Season.new(season_desc)
+  end
+  
+  def rolloverable?
+    return false if season.next > Season.new.next
+    SubscriptionFee.where(category: category, season_desc: season.next).count == 0
+  end
+
+  def rollover
+    return unless rolloverable?
+    SubscriptionFee.create(category: category, season_desc: season.next, amount: amount)
   end
 
   private

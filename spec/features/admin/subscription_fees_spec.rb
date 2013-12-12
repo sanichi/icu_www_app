@@ -105,8 +105,11 @@ feature "Edit a fee" do
   given(:edit)   { I18n.t("edit") }
   given(:fee)    { create(:subscription_fee) }
   given(:save)   { I18n.t("save") }
+  given(:rollover) { "Rollover" }
+  given(:success)  { "div.alert-success" }
+  given(:season)   { "//th[.='#{I18n.t("fee.subscription.season")}']/following-sibling::td" }
 
-  scenario "amount" do
+  scenario "update amount" do
     visit admin_subscription_fee_path(fee)
     click_link edit
     fill_in amount, with: " 9999.99 "
@@ -114,5 +117,19 @@ feature "Edit a fee" do
 
     fee = SubscriptionFee.limit(1).first
     expect(fee.amount).to eq 9999.99
+  end
+
+  scenario "rollover" do
+    expect(JournalEntry.count).to eq 0
+    
+    visit admin_subscription_fee_path(fee)
+    expect(page).to have_link(rollover)
+    click_link rollover
+
+    expect(page).to have_css(success, text: "rolled over")
+    expect(page).to have_xpath(season, text: fee.season.next)
+    expect(page).to_not have_link(rollover)
+
+    expect(JournalEntry.where(action: "create").count).to eq 1
   end
 end

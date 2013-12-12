@@ -1,13 +1,22 @@
 class Admin::SubscriptionFeesController < ApplicationController
   authorize_resource
-  before_action :set_fee, only: [:show, :edit, :update, :destroy]
+  before_action :set_fee, only: [:show, :edit, :update, :destroy, :rollover]
 
   def index
-    @fees = SubscriptionFee.all    
+    @fees = SubscriptionFee.ordered.to_a
   end
 
   def show
     @entries = @fee.journal_entries if current_user.roles.present?
+  end
+
+  def rollover
+    if fee = @fee.rollover
+      fee.journal(:create, current_user, request.ip)
+      redirect_to [:admin, fee], notice: "Subscription successfully rolled over"
+    else
+      redirect_to [:admin, @fee], alert: "Subscription has already been rolled over"
+    end
   end
 
   def new

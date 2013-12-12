@@ -19,7 +19,9 @@ IcuWwwApp::Application.routes.draw do
     resources :journal_entries,   only: [:index, :show]
     resources :logins,            only: [:index, :show]
     resources :players,           only: [:show, :new, :create, :edit, :update]
-    resources :subscription_fees
+    resources :subscription_fees do
+      get :rollover, on: :member
+    end
     resources :translations,      only: [:index, :show, :edit, :update, :destroy]
     resources :users do
       get :login, on: :member
