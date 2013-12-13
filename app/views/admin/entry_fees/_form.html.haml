@@ -1,0 +1,18 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @fee], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @fee.new_record? ? "New fee" : "Edit fee"
+        - locals = { form: f, object: @fee, col: "sm", pad: 3, width: 2 }
+        = render "utils/text_field_for", locals.merge(param: :event_name, text: t("fee.entry.event_name"), width: 4)
+        = render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"))
+        = render "utils/text_field_for", locals.merge(param: :discounted_amount, text: t("fee.discounted_amount"))
+        = render "utils/text_field_for", locals.merge(param: :discount_deadline, text: t("fee.discount_deadline"), placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :event_start, text: t("fee.entry.event_start"), placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :event_end, text: t("fee.entry.event_end"), placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :sale_start, text: t("fee.sale_start"), placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :sale_end, text: t("fee.sale_end"), placeholder: "YYYY-MM-DD")
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", @fee.new_record? ? admin_entry_fees_path : [:admin, @fee], class: "btn btn-default"

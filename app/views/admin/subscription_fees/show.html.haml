@@ -16,13 +16,13 @@
         %th= t("fee.amount")
         %td= euros(@fee.amount)
       %tr
-        %th Sale starts
+        %th= t("fee.sale_start")
         %td= @fee.sale_start.to_s
       %tr
-        %th Sale ends
+        %th= t("fee.sale_end")
         %td= @fee.sale_end.to_s
       %tr
-        %th Age reference date
+        %th= t("fee.subscription.age_ref_date")
         %td= @fee.age_ref_date.to_s
       = render "utils/timestamps", object: @fee
 

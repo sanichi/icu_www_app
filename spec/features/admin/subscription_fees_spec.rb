@@ -96,16 +96,16 @@ feature "Create and delete a subscription" do
   end
 end
 
-feature "Edit a fee" do
+feature "Edit a subscription fee" do
   before(:each) do
     login("treasurer")
   end
 
-  given(:amount) { I18n.t("fee.amount") }
-  given(:edit)   { I18n.t("edit") }
-  given(:fee)    { create(:subscription_fee) }
-  given(:save)   { I18n.t("save") }
-  given(:rollover) { "Rollover" }
+  given(:fee)      { create(:subscription_fee) }
+  given(:edit)     { I18n.t("edit") }
+  given(:save)     { I18n.t("save") }
+  given(:amount)   { I18n.t("fee.amount") }
+  given(:rollover) { I18n.t("fee.rollover") }
   given(:success)  { "div.alert-success" }
   given(:season)   { "//th[.='#{I18n.t("fee.subscription.season")}']/following-sibling::td" }
 
@@ -123,7 +123,6 @@ feature "Edit a fee" do
     expect(JournalEntry.count).to eq 0
     
     visit admin_subscription_fee_path(fee)
-    expect(page).to have_link(rollover)
     click_link rollover
 
     expect(page).to have_css(success, text: "rolled over")

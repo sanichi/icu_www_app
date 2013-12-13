@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131206114034) do
+ActiveRecord::Schema.define(version: 20131212130432) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -34,6 +34,20 @@ ActiveRecord::Schema.define(version: 20131206114034) do
     t.boolean  "active"
     t.decimal  "lat",                    precision: 10, scale: 7
     t.decimal  "long",                   precision: 10, scale: 7
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "entry_fees", force: true do |t|
+    t.string   "event_name",        limit: 100
+    t.string   "year_or_season",    limit: 7
+    t.decimal  "amount",                        precision: 6, scale: 2
+    t.decimal  "discounted_amount",             precision: 6, scale: 2
+    t.date     "sale_start"
+    t.date     "sale_end"
+    t.date     "discount_deadline"
+    t.date     "event_start"
+    t.date     "event_end"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

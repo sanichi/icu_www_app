@@ -22,6 +22,9 @@ IcuWwwApp::Application.routes.draw do
     resources :subscription_fees do
       get :rollover, on: :member
     end
+    resources :entry_fees do
+      get :rollover, on: :member
+    end
     resources :translations,      only: [:index, :show, :edit, :update, :destroy]
     resources :users do
       get :login, on: :member

@@ -23,6 +23,7 @@ class Ability
     end
 
     if user.treasurer?
+      can :manage, EntryFee
       can :manage, SubscriptionFee
     end
 

@@ -1,9 +1,9 @@
-- content_for :title, t("fee.type.subscriptions")
+- content_for :title, t("fee.type.entries")
 
 .row
   .col-md-6.col-md-offset-3
   
-    %h1.text-center= t("fee.type.subscriptions")
+    %h1.text-center= t("fee.type.entries")
 
     %table{class: "table table-bordered table-striped"}
       %thead
@@ -16,4 +16,4 @@
             %td= link_to f.description, [:admin, f]
             %td{class: "righted"}= euros(f.amount)
 
-    = link_to "New", new_admin_subscription_fee_path, class: "btn btn-info"
+    = link_to "New", new_admin_entry_fee_path, class: "btn btn-info"

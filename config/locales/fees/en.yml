@@ -1,7 +1,23 @@
 en:
   fee:
     amount: Amount
+    description: Description
+    discounted_amount: Discounted amount
+    discount_deadline: Discount deadline
+    rollover: Rollover
+    sale_start: Sale start
+    sale_end: Sale end
+    type:
+      entries: Entry fees
+      entry: Entry fee
+      subscription: Subscription fee
+      subscriptions: Subscription fees
+    entry:
+      event_name: Event name
+      event_start: Event start
+      event_end: Event end
     subscription:
+      age_ref_date: Age reference date
       season: Season
       category:
         category: Category
