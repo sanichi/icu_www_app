@@ -7,7 +7,7 @@ class SubscriptionFee < ActiveRecord::Base
   validates :category, inclusion: { in: CATEGORIES }, uniqueness: { scope: :season_desc, message: "no more than one per season" }
   validates :amount, numericality: { greater_than: 0.0 }
   validate :valid_season_desc
-  
+
   after_save :reset_season
 
   scope :ordered, -> { order(season_desc: :desc, amount: :desc, category: :asc) }
@@ -15,11 +15,11 @@ class SubscriptionFee < ActiveRecord::Base
   def description
     "#{season_desc} #{I18n.t("fee.subscription.category.#{category}")}"
   end
-  
+
   def season
     @season ||= Season.new(season_desc)
   end
-  
+
   def rolloverable?
     return false if season.next > Season.new.next
     SubscriptionFee.where(category: category, season_desc: season.next).count == 0
@@ -47,7 +47,7 @@ class SubscriptionFee < ActiveRecord::Base
       end
     end
   end
-  
+
   def reset_season
     if previous_changes.has_key?("season_desc")
       @season = nil

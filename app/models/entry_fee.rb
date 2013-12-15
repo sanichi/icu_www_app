@@ -1,6 +1,8 @@
 class EntryFee < ActiveRecord::Base
   include Journalable
-  journalize %w[event_name amount discounted_amount discount_deadline sale_start sale_end event_start event_end], "/admin/entry_fees/%d"
+  journalize %w[event_name amount discounted_amount discount_deadline event_start event_end sale_start sale_end player_id], "/admin/entry_fees/%d"
+
+  belongs_to :player, -> { includes :users }
 
   before_validation :normalize_attributes, :default_attributes
 
@@ -10,7 +12,7 @@ class EntryFee < ActiveRecord::Base
   validates :discounted_amount, presence: true, if: Proc.new { |f| f.discount_deadline.present? }
   validates :discount_deadline, presence: true, if: Proc.new { |f| f.discounted_amount.present? }
   validates :event_start, :event_end, :sale_start, :sale_end, presence: true
-  validate :check_dates, :check_discount
+  validate :check_dates, :check_discount, :check_manager
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
 
@@ -36,7 +38,7 @@ class EntryFee < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[discount_deadline discounted_amount].each do |atr|
+    %w[discount_deadline discounted_amount player_id].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
   end
@@ -91,6 +93,21 @@ class EntryFee < ActiveRecord::Base
       Season.new(year_or_season).next
     else
       (year_or_season.to_i + 1).to_s
+    end
+  end
+
+  def check_manager
+    return if player_id.nil?
+    if player_id == 0
+      errors.add(:player_id, "please supply a player ID (a positive integer)")
+    elsif player.nil?
+      errors.add(:player_id, "invalid player ID")
+    elsif player.email.blank?
+      errors.add(:player_id, "this player doesn't have an email address")
+    elsif player.users.empty?
+      errors.add(:player_id, "this player has no login to the website")
+    elsif player.users.select{ |u| u.expires_on > Date.today }.empty?
+      errors.add(:player_id, "this player is not a current member")
     end
   end
 end

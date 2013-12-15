@@ -64,6 +64,36 @@ describe EntryFee do
     end
   end
 
+  context "contact errors" do
+    let(:params) { attributes_for(:entry_fee) }
+
+    it "invalid ID" do
+      expect{EntryFee.create!(params.merge(player_id: "1"))}.to raise_error(/invalid.*ID/i)
+    end
+
+    it "player without email" do
+      player = create(:player, email: nil)
+      expect{EntryFee.create!(params.merge(player_id: player.id))}.to raise_error(/email/i)
+    end
+
+    it "player without any logins" do
+      player = create(:player, email: "tournaments@icu.ie")
+      expect{EntryFee.create!(params.merge(player_id: player.id))}.to raise_error(/login/i)
+    end
+
+    it "player who is not a current member" do
+      player = create(:player, email: "tournaments@icu.ie")
+      user = create(:user, player: player, expires_on: Date.today.last_year.at_end_of_year)
+      expect{EntryFee.create!(params.merge(player_id: player.id))}.to raise_error(/current member/i)
+    end
+
+    it "player who is a current member" do
+      player = create(:player, email: "tournaments@icu.ie")
+      user = create(:user, player: player, expires_on: Date.today.next_year.at_beginning_of_year)
+      expect{EntryFee.create!(params.merge(player_id: player.id))}.to_not raise_error
+    end
+  end
+
   context "rollover" do
     let(:fee) { create(:entry_fee, event_name: "Kilkenny Challengers", amount: 45, discounted_amount: 35, discount_deadline: "2013-09-15", event_start: "2013-09-22", event_end: "2013-09-24", sale_start: "2013-07-01", sale_end: "2013-09-20") }
 

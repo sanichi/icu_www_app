@@ -52,9 +52,9 @@ feature "Create and delete an entry fee" do
   given(:amount)            { I18n.t("fee.amount") }
   given(:discounted_amount) { I18n.t("fee.discounted_amount") }
   given(:discount_deadline) { I18n.t("fee.discount_deadline") }
-  given(:event_name)        { I18n.t("fee.entry.event_name") }
-  given(:event_start)       { I18n.t("fee.entry.event_start") }
-  given(:event_end)         { I18n.t("fee.entry.event_end") }
+  given(:event_name)        { I18n.t("fee.entry.event.name") }
+  given(:event_start)       { I18n.t("fee.entry.event.start") }
+  given(:event_end)         { I18n.t("fee.entry.event.end") }
   given(:sale_start)        { I18n.t("fee.sale_start") }
   given(:sale_end)          { I18n.t("fee.sale_end") }
   given(:delete)            { I18n.t("delete") }

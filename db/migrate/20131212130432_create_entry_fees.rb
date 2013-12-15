@@ -6,6 +6,7 @@ class CreateEntryFees < ActiveRecord::Migration
       t.decimal  :amount, :discounted_amount, precision: 6, scale: 2
       t.date     :sale_start, :sale_end, :discount_deadline
       t.date     :event_start, :event_end
+      t.integer  :player_id
 
       t.timestamps
     end
