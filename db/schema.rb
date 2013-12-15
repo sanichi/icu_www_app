@@ -48,6 +48,7 @@ ActiveRecord::Schema.define(version: 20131212130432) do
     t.date     "discount_deadline"
     t.date     "event_start"
     t.date     "event_end"
+    t.string   "event_website"
     t.integer  "player_id"
     t.datetime "created_at"
     t.datetime "updated_at"

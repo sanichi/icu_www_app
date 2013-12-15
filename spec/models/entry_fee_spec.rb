@@ -94,6 +94,26 @@ describe EntryFee do
     end
   end
 
+  context "website errors" do
+    let(:params) { attributes_for(:entry_fee) }
+
+    it "invalid URL" do
+      expect{EntryFee.create!(params.merge(event_website: "x"))}.to raise_error(/invalid/i)
+    end
+
+    it "bad URL" do
+      expect{EntryFee.create!(params.merge(event_website: "http://www.icu.ie/no_such_page.html"))}.to raise_error(/bad response/i)
+    end
+
+    it "URL OK" do
+      expect{EntryFee.create!(params.merge(event_website: "http://www.icu.ie/"))}.to_not raise_error
+    end
+
+    it "URL OK even without path" do
+      expect{EntryFee.create!(params.merge(event_website: "http://www.icu.ie"))}.to_not raise_error
+    end
+  end
+
   context "rollover" do
     let(:fee) { create(:entry_fee, event_name: "Kilkenny Challengers", amount: 45, discounted_amount: 35, discount_deadline: "2013-09-15", event_start: "2013-09-22", event_end: "2013-09-24", sale_start: "2013-07-01", sale_end: "2013-09-20") }
 

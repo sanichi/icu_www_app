@@ -12,7 +12,7 @@ class EntryFee < ActiveRecord::Base
   validates :discounted_amount, presence: true, if: Proc.new { |f| f.discount_deadline.present? }
   validates :discount_deadline, presence: true, if: Proc.new { |f| f.discounted_amount.present? }
   validates :event_start, :event_end, :sale_start, :sale_end, presence: true
-  validate :check_dates, :check_discount, :check_manager
+  validate :check_dates, :check_discount, :check_manager, :check_website
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
 
@@ -38,7 +38,7 @@ class EntryFee < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[discount_deadline discounted_amount player_id].each do |atr|
+    %w[discount_deadline discounted_amount player_id event_website].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
   end
@@ -88,14 +88,6 @@ class EntryFee < ActiveRecord::Base
     end
   end
 
-  def next_year_or_season
-    if year_or_season.match(/\A\d{4}-\d{2}\z/)
-      Season.new(year_or_season).next
-    else
-      (year_or_season.to_i + 1).to_s
-    end
-  end
-
   def check_manager
     return if player_id.nil?
     if player_id == 0
@@ -108,6 +100,26 @@ class EntryFee < ActiveRecord::Base
       errors.add(:player_id, "this player has no login to the website")
     elsif player.users.select{ |u| u.expires_on > Date.today }.empty?
       errors.add(:player_id, "this player is not a current member")
+    end
+  end
+
+  def check_website
+    return if event_website.nil?
+    uri = URI.parse(event_website)
+    raise "invalid web address" unless uri.try(:scheme).try(:match, /\Ahttps?\z/) && uri.host.present? && uri.port.present?
+    req = Net::HTTP.new(uri.host, uri.port)
+    req.read_timeout = 10
+    res = req.start { |http| http.head(uri.path.blank? ? "/" : uri.path) }
+    raise "got bad response for this web address" unless res.kind_of?(Net::HTTPSuccess)
+  rescue => e
+    errors.add(:event_website, e.message)
+  end
+
+  def next_year_or_season
+    if year_or_season.match(/\A\d{4}-\d{2}\z/)
+      Season.new(year_or_season).next
+    else
+      (year_or_season.to_i + 1).to_s
     end
   end
 end

@@ -13,26 +13,29 @@
         %th= t("fee.amount")
         %td= euros(@fee.amount)
       %tr
-        %th= t("fee.discounted_amount")
-        %td= euros(@fee.discounted_amount) if @fee.discounted_amount.present?
-      %tr
-        %th= t("fee.discount_deadline")
-        %td= @fee.discount_deadline.to_s if @fee.discount_deadline.present?
-      %tr
         %th= t("fee.entry.event.start")
         %td= @fee.event_start.to_s
       %tr
         %th= t("fee.entry.event.end")
         %td= @fee.event_end.to_s
       %tr
-        %th= t("fee.entry.event.contact")
-        %td= "#{@fee.player.name} (#{@fee.player.email})" if @fee.player
-      %tr
         %th= t("fee.sale_start")
         %td= @fee.sale_start.to_s
       %tr
         %th= t("fee.sale_end")
         %td= @fee.sale_end.to_s
+      %tr
+        %th= t("fee.discounted_amount")
+        %td= euros(@fee.discounted_amount) if @fee.discounted_amount.present?
+      %tr
+        %th= t("fee.discount_deadline")
+        %td= @fee.discount_deadline.to_s if @fee.discount_deadline.present?
+      %tr
+        %th= t("fee.entry.event.contact")
+        %td= "#{@fee.player.name} (#{@fee.player.email})" if @fee.player
+      %tr
+        %th= t("fee.entry.event.website")
+        %td= link_to @fee.event_website, @fee.event_website, target: "_external" if @fee.event_website
       = render "utils/timestamps", object: @fee
 
     = link_to "Edit", edit_admin_entry_fee_path(@fee), class: "btn btn-primary"

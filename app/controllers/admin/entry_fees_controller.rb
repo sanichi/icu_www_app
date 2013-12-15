@@ -57,6 +57,6 @@ class Admin::EntryFeesController < ApplicationController
   end
 
   def fee_params
-    params[:entry_fee].permit(:event_name, :amount, :discounted_amount, :discount_deadline, :event_start, :event_end, :sale_start, :sale_end, :player_id)
+    params[:entry_fee].permit(:event_name, :amount, :discounted_amount, :discount_deadline, :event_start, :event_end, :event_website, :sale_start, :sale_end, :player_id)
   end
 end
