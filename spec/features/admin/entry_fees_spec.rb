@@ -1,15 +1,17 @@
 require 'spec_helper'
 
 feature "Authorization for entry fees" do
+  given(:player)          { create(:player) }
+  given(:user)            { create(:user, player: player) }
+  given(:fee)             { create(:entry_fee, player: user.player) }
   given(:ok_roles)        { %w[admin treasurer] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:fee)             { create(:entry_fee) }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:button)          { I18n.t("edit") }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
-  given(:paths)           { [new_admin_entry_fee_path, edit_admin_entry_fee_path(fee), admin_entry_fees_path, admin_entry_fee_path(fee)] }
+  given(:paths)           { [admin_entry_fees_path, new_admin_entry_fee_path, admin_entry_fee_path(fee), edit_admin_entry_fee_path(fee)] }
 
   scenario "the admin and treasurer roles can manage entry fees" do
     ok_roles.each do |role|
@@ -22,7 +24,20 @@ feature "Authorization for entry fees" do
     end
   end
 
-  scenario "other roles hae no access" do
+  scenario "the contact can only show and edit entry fees" do
+    login user
+    expect(page).to have_css(success, text: signed_in_as)
+    paths.each_with_index do |path, i|
+      visit path
+      if i < 2
+        expect(page).to have_css(failure, text: unauthorized)
+      else
+        expect(page).to_not have_css(failure)
+      end
+    end
+  end
+
+  scenario "other roles have no access" do
     not_ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -182,5 +197,31 @@ feature "Edit an entry fee" do
     expect(page).to_not have_link(rollover)
 
     expect(JournalEntry.where(action: "create").count).to eq 1
+  end
+end
+
+feature "Edit an entry fee by a contact" do
+  given(:user)        { create(:user) }
+  given(:fee)         { create(:entry_fee, player: user.player) }
+  given(:sale_start)  { I18n.t("fee.sale_start") }
+  given(:rollover)    { I18n.t("fee.rollover") }
+  given(:edit)        { I18n.t("edit") }
+  given(:save)        { I18n.t("save") }
+  given(:success)     { "div.alert-success" }
+  given(:description) { "//th[.='#{I18n.t("fee.description")}']/following-sibling::td" }
+
+  scenario "update sale start" do
+    login user
+    visit admin_entry_fee_path(fee)
+    new_sale_start = fee.sale_start.days_ago(1)
+    
+    expect(page).to_not have_link(rollover)
+
+    click_link edit
+    fill_in sale_start, with: new_sale_start.to_s
+    click_button save
+
+    fee = EntryFee.limit(1).first
+    expect(fee.sale_start).to eq new_sale_start
   end
 end

@@ -1,16 +1,18 @@
 class Admin::EntryFeesController < ApplicationController
-  authorize_resource
-  before_action :set_fee, only: [:show, :edit, :update, :destroy, :rollover]
-
   def index
+    authorize! :index, EntryFee
     @fees = EntryFee.ordered.to_a
   end
 
   def show
+    @fee = EntryFee.find(params[:id])
+    authorize! :show, @fee
     @entries = @fee.journal_entries if current_user.roles.present?
   end
 
   def rollover
+    @fee = EntryFee.find(params[:id])
+    authorize! :rollover, @fee
     if fee = @fee.rollover
       fee.journal(:create, current_user, request.ip)
       redirect_to [:admin, fee], notice: "Entry fee successfully rolled over"
@@ -20,10 +22,12 @@ class Admin::EntryFeesController < ApplicationController
   end
 
   def new
+    authorize! :new, EntryFee
     @fee = EntryFee.new
   end
 
   def create
+    authorize! :create, EntryFee
     @fee = EntryFee.new(fee_params)
 
     if @fee.save
@@ -34,7 +38,14 @@ class Admin::EntryFeesController < ApplicationController
     end
   end
 
+  def edit
+    @fee = EntryFee.find(params[:id])
+    authorize! :edit, @fee
+  end
+
   def update
+    @fee = EntryFee.find(params[:id])
+    authorize! :update, @fee
     if @fee.update(fee_params)
       @fee.journal(:update, current_user, request.ip)
       redirect_to [:admin, @fee], notice: "Entry fee was successfully updated"
@@ -45,16 +56,14 @@ class Admin::EntryFeesController < ApplicationController
   end
 
   def destroy
+    @fee = EntryFee.find(params[:id])
+    authorize! :destroy, @fee
     @fee.journal(:destroy, current_user, request.ip)
     @fee.destroy
     redirect_to admin_entry_fees_path
   end
 
   private
-
-  def set_fee
-    @fee = EntryFee.find(params[:id])
-  end
 
   def fee_params
     params[:entry_fee].permit(:event_name, :amount, :discounted_amount, :discount_deadline, :event_start, :event_end, :event_website, :sale_start, :sale_end, :player_id)
