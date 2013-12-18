@@ -108,7 +108,7 @@ class Player < ActiveRecord::Base
     markdown.render(note).html_safe
   end
 
-  def self.search(params, path)
+  def self.search(params, path, opt={})
     params[:status] = "active" unless params.has_key?(:status)
     params[:order] = "id" if params[:order].blank?
     matches = all
@@ -174,7 +174,7 @@ class Player < ActiveRecord::Base
       matches = matches.order(:id)
     end
     clear_whitespace_to_reveal_placeholders(params, :id, :first_name, :last_name, :yob)
-    paginate(matches, params, path)
+    paginate(matches, params, path, opt)
   end
 
   private

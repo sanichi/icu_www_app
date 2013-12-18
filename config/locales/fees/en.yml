@@ -18,6 +18,7 @@ en:
         start: Event start
         end: Event end
         contact: Event contact
+        contact_id: Event contact (ICU ID)
         website: Website
     subscription:
       age_ref_date: Age reference date

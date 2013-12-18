@@ -15,8 +15,10 @@
         %hr
         = render "utils/text_field_for", locals.merge(param: :discounted_amount, text: t("fee.discounted_amount"))
         = render "utils/text_field_for", locals.merge(param: :discount_deadline, text: t("fee.discount_deadline"), placeholder: "YYYY-MM-DD")
-        = render "utils/text_field_for", locals.merge(param: :player_id, text: t("fee.entry.event.contact"))
+        = render "utils/icu_id_field_for", locals.merge(param: :player_id, text: t("fee.entry.event.contact_id"))
         = render "utils/text_field_for", locals.merge(param: :event_website, text: t("fee.entry.event.website"), width: 4)
         %hr
         = f.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", @fee.new_record? ? admin_entry_fees_path : [:admin, @fee], class: "btn btn-default"
+
+= render "player_ids/modal", target: "entry_fee_player_id"

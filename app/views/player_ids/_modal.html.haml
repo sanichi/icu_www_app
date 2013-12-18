@@ -1,0 +1,11 @@
+#player_ids_modal{class: "modal fade", tabindex: "-1", role: "dialog", "aria-labelledby" => "modal_label", "aria-hidden" => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        %h4.modal-title#modal_label= t("find.id")
+      .modal-body
+        = render "player_ids/search_form"
+        #player_ids_results
+%script
+  = render "player_ids/update.js", target: target

@@ -65,7 +65,7 @@ class Translation < ActiveRecord::Base
     if (category = params[:category].to_s).match(/\A(delet|creat|updat|edit)able\z/)
       matches = matches.send(category)
     end
-    paginate(matches, params, path, PAGE_SIZE)
+    paginate(matches, params, path, per_page: PAGE_SIZE)
   end
 
   def self.creates_required

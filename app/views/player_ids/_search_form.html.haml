@@ -1,0 +1,18 @@
+= form_tag player_ids_path, method: :get, id: "player_ids_form", class: "form-horizontal", role: "form", remote: true do
+  - locals = { col: "sm", pad: 4, width: 4 }
+  .row
+    .col-sm-12
+      = render "utils/text_field_tag", locals.merge(param: :last_name, text: t("player.last_name"))
+      = render "utils/text_field_tag", locals.merge(param: :first_name, text: t("player.first_name"))
+      = render "utils/select_tag", locals.merge(param: :gender, text: t("player.gender.gender"), menu: player_gender_menu(params[:gender], "player.any_gender"))
+      .form-group
+        = label_tag :yob, t("player.abbrev.yob"), class: "control-label col-sm-4"
+        %div{class: "col-sm-2"}= select_tag :relation, player_relation_menu(params[:relation]), class: "form-control"
+        %div{class: "col-sm-3"}= text_field_tag :yob, params[:yob], class: "form-control", type: "text"
+      = render "utils/select_tag", locals.merge(param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true))
+      = render "utils/select_tag", locals.merge(param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed]))
+
+%hr
+
+%script
+  = render "player_ids/onchange.js", form_id: "player_ids_form"

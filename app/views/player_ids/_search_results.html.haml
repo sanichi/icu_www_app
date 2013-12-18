@@ -1,0 +1,23 @@
+- if @players.count > 0
+  .row
+    .col-sm-12
+      %table{class: "table table-striped table-condensed", id: "results"}
+        %thead
+          %tr
+            %th= t("player.abbrev.id")
+            %th= t("player.name")
+            %th= t("player.abbrev.gender")
+            %th= t("player.abbrev.yob")
+            %th= t("club.club")
+            %th= t("player.abbrev.federation")
+        %tbody
+          - @players.matches.each do |player|
+            %tr
+              %td= link_to_function player.id, "update_player_ids_target(#{player.id})"
+              %td= player.name(:reversed)
+              %td= t("player.abbrev.#{player.gender}") if player.gender
+              %td= player.dob.year if player.dob
+              %td= player.club.name if player.club
+              %td= player.fed
+              
+          = render "utils/pagination_links", pager: @players, columns: 6

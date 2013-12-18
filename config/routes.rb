@@ -8,10 +8,11 @@ IcuWwwApp::Application.routes.draw do
   get "sign_out" => "sessions#destroy"
   get "redirect" => "redirects#redirect"
 
-  resources :sessions, only: [:create]
-  resources :users,    only: [:show, :edit, :update]
-  resources :clubs,    only: [:index, :show]
-  resources :players,  only: [:index]
+  resources :sessions,   only: [:create]
+  resources :users,      only: [:show, :edit, :update]
+  resources :clubs,      only: [:index, :show]
+  resources :players,    only: [:index]
+  resources :player_ids, only: [:index]
 
   namespace :admin do
     resources :bad_logins,        only: [:index]

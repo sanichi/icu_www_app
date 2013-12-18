@@ -1,25 +1,29 @@
 module Util
   module Pagination
-    def paginate(matches, params, path, per_page=10)
+    def paginate(matches, params, path, opt={})
       count = matches.count
       page = params[:page].to_i > 0 ? params[:page].to_i : 1
+      per_page = opt[:per_page].to_i
+      per_page = 10 if per_page == 0
+      remote = opt[:remote] ? true : false
       page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
       matches = matches.offset(per_page * (page - 1)) if page > 1
       matches = matches.limit(per_page)
-      Pager.new(matches, params, path, per_page, page, count)
+      Pager.new(matches, params, path, per_page, page, count, remote)
     end
   end
 
   class Pager
-    attr_reader :matches, :count
+    attr_reader :matches, :count, :remote
 
-    def initialize(matches, params, path, per_page, page, count)
+    def initialize(matches, params, path, per_page, page, count, remote)
       @matches  = matches
       @params   = params
       @path     = path
       @per_page = per_page
       @page     = page
       @count    = count
+      @remote   = remote
     end
     
     def multi_page?
