@@ -1,7 +1,7 @@
 class Admin::EntryFeesController < ApplicationController
   def index
     authorize! :index, EntryFee
-    @fees = EntryFee.ordered.to_a
+    @fees = EntryFee.search(params, admin_entry_fees_path)
   end
 
   def show
@@ -53,14 +53,6 @@ class Admin::EntryFeesController < ApplicationController
       flash.now.alert = @fee.errors[:base].first if @fee.errors[:base].any?
       render action: "edit"
     end
-  end
-
-  def destroy
-    @fee = EntryFee.find(params[:id])
-    authorize! :destroy, @fee
-    @fee.journal(:destroy, current_user, request.ip)
-    @fee.destroy
-    redirect_to admin_entry_fees_path
   end
 
   private

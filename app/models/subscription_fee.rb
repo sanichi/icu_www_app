@@ -1,4 +1,5 @@
 class SubscriptionFee < ActiveRecord::Base
+  extend Util::Pagination
   include Journalable
   journalize %w[category amount season_desc], "/admin/subscription_fees/%d"
 
@@ -11,6 +12,11 @@ class SubscriptionFee < ActiveRecord::Base
   after_save :reset_season
 
   scope :ordered, -> { order(season_desc: :desc, amount: :desc, category: :asc) }
+
+  def self.search(params, path)
+    matches = ordered
+    paginate(matches, params, path, per_page: 10)
+  end
 
   def description
     "#{season_desc} #{I18n.t("fee.subscription.category.#{category}")}"

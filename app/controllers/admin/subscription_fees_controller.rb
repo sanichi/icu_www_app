@@ -3,7 +3,7 @@ class Admin::SubscriptionFeesController < ApplicationController
   before_action :set_fee, only: [:show, :edit, :update, :destroy, :rollover]
 
   def index
-    @fees = SubscriptionFee.ordered.to_a
+    @fees = SubscriptionFee.search(params, admin_subscription_fees_path)
   end
 
   def show
@@ -42,12 +42,6 @@ class Admin::SubscriptionFeesController < ApplicationController
       flash.now.alert = @fee.errors[:base].first if @fee.errors[:base].any?
       render action: "edit"
     end
-  end
-
-  def destroy
-    @fee.journal(:destroy, current_user, request.ip)
-    @fee.destroy
-    redirect_to admin_subscription_fees_path
   end
 
   private

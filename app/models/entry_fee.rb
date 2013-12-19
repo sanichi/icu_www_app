@@ -1,4 +1,5 @@
 class EntryFee < ActiveRecord::Base
+  extend Util::Pagination
   include Journalable
   journalize %w[event_name amount discounted_amount discount_deadline event_start event_end sale_start sale_end player_id], "/admin/entry_fees/%d"
 
@@ -15,6 +16,11 @@ class EntryFee < ActiveRecord::Base
   validate :check_dates, :check_discount, :check_manager, :check_website
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
+
+  def self.search(params, path)
+    matches = ordered
+    paginate(matches, params, path, per_page: 10)
+  end
 
   def description
     "#{event_name} #{year_or_season}"

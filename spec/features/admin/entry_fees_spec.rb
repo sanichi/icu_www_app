@@ -57,7 +57,7 @@ feature "Authorization for entry fees" do
   end
 end
 
-feature "Create and delete an entry fee" do
+feature "Create an entry fee" do
   before(:each) do
     login("treasurer")
   end
@@ -72,7 +72,6 @@ feature "Create and delete an entry fee" do
   given(:event_end)         { I18n.t("fee.entry.event.end") }
   given(:sale_start)        { I18n.t("fee.sale_start") }
   given(:sale_end)          { I18n.t("fee.sale_end") }
-  given(:delete)            { I18n.t("delete") }
   given(:save)              { I18n.t("save") }
 
   scenario "no discount" do
@@ -98,11 +97,7 @@ feature "Create and delete an entry fee" do
     expect(fee.sale_end.to_s).to eq "2014-02-06"
     expect(fee.year_or_season).to eq "2014"
     expect(fee.journal_entries.count).to eq 1
-    expect(JournalEntry.count).to eq 1
-
-    click_link delete
-    expect(SubscriptionFee.count).to eq 0
-    expect(JournalEntry.count).to eq 2
+    expect(JournalEntry.where(journalable_type: "EntryFee", action: "create").count).to eq 1
   end
 
   scenario "with discount" do
@@ -130,11 +125,7 @@ feature "Create and delete an entry fee" do
     expect(fee.sale_end.to_s).to eq "2014-12-27"
     expect(fee.year_or_season).to eq "2014-15"
     expect(fee.journal_entries.count).to eq 1
-    expect(JournalEntry.count).to eq 1
-
-    click_link delete
-    expect(SubscriptionFee.count).to eq 0
-    expect(JournalEntry.count).to eq 2
+    expect(JournalEntry.where(journalable_type: "EntryFee", action: "create").count).to eq 1
   end
   
   scenario "duplicate" do
