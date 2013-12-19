@@ -3,7 +3,7 @@
     .modal-content
       .modal-header
         %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
-        %h4.modal-title#modal_label= t("find.id")
+        %h4.modal-title#modal_label= t("player.find_id")
       .modal-body
         = render "player_ids/search_form"
         #player_ids_results

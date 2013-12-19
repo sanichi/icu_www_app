@@ -12,6 +12,7 @@ en:
     duplicate_of: Duplicate of
     email: Email
     federation: Federation
+    find_id: Find ICU ID
     first_name: First name
     foreign: Foreign
     id: ICU ID
