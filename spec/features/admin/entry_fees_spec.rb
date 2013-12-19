@@ -24,12 +24,12 @@ feature "Authorization for entry fees" do
     end
   end
 
-  scenario "the contact can only show and edit entry fees" do
+  scenario "the contact can only view entry fees" do
     login user
     expect(page).to have_css(success, text: signed_in_as)
     paths.each_with_index do |path, i|
       visit path
-      if i < 2
+      if [0, 1, 3].include?(i)
         expect(page).to have_css(failure, text: unauthorized)
       else
         expect(page).to_not have_css(failure)
@@ -86,7 +86,7 @@ feature "Create an entry fee" do
 
     expect(page).to have_css(success, text: "created")
 
-    fee = EntryFee.limit(1).first
+    fee = EntryFee.last
     expect(fee.event_name).to eq "Bunratty Masters"
     expect(fee.amount).to eq 50.0
     expect(fee.discounted_amount).to be_nil
@@ -114,7 +114,7 @@ feature "Create an entry fee" do
 
     expect(page).to have_css(success, text: "created")
 
-    fee = EntryFee.limit(1).first
+    fee = EntryFee.last
     expect(fee.event_name).to eq "Bangor Xmas Special"
     expect(fee.amount).to eq 35.0
     expect(fee.discounted_amount).to eq 30
@@ -127,10 +127,10 @@ feature "Create an entry fee" do
     expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "EntryFee", action: "create").count).to eq 1
   end
-  
+
   scenario "duplicate" do
     fee = create(:entry_fee)
-    
+
     visit new_admin_entry_fee_path
     fill_in event_name, with: fee.event_name
     fill_in amount, with: fee.amount.to_s
@@ -157,8 +157,10 @@ feature "Edit an entry fee" do
     login("treasurer")
   end
 
-  given(:fee)         { create(:entry_fee) }
+  given(:fee)         { create(:entry_fee, event_name: "Bunratty Masters") }
   given(:amount)      { I18n.t("fee.amount") }
+  given(:event_name)  { I18n.t("fee.entry.event.name") }
+  given(:clone)       { I18n.t("fee.clone") }
   given(:rollover)    { I18n.t("fee.rollover") }
   given(:edit)        { I18n.t("edit") }
   given(:save)        { I18n.t("save") }
@@ -171,15 +173,15 @@ feature "Edit an entry fee" do
     fill_in amount, with: "99"
     click_button save
 
-    fee = EntryFee.limit(1).first
+    fee = EntryFee.last
     expect(fee.amount).to eq 99.0
   end
 
   scenario "rollover" do
     expect(JournalEntry.count).to eq 0
-    
+
     expect(fee.rolloverable?).to be_true
-    
+
     visit admin_entry_fee_path(fee)
     click_link rollover
 
@@ -189,30 +191,26 @@ feature "Edit an entry fee" do
 
     expect(JournalEntry.where(action: "create").count).to eq 1
   end
-end
 
-feature "Edit an entry fee by a contact" do
-  given(:user)        { create(:user) }
-  given(:fee)         { create(:entry_fee, player: user.player) }
-  given(:sale_start)  { I18n.t("fee.sale_start") }
-  given(:rollover)    { I18n.t("fee.rollover") }
-  given(:edit)        { I18n.t("edit") }
-  given(:save)        { I18n.t("save") }
-  given(:success)     { "div.alert-success" }
-  given(:description) { "//th[.='#{I18n.t("fee.description")}']/following-sibling::td" }
+  scenario "clone" do
+    expect(JournalEntry.count).to eq 0
 
-  scenario "update sale start" do
-    login user
     visit admin_entry_fee_path(fee)
-    new_sale_start = fee.sale_start.days_ago(1)
-    
-    expect(page).to_not have_link(rollover)
+    click_link clone
 
-    click_link edit
-    fill_in sale_start, with: new_sale_start.to_s
+    fill_in event_name, with: "Bunratty Challengers"
+    fill_in amount, with: "20"
     click_button save
 
-    fee = EntryFee.limit(1).first
-    expect(fee.sale_start).to eq new_sale_start
+    expect(page).to have_css(success, text: "created")
+
+    clone = EntryFee.last
+    expect(clone.event_name).to eq "Bunratty Challengers"
+    expect(clone.amount).to eq 20.0
+    %w[discounted_amount discount_deadline event_start event_end sale_start sale_end year_or_season].each do |atr|
+      expect(clone.send(atr)).to eq fee.send(atr)
+    end
+
+    expect(JournalEntry.where(action: "create", journalable_type: "EntryFee", journalable_id: clone.id).count).to eq 1
   end
 end

@@ -13,6 +13,7 @@ IcuWwwApp::Application.routes.draw do
   resources :clubs,      only: [:index, :show]
   resources :players,    only: [:index]
   resources :player_ids, only: [:index]
+  resources :fees,       only: [:index, :show]
 
   namespace :admin do
     resources :bad_logins,        only: [:index]
@@ -24,7 +25,7 @@ IcuWwwApp::Application.routes.draw do
       get :rollover, on: :member
     end
     resources :entry_fees,        only: [:index, :show, :new, :create, :edit, :update] do
-      get :rollover, on: :member
+      get :rollover, :clone, on: :member
     end
     resources :translations,      only: [:index, :show, :edit, :update, :destroy]
     resources :users do

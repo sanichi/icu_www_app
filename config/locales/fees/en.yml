@@ -1,17 +1,19 @@
 en:
   fee:
     amount: Amount
+    clone: Clone
     description: Description
     discounted_amount: Discounted amount
     discount_deadline: Discount deadline
     rollover: Rollover
     sale_start: Sale start
     sale_end: Sale end
+    shop: Shop
     type:
-      entries: Entry fees
+      entries: Tournament entry fees
       entry: Entry fee
       subscription: Subscription fee
-      subscriptions: Subscription fees
+      subscriptions: ICU subscription fees
     entry:
       event:
         name: Event name

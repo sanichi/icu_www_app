@@ -27,8 +27,8 @@ class Ability
       can :manage, SubscriptionFee
     end
 
-    can [:show, :update, :destroy], EntryFee, player_id: user.player_id
-    can :manage_preferences, User, id: user.id
+    can :show, EntryFee, player_id: user.player_id
     can :show, Player, id: user.player_id
+    can :manage_preferences, User, id: user.id
   end
 end

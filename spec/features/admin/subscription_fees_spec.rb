@@ -65,7 +65,7 @@ feature "Create a subscription" do
 
     expect(page).to have_css(success, text: "created")
 
-    fee = SubscriptionFee.limit(1).first
+    fee = SubscriptionFee.last
     expect(fee.category).to eq "standard"
     expect(fee.amount).to eq 35.5
     expect(fee.season_desc).to eq "2013-14"
@@ -110,7 +110,7 @@ feature "Edit a subscription fee" do
     fill_in amount, with: " 9999.99 "
     click_button save
 
-    fee = SubscriptionFee.limit(1).first
+    fee = SubscriptionFee.last
     expect(fee.amount).to eq 9999.99
   end
 

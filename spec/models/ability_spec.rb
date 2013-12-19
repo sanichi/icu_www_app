@@ -97,11 +97,12 @@ describe Ability do
     let(:nones_fee) { create(:entry_fee, event_name: "Galway") }
     let(:ability)   { Ability.new(user) }
     
-    it "user can manage their own fees" do
-      [:show, :edit, :update, :destroy].each { |action| ability.should be_able_to action, users_fee }
+    it "user can view their own fees" do
+      [:show].each { |action| ability.should be_able_to action, users_fee }
+      [:edit, :update].each { |action| ability.should_not be_able_to action, users_fee }
       [:index, :new, :create].each { |action| ability.should_not be_able_to action, EntryFee }
       [other_fee, nones_fee].each do |fee|
-        [:show, :create, :edit, :update, :destroy].each { |action| ability.should_not be_able_to action, fee }
+        [:show, :create, :edit, :update].each { |action| ability.should_not be_able_to action, fee }
         [:index, :new].each { |action| ability.should_not be_able_to action, EntryFee }
       end
     end

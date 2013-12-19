@@ -10,6 +10,14 @@ class Admin::EntryFeesController < ApplicationController
     @entries = @fee.journal_entries if current_user.roles.present?
   end
 
+  def clone
+    @fee = EntryFee.find(params[:id]).dup
+    authorize! :clone, @fee
+    @fee.event_name = nil
+    @fee.amount = nil
+    render "new"
+  end
+
   def rollover
     @fee = EntryFee.find(params[:id])
     authorize! :rollover, @fee
