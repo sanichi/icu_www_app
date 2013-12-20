@@ -42,7 +42,7 @@ feature "Authorization for subscription fees" do
   end
 end
 
-feature "Create a subscription" do
+feature "Create and delete a subscription" do
   before(:each) do
     login("treasurer")
   end
@@ -54,6 +54,7 @@ feature "Create a subscription" do
   given(:standard) { I18n.t("fee.subscription.category.standard") }
   given(:season)   { I18n.t("fee.subscription.season") }
   given(:save)     { I18n.t("save") }
+  given(:delete)   { I18n.t("delete") }
   given(:fee)      { create(:subscription_fee) }
 
   scenario "standard" do
@@ -72,7 +73,11 @@ feature "Create a subscription" do
     expect(fee.sale_start.to_s).to eq "2013-08-01"
     expect(fee.sale_end.to_s).to eq "2014-08-31"
     expect(fee.journal_entries.count).to eq 1
-    expect(JournalEntry.where(journalable_type: "SubscriptionFee", action: "create").count).to eq 1
+    expect(JournalEntry.where(journalable_type: "SubscriptionFee").count).to eq 1
+     
+    click_link delete
+    expect(SubscriptionFee.count).to eq 0
+    expect(JournalEntry.where(journalable_type: "SubscriptionFee").count).to eq 2
   end
 
   scenario "duplicate" do

@@ -44,6 +44,12 @@ class Admin::SubscriptionFeesController < ApplicationController
     end
   end
 
+  def destroy
+    @fee.journal(:destroy, current_user, request.ip)
+    @fee.destroy
+    redirect_to admin_subscription_fees_path
+  end
+
   private
 
   def set_fee

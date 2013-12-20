@@ -63,6 +63,14 @@ class Admin::EntryFeesController < ApplicationController
     end
   end
 
+  def destroy
+    @fee = EntryFee.find(params[:id])
+    authorize! :destroy, @fee
+    @fee.journal(:destroy, current_user, request.ip)
+    @fee.destroy
+    redirect_to admin_entry_fees_path
+  end
+
   private
 
   def fee_params

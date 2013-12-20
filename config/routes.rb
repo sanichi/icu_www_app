@@ -21,10 +21,10 @@ IcuWwwApp::Application.routes.draw do
     resources :journal_entries,   only: [:index, :show]
     resources :logins,            only: [:index, :show]
     resources :players,           only: [:show, :new, :create, :edit, :update]
-    resources :subscription_fees, only: [:index, :show, :new, :create, :edit, :update] do
+    resources :subscription_fees do
       get :rollover, on: :member
     end
-    resources :entry_fees,        only: [:index, :show, :new, :create, :edit, :update] do
+    resources :entry_fees do
       get :rollover, :clone, on: :member
     end
     resources :translations,      only: [:index, :show, :edit, :update, :destroy]
