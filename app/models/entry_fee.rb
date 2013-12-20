@@ -27,7 +27,7 @@ class EntryFee < ActiveRecord::Base
   end
 
   def rollover_params
-    params = { event_name: event_name, amount: amount, discounted_amount: discounted_amount }
+    params = { event_name: event_name, event_website: event_website, amount: amount, discounted_amount: discounted_amount, player_id: player_id }
     %w[event_start event_end sale_start sale_end discount_deadline].map(&:to_sym).each do |atr|
       val = self.send(atr)
       params[atr] = val.present? ? val.years_since(1) : nil

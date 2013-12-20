@@ -199,6 +199,8 @@ feature "Edit an entry fee" do
     fee2 = EntryFee.last
     expect(fee2.event_name).to eq fee.event_name
     expect(fee2.amount).to eq fee.amount
+    expect(fee2.event_website).to eq fee.event_website
+    expect(fee2.player_id).to eq fee.player_id
     expect(fee2.event_start).to eq fee.event_start.years_since(1)
     expect(fee2.event_end).to eq fee.event_end.years_since(1)
     expect(fee2.sale_start).to eq fee.sale_start.years_since(1)
