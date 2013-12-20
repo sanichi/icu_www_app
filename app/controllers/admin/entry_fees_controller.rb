@@ -11,22 +11,18 @@ class Admin::EntryFeesController < ApplicationController
   end
 
   def clone
+    authorize! :new, EntryFee
     @fee = EntryFee.find(params[:id]).dup
-    authorize! :clone, @fee
     @fee.event_name = nil
     @fee.amount = nil
     render "new"
   end
 
   def rollover
-    @fee = EntryFee.find(params[:id])
-    authorize! :rollover, @fee
-    if fee = @fee.rollover
-      fee.journal(:create, current_user, request.ip)
-      redirect_to [:admin, fee], notice: "Entry fee successfully rolled over"
-    else
-      redirect_to [:admin, @fee], alert: "Entry fee has already been rolled over"
-    end
+    authorize! :new, EntryFee
+    fee = EntryFee.find(params[:id])
+    @fee = EntryFee.new(fee.rollover_params)
+    render "new"
   end
 
   def new

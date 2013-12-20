@@ -189,14 +189,26 @@ feature "Edit an entry fee" do
   scenario "rollover" do
     expect(JournalEntry.count).to eq 0
 
-    expect(fee.rolloverable?).to be_true
-
     visit admin_entry_fee_path(fee)
     click_link rollover
+    click_button save
 
-    expect(page).to have_css(success, text: "rolled over")
+    expect(page).to have_css(success, text: "created")
     expect(page).to have_xpath(description, text: "#{fee.event_name} #{fee.year_or_season.to_i + 1}")
-    expect(page).to_not have_link(rollover)
+    
+    fee2 = EntryFee.last
+    expect(fee2.event_name).to eq fee.event_name
+    expect(fee2.amount).to eq fee.amount
+    expect(fee2.event_start).to eq fee.event_start.years_since(1)
+    expect(fee2.event_end).to eq fee.event_end.years_since(1)
+    expect(fee2.sale_start).to eq fee.sale_start.years_since(1)
+    expect(fee2.sale_end).to eq fee.sale_end.years_since(1)
+    expect(fee2.discounted_amount).to eq fee.discounted_amount
+    if fee.discount_deadline.present?
+      expect(fee2.discount_deadline).to eq fee.discount_deadline.years_since(1)
+    else
+      expect(fee2.discount_deadline).to be_nil
+    end
 
     expect(JournalEntry.where(action: "create").count).to eq 1
   end

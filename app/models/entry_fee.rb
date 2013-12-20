@@ -26,19 +26,13 @@ class EntryFee < ActiveRecord::Base
     "#{event_name} #{year_or_season}"
   end
 
-  def rolloverable?
-    return false if event_start.year + 1 > Date.today.year + 1
-    EntryFee.where(event_name: event_name, year_or_season: next_year_or_season).count == 0
-  end
-
-  def rollover
-    return unless rolloverable?
+  def rollover_params
     params = { event_name: event_name, amount: amount, discounted_amount: discounted_amount }
     %w[event_start event_end sale_start sale_end discount_deadline].map(&:to_sym).each do |atr|
       val = self.send(atr)
       params[atr] = val.present? ? val.years_since(1) : nil
     end
-    EntryFee.create(params)
+    params
   end
 
   private
