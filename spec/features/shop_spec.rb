@@ -40,13 +40,10 @@ feature "Shop" do
     click_button select_member
 
     fill_in last_name, with: player.last_name
-    wait_for_ajax
 
     fill_in first_name, with: player.first_name
-    wait_for_ajax
 
     click_link player.id
-    wait_for_ajax
 
     expect(page).to_not have_button(select_member)
     expect(page).to have_button(reselect_member)
@@ -85,11 +82,8 @@ feature "Shop" do
     click_link standard_sub.description
     click_button select_member
     fill_in last_name, with: player.last_name
-    wait_for_ajax
     fill_in first_name, with: player.first_name
-    wait_for_ajax
     click_link player.id
-    wait_for_ajax
     click_button add_to_cart
 
     expect(page).to have_css(failure, lifetime_error)
@@ -106,11 +100,8 @@ feature "Shop" do
     click_link standard_sub.description
     click_button select_member
     fill_in last_name, with: player.last_name
-    wait_for_ajax
     fill_in first_name, with: player.first_name
-    wait_for_ajax
     click_link player.id
-    wait_for_ajax
     click_button add_to_cart
 
     expect(page).to have_css(failure, already_error)
