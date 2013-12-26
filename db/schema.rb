@@ -11,13 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131212130432) do
+ActiveRecord::Schema.define(version: 20131225202243) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
     t.string   "encrypted_password", limit: 32
     t.string   "ip",                 limit: 50
     t.datetime "created_at"
+  end
+
+  create_table "cart_items", force: true do |t|
+    t.string   "cartable_type", limit: 30
+    t.integer  "cartable_id"
+    t.integer  "cart_id"
+    t.string   "description"
+    t.string   "status",        limit: 20,                         default: "unpaid"
+    t.decimal  "cost",                     precision: 6, scale: 2
+    t.datetime "created_at"
+  end
+
+  add_index "cart_items", ["cart_id"], name: "index_cart_items_on_cart_id", using: :btree
+  add_index "cart_items", ["cartable_type", "cartable_id"], name: "index_cart_items_on_cartable_type_and_cartable_id", using: :btree
+
+  create_table "carts", force: true do |t|
+    t.datetime "payment_completed"
+    t.string   "status",            limit: 20, default: "unpaid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "clubs", force: true do |t|
@@ -118,6 +138,19 @@ ActiveRecord::Schema.define(version: 20131212130432) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "subscriptions", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "subscription_fee_id"
+    t.string   "season_desc",         limit: 7
+    t.boolean  "active",                        default: false
+    t.datetime "created_at"
+  end
+
+  add_index "subscriptions", ["active"], name: "index_subscriptions_on_active", using: :btree
+  add_index "subscriptions", ["player_id"], name: "index_subscriptions_on_player_id", using: :btree
+  add_index "subscriptions", ["season_desc"], name: "index_subscriptions_on_season_desc", using: :btree
+  add_index "subscriptions", ["subscription_fee_id"], name: "index_subscriptions_on_subscription_fee_id", using: :btree
 
   create_table "translations", force: true do |t|
     t.string   "locale",      limit: 2

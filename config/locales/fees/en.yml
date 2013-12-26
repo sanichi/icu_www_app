@@ -8,20 +8,20 @@ en:
     rollover: Rollover
     sale_start: Sale start
     sale_end: Sale end
-    shop: Shop
     type:
-      entries: Tournament entry fees
-      entry: Entry fee
-      subscription: Subscription fee
-      subscriptions: ICU subscription fees
+      entries: Tournament Entry Fees
+      entry: Tournament Entry Fee
+      subscription: ICU Subscription Fee
+      subscriptions: ICU Subscription Fees
     entry:
       event:
         name: Event name
         start: Event start
         end: Event end
         contact: Event contact
-        contact_id: Event contact (ICU ID)
         website: Website
+      select_contact: Select Contact
+      reselect_contact: Reselect Contact
     subscription:
       age_ref_date: Age reference date
       season: Season
@@ -33,3 +33,11 @@ en:
         under_18: Under 18
         under_12: Under 12
         new_under_18: New under 18
+      error:
+        missing_member: "Missing member"
+        lifetime_exists: "%{member} already has a lifetime subscrition"
+        already_exists: "%{member} is already subscribed for %{season}"
+        already_in_cart: "A subscription for this member is already in your cart"
+      valid:
+        from: Valid from
+        to: Valid to

@@ -1,0 +1,11 @@
+- btn_text = t("fee.entry.#{player ? 're' : ''}select_contact")
+- btn_alt = t("fee.entry.reselect_contact")
+- btn_color = player ? "default" : "info"
+
+.form-group
+  = form.label param, text, class: "control-label col-#{col}-#{pad}"
+  = hidden_field :entry_fee, param
+  %div{class: "col-#{col}-#{width} help-block"}
+    %span{id: "player_name"}= player.name(id: true) if player
+    &nbsp;
+    %button{id: "player_ids_button", class: "btn btn-#{btn_color} btn-sm", "data-toggle" => "modal", "data-alt" => btn_alt, "data-target" => "#player_ids_modal"}= btn_text

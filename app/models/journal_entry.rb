@@ -4,9 +4,6 @@ class JournalEntry < ActiveRecord::Base
   belongs_to :journalable, polymorphic: true
 
   default_scope { order(created_at: :desc) }
-  %w[Club Player User].each do |model|
-    scope model.downcase.pluralize.to_sym, -> { where(journalable_type: model) }
-  end
 
   ACTIONS = %w[create update destroy]
 

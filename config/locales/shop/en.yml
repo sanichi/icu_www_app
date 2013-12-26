@@ -1,0 +1,19 @@
+en:
+  shop:
+    shop: Shop
+    cart:
+      cart: Cart
+      continue: Continue Shopping
+      checkout: Checkout
+      total: Total cost
+      item:
+        add: Add to Cart
+        confirm_delete: Sure you want to delete this item?
+        cost: Cost
+        item: Item
+        member: Member
+        reselect_member: Reselect Member
+        select_member: Select Member
+        items:
+          one: 1 item
+          other: "%{count} items"

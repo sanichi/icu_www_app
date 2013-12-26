@@ -59,3 +59,14 @@ end
 def wait_for_browser(delay=0.2)
   sleep(delay)
 end
+
+# Wait for Ajax requests to finish.
+def wait_for_ajax(delay=0.1)
+  counter = 0
+  while page.execute_script("return $.active").to_i > 0
+    counter += 1
+    sleep(delay)
+    raise "AJAX request took longer than 5 seconds" if counter >= 50
+  end
+  sleep(2 * delay)
+end

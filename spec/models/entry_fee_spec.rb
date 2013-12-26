@@ -68,7 +68,7 @@ describe EntryFee do
     let(:params) { attributes_for(:entry_fee) }
 
     it "invalid ID" do
-      expect{EntryFee.create!(params.merge(player_id: "1"))}.to raise_error(/invalid.*ID/i)
+      expect{EntryFee.create!(params.merge(player_id: "1"))}.to raise_error(/invalid/i)
     end
 
     it "player without email" do

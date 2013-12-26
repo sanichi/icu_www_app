@@ -3,9 +3,9 @@
     .modal-content
       .modal-header
         %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
-        %h4.modal-title#modal_label= t("player.find_id")
+        %h4.modal-title#modal_label= title
       .modal-body
         = render "player_ids/search_form"
         #player_ids_results
 %script
-  = render "player_ids/update.js", target: target
+  = render "player_ids/attach_callbacks.js"

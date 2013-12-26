@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 
 feature "Searching clubs" do
@@ -11,7 +10,7 @@ feature "Searching clubs" do
     @xpath = "//div[starts-with(@id,'club_')]"
     @search = "Search"
   end
-  
+
   it "shows all active records by default" do
     expect(page).to have_xpath(@xpath, count: 3)
   end
@@ -100,11 +99,11 @@ feature "Searching clubs" do
   end
 end
 
-feature "Showing a club" do  
+feature "Showing a club" do
   def xpath(label)
     "//table//th[.='#{label}']/following-sibling::td"
   end
-  
+
   it "all fields" do
     params = {
       name:      "Bangor",

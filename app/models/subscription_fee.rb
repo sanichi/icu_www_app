@@ -12,6 +12,7 @@ class SubscriptionFee < ActiveRecord::Base
   after_save :reset_season
 
   scope :ordered, -> { order(season_desc: :desc, amount: :desc, category: :asc) }
+  scope :on_sale, -> { where("sale_start <= ?", Date.today).where("sale_end >= ?", Date.today) }
 
   def self.search(params, path)
     matches = ordered
@@ -20,6 +21,14 @@ class SubscriptionFee < ActiveRecord::Base
 
   def description
     "#{season_desc} #{I18n.t("fee.subscription.category.#{category}")}"
+  end
+
+  def full_description
+    "#{I18n.t("fee.type.subscription", locale: :en)} #{season_desc} #{I18n.t("fee.subscription.category.#{category}", locale: :en)}"
+  end
+
+  def cost
+    amount # no discounts for subscriptions
   end
 
   def season
@@ -34,6 +43,14 @@ class SubscriptionFee < ActiveRecord::Base
   def rollover
     return unless rolloverable?
     SubscriptionFee.create(category: category, season_desc: season.next, amount: amount)
+  end
+
+  def validate_cart_item(item)
+    return unless error = case
+    when item.player.nil?              then "missing_member"
+    when player_already_in_cart?(item) then "already_in_cart"
+    end
+    I18n.t("fee.subscription.error.#{error}")
   end
 
   private
@@ -57,6 +74,12 @@ class SubscriptionFee < ActiveRecord::Base
   def reset_season
     if previous_changes.has_key?("season_desc")
       @season = nil
+    end
+  end
+  
+  def player_already_in_cart?(item)
+    item.cart.cart_items.detect do |cart_item|
+      cart_item != item && cart_item.cartable_type == "SubscriptionFee" && cart_item.cartable.season_desc == season_desc
     end
   end
 end

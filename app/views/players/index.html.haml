@@ -22,7 +22,7 @@
           - @players.matches.each do |player|
             %tr
               %td= player.id
-              %td= link_to_if can?(:show, player), player.name(:reversed), [:admin, player]
+              %td= link_to_if can?(:show, player), player.name(reversed: true), [:admin, player]
               %td= t("player.abbrev.#{player.gender}") if player.gender
               %td= player.dob.year if player.dob
               %td= player.fed if player.fed

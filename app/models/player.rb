@@ -50,12 +50,11 @@ class Player < ActiveRecord::Base
 
   validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones, :validate_legacy_rating
 
-  def name(reversed=false)
-    if reversed
-      "#{last_name}, #{first_name}"
-    else
-      "#{first_name} #{last_name}"
-    end
+  def name(opt={})
+    names = []
+    names << (opt[:reversed] ? "#{last_name}, #{first_name}" : "#{first_name} #{last_name}")
+    names << "(#{id})" if opt[:id]
+    names.join(" ")
   end
 
   def duplicate?

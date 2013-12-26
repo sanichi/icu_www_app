@@ -118,5 +118,13 @@ describe Player do
       player = create(:player)
       expect(player.phones).to eq ""
     end
+
+    it "#name" do
+      player = create(:player, first_name: "Mark", last_name: "Orr")
+      expect(player.name).to eq "Mark Orr"
+      expect(player.name(reversed: true)).to eq "Orr, Mark"
+      expect(player.name(id: true)).to eq "Mark Orr (#{player.id})"
+      expect(player.name(reversed: true, id: true)).to eq "Orr, Mark (#{player.id})"
+    end
   end
 end

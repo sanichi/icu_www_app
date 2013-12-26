@@ -13,8 +13,8 @@
         %tbody
           - @players.matches.each do |player|
             %tr
-              %td= link_to_function player.id, "update_player_ids_target(#{player.id})"
-              %td= player.name(:reversed)
+              %td= link_to player.id, "#", "data-id" => player.id, "data-name" => player.name, class: "player_ids_callback"
+              %td= player.name(reversed: true)
               %td= t("player.abbrev.#{player.gender}") if player.gender
               %td= player.dob.year if player.dob
               %td= player.club.name if player.club

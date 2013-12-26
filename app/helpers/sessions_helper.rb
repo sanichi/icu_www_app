@@ -9,4 +9,16 @@ module SessionsHelper
     end
     @current_user ||= User::Guest.new
   end
+
+  def current_cart(create=false)
+    return @current_cart if @current_cart
+    if session[:cart_id]
+      @current_cart = Cart.includes(:cart_items).find_by(id: session[:cart_id])
+      logger.error("no cart found for session cart ID #{session[:cart_id]}") unless @current_cart
+    end
+    return @current_cart unless create
+    @current_cart ||= Cart.create
+    session[:cart_id] = @current_cart.id
+    @current_cart
+  end
 end

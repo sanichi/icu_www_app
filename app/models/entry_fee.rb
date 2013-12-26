@@ -13,9 +13,10 @@ class EntryFee < ActiveRecord::Base
   validates :discounted_amount, presence: true, if: Proc.new { |f| f.discount_deadline.present? }
   validates :discount_deadline, presence: true, if: Proc.new { |f| f.discounted_amount.present? }
   validates :event_start, :event_end, :sale_start, :sale_end, presence: true
-  validate :check_dates, :check_discount, :check_manager, :check_website
+  validate :check_dates, :check_discount, :check_contact, :check_website
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
+  scope :on_sale, -> { where("sale_start <= ?", Date.today).where("sale_end >= ?", Date.today) }
 
   def self.search(params, path)
     matches = ordered
@@ -88,18 +89,16 @@ class EntryFee < ActiveRecord::Base
     end
   end
 
-  def check_manager
+  def check_contact
     return if player_id.nil?
-    if player_id == 0
-      errors.add(:player_id, "please supply a player ID (a positive integer)")
-    elsif player.nil?
-      errors.add(:player_id, "invalid player ID")
+    if player_id == 0 || player.nil?
+      errors[:base] << "Invalid contact"
     elsif player.email.blank?
-      errors.add(:player_id, "this player doesn't have an email address")
+      errors[:base] << "Contact has no email address"
     elsif player.users.empty?
-      errors.add(:player_id, "this player has no login to the website")
+      errors[:base] << "Contact has no login to this website"
     elsif player.users.select{ |u| u.expires_on > Date.today }.empty?
-      errors.add(:player_id, "this player is not a current member")
+      errors[:base] << "Contact is not a current member of the ICU"
     end
   end
 

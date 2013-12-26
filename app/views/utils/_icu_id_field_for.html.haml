@@ -1,6 +1,0 @@
-.form-group{class: object.errors[param].any? ? "has-error" : ""}
-  = form.label param, text, class: "control-label col-#{col}-#{pad}"
-  %div{class: "col-#{col}-#{width}"}= form.text_field param, class: "form-control", type: "text", placeholder: t("player.id")
-  %div{class: "col-#{col}-#{12-pad-width} help-block"}
-    %button{class: "btn btn-info btn-sm", "data-toggle" => "modal", "data-target" => "#player_ids_modal"}= t("player.find_id")
-    = object.errors[param].first
