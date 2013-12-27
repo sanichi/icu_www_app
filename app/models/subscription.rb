@@ -4,12 +4,25 @@ class Subscription < ActiveRecord::Base
   belongs_to :player
   belongs_to :subscription_fee
 
+  CATEGORIES = SubscriptionFee::CATEGORIES + %w[lifetime]
+
   validates :player_id, numericality: { only_integer: true, greater_than: 0 }
   validates :subscription_fee_id, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :category, inclusion: { in: CATEGORIES }
+  validates :cost, numericality: { greater_than_or_equal: 0.0 }
+
   validate :valid_season_desc, :no_duplicates
 
   def season
     @season ||= Season.new(season_desc)
+  end
+
+  def description
+    desc = []
+    desc << I18n.t("fee.type.subscription")
+    desc << season_desc unless category == "lifetime"
+    desc << I18n.t("fee.subscription.category.#{category}")
+    desc.join(" ")
   end
 
   private

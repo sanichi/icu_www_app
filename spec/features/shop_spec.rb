@@ -6,8 +6,8 @@ feature "Shop" do
   given!(:unemployed_sub) { create(:subscription_fee, category: "unemployed", amount: 20.0) }
 
   given(:season_desc)     { Season.new.desc }
-  given(:lifetime_sub)    { create(:subscription, player: player, subscription_fee: nil, season_desc: season_desc) }
-  given(:existing_sub)    { create(:subscription, player: player, subscription_fee: nil) }
+  given(:lifetime_sub)    { create(:subscription, player: player, subscription_fee: nil, category: "lifetime", cost: 0.0, season_desc: nil) }
+  given(:existing_sub)    { create(:subscription, player: player, subscription_fee: nil, category: "standard", cost: 35.0, season_desc: season_desc) }
 
   given(:add_to_cart)     { I18n.t("shop.cart.item.add") }
   given(:cost)            { I18n.t("shop.cart.item.cost") }
@@ -49,13 +49,6 @@ feature "Shop" do
     expect(page).to have_button(reselect_member)
     click_button add_to_cart
 
-    expect(page).to have_xpath(xpath("th", item, member, cost))
-    expect(page).to have_xpath(xpath("td", standard_sub.full_description, player.name(id: true), standard_sub.cost))
-    expect(page).to have_xpath(xpath("th", total, standard_sub.cost))
-
-    visit shop_path
-    expect(page).to have_link(cart_link)
-
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
     expect(Subscription.where(active: false).count).to eq 1
@@ -63,6 +56,13 @@ feature "Shop" do
     cart = Cart.last
     cart_item = CartItem.last
     subscription = Subscription.last
+
+    expect(page).to have_xpath(xpath("th", item, member, cost))
+    expect(page).to have_xpath(xpath("td", subscription.description, player.name(id: true), subscription.cost))
+    expect(page).to have_xpath(xpath("th", total, standard_sub.cost))
+
+    visit shop_path
+    expect(page).to have_link(cart_link)
 
     expect(cart.status).to eq "unpaid"
     expect(cart_item.status).to eq "unpaid"

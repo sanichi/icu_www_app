@@ -3,7 +3,10 @@ class CreateSubscriptions < ActiveRecord::Migration
     create_table :subscriptions do |t|
       t.integer  :player_id, :subscription_fee_id
       t.string   :season_desc, limit: 7
+      t.string   :category, limit: 20
+      t.decimal  :cost, precision: 6, scale: 2
       t.boolean  :active, default: false
+      
       t.datetime :created_at
     end
 

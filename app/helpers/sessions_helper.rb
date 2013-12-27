@@ -13,7 +13,7 @@ module SessionsHelper
   def current_cart(create=false)
     return @current_cart if @current_cart
     if session[:cart_id]
-      @current_cart = Cart.includes(:cart_items).find_by(id: session[:cart_id])
+      @current_cart = Cart.include_cartables.find_by(id: session[:cart_id])
       logger.error("no cart found for session cart ID #{session[:cart_id]}") unless @current_cart
     end
     return @current_cart unless create

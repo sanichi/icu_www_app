@@ -11,7 +11,7 @@ class EntriesController < ApplicationController
 
     if @entry.save
       cart = current_cart(:create)
-      cart_item = CartItem.create(cart: cart, cartable: @entry, description: @entry.full_description, cost: @entry.cost)
+      cart_item = CartItem.create(cart: cart, cartable: @entry)
       redirect_to cart_path(cart)
     else
       flash.now.alert = @entry.errors.to_a.first

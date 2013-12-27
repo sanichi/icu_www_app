@@ -24,9 +24,7 @@ ActiveRecord::Schema.define(version: 20131225202243) do
     t.string   "cartable_type", limit: 30
     t.integer  "cartable_id"
     t.integer  "cart_id"
-    t.string   "description"
-    t.string   "status",        limit: 20,                         default: "unpaid"
-    t.decimal  "cost",                     precision: 6, scale: 2
+    t.string   "status",        limit: 20, default: "unpaid"
     t.datetime "created_at"
   end
 
@@ -143,7 +141,9 @@ ActiveRecord::Schema.define(version: 20131225202243) do
     t.integer  "player_id"
     t.integer  "subscription_fee_id"
     t.string   "season_desc",         limit: 7
-    t.boolean  "active",                        default: false
+    t.string   "category",            limit: 20
+    t.decimal  "cost",                           precision: 6, scale: 2
+    t.boolean  "active",                                                 default: false
     t.datetime "created_at"
   end
 

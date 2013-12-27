@@ -23,10 +23,6 @@ class SubscriptionFee < ActiveRecord::Base
     "#{season_desc} #{I18n.t("fee.subscription.category.#{category}")}"
   end
 
-  def full_description
-    "#{I18n.t("fee.type.subscription", locale: :en)} #{season_desc} #{I18n.t("fee.subscription.category.#{category}", locale: :en)}"
-  end
-
   def cost
     amount # no discounts for subscriptions
   end
