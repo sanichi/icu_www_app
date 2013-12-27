@@ -10,9 +10,9 @@ class SubscriptionsController < ApplicationController
     @fee = @sub.subscription_fee
     @sub.category = @fee.category
     @sub.cost = @fee.cost
+    cart = current_cart(:create)
 
-    if @sub.save
-      cart = current_cart(:create)
+    if cart.does_not_already_have?(@sub) && @sub.save
       cart_item = CartItem.create(cart: cart, cartable: @sub)
       redirect_to cart_path(cart)
     else

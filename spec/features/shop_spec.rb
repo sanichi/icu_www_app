@@ -20,7 +20,8 @@ feature "Shop" do
   given(:select_member)   { I18n.t("shop.cart.item.select_member") }
   given(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
   given(:lifetime_error)  { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
-  given(:already_error)   { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
+  given(:exists_error)    { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
+  given(:in_cart_error)   { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
 
   given(:failure)         { "div.alert-danger" }
 
@@ -40,8 +41,7 @@ feature "Shop" do
     click_button select_member
 
     fill_in last_name, with: player.last_name
-
-    fill_in first_name, with: player.first_name
+    fill_in first_name, with: player.first_name + "\n"
 
     click_link player.id
 
@@ -82,13 +82,13 @@ feature "Shop" do
     click_link standard_sub.description
     click_button select_member
     fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name
+    fill_in first_name, with: player.first_name + "\n"
     click_link player.id
     click_button add_to_cart
 
     expect(page).to have_css(failure, lifetime_error)
 
-    expect(Cart.count).to eq 0
+    expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
     expect(Subscription.where(active: false).count).to eq 0
   end
@@ -100,14 +100,44 @@ feature "Shop" do
     click_link standard_sub.description
     click_button select_member
     fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name
+    fill_in first_name, with: player.first_name + "\n"
     click_link player.id
     click_button add_to_cart
 
-    expect(page).to have_css(failure, already_error)
+    expect(page).to have_css(failure, exists_error)
 
-    expect(Cart.count).to eq 0
+    expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
     expect(Subscription.where(active: false).count).to eq 0
+  end
+
+  scenario "failed add because duplicate subscription in cart", js: true do
+    visit shop_path
+    click_link standard_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
+    
+    visit shop_path
+    click_link unemployed_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, in_cart_error)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
   end
 end

@@ -25,6 +25,15 @@ class Subscription < ActiveRecord::Base
     desc.join(" ")
   end
 
+  def duplicate_of?(sub)
+    if sub.player_id == player_id && sub.season_desc == season_desc
+      errors.add(:base, I18n.t("fee.subscription.error.already_exists"))
+      true
+    else
+      false
+    end
+  end
+
   private
 
   def valid_season_desc
