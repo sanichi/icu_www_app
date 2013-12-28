@@ -9,7 +9,7 @@ IcuWwwApp::Application.routes.draw do
   get "redirect" => "redirects#redirect"
 
   resource  :cart,              only: [:show]
-  resources :cart_items,        only: [:create, :destroy]
+  resources :cart_items,        only: [:destroy]
   resources :clubs,             only: [:index, :show]
   resources :entries,           only: [:new, :create]
   resources :player_ids,        only: [:index]

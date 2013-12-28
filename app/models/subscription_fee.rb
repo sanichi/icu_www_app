@@ -3,7 +3,7 @@ class SubscriptionFee < ActiveRecord::Base
   include Journalable
   journalize %w[category amount season_desc], "/admin/subscription_fees/%d"
 
-  CATEGORIES = %w[standard over_65 under_18 under_12 unemployed new_under_18]
+  CATEGORIES = Subscription::CATEGORIES.reject { |cat| cat == "lifetime" }
 
   validates :category, inclusion: { in: CATEGORIES }, uniqueness: { scope: :season_desc, message: "no more than one per season" }
   validates :amount, numericality: { greater_than: 0.0 }

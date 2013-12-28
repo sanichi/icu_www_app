@@ -38,7 +38,7 @@ en:
         missing_member: "Missing member"
         lifetime_exists: "%{member} already has a lifetime subscrition"
         already_exists: "%{member} is already subscribed for %{season}"
-        already_in_cart: "A subscription for this member is already in your cart"
+        already_in_cart: "A subscription for %{member} is already in your cart"
       valid:
         from: Valid from
         to: Valid to

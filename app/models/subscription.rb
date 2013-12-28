@@ -4,7 +4,7 @@ class Subscription < ActiveRecord::Base
   belongs_to :player
   belongs_to :subscription_fee
 
-  CATEGORIES = SubscriptionFee::CATEGORIES + %w[lifetime]
+  CATEGORIES = %w[standard over_65 under_18 under_12 unemployed new_under_18 lifetime]
 
   validates :player_id, numericality: { only_integer: true, greater_than: 0 }
   validates :subscription_fee_id, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
@@ -25,9 +25,9 @@ class Subscription < ActiveRecord::Base
     desc.join(" ")
   end
 
-  def duplicate_of?(sub)
+  def duplicate_of?(sub, add_error=false)
     if sub.player_id == player_id && sub.season_desc == season_desc
-      errors.add(:base, I18n.t("fee.subscription.error.already_exists"))
+      errors.add(:base, I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true))) if add_error
       true
     else
       false

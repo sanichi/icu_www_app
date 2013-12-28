@@ -2,6 +2,7 @@ require 'spec_helper'
 
 feature "Shop" do
   given!(:player)         { create(:player) }
+  given!(:player2)        { create(:player) }
   given!(:standard_sub)   { create(:subscription_fee, category: "standard", amount: 35.0) }
   given!(:unemployed_sub) { create(:subscription_fee, category: "unemployed", amount: 20.0) }
 
@@ -21,7 +22,7 @@ feature "Shop" do
   given(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
   given(:lifetime_error)  { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
   given(:exists_error)    { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
-  given(:in_cart_error)   { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
+  given(:in_cart_error)   { I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true)) }
 
   given(:failure)         { "div.alert-danger" }
 
@@ -75,7 +76,7 @@ feature "Shop" do
     expect(subscription.subscription_fee).to eq standard_sub
   end
 
-  scenario "failed add because of lifetime subscription", js: true do
+  scenario "failed add due to lifetime subscription", js: true do
     expect(lifetime_sub.player).to eq player
 
     visit shop_path
@@ -86,14 +87,14 @@ feature "Shop" do
     click_link player.id
     click_button add_to_cart
 
-    expect(page).to have_css(failure, lifetime_error)
+    expect(page).to have_css(failure, text: lifetime_error)
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "failed add because of existing subscription", js: true do
+  scenario "failed add due to existing subscription", js: true do
     expect(existing_sub.player).to eq player
 
     visit shop_path
@@ -104,14 +105,14 @@ feature "Shop" do
     click_link player.id
     click_button add_to_cart
 
-    expect(page).to have_css(failure, exists_error)
+    expect(page).to have_css(failure, text: exists_error)
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "failed add because duplicate subscription in cart", js: true do
+  scenario "failed add due to duplicate subscription in cart", js: true do
     visit shop_path
     click_link standard_sub.description
     click_button select_member
@@ -125,7 +126,7 @@ feature "Shop" do
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
     expect(Subscription.where(active: false).count).to eq 1
-    
+
     visit shop_path
     click_link unemployed_sub.description
     click_button select_member
@@ -134,10 +135,58 @@ feature "Shop" do
     click_link player.id
     click_button add_to_cart
 
-    expect(page).to have_css(failure, in_cart_error)
+    expect(page).to have_css(failure, text: in_cart_error)
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
     expect(Subscription.where(active: false).count).to eq 1
+  end
+
+  scenario "delete subscriptions from cart", js: true do
+    visit shop_path
+    click_link standard_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to have_xpath(xpath("th", total, standard_sub.cost))
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
+
+    visit shop_path
+    click_link unemployed_sub.description
+    click_button select_member
+    fill_in last_name, with: player2.last_name
+    fill_in first_name, with: player2.first_name + "\n"
+    click_link player2.id
+    click_button add_to_cart
+
+    expect(page).to have_xpath(xpath("th", total, standard_sub.cost + unemployed_sub.cost))
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 2
+    expect(Subscription.where(active: false).count).to eq 2
+
+    click_link "✘", match: :first
+    confirm_dialog
+    
+    expect(page).to have_xpath(xpath("th", total, unemployed_sub.cost))
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
+
+    click_link "✘", match: :first
+    confirm_dialog
+
+    expect(page).to have_xpath(xpath("th", total, 0.0))
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 0
+    expect(Subscription.where(active: false).count).to eq 0
   end
 end

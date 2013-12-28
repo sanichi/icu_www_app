@@ -17,7 +17,7 @@ class Cart < ActiveRecord::Base
 
   def does_not_already_have?(cartable)
     return true if cart_items.none? do |item|
-      item.cartable_type == cartable.class.to_s && cartable.duplicate_of?(item.cartable)
+      item.cartable_type == cartable.class.to_s && cartable.duplicate_of?(item.cartable, :add_error)
     end
     false
   end

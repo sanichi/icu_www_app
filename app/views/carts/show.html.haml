@@ -15,7 +15,7 @@
             %td= item.cartable.description
             %td= item.cartable.player.name(id: true)
             %td.text-center= euros(item.cartable.cost)
-            %td.text-center= link_to "✘", cart_item_path(item), data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
+            %td.text-center= link_to "✘", item, data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
         %tr
           %th{colspan: 2}= t("shop.cart.total")
           %th.text-center= euros(@cart.total)

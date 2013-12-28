@@ -62,3 +62,10 @@ end
 def wait_for_browser(delay=0.2)
   sleep(delay)
 end
+
+# Confirm a popup confirmation dialog.
+def confirm_dialog(delay=0.2)
+  wait_for_browser(delay)
+  page.driver.browser.switch_to.alert.accept
+  wait_for_browser(delay)
+end
