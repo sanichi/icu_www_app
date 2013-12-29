@@ -173,7 +173,7 @@ feature "Shop" do
 
     click_link "✘", match: :first
     confirm_dialog
-    
+
     expect(page).to have_xpath(xpath("th", total, unemployed_sub.cost))
 
     expect(Cart.count).to eq 1
@@ -188,5 +188,40 @@ feature "Shop" do
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
     expect(Subscription.where(active: false).count).to eq 0
+  end
+
+  scenario "can only delete from the current cart", js: true do
+    visit shop_path
+    click_link standard_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
+
+    cart = Cart.include_cartables.first
+    cart_item = cart.cart_items.first
+    other_cart = create(:cart)
+    cart_item.cart_id = other_cart.id
+    cart_item.save
+
+    expect(cart.items).to eq 0
+    expect(other_cart.items).to eq 1
+
+    click_link "✘", match: :first
+    confirm_dialog
+
+    expect(page).to have_link(cart_link)
+
+    expect(Cart.count).to eq 2
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false).count).to eq 1
+
+    expect(cart.items).to eq 0
+    expect(other_cart.items).to eq 1
   end
 end
