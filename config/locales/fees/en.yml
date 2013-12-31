@@ -28,17 +28,19 @@ en:
       category:
         category: Category
         lifetime: Lifetime
-        new_under_18: New under 18
-        over_65: Over 65
+        new_under_18: New 18 or under
+        over_65: 65 or over
         unemployed: Unemployed
-        under_18: Under 18
-        under_12: Under 12
+        under_18: 18 or under
+        under_12: 12 or under
         standard: Standard
       error:
         missing_member: "Missing member"
         lifetime_exists: "%{member} already has a lifetime subscrition"
         already_exists: "%{member} is already subscribed for %{season}"
         already_in_cart: "A subscription for %{member} is already in your cart"
+        too_old: "%{member} is over %{limit} on %{date}"
+        too_young: "%{member} is under %{limit} on %{date}"
       valid:
         from: Valid from
         to: Valid to

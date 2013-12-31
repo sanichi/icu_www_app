@@ -11,7 +11,7 @@ class Subscription < ActiveRecord::Base
   validates :category, inclusion: { in: CATEGORIES }
   validates :cost, numericality: { greater_than_or_equal: 0.0 }
 
-  validate :valid_season_desc, :no_duplicates
+  validate :valid_season_desc, :no_duplicates, :right_age
 
   def season
     @season ||= Season.new(season_desc)
@@ -56,6 +56,21 @@ class Subscription < ActiveRecord::Base
       elsif Subscription.where(active: true, player_id: player.id, season_desc: nil).count > 0
         errors.add(:base, I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)))
       end
+    end
+  end
+
+  def right_age
+    return unless category.match(/(under|over)_\d+/)
+    return unless player && player.dob.present? && subscription_fee && subscription_fee.age_ref_date.present?
+    age = player.age(subscription_fee.age_ref_date)
+    error, limit =
+    case
+    when age > 12 && category == "under_12"       then ["too_old", 12]
+    when age < 65 && category == "over_65"        then ["too_young", 65]
+    when age > 18 && category.match(/under_18\z/) then ["too_old", 18]
+    end
+    if error
+      errors.add(:base, I18n.t("fee.subscription.error.#{error}", member: player.name(id: true), limit: limit, date: subscription_fee.age_ref_date.to_s))
     end
   end
 end

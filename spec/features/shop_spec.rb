@@ -1,10 +1,14 @@
 require 'spec_helper'
 
 feature "Shop" do
-  given!(:player)         { create(:player) }
-  given!(:player2)        { create(:player) }
+  given!(:player)         { create(:player, dob: 58.years.ago, joined: 30.years.ago) }
+  given!(:player2)        { create(:player, dob: 30.years.ago, joined: 20.years.ago) }
+  given!(:junior)         { create(:player, dob: 10.years.ago, joined: 2.years.ago) }
+  given!(:oldie)          { create(:player, dob: 70.years.ago, joined: 50.years.ago) }
   given!(:standard_sub)   { create(:subscription_fee, category: "standard", amount: 35.0) }
   given!(:unemployed_sub) { create(:subscription_fee, category: "unemployed", amount: 20.0) }
+  given!(:under_12_sub)   { create(:subscription_fee, category: "under_12", amount: 20.0) }
+  given!(:over_65_sub)    { create(:subscription_fee, category: "over_65", amount: 20.0) }
 
   given(:season_desc)     { Season.new.desc }
   given(:lifetime_sub)    { create(:subscription, player: player, subscription_fee: nil, category: "lifetime", cost: 0.0, season_desc: nil) }
@@ -23,9 +27,10 @@ feature "Shop" do
   given(:lifetime_error)  { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
   given(:exists_error)    { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
   given(:in_cart_error)   { I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true)) }
+  given(:too_old_error)   { I18n.t("fee.subscription.error.too_old", member: player.name(id: true), limit: 12, date: under_12_sub.age_ref_date.to_s) }
+  given(:too_young_error) { I18n.t("fee.subscription.error.too_young", member: player.name(id: true), limit: 65, date: over_65_sub.age_ref_date.to_s) }
 
   given(:failure)         { "div.alert-danger" }
-
 
   def xpath(type, text, *txts)
     txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|
@@ -76,7 +81,7 @@ feature "Shop" do
     expect(subscription.subscription_fee).to eq standard_sub
   end
 
-  scenario "failed add due to lifetime subscription", js: true do
+  scenario "error due to lifetime subscription", js: true do
     expect(lifetime_sub.player).to eq player
 
     visit shop_path
@@ -94,7 +99,7 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "failed add due to existing subscription", js: true do
+  scenario "error due to existing subscription", js: true do
     expect(existing_sub.player).to eq player
 
     visit shop_path
@@ -112,7 +117,7 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "failed add due to duplicate subscription in cart", js: true do
+  scenario "error due to duplicate subscription in cart", js: true do
     visit shop_path
     click_link standard_sub.description
     click_button select_member
@@ -140,6 +145,54 @@ feature "Shop" do
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
     expect(Subscription.where(active: false).count).to eq 1
+  end
+
+  scenario "error due to age (too old)", js: true do
+    visit shop_path
+    click_link under_12_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_old_error)
+
+    click_button select_member
+    fill_in last_name, with: junior.last_name
+    fill_in first_name, with: junior.first_name + "\n"
+    click_link junior.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false, category: "under_12").count).to eq 1
+  end
+
+  scenario "error due to age (too young)", js: true do
+    visit shop_path
+    click_link over_65_sub.description
+    click_button select_member
+    fill_in last_name, with: player.last_name
+    fill_in first_name, with: player.first_name + "\n"
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_young_error)
+
+    click_button select_member
+    fill_in last_name, with: oldie.last_name
+    fill_in first_name, with: oldie.first_name + "\n"
+    click_link oldie.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Subscription.where(active: false, category: "over_65").count).to eq 1
   end
 
   scenario "delete subscriptions from cart", js: true do
