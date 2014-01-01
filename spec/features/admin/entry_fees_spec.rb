@@ -63,26 +63,38 @@ feature "Create and delete an entry fee" do
   end
 
   given(:success)           { "div.alert-success" }
-  given(:failure)           { "div.help-block" }
+  given(:failure)           { "div.alert-danger" }
+  given(:attr_failure)      { "div.help-block" }
   given(:amount)            { I18n.t("fee.amount") }
   given(:discounted_amount) { I18n.t("fee.discounted_amount") }
   given(:discount_deadline) { I18n.t("fee.discount_deadline") }
   given(:event_name)        { I18n.t("fee.entry.event.name") }
   given(:event_start)       { I18n.t("fee.entry.event.start") }
   given(:event_end)         { I18n.t("fee.entry.event.end") }
+  given(:select_contact)    { I18n.t("fee.entry.select_contact") }
+  given(:reselect_contact)  { I18n.t("fee.entry.reselect_contact") }
   given(:sale_start)        { I18n.t("fee.sale_start") }
   given(:sale_end)          { I18n.t("fee.sale_end") }
+  given(:first_name)        { I18n.t("player.first_name") }
+  given(:last_name)         { I18n.t("player.last_name") }
   given(:delete)            { I18n.t("delete") }
   given(:save)              { I18n.t("save") }
+  given(:last_week)         { Date.today.days_ago(7) }
+  given(:next_year)         { Date.today.at_end_of_year.days_since(40) }
+  given(:late_next_year)    { Date.today.next_year.at_end_of_year.days_ago(1) }
+  given(:user)              { create(:user) }
+  given(:user_expired)      { create(:user, expires_on: Date.today.last_year.at_end_of_year) }
+  given(:user_no_email)     { create(:user, player: create(:player,email: nil)) }
+  given(:player_no_user)    { create(:player) }
 
   scenario "no discount" do
     visit new_admin_entry_fee_path
     fill_in event_name, with: "Bunratty Masters"
     fill_in amount, with: "50"
-    fill_in event_start, with: "2014-02-07"
-    fill_in event_end, with: "2014-02-09"
-    fill_in sale_start, with: "2013-10-01"
-    fill_in sale_end, with: "2014-02-06"
+    fill_in event_start, with: next_year.to_s
+    fill_in event_end, with: next_year.days_since(2).to_s
+    fill_in sale_start, with: last_week
+    fill_in sale_end, with: next_year.days_ago(1)
     click_button save
 
     expect(page).to have_css(success, text: "created")
@@ -92,14 +104,14 @@ feature "Create and delete an entry fee" do
     expect(fee.amount).to eq 50.0
     expect(fee.discounted_amount).to be_nil
     expect(fee.discount_deadline).to be_nil
-    expect(fee.event_start.to_s).to eq "2014-02-07"
-    expect(fee.event_end.to_s).to eq "2014-02-09"
-    expect(fee.sale_start.to_s).to eq "2013-10-01"
-    expect(fee.sale_end.to_s).to eq "2014-02-06"
-    expect(fee.year_or_season).to eq "2014"
+    expect(fee.event_start).to eq next_year
+    expect(fee.event_end).to eq next_year.days_since(2)
+    expect(fee.sale_start).to eq last_week
+    expect(fee.sale_end).to eq next_year.days_ago(1)
+    expect(fee.year_or_season).to eq next_year.year.to_s
     expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 1
-     
+
     click_link delete
     expect(EntryFee.count).to eq 0
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 2
@@ -110,11 +122,11 @@ feature "Create and delete an entry fee" do
     fill_in event_name, with: "Bangor Xmas Special"
     fill_in amount, with: "35"
     fill_in discounted_amount, with: "30"
-    fill_in discount_deadline, with: "2014-12-20"
-    fill_in event_start, with: "2014-12-28"
-    fill_in event_end, with: "2015-01-05"
-    fill_in sale_start, with: "2014-10-01"
-    fill_in sale_end, with: "2014-12-27"
+    fill_in discount_deadline, with: late_next_year.days_ago(10).to_s
+    fill_in event_start, with: late_next_year.to_s
+    fill_in event_end, with: late_next_year.days_since(5).to_s
+    fill_in sale_start, with: last_week
+    fill_in sale_end, with: late_next_year.days_ago(1)
     click_button save
 
     expect(page).to have_css(success, text: "created")
@@ -122,17 +134,67 @@ feature "Create and delete an entry fee" do
     fee = EntryFee.last
     expect(fee.event_name).to eq "Bangor Xmas Special"
     expect(fee.amount).to eq 35.0
-    expect(fee.discounted_amount).to eq 30
-    expect(fee.discount_deadline.to_s).to eq "2014-12-20"
-    expect(fee.event_start.to_s).to eq "2014-12-28"
-    expect(fee.event_end.to_s).to eq "2015-01-05"
-    expect(fee.sale_start.to_s).to eq "2014-10-01"
-    expect(fee.sale_end.to_s).to eq "2014-12-27"
-    expect(fee.year_or_season).to eq "2014-15"
-    expect(fee.journal_entries.count).to eq 1    
+    expect(fee.discounted_amount).to eq 30.0
+    expect(fee.discount_deadline).to eq late_next_year.days_ago(10)
+    expect(fee.event_start).to eq late_next_year
+    expect(fee.event_end).to eq late_next_year.days_since(5)
+    expect(fee.sale_start).to eq last_week
+    expect(fee.sale_end).to eq late_next_year.days_ago(1)
+    expect(fee.year_or_season).to eq Season.new(late_next_year).desc
+    expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 1
-     
+
     click_link delete
+    expect(EntryFee.count).to eq 0
+    expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 2
+  end
+
+  scenario "contact", js: true do
+    visit new_admin_entry_fee_path
+    fill_in event_name, with: "Bunratty Masters"
+    fill_in amount, with: "50"
+    fill_in event_start, with: next_year.to_s
+    fill_in event_end, with: next_year.days_since(2).to_s
+    fill_in sale_start, with: last_week
+    fill_in sale_end, with: next_year.days_ago(1)
+
+    click_button select_contact
+    fill_in last_name, with: player_no_user.last_name
+    fill_in first_name, with: player_no_user.first_name + "\n"
+    click_link player_no_user.id
+    click_button save
+
+    expect(page).to have_css(failure, text: /no login/)
+
+    click_button reselect_contact
+    fill_in last_name, with: user_no_email.player.last_name
+    fill_in first_name, with: user_no_email.player.first_name + "\n"
+    click_link user_no_email.player.id
+    click_button save
+
+    expect(page).to have_css(failure, text: /no email/)
+
+    click_button reselect_contact
+    fill_in last_name, with: user_expired.player.last_name
+    fill_in first_name, with: user_expired.player.first_name + "\n"
+    click_link user_expired.player.id
+    click_button save
+
+    expect(page).to have_css(failure, text: /current member/)
+
+    click_button reselect_contact
+    fill_in last_name, with: user.player.last_name
+    fill_in first_name, with: user.player.first_name + "\n"
+    click_link user.player.id
+    click_button save
+
+    expect(page).to have_css(success, text: "created")
+
+    fee = EntryFee.last
+    expect(fee.player).to eq user.player
+
+    click_link delete
+    confirm_dialog
     expect(EntryFee.count).to eq 0
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 2
   end
@@ -149,7 +211,7 @@ feature "Create and delete an entry fee" do
     fill_in sale_end, with: fee.sale_end.to_s
     click_button save
 
-    expect(page).to have_css(failure, text: "one per year/season")
+    expect(page).to have_css(attr_failure, text: "one per year/season")
 
     fill_in event_start, with: fee.event_start.years_since(1).to_s
     fill_in event_end, with: fee.event_end.years_since(1).to_s
@@ -195,7 +257,7 @@ feature "Edit an entry fee" do
 
     expect(page).to have_css(success, text: "created")
     expect(page).to have_xpath(description, text: "#{fee.event_name} #{fee.year_or_season.to_i + 1}")
-    
+
     fee2 = EntryFee.last
     expect(fee2.event_name).to eq fee.event_name
     expect(fee2.amount).to eq fee.amount

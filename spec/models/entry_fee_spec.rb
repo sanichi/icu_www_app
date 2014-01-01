@@ -2,41 +2,42 @@ require 'spec_helper'
 
 describe EntryFee do
   context "implicitly set attributes" do
-    let(:fee) { create(:entry_fee, event_name: "Bunratty Masters", event_start: "2014-02-05", event_end: "2014-02-07") }
+    let(:fee) { create(:entry_fee, sale_start: nil, sale_end: nil) }
 
     it "sale start and end dates" do
-      expect(fee.sale_start.to_s).to eq "2013-11-05"
-      expect(fee.sale_end.to_s).to eq "2014-02-04"
+      expect(fee.sale_start).to eq fee.event_start.months_ago(3)
+      expect(fee.sale_end).to eq fee.event_start.days_ago(1)
     end
 
     it "#year_or_season" do
-      expect(fee.year_or_season).to eq "2014"
+      expect(fee.year_or_season).to eq fee.event_start.year.to_s
     end
 
     it "#description" do
-      expect(fee.description).to eq "Bunratty Masters 2014"
+      expect(fee.description).to eq "#{fee.event_name} #{fee.event_start.year}"
     end
   end
 
   context "more implicitly set attributes" do
-    let(:fee) { create(:entry_fee, event_name: "Ulster New Year Special", amount: "50", event_start: "2013-12-27", event_end: "2014-01-02", discounted_amount: "40", discount_deadline: "2013-12-01") }
+    let(:late_next_year) { Date.today.next_year.end_of_year.days_ago(2) }
+    let(:fee) { create(:entry_fee, event_name: "Ulster End of Year Special", amount: "50", event_start: late_next_year, event_end: late_next_year.days_since(10), sale_start: nil, sale_end: nil, discounted_amount: "40", discount_deadline: late_next_year.days_ago(10)) }
 
     it "sale start and end dates" do
-      expect(fee.sale_start.to_s).to eq "2013-09-27"
-      expect(fee.sale_end.to_s).to eq "2013-12-26"
+      expect(fee.sale_start).to eq late_next_year.months_ago(3)
+      expect(fee.sale_end).to eq late_next_year.days_ago(1)
     end
 
     it "#year_or_season" do
-      expect(fee.year_or_season).to eq "2013-14"
+      expect(fee.year_or_season).to eq Season.new(late_next_year).desc
     end
 
     it "#description" do
-      expect(fee.description).to eq "Ulster New Year Special 2013-14"
+      expect(fee.description).to eq "#{fee.event_name} #{Season.new(late_next_year).desc}"
     end
   end
 
   context "errors" do
-    let(:params) { attributes_for(:entry_fee, discounted_amount: 40, discount_deadline: "2014-02-01", event_start: "2014-02-05", event_end: "2014-02-09", sale_start: "2013-11-01", sale_end: "2014-02-03") }
+    let(:params) { attributes_for(:entry_fee, discounted_amount: 40, discount_deadline: Date.today.days_since(7)) }
 
     it "ok" do
       expect{EntryFee.create!(params)}.to_not raise_error
@@ -47,20 +48,20 @@ describe EntryFee do
     end
 
     it "bad event start" do
-      expect{EntryFee.create!(params.merge(event_start: "2014-02-10"))}.to raise_error(/start/)
+      expect{EntryFee.create!(params.merge(event_start: params[:event_end].days_since(1)))}.to raise_error(/start/)
     end
 
     it "bad event end" do
-      expect{EntryFee.create!(params.merge(event_end: "2016-02-10"))}.to raise_error(/end/)
+      expect{EntryFee.create!(params.merge(event_end: params[:event_start].days_ago(1)))}.to raise_error(/end/)
     end
 
     it "bad sale start" do
-      expect{EntryFee.create!(params.merge(sale_start: "2014-02-10"))}.to raise_error(/start/)
+      expect{EntryFee.create!(params.merge(sale_start: params[:event_start].days_since(1)))}.to raise_error(/start/)
     end
 
     it "bad sale end" do
-      expect{EntryFee.create!(params.merge(sale_end: "2014-02-07"))}.to raise_error(/before/)
-      expect{EntryFee.create!(params.merge(sale_end: "2013-10-01"))}.to raise_error(/start/)
+      expect{EntryFee.create!(params.merge(sale_end: params[:event_start].days_since(1)))}.to raise_error(/before/)
+      expect{EntryFee.create!(params.merge(sale_end: params[:sale_start].days_ago(4)))}.to raise_error(/start/)
     end
   end
 

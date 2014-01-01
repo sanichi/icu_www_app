@@ -4,7 +4,7 @@
 
 .form-group
   = form.label param, text, class: "control-label col-#{col}-#{pad}"
-  = hidden_field :entry_fee, param
+  = form.hidden_field param
   %div{class: "col-#{col}-#{width} help-block"}
     %span{id: "player_name"}= player.name(id: true) if player
     &nbsp;

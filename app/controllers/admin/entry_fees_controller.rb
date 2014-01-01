@@ -38,6 +38,7 @@ class Admin::EntryFeesController < ApplicationController
       @fee.journal(:create, current_user, request.ip)
       redirect_to [:admin, @fee], notice: "Entry fee was successfully created"
     else
+      flash_first_base_error(@fee)
       render action: "new"
     end
   end
@@ -54,7 +55,7 @@ class Admin::EntryFeesController < ApplicationController
       @fee.journal(:update, current_user, request.ip)
       redirect_to [:admin, @fee], notice: "Entry fee was successfully updated"
     else
-      flash.now.alert = @fee.errors[:base].first if @fee.errors[:base].any?
+      flash_first_base_error(@fee)
       render action: "edit"
     end
   end

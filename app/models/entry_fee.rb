@@ -91,7 +91,7 @@ class EntryFee < ActiveRecord::Base
 
   def check_contact
     return if player_id.nil?
-    if player_id == 0 || player.nil?
+    if player.blank?
       errors[:base] << "Invalid contact"
     elsif player.email.blank?
       errors[:base] << "Contact has no email address"

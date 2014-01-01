@@ -34,4 +34,8 @@ class ApplicationController < ActionController::Base
   def admin_path?
     controller_path.match(/^admin\//)
   end
+  
+  def flash_first_base_error(model)
+    flash.now.alert = model.errors[:base].first if model.errors[:base].any?
+  end
 end

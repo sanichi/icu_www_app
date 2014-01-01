@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :entry_fee do
-    event_name        "Kilkenny Masters"
+    event_name        "Bunratty Masters"
     amount            50.0
-    event_start       "2013-09-22"
-    event_end         "2013-09-25"
-    sale_start        nil
-    sale_end          nil
+    event_start       { Date.today.next_year.beginning_of_year.days_since(35) }
+    event_end         { event_start.days_since(2) }
+    sale_start        { Date.today.days_ago(7) }
+    sale_end          { event_start.days_ago(1) }
     discounted_amount nil
     discount_deadline nil
   end

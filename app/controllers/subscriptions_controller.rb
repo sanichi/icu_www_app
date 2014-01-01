@@ -16,7 +16,7 @@ class SubscriptionsController < ApplicationController
       cart_item = CartItem.create(cart: cart, cartable: @sub)
       redirect_to cart_path(cart)
     else
-      flash.now.alert = @sub.errors.to_a.first
+      flash_first_base_error(@sub)
       render "new"
     end
   end
