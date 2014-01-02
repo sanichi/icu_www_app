@@ -3,6 +3,8 @@ class SubscriptionFee < ActiveRecord::Base
   include Journalable
   journalize %w[category amount season_desc], "/admin/subscription_fees/%d"
 
+  has_many :subscriptions
+
   CATEGORIES = Subscription::CATEGORIES.reject { |cat| cat == "lifetime" }
 
   validates :category, inclusion: { in: CATEGORIES }, uniqueness: { scope: :season_desc, message: "no more than one per season" }
@@ -29,6 +31,10 @@ class SubscriptionFee < ActiveRecord::Base
 
   def season
     @season ||= Season.new(season_desc)
+  end
+  
+  def deletable?
+    subscriptions.count == 0
   end
 
   def rolloverable?
@@ -72,7 +78,7 @@ class SubscriptionFee < ActiveRecord::Base
       @season = nil
     end
   end
-  
+
   def player_already_in_cart?(item)
     item.cart.cart_items.detect do |cart_item|
       cart_item != item && cart_item.cartable_type == "SubscriptionFee" && cart_item.cartable.season_desc == season_desc

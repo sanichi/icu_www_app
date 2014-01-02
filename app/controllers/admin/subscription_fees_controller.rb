@@ -45,9 +45,15 @@ class Admin::SubscriptionFeesController < ApplicationController
   end
 
   def destroy
-    @fee.journal(:destroy, current_user, request.ip)
-    @fee.destroy
-    redirect_to admin_subscription_fees_path
+    if @fee.deletable?
+      @fee.journal(:destroy, current_user, request.ip)
+      @fee.destroy
+      redirect_to admin_subscription_fees_path, notice: "Subscription fee was successfully deleted"
+    else
+      flash.now[:alert] = "This fee can't be deleted because it is linked to one or more subscriptions"
+      @entries = @fee.journal_entries if current_user.roles.present?
+      render "show"
+    end
   end
 
   private

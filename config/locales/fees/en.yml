@@ -25,6 +25,7 @@ en:
     subscription:
       age_ref_date: Age reference date
       season: Season
+      subscriptions: Subscriptions
       category:
         category: Category
         lifetime: Lifetime

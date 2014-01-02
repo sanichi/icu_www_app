@@ -74,7 +74,7 @@ feature "Create and delete a subscription" do
     expect(fee.sale_end.to_s).to eq "2014-08-31"
     expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "SubscriptionFee").count).to eq 1
-     
+
     click_link delete
     expect(SubscriptionFee.count).to eq 0
     expect(JournalEntry.where(journalable_type: "SubscriptionFee").count).to eq 2
@@ -121,7 +121,7 @@ feature "Edit a subscription fee" do
 
   scenario "rollover" do
     expect(JournalEntry.count).to eq 0
-    
+
     visit admin_subscription_fee_path(fee)
     click_link rollover
 
@@ -130,5 +130,44 @@ feature "Edit a subscription fee" do
     expect(page).to_not have_link(rollover)
 
     expect(JournalEntry.where(action: "create").count).to eq 1
+  end
+end
+
+feature "Subscription fees linked to subscriptions" do
+  before(:each) do
+    login("treasurer")
+  end
+
+  given(:player)        { create(:player) }
+  given(:fee)           { create(:subscription_fee) }
+  given!(:subscription) { create(:subscription, subscription_fee: fee, player: player) }
+  given(:delete)        { I18n.t("delete") }
+  given(:success)       { "div.alert-success" }
+  given(:failure)       { "div.alert-danger" }
+
+  scenario "can't be deleted" do
+    expect(SubscriptionFee.count).to eq 1
+    expect(Subscription.count).to eq 1
+
+    visit admin_subscription_fee_path(fee)
+    expect(page).to_not have_link(delete)
+
+    visit admin_subscription_fee_path(fee, show_delete_button_for_test: "")
+    click_link delete
+
+    expect(page).to have_css(failure, text: /can't be deleted/)
+    expect(SubscriptionFee.count).to eq 1
+    expect(Subscription.count).to eq 1
+
+    fee.subscriptions.each { |sub| sub.destroy }
+    expect(SubscriptionFee.count).to eq 1
+    expect(Subscription.count).to eq 0
+
+    visit admin_subscription_fee_path(fee)
+    click_link delete
+
+    expect(page).to have_css(success, text: /successfully deleted/)
+    expect(SubscriptionFee.count).to eq 0
+    expect(Subscription.count).to eq 0
   end
 end

@@ -24,10 +24,14 @@
       %tr
         %th= t("fee.subscription.age_ref_date")
         %td= @fee.age_ref_date.to_s
+      %tr
+        %th= t("fee.subscription.subscriptions")
+        %td= @fee.subscriptions.count
       = render "utils/timestamps", object: @fee
 
     = link_to "Edit", edit_admin_subscription_fee_path(@fee), class: "btn btn-primary"
-    = link_to "Delete", admin_subscription_fee_path(@fee), data: { confirm: "Sure you want to delete this fee?" }, method: :delete, class: "btn btn-danger"
+    - if @fee.deletable? || params[:show_delete_button_for_test]
+      = link_to "Delete", admin_subscription_fee_path(@fee), data: { confirm: "Sure you want to delete this fee?" }, method: :delete, class: "btn btn-danger"
     - if @fee.rolloverable?
       = link_to "Rollover", rollover_admin_subscription_fee_path(@fee), class: "btn btn-info"
     = link_to "Fees", admin_subscription_fees_path, class: "btn btn-default"
