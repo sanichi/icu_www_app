@@ -327,10 +327,7 @@ feature "Delete users" do
       login "admin"
       visit admin_user_path(user)
       click_link "Delete"
-      if js
-        wait_for_browser
-        page.driver.browser.switch_to.alert.accept
-      end
+      confirm_dialog if js
       expect(page).to have_css(success, text: deleted)
       expect(User.where(id: user.id).count).to eq 0
     end
