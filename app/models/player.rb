@@ -33,6 +33,7 @@ class Player < ActiveRecord::Base
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
   validates :fed, format: { with: /\A[A-Z]{3}\z/ }, allow_nil: true
+  validates :latest_rating, numericality: { only_integer: true }, allow_nil: true
   validates :legacy_rating, numericality: { only_integer: true }, allow_nil: true
   validates :legacy_rating_type, inclusion: { in: RATING_TYPES }, allow_nil: true
   validates :legacy_games, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
@@ -182,7 +183,7 @@ class Player < ActiveRecord::Base
     nillable = %w[dob gender joined email address note]
     nillable+= %w[home_phone mobile_phone work_phone]
     nillable+= %w[player_title arbiter_title trainer_title]
-    nillable+= %w[legacy_rating legacy_rating_type legacy_games]
+    nillable+= %w[legacy_rating legacy_rating_type legacy_games latest_rating]
     nillable.each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).present?
     end

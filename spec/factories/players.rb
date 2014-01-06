@@ -15,6 +15,7 @@ FactoryGirl.define do
     player_title       nil
     arbiter_title      nil
     trainer_title      nil
+    latest_rating      nil
     legacy_rating      nil
     legacy_rating_type nil
     legacy_games       nil
