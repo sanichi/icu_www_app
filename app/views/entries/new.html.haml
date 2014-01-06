@@ -14,6 +14,10 @@
         .panel-body
           = render "cart_items/detail", term: t("fee.entry.event.start"), desc: @fee.event_start.to_s
           = render "cart_items/detail", term: t("fee.entry.event.end"), desc: @fee.event_end.to_s
+          - if @fee.min_rating
+            = render "cart_items/detail", term: t("fee.entry.min_rating"), desc: @fee.min_rating
+          - if @fee.max_rating
+            = render "cart_items/detail", term: t("fee.entry.max_rating"), desc: @fee.max_rating
           - if @fee.discountable?
             = render "cart_items/detail", term: t("fee.entry.standard_fee"), desc: euros(@fee.amount)
             = render "cart_items/detail", term: t("fee.entry.early_discount"), desc: euros(@fee.discounted_amount)

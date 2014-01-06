@@ -22,6 +22,8 @@ en:
       standard_fee: Standard fee
       error:
         already_in_cart: "An entry for %{member} in the same event is already in your cart"
+        rating_too_high: "%{member}'s current rating is over the limit (%{limit}) for this event"
+        rating_too_low: "%{member}'s current rating is under the limit (%{limit}) for this event"
       event:
         name: Event name
         start: Event start

@@ -229,6 +229,31 @@ feature "Create and delete an entry fee" do
 
     expect(page).to have_css(success, text: "created")
   end
+
+  scenario "bad rating constraints" do
+    visit new_admin_entry_fee_path
+    fill_in event_name, with: "Bunratty Challengers"
+    fill_in amount, with: "30"
+    fill_in event_start, with: next_year.to_s
+    fill_in event_end, with: next_year.days_since(2).to_s
+    fill_in min_rating, with: "2000"
+    fill_in max_rating, with: "1000"
+    click_button save
+
+    expect(page).to have_css(failure, text: "greater than")
+
+    fill_in min_rating, with: "1500"
+    fill_in max_rating, with: "1500"
+    click_button save
+
+    expect(page).to have_css(failure, text: "too close")
+
+    fill_in min_rating, with: "1400"
+    fill_in max_rating, with: "1600"
+    click_button save
+
+    expect(page).to have_css(success, text: "created")
+  end
 end
 
 feature "Edit an entry fee" do

@@ -9,7 +9,7 @@ class Entry < ActiveRecord::Base
   validates :cost, numericality: { greater_than: 0.0 }
   validates :description, :event_start, :event_end, presence: true
 
-  validate :check_dates
+  validate :check_dates, :check_rating
 
   def duplicate_of?(entry, add_error=false)
     if entry.player_id == player_id && entry.description == entry.description
@@ -29,6 +29,18 @@ class Entry < ActiveRecord::Base
       elsif event_end.year > event_start.year + 1
         errors.add(:event_end, "must end in the same or next year it starts")
       end
+    end
+  end
+
+  def check_rating
+    return unless player && player.latest_rating && entry_fee && (entry_fee.min_rating || entry_fee.max_rating)
+    error, limit =
+      case
+      when entry_fee.min_rating && player.latest_rating < entry_fee.min_rating then ["too_low",  entry_fee.min_rating]
+      when entry_fee.max_rating && player.latest_rating > entry_fee.max_rating then ["too_high", entry_fee.max_rating]
+      end
+    if error
+      errors.add(:base, I18n.t("fee.entry.error.rating_#{error}", member: player.name, limit: limit))
     end
   end
 end

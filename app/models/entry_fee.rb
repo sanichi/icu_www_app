@@ -14,7 +14,7 @@ class EntryFee < ActiveRecord::Base
   validates :discount_deadline, presence: true, if: Proc.new { |f| f.discounted_amount.present? }
   validates :event_start, :event_end, :sale_start, :sale_end, presence: true
   validates :min_rating, :max_rating, numericality: { only_integer: true, greater_than: 0, less_than: 3000 }, allow_nil: true
-  validate :check_dates, :check_discount, :check_contact, :check_website
+  validate :check_dates, :check_discount, :check_contact, :check_website, :check_rating_limits
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
   scope :on_sale, -> { where("sale_start <= ?", Date.today).where("sale_end >= ?", Date.today) }
@@ -44,7 +44,7 @@ class EntryFee < ActiveRecord::Base
     end
     params
   end
-  
+
   def event_host
     return unless event_website
     uri = URI.parse(event_website)
@@ -130,6 +130,15 @@ class EntryFee < ActiveRecord::Base
     raise "got bad response for this web address" unless res.kind_of?(Net::HTTPSuccess)
   rescue => e
     errors.add(:event_website, e.message)
+  end
+
+  def check_rating_limits
+    return unless min_rating && max_rating
+    if min_rating > max_rating
+      errors[:base] << "Rating minimum is greater than maximum"
+    elsif min_rating + 100 > max_rating
+      errors[:base] << "Rating limits are too close"
+    end
   end
 
   def next_year_or_season

@@ -4,7 +4,10 @@ class Player < ActiveRecord::Base
   extend ICU::Util::AlternativeNames
 
   include Journalable
-  journalize %w[first_name last_name dob gender joined fed email address home_phone mobile_phone work_phone player_title arbiter_title trainer_title note status player_id club_id], "/admin/players/%d"
+  journalize %w[
+    first_name last_name dob gender fed email address home_phone mobile_phone work_phone
+    joined player_title arbiter_title trainer_title note status player_id club_id
+  ], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
   belongs_to :club
@@ -18,7 +21,7 @@ class Player < ActiveRecord::Base
   ARBITER_TITLES = %w[IA FA NA]
   TRAINER_TITLES = %w[FST FT FI NI DI]
   RATING_TYPES = %w[full provisional]
-  
+
   default_scope { includes(:club) }
 
   before_validation :normalize_attributes, :conditional_adjustment
@@ -76,7 +79,7 @@ class Player < ActiveRecord::Base
     age -= 1 if today.month < dob.month || (today.month == dob.month && today.day < dob.day)
     age
   end
-  
+
   def federation(code=false)
     return unless fed.present?
     federation = ICU::Federation.find(fed).try(:name) || "Unknown"
@@ -91,7 +94,7 @@ class Player < ActiveRecord::Base
     titles << trainer_title if trainer_title
     titles.join(" ")
   end
-  
+
   def phones
     %w[home mobile work].each_with_object([]) do |type, numbers|
       number = send("#{type}_phone")
@@ -244,7 +247,7 @@ class Player < ActiveRecord::Base
       self.status = "inactive"
     end
   end
-  
+
   def validate_phones
     mob = {}
     err = 0
@@ -277,7 +280,7 @@ class Player < ActiveRecord::Base
       end
     end
   end
-  
+
   # Either all legacy rating attributes are nil or none are.
   def validate_legacy_rating
     atrs = %w[rating rating_type games]

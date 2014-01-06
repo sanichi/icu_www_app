@@ -12,7 +12,7 @@ class EntriesController < ApplicationController
     @entry.cost = @fee.cost
     @entry.event_start = @fee.event_start
     @entry.event_end = @fee.event_end
-    
+
     cart = current_cart(:create)
 
     if @entry.save

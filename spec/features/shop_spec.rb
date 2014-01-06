@@ -282,7 +282,11 @@ end
 
 feature "Shop for entries" do
   given!(:player)         { create(:player) }
+  given!(:master)         { create(:player, latest_rating: 2400) }
+  given!(:beginner)       { create(:player, latest_rating: 1000) }
   given!(:entry_fee)      { create(:entry_fee) }
+  given!(:u1400_fee)      { create(:entry_fee, event_name: "Limerick U1400", max_rating: 1400) }
+  given!(:premier_fee)    { create(:entry_fee, event_name: "Kilbunny Premier", min_rating: 2000) }
 
   given(:add_to_cart)     { I18n.t("shop.cart.item.add") }
   given(:cost)            { I18n.t("shop.cart.item.cost") }
@@ -294,11 +298,8 @@ feature "Shop for entries" do
   given(:last_name)       { I18n.t("player.last_name") }
   given(:select_member)   { I18n.t("shop.cart.item.select_member") }
   given(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
-  given(:lifetime_error)  { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
-  given(:exists_error)    { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
-  given(:in_cart_error)   { I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true)) }
-  given(:too_old_error)   { I18n.t("fee.subscription.error.too_old", member: player.name(id: true), limit: 12, date: under_12_sub.age_ref_date.to_s) }
-  given(:too_young_error) { I18n.t("fee.subscription.error.too_young", member: player.name(id: true), limit: 65, date: over_65_sub.age_ref_date.to_s) }
+  given(:too_high_error)  { I18n.t("fee.entry.error.rating_too_high", member: master.name, limit: 1400) }
+  given(:too_low_error)   { I18n.t("fee.entry.error.rating_too_low", member: beginner.name, limit: 2000) }
 
   given(:force_submit)    { "\n" }
   given(:failure)         { "div.alert-danger" }
@@ -328,7 +329,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Entry.where(active: false).count).to eq 1
+    expect(Entry.where(active: false, entry_fee_id: entry_fee.id, player_id: player.id).count).to eq 1
 
     cart = Cart.last
     cart_item = CartItem.last
@@ -349,5 +350,81 @@ feature "Shop for entries" do
     expect(cart_item.cartable).to eq entry
     expect(entry.cart_item).to eq cart_item
     expect(entry.entry_fee).to eq entry_fee
+  end
+
+  scenario "can't add due to rating (too high)", js: true do
+    visit shop_path
+    click_link u1400_fee.description
+    click_button select_member
+    fill_in last_name, with: master.last_name + force_submit
+    fill_in first_name, with: master.first_name + force_submit
+    click_link master.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_high_error)
+
+    click_button select_member
+    fill_in last_name, with: beginner.last_name + force_submit
+    fill_in first_name, with: beginner.first_name + force_submit
+    click_link beginner.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Entry.where(active: false, entry_fee_id: u1400_fee.id, player_id: beginner.id).count).to eq 1
+
+    visit shop_path
+    click_link u1400_fee.description
+    click_button select_member
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 2
+    expect(Entry.where(active: false, entry_fee_id: u1400_fee.id).count).to eq 2
+  end
+
+  scenario "can't add due to rating (too low)", js: true do
+    visit shop_path
+    click_link premier_fee.description
+    click_button select_member
+    fill_in last_name, with: beginner.last_name + force_submit
+    fill_in first_name, with: beginner.first_name + force_submit
+    click_link beginner.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_low_error)
+
+    click_button select_member
+    fill_in last_name, with: master.last_name + force_submit
+    fill_in first_name, with: master.first_name + force_submit
+    click_link master.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Entry.where(active: false, entry_fee_id: premier_fee.id, player_id: master.id).count).to eq 1
+
+    visit shop_path
+    click_link premier_fee.description
+    click_button select_member
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 2
+    expect(Entry.where(active: false, entry_fee_id: premier_fee.id).count).to eq 2
   end
 end
