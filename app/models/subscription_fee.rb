@@ -32,7 +32,7 @@ class SubscriptionFee < ActiveRecord::Base
   def season
     @season ||= Season.new(season_desc)
   end
-  
+
   def deletable?
     subscriptions.count == 0
   end
@@ -45,14 +45,6 @@ class SubscriptionFee < ActiveRecord::Base
   def rollover
     return unless rolloverable?
     SubscriptionFee.create(category: category, season_desc: season.next, amount: amount)
-  end
-
-  def validate_cart_item(item)
-    return unless error = case
-    when item.player.nil?              then "missing_member"
-    when player_already_in_cart?(item) then "already_in_cart"
-    end
-    I18n.t("fee.subscription.error.#{error}")
   end
 
   private
@@ -76,12 +68,6 @@ class SubscriptionFee < ActiveRecord::Base
   def reset_season
     if previous_changes.has_key?("season_desc")
       @season = nil
-    end
-  end
-
-  def player_already_in_cart?(item)
-    item.cart.cart_items.detect do |cart_item|
-      cart_item != item && cart_item.cartable_type == "SubscriptionFee" && cart_item.cartable.season_desc == season_desc
     end
   end
 end

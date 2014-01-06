@@ -1,4 +1,4 @@
-- content_for :title, "Subscription Fee"
+- content_for :title, t("fee.type.subscription")
 
 = form_for @sub do |form|
   = form.hidden_field :subscription_fee_id
@@ -12,7 +12,7 @@
           %h4.panel-title
             = t("fee.type.subscription")
             = @fee.season_desc
-            .pull-right= euros(@fee.amount)
+            .pull-right= euros(@fee.cost)
         .panel-body
           = render "cart_items/detail", term: t("fee.subscription.category.category"), desc: t("fee.subscription.category.#{@fee.category}")
           = render "cart_items/detail", term: t("fee.subscription.valid.from"), desc: @fee.season.start.to_s

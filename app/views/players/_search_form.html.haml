@@ -3,7 +3,7 @@
   = render "utils/inline_text_field", param: :last_name, text: t("player.last_name"), size: 8
   = render "utils/inline_text_field", param: :first_name, text: t("player.first_name"), size: 8
   = render "utils/inline_select", param: :gender, text: t("player.gender.gender"), menu: player_gender_menu(params[:gender], "player.any_gender")
-  = render "utils/inline_select", param: :relation, text: "", menu: player_relation_menu(params[:relation])
+  = render "utils/inline_select", param: :yob_relation, text: "", menu: player_yob_relation_menu(params[:yob_relation])
   = render "utils/inline_text_field", param: :yob, text: t("player.abbrev.yob"), size: 4
   - unless current_user.guest?
     = render "utils/inline_select", param: :status, text: t("player.status"), menu: player_status_menu(params[:status], any: true, duplicate: true)

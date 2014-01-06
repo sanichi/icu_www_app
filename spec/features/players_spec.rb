@@ -80,10 +80,10 @@ feature "Search players" do
     fill_in "yob", with: "1966"
     click_button search
     expect(page).to_not have_xpath(result)
-    select ">", from: "relation"
+    select ">", from: "yob_relation"
     click_button search
     expect(page).to have_xpath(result, count: 2)
-    select "<", from: "relation"
+    select "<", from: "yob_relation"
     click_button search
     expect(page).to have_xpath(result, count: 4)
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131225202243) do
+ActiveRecord::Schema.define(version: 20140103131424) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -55,6 +55,21 @@ ActiveRecord::Schema.define(version: 20131225202243) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "entries", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "entry_fee_id"
+    t.string   "description"
+    t.date     "event_start"
+    t.date     "event_end"
+    t.decimal  "cost",         precision: 6, scale: 2
+    t.boolean  "active",                               default: false
+    t.datetime "created_at"
+  end
+
+  add_index "entries", ["active"], name: "index_entries_on_active", using: :btree
+  add_index "entries", ["entry_fee_id"], name: "index_entries_on_entry_fee_id", using: :btree
+  add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
 
   create_table "entry_fees", force: true do |t|
     t.string   "event_name",        limit: 100

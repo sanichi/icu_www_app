@@ -24,7 +24,7 @@ module PlayersHelper
     options_for_select(orders, selected)
   end
 
-  def player_relation_menu(selected)
+  def player_yob_relation_menu(selected)
     options_for_select(%w[= < >], selected)
   end
 

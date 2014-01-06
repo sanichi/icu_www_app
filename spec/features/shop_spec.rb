@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Shop" do
+feature "Shop for subscriptions" do
   given!(:player)         { create(:player, dob: 58.years.ago, joined: 30.years.ago) }
   given!(:player2)        { create(:player, dob: 30.years.ago, joined: 20.years.ago) }
   given!(:junior)         { create(:player, dob: 10.years.ago, joined: 2.years.ago) }
@@ -30,6 +30,7 @@ feature "Shop" do
   given(:too_old_error)   { I18n.t("fee.subscription.error.too_old", member: player.name(id: true), limit: 12, date: under_12_sub.age_ref_date.to_s) }
   given(:too_young_error) { I18n.t("fee.subscription.error.too_young", member: player.name(id: true), limit: 65, date: over_65_sub.age_ref_date.to_s) }
 
+  given(:force_submit)    { "\n" }
   given(:failure)         { "div.alert-danger" }
 
   def xpath(type, text, *txts)
@@ -38,7 +39,7 @@ feature "Shop" do
     end
   end
 
-  scenario "add subscription", js: true do
+  scenario "add", js: true do
     visit shop_path
     expect(page).to_not have_link(cart_link)
     click_link standard_sub.description
@@ -46,8 +47,8 @@ feature "Shop" do
     expect(page).to_not have_button(add_to_cart)
     click_button select_member
 
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
 
     click_link player.id
 
@@ -81,14 +82,14 @@ feature "Shop" do
     expect(subscription.subscription_fee).to eq standard_sub
   end
 
-  scenario "error due to lifetime subscription", js: true do
+  scenario "can't add due to existing lifetime subscription", js: true do
     expect(lifetime_sub.player).to eq player
 
     visit shop_path
     click_link standard_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -99,14 +100,14 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "error due to existing subscription", js: true do
+  scenario "can't add due to existing subscription for the season", js: true do
     expect(existing_sub.player).to eq player
 
     visit shop_path
     click_link standard_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -117,12 +118,12 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "error due to duplicate subscription in cart", js: true do
+  scenario "can't add due to duplicate subscription in cart", js: true do
     visit shop_path
     click_link standard_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -135,8 +136,8 @@ feature "Shop" do
     visit shop_path
     click_link unemployed_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -147,20 +148,20 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 1
   end
 
-  scenario "error due to age (too old)", js: true do
+  scenario "can't add due to age (too old)", js: true do
     visit shop_path
     click_link under_12_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
     expect(page).to have_css(failure, text: too_old_error)
 
     click_button select_member
-    fill_in last_name, with: junior.last_name
-    fill_in first_name, with: junior.first_name + "\n"
+    fill_in last_name, with: junior.last_name + force_submit
+    fill_in first_name, with: junior.first_name + force_submit
     click_link junior.id
     click_button add_to_cart
 
@@ -171,20 +172,20 @@ feature "Shop" do
     expect(Subscription.where(active: false, category: "under_12").count).to eq 1
   end
 
-  scenario "error due to age (too young)", js: true do
+  scenario "can't add due to age (too young)", js: true do
     visit shop_path
     click_link over_65_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
     expect(page).to have_css(failure, text: too_young_error)
 
     click_button select_member
-    fill_in last_name, with: oldie.last_name
-    fill_in first_name, with: oldie.first_name + "\n"
+    fill_in last_name, with: oldie.last_name + force_submit
+    fill_in first_name, with: oldie.first_name + force_submit
     click_link oldie.id
     click_button add_to_cart
 
@@ -195,12 +196,12 @@ feature "Shop" do
     expect(Subscription.where(active: false, category: "over_65").count).to eq 1
   end
 
-  scenario "delete subscriptions from cart", js: true do
+  scenario "delete", js: true do
     visit shop_path
     click_link standard_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -213,8 +214,8 @@ feature "Shop" do
     visit shop_path
     click_link unemployed_sub.description
     click_button select_member
-    fill_in last_name, with: player2.last_name
-    fill_in first_name, with: player2.first_name + "\n"
+    fill_in last_name, with: player2.last_name + force_submit
+    fill_in first_name, with: player2.first_name + force_submit
     click_link player2.id
     click_button add_to_cart
 
@@ -243,12 +244,12 @@ feature "Shop" do
     expect(Subscription.where(active: false).count).to eq 0
   end
 
-  scenario "can only delete from the current cart", js: true do
+  scenario "can only delete from current cart", js: true do
     visit shop_path
     click_link standard_sub.description
     click_button select_member
-    fill_in last_name, with: player.last_name
-    fill_in first_name, with: player.first_name + "\n"
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
     click_link player.id
     click_button add_to_cart
 
@@ -276,5 +277,77 @@ feature "Shop" do
 
     expect(cart.items).to eq 0
     expect(other_cart.items).to eq 1
+  end
+end
+
+feature "Shop for entries" do
+  given!(:player)         { create(:player) }
+  given!(:entry_fee)      { create(:entry_fee) }
+
+  given(:add_to_cart)     { I18n.t("shop.cart.item.add") }
+  given(:cost)            { I18n.t("shop.cart.item.cost") }
+  given(:item)            { I18n.t("shop.cart.item.item") }
+  given(:member)          { I18n.t("shop.cart.item.member") }
+  given(:total)           { I18n.t("shop.cart.total") }
+  given(:cart_link)       { I18n.t("shop.cart.cart") + ":" }
+  given(:first_name)      { I18n.t("player.first_name") }
+  given(:last_name)       { I18n.t("player.last_name") }
+  given(:select_member)   { I18n.t("shop.cart.item.select_member") }
+  given(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
+  given(:lifetime_error)  { I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)) }
+  given(:exists_error)    { I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc) }
+  given(:in_cart_error)   { I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true)) }
+  given(:too_old_error)   { I18n.t("fee.subscription.error.too_old", member: player.name(id: true), limit: 12, date: under_12_sub.age_ref_date.to_s) }
+  given(:too_young_error) { I18n.t("fee.subscription.error.too_young", member: player.name(id: true), limit: 65, date: over_65_sub.age_ref_date.to_s) }
+
+  given(:force_submit)    { "\n" }
+  given(:failure)         { "div.alert-danger" }
+
+  def xpath(type, text, *txts)
+    txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|
+      acc + '/following-sibling::%s[contains(.,"%s")]' % [type, txt]
+    end
+  end
+
+  scenario "add", js: true do
+    visit shop_path
+    expect(page).to_not have_link(cart_link)
+    click_link entry_fee.description
+
+    expect(page).to_not have_button(add_to_cart)
+    click_button select_member
+
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
+
+    click_link player.id
+
+    expect(page).to_not have_button(select_member)
+    expect(page).to have_button(reselect_member)
+    click_button add_to_cart
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Entry.where(active: false).count).to eq 1
+
+    cart = Cart.last
+    cart_item = CartItem.last
+    entry = Entry.last
+
+    expect(page).to have_xpath(xpath("th", item, member, cost))
+    expect(page).to have_xpath(xpath("td", entry.description, player.name(id: true), entry.cost))
+    expect(page).to have_xpath(xpath("th", total, entry.cost))
+
+    visit shop_path
+    expect(page).to have_link(cart_link)
+
+    expect(cart.status).to eq "unpaid"
+    expect(cart_item.status).to eq "unpaid"
+    expect(entry.active).to be_false
+
+    expect(cart_item.cart).to eq cart
+    expect(cart_item.cartable).to eq entry
+    expect(entry.cart_item).to eq cart_item
+    expect(entry.entry_fee).to eq entry_fee
   end
 end

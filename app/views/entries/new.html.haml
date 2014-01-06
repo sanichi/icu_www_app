@@ -1,0 +1,32 @@
+- content_for :title, t("fee.type.entry")
+
+= form_for @entry do |form|
+  = form.hidden_field :entry_fee_id
+  = form.hidden_field :player_id
+
+  .row
+    .col-md-6.col-md-offset-3
+      .panel.panel-info
+        .panel-heading
+          %h4.panel-title
+            = @fee.description
+            .pull-right= euros(@fee.cost)
+        .panel-body
+          = render "cart_items/detail", term: t("fee.entry.event.start"), desc: @fee.event_start.to_s
+          = render "cart_items/detail", term: t("fee.entry.event.end"), desc: @fee.event_end.to_s
+          - if @fee.discountable?
+            = render "cart_items/detail", term: t("fee.entry.standard_fee"), desc: euros(@fee.amount)
+            = render "cart_items/detail", term: t("fee.entry.early_discount"), desc: euros(@fee.discounted_amount)
+            = render "cart_items/detail", term: t("fee.discount_deadline"), desc: @fee.discount_deadline.to_s
+          - if @fee.player
+            = render "cart_items/detail", term: t("fee.entry.event.contact"), desc: mail_to(@fee.player.email, @fee.player.name, target: "_contact")
+          - if @fee.event_website
+            = render "cart_items/detail", term: t("fee.entry.event.website"), desc: link_to(@fee.event_host, @fee.event_website, target: "_website")
+          = render "cart_items/detail", term: t("shop.cart.item.member"), desc: "", id: "player_name"
+        .panel-footer
+          = render "player_ids_button"
+          = render "cart_items/add_to_cart", form: form
+
+= render "player_ids/modal", title: t("shop.cart.item.select_member")
+%script
+  = render "player_ids_callback.js"

@@ -7,7 +7,7 @@
       = render "utils/select_tag", locals.merge(param: :gender, text: t("player.gender.gender"), menu: player_gender_menu(params[:gender], "player.any_gender"))
       .form-group
         = label_tag :yob, t("player.abbrev.yob"), class: "control-label col-sm-4"
-        %div{class: "col-sm-2"}= select_tag :relation, player_relation_menu(params[:relation]), class: "form-control"
+        %div{class: "col-sm-2"}= select_tag :yob_relation, player_yob_relation_menu(params[:yob_relation]), class: "form-control"
         %div{class: "col-sm-3"}= text_field_tag :yob, params[:yob], class: "form-control", type: "text"
       = render "utils/select_tag", locals.merge(param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true))
       = render "utils/select_tag", locals.merge(param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed]))

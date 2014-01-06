@@ -7,10 +7,15 @@ class EntriesController < ApplicationController
 
   def create
     @entry = Entry.new(entry_params)
-    @fee = @entry.subscription_fee
+    @fee = @entry.entry_fee
+    @entry.description = @fee.description
+    @entry.cost = @fee.cost
+    @entry.event_start = @fee.event_start
+    @entry.event_end = @fee.event_end
+    
+    cart = current_cart(:create)
 
     if @entry.save
-      cart = current_cart(:create)
       cart_item = CartItem.create(cart: cart, cartable: @entry)
       redirect_to cart_path(cart)
     else

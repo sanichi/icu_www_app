@@ -27,6 +27,14 @@ class EntryFee < ActiveRecord::Base
     "#{event_name} #{year_or_season}"
   end
 
+  def cost
+    discountable? ? discounted_amount : amount
+  end
+
+  def discountable?
+    discounted_amount && discount_deadline && Date.today <= discount_deadline
+  end
+
   def rollover_params
     params = { event_name: event_name, event_website: event_website, amount: amount, discounted_amount: discounted_amount, player_id: player_id }
     %w[event_start event_end sale_start sale_end discount_deadline].map(&:to_sym).each do |atr|
@@ -34,6 +42,12 @@ class EntryFee < ActiveRecord::Base
       params[atr] = val.present? ? val.years_since(1) : nil
     end
     params
+  end
+  
+  def event_host
+    return unless event_website
+    uri = URI.parse(event_website)
+    uri.host
   end
 
   private

@@ -14,14 +14,18 @@ en:
       subscription: ICU Subscription Fee
       subscriptions: ICU Subscription Fees
     entry:
+      early_discount: Early entry discount
+      reselect_contact: Reselect Contact
+      select_contact: Select Contact
+      standard_fee: Standard fee
+      error:
+        already_in_cart: "An entry for %{member} in the same event is already in your cart"
       event:
         name: Event name
         start: Event start
         end: Event end
         contact: Event contact
         website: Website
-      select_contact: Select Contact
-      reselect_contact: Reselect Contact
     subscription:
       age_ref_date: Age reference date
       season: Season
@@ -36,7 +40,6 @@ en:
         under_12: 12 or under
         standard: Standard
       error:
-        missing_member: "Missing member"
         lifetime_exists: "%{member} already has a lifetime subscrition"
         already_exists: "%{member} is already subscribed for %{season}"
         already_in_cart: "A subscription for %{member} is already in your cart"
