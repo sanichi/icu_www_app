@@ -150,7 +150,7 @@ class Player < ActiveRecord::Base
     else
       matches = matches.where(player_id: nil)
     end
-    if (yob = params[:yob].to_i).to_s.match(/\A(19|20)\d\d\z/)
+    if (1900..2099).include?(yob = params[:yob].to_i)
       case params[:yob_relation]
       when "="
         matches = matches.where("dob LIKE '#{yob}%'")

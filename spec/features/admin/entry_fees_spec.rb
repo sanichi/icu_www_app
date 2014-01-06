@@ -73,6 +73,8 @@ feature "Create and delete an entry fee" do
   given(:event_end)         { I18n.t("fee.entry.event.end") }
   given(:select_contact)    { I18n.t("fee.entry.select_contact") }
   given(:reselect_contact)  { I18n.t("fee.entry.reselect_contact") }
+  given(:min_rating)        { I18n.t("fee.entry.min_rating") }
+  given(:max_rating)        { I18n.t("fee.entry.max_rating") }
   given(:sale_start)        { I18n.t("fee.sale_start") }
   given(:sale_end)          { I18n.t("fee.sale_end") }
   given(:first_name)        { I18n.t("player.first_name") }
@@ -87,7 +89,7 @@ feature "Create and delete an entry fee" do
   given(:user_no_email)     { create(:user, player: create(:player,email: nil)) }
   given(:player_no_user)    { create(:player) }
 
-  scenario "no discount" do
+  scenario "no frills" do
     visit new_admin_entry_fee_path
     fill_in event_name, with: "Bunratty Masters"
     fill_in amount, with: "50"
@@ -109,6 +111,8 @@ feature "Create and delete an entry fee" do
     expect(fee.sale_start).to eq last_week
     expect(fee.sale_end).to eq next_year.days_ago(1)
     expect(fee.year_or_season).to eq next_year.year.to_s
+    expect(fee.min_rating).to be_nil
+    expect(fee.max_rating).to be_nil
     expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 1
 
@@ -117,7 +121,7 @@ feature "Create and delete an entry fee" do
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 2
   end
 
-  scenario "with discount" do
+  scenario "with discount and rating constraints" do
     visit new_admin_entry_fee_path
     fill_in event_name, with: "Bangor Xmas Special"
     fill_in amount, with: "35"
@@ -127,6 +131,8 @@ feature "Create and delete an entry fee" do
     fill_in event_end, with: late_next_year.days_since(5).to_s
     fill_in sale_start, with: last_week
     fill_in sale_end, with: late_next_year.days_ago(1)
+    fill_in min_rating, with: "1500"
+    fill_in max_rating, with: "2000"
     click_button save
 
     expect(page).to have_css(success, text: "created")
@@ -141,6 +147,8 @@ feature "Create and delete an entry fee" do
     expect(fee.sale_start).to eq last_week
     expect(fee.sale_end).to eq late_next_year.days_ago(1)
     expect(fee.year_or_season).to eq Season.new(late_next_year).desc
+    expect(fee.min_rating).to eq 1500
+    expect(fee.max_rating).to eq 2000
     expect(fee.journal_entries.count).to eq 1
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 1
 
@@ -149,7 +157,7 @@ feature "Create and delete an entry fee" do
     expect(JournalEntry.where(journalable_type: "EntryFee").count).to eq 2
   end
 
-  scenario "contact", js: true do
+  scenario "with contact", js: true do
     visit new_admin_entry_fee_path
     fill_in event_name, with: "Bunratty Masters"
     fill_in amount, with: "50"

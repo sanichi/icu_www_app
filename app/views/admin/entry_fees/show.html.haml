@@ -31,6 +31,12 @@
         %th= t("fee.discount_deadline")
         %td= @fee.discount_deadline.to_s if @fee.discount_deadline.present?
       %tr
+        %th= t("fee.entry.min_rating")
+        %td= @fee.min_rating
+      %tr
+        %th= t("fee.entry.max_rating")
+        %td= @fee.max_rating
+      %tr
         %th= t("fee.entry.event.contact")
         %td= "#{@fee.player.name} (#{@fee.player.email})" if @fee.player
       %tr

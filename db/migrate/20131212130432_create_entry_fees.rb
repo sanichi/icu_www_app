@@ -8,8 +8,12 @@ class CreateEntryFees < ActiveRecord::Migration
       t.date     :event_start, :event_end
       t.string   :event_website
       t.integer  :player_id
+      t.integer  :min_rating, :max_rating, limit: 2
 
       t.timestamps
     end
+
+    add_index :entry_fees, :sale_start
+    add_index :entry_fees, :sale_end
   end
 end

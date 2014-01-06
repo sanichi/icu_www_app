@@ -8,5 +8,8 @@ class CreateSubscriptionFees < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :subscription_fees, :sale_start
+    add_index :subscription_fees, :sale_end
   end
 end

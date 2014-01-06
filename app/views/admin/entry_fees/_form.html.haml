@@ -13,6 +13,8 @@
         = render "utils/text_field_for", locals.merge(param: :sale_start, text: t("fee.sale_start"), placeholder: "YYYY-MM-DD")
         = render "utils/text_field_for", locals.merge(param: :sale_end, text: t("fee.sale_end"), placeholder: "YYYY-MM-DD")
         %hr
+        = render "utils/text_field_for", locals.merge(param: :min_rating, text: t("fee.entry.min_rating"))
+        = render "utils/text_field_for", locals.merge(param: :max_rating, text: t("fee.entry.max_rating"))
         = render "utils/text_field_for", locals.merge(param: :discounted_amount, text: t("fee.discounted_amount"))
         = render "utils/text_field_for", locals.merge(param: :discount_deadline, text: t("fee.discount_deadline"), placeholder: "YYYY-MM-DD")
         = render "contact_hidden_field", locals.merge(param: :player_id, text: t("fee.entry.event.contact"), player: @fee.player, width: 7)

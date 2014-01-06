@@ -83,9 +83,14 @@ ActiveRecord::Schema.define(version: 20140103131424) do
     t.date     "event_end"
     t.string   "event_website"
     t.integer  "player_id"
+    t.integer  "min_rating",        limit: 2
+    t.integer  "max_rating",        limit: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "entry_fees", ["sale_end"], name: "index_entry_fees_on_sale_end", using: :btree
+  add_index "entry_fees", ["sale_start"], name: "index_entry_fees_on_sale_start", using: :btree
 
   create_table "journal_entries", force: true do |t|
     t.integer  "journalable_id"
@@ -151,6 +156,9 @@ ActiveRecord::Schema.define(version: 20140103131424) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "subscription_fees", ["sale_end"], name: "index_subscription_fees_on_sale_end", using: :btree
+  add_index "subscription_fees", ["sale_start"], name: "index_subscription_fees_on_sale_start", using: :btree
 
   create_table "subscriptions", force: true do |t|
     t.integer  "player_id"

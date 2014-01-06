@@ -8,5 +8,7 @@ FactoryGirl.define do
     sale_end          { event_start.days_ago(1) }
     discounted_amount nil
     discount_deadline nil
+    min_rating        nil
+    max_rating        nil
   end
 end
