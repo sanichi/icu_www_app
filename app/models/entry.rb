@@ -9,7 +9,7 @@ class Entry < ActiveRecord::Base
   validates :cost, numericality: { greater_than: 0.0 }
   validates :description, :event_start, :event_end, presence: true
 
-  validate :check_dates, :check_rating
+  validate :check_dates, :check_rating, :check_age
 
   def duplicate_of?(entry, add_error=false)
     if entry.player_id == player_id && entry.description == entry.description
@@ -41,6 +41,18 @@ class Entry < ActiveRecord::Base
       end
     if error
       errors.add(:base, I18n.t("fee.entry.error.rating_#{error}", member: player.name, limit: limit))
+    end
+  end
+
+  def check_age
+    return unless player && player.dob && entry_fee && entry_fee.age_ref_date && (entry_fee.min_age || entry_fee.max_age)
+    error, limit =
+      case
+      when entry_fee.min_age && player.age < entry_fee.min_age then ["too_young",  entry_fee.min_age]
+      when entry_fee.max_age && player.age > entry_fee.max_age then ["too_old", entry_fee.max_age]
+      end
+    if error
+      errors.add(:base, I18n.t("fee.entry.error.#{error}", member: player.name, limit: limit, date: entry_fee.age_ref_date))
     end
   end
 end

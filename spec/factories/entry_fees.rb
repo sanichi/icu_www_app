@@ -10,5 +10,8 @@ FactoryGirl.define do
     discount_deadline nil
     min_rating        nil
     max_rating        nil
+    min_age           nil
+    max_age           nil
+    age_ref_date      nil
   end
 end

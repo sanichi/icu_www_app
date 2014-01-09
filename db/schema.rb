@@ -81,6 +81,9 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.date     "discount_deadline"
     t.date     "event_start"
     t.date     "event_end"
+    t.date     "age_ref_date"
+    t.integer  "min_age"
+    t.integer  "max_age"
     t.string   "event_website"
     t.integer  "player_id"
     t.integer  "min_rating",        limit: 2

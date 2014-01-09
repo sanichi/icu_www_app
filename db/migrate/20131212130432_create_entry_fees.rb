@@ -5,7 +5,8 @@ class CreateEntryFees < ActiveRecord::Migration
       t.string   :year_or_season, limit: 7
       t.decimal  :amount, :discounted_amount, precision: 6, scale: 2
       t.date     :sale_start, :sale_end, :discount_deadline
-      t.date     :event_start, :event_end
+      t.date     :event_start, :event_end, :age_ref_date
+      t.integer  :min_age, :max_age
       t.string   :event_website
       t.integer  :player_id
       t.integer  :min_rating, :max_rating, limit: 2

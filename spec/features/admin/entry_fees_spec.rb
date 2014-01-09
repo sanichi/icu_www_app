@@ -73,8 +73,11 @@ feature "Create and delete an entry fee" do
   given(:event_end)         { I18n.t("fee.entry.event.end") }
   given(:select_contact)    { I18n.t("fee.entry.select_contact") }
   given(:reselect_contact)  { I18n.t("fee.entry.reselect_contact") }
-  given(:min_rating)        { I18n.t("fee.entry.min_rating") }
-  given(:max_rating)        { I18n.t("fee.entry.max_rating") }
+  given(:min_rating)        { I18n.t("fee.entry.rating.min") }
+  given(:max_rating)        { I18n.t("fee.entry.rating.max") }
+  given(:min_age)           { I18n.t("fee.entry.age.min") }
+  given(:max_age)           { I18n.t("fee.entry.age.max") }
+  given(:age_ref)           { I18n.t("fee.entry.age.ref_date") }
   given(:sale_start)        { I18n.t("fee.sale_start") }
   given(:sale_end)          { I18n.t("fee.sale_end") }
   given(:first_name)        { I18n.t("player.first_name") }
@@ -250,6 +253,30 @@ feature "Create and delete an entry fee" do
 
     fill_in min_rating, with: "1400"
     fill_in max_rating, with: "1600"
+    click_button save
+
+    expect(page).to have_css(success, text: "created")
+  end
+
+  scenario "bad age constraints" do
+    visit new_admin_entry_fee_path
+    fill_in event_name, with: "Bunratty Challengers"
+    fill_in amount, with: "30"
+    fill_in event_start, with: next_year.to_s
+    fill_in event_end, with: next_year.days_since(2).to_s
+    fill_in min_age, with: "14"
+    fill_in max_age, with: "15"
+    click_button save
+
+    expect(page).to have_css(attr_failure, text: "reference date", count: 2)
+
+    fill_in min_age, with: "16"
+    fill_in age_ref, with: next_year.to_s
+    click_button save
+
+    expect(page).to have_css(failure, text: "greater")
+
+    fill_in min_age, with: ""
     click_button save
 
     expect(page).to have_css(success, text: "created")

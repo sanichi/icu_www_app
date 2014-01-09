@@ -15,21 +15,28 @@ en:
       subscriptions: ICU Subscription Fees
     entry:
       early_discount: Early entry discount
-      max_rating: Maximum rating
-      min_rating: Minimum rating
       reselect_contact: Reselect Contact
       select_contact: Select Contact
       standard_fee: Standard fee
+      age:
+        min: Minimum age
+        max: Maximum age
+        ref_date: Age reference date
       error:
         already_in_cart: "An entry for %{member} in the same event is already in your cart"
         rating_too_high: "%{member}'s current rating is over the limit (%{limit}) for this event"
         rating_too_low: "%{member}'s current rating is under the limit (%{limit}) for this event"
+        too_old: "%{member}'s age on %{date} is over the limit (%{limit}) for this event"
+        too_young: "%{member}'s age on %{date} is under the limit (%{limit}) for this event"
       event:
         name: Event name
         start: Event start
         end: Event end
         contact: Event contact
         website: Website
+      rating:
+        max: Maximum rating
+        min: Minimum rating
     subscription:
       age_ref_date: Age reference date
       season: Season

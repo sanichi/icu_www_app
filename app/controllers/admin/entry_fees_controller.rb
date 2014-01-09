@@ -75,7 +75,8 @@ class Admin::EntryFeesController < ApplicationController
       %i[event_name amount event_website player_id] +
       %i[discounted_amount discount_deadline] +
       %i[event_start event_end sale_start sale_end] +
-      %i[min_rating max_rating]
+      %i[min_rating max_rating] +
+      %i[age_ref_date min_age max_age]
     params[:entry_fee].permit(attrs)
   end
 end

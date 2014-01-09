@@ -284,9 +284,12 @@ feature "Shop for entries" do
   given!(:player)         { create(:player) }
   given!(:master)         { create(:player, latest_rating: 2400) }
   given!(:beginner)       { create(:player, latest_rating: 1000) }
+  given!(:u16)            { create(:player, dob: Date.today.years_ago(15), joined: Date.today.years_ago(5)) }
+  given!(:u10)            { create(:player, dob: Date.today.years_ago(9), joined: Date.today.years_ago(1)) }
   given!(:entry_fee)      { create(:entry_fee) }
   given!(:u1400_fee)      { create(:entry_fee, event_name: "Limerick U1400", max_rating: 1400) }
   given!(:premier_fee)    { create(:entry_fee, event_name: "Kilbunny Premier", min_rating: 2000) }
+  given!(:junior_fee)     { create(:entry_fee, event_name: "Irish U16", max_age: 15, min_age: 13, age_ref_date: Date.today.months_ago(1)) }
 
   given(:add_to_cart)     { I18n.t("shop.cart.item.add") }
   given(:cost)            { I18n.t("shop.cart.item.cost") }
@@ -300,6 +303,8 @@ feature "Shop for entries" do
   given(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
   given(:too_high_error)  { I18n.t("fee.entry.error.rating_too_high", member: master.name, limit: 1400) }
   given(:too_low_error)   { I18n.t("fee.entry.error.rating_too_low", member: beginner.name, limit: 2000) }
+  given(:too_old_error)   { I18n.t("fee.entry.error.too_old", member: player.name, limit: junior_fee.max_age, date: junior_fee.age_ref_date) }
+  given(:too_young_error) { I18n.t("fee.entry.error.too_young", member: u10.name, limit: junior_fee.min_age, date: junior_fee.age_ref_date) }
 
   given(:force_submit)    { "\n" }
   given(:failure)         { "div.alert-danger" }
@@ -426,5 +431,37 @@ feature "Shop for entries" do
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 2
     expect(Entry.where(active: false, entry_fee_id: premier_fee.id).count).to eq 2
+  end
+
+  scenario "can't add due to age", js: true do
+    visit shop_path
+    click_link junior_fee.description
+    click_button select_member
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
+    click_link player.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_old_error)
+
+    click_button select_member
+    fill_in last_name, with: u10.last_name + force_submit
+    fill_in first_name, with: u10.first_name + force_submit
+    click_link u10.id
+    click_button add_to_cart
+
+    expect(page).to have_css(failure, text: too_young_error)
+
+    click_button select_member
+    fill_in last_name, with: u16.last_name + force_submit
+    fill_in first_name, with: u16.first_name + force_submit
+    click_link u16.id
+    click_button add_to_cart
+    
+    expect(page).to_not have_css(failure)
+
+    expect(Cart.count).to eq 1
+    expect(CartItem.count).to eq 1
+    expect(Entry.where(active: false, entry_fee_id: junior_fee.id, player_id: u16.id).count).to eq 1
   end
 end

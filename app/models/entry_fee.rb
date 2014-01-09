@@ -1,7 +1,12 @@
 class EntryFee < ActiveRecord::Base
   extend Util::Pagination
   include Journalable
-  journalize %w[event_name amount discounted_amount discount_deadline event_start event_end sale_start sale_end player_id], "/admin/entry_fees/%d"
+  journalize %w[
+    event_name event_start event_end amount
+    discounted_amount discount_deadline
+    sale_start sale_end player_id
+    age_ref_date min_age max_age
+  ], "/admin/entry_fees/%d"
 
   belongs_to :player, -> { includes :users }
 
@@ -14,7 +19,8 @@ class EntryFee < ActiveRecord::Base
   validates :discount_deadline, presence: true, if: Proc.new { |f| f.discounted_amount.present? }
   validates :event_start, :event_end, :sale_start, :sale_end, presence: true
   validates :min_rating, :max_rating, numericality: { only_integer: true, greater_than: 0, less_than: 3000 }, allow_nil: true
-  validate :check_dates, :check_discount, :check_contact, :check_website, :check_rating_limits
+  validates :min_age, :max_age, numericality: { only_integer: true, greater_than: 0, less_than: 100 }, allow_nil: true
+  validate :check_dates, :check_discount, :check_contact, :check_website, :check_rating_limits, :check_age_constraints
 
   scope :ordered, -> { order(event_start: :desc, event_name: :asc) }
   scope :on_sale, -> { where("sale_start <= ?", Date.today).where("sale_end >= ?", Date.today) }
@@ -57,7 +63,7 @@ class EntryFee < ActiveRecord::Base
     %w[discount_deadline discounted_amount event_website].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
     end
-    %w[player_id min_rating max_rating].each do |atr|
+    %w[player_id min_rating max_rating min_age max_age].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).to_i > 0
     end
   end
@@ -138,6 +144,17 @@ class EntryFee < ActiveRecord::Base
       errors[:base] << "Rating minimum is greater than maximum"
     elsif min_rating + 100 > max_rating
       errors[:base] << "Rating limits are too close"
+    end
+  end
+
+  def check_age_constraints
+    if min_age || max_age
+      unless age_ref_date.present?
+        %w[min_age max_age].each { |m| errors[m.to_sym] << "Age reference date required" if self.send(m) }
+      end
+    end
+    if min_age && max_age && min_age > max_age
+      errors[:base] << "Age minimum is greater than maximum"
     end
   end
 
