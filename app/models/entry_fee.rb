@@ -71,6 +71,9 @@ class EntryFee < ActiveRecord::Base
     %w[player_id min_rating max_rating min_age max_age].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).to_i > 0
     end
+    if event_website && event_website.match(/\A[-\w]+(\.[-\w]+)*(:\d+)?\z/)
+      self.event_website = "http://#{event_website}"
+    end
   end
 
   def default_attributes

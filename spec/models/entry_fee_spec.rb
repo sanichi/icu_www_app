@@ -99,7 +99,7 @@ describe EntryFee do
     let(:params) { attributes_for(:entry_fee) }
 
     it "invalid URL" do
-      expect{EntryFee.create!(params.merge(event_website: "x"))}.to raise_error(/invalid/i)
+      expect{EntryFee.create!(params.merge(event_website: "ftp://icu.ie"))}.to raise_error(/invalid/i)
     end
 
     it "bad URL" do
