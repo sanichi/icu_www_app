@@ -8,6 +8,7 @@ class EntryFee < ActiveRecord::Base
     age_ref_date min_age max_age
   ], "/admin/entry_fees/%d"
 
+  has_many :entries
   belongs_to :player, -> { includes :users }
 
   before_validation :normalize_attributes, :default_attributes
@@ -55,6 +56,10 @@ class EntryFee < ActiveRecord::Base
     return unless event_website
     uri = URI.parse(event_website)
     uri.host
+  end
+
+  def deletable?
+    entries.count == 0
   end
 
   private

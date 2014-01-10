@@ -359,3 +359,42 @@ feature "Edit an entry fee" do
     expect(JournalEntry.where(action: "create", journalable_type: "EntryFee", journalable_id: clone.id).count).to eq 1
   end
 end
+
+feature "Subscription fees linked to subscriptions" do
+  before(:each) do
+    login("treasurer")
+  end
+
+  given(:player)        { create(:player) }
+  given(:fee)           { create(:entry_fee) }
+  given!(:entry)        { create(:entry, entry_fee: fee, player: player) }
+  given(:delete)        { I18n.t("delete") }
+  given(:success)       { "div.alert-success" }
+  given(:failure)       { "div.alert-danger" }
+
+  scenario "can't be deleted" do
+    expect(EntryFee.count).to eq 1
+    expect(Entry.count).to eq 1
+
+    visit admin_entry_fee_path(fee)
+    expect(page).to_not have_link(delete)
+
+    visit admin_entry_fee_path(fee, show_delete_button_for_test: "")
+    click_link delete
+
+    expect(page).to have_css(failure, text: /can't be deleted/)
+    expect(EntryFee.count).to eq 1
+    expect(Entry.count).to eq 1
+
+    fee.entries.each { |entry| entry.destroy }
+    expect(EntryFee.count).to eq 1
+    expect(Entry.count).to eq 0
+
+    visit admin_entry_fee_path(fee)
+    click_link delete
+
+    expect(page).to have_css(success, text: /successfully deleted/)
+    expect(EntryFee.count).to eq 0
+    expect(Entry.count).to eq 0
+  end
+end

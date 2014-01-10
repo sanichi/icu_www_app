@@ -63,9 +63,15 @@ class Admin::EntryFeesController < ApplicationController
   def destroy
     @fee = EntryFee.find(params[:id])
     authorize! :destroy, @fee
-    @fee.journal(:destroy, current_user, request.ip)
-    @fee.destroy
-    redirect_to admin_entry_fees_path
+    if @fee.deletable?
+      @fee.journal(:destroy, current_user, request.ip)
+      @fee.destroy
+      redirect_to admin_entry_fees_path, notice: "Entry fee was successfully deleted"
+    else
+      flash.now[:alert] = "This fee can't be deleted because it is linked to one or more entries"
+      @entries = @fee.journal_entries if current_user.roles.present?
+      render "show"
+    end
   end
 
   private
