@@ -15,7 +15,6 @@ gem "validates_timeliness", "~> 3.0"
 gem "redcarpet"
 
 group :development do
-  gem "sshkit", "1.0.0"  # until 'verbosity' bug with --dry-run is fixed
   gem "capistrano"
   gem "capistrano-rails"
   gem "capistrano-bundler"
