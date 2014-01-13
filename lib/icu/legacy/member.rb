@@ -101,10 +101,8 @@ module ICU
         when count == 0 && changes == 0
           false
         when force
-          deleted = User.delete_all
-          puts "old user records deleted: #{deleted}"
-          deleted = JournalEntry.users.delete_all
-          puts "old user journal entries deleted: #{deleted}"
+          puts "old user records deleted: #{User.delete_all}"
+          puts "old user journal entries deleted: #{JournalEntry.users.delete_all}"
           false
         else
           true

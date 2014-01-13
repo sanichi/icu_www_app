@@ -4,12 +4,13 @@ class Subscription < ActiveRecord::Base
   belongs_to :player
   belongs_to :subscription_fee
 
-  CATEGORIES = %w[standard over_65 under_18 under_12 unemployed new_under_18 lifetime]
+  CATEGORIES = %w[standard over_65 under_18 under_12 unemployed new_under_18 overseas lifetime]
 
   validates :player_id, numericality: { only_integer: true, greater_than: 0 }
-  validates :subscription_fee_id, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validates :subscription_fee_id, numericality: { only_integer: true, greater_than: 0 }, unless: Proc.new { |s| s.category == "lifetime" || s.source == "www1" }
   validates :category, inclusion: { in: CATEGORIES }
   validates :cost, numericality: { greater_than_or_equal: 0.0 }
+  validates :source, inclusion: { in: %w[www1 www2] }
 
   validate :valid_season_desc, :no_duplicates, :right_age
 

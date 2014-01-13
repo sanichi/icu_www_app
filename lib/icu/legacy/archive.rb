@@ -99,8 +99,7 @@ module ICU
         when count == 0
           false
         when force
-          deleted = scope.delete_all
-          puts "old archive player records deleted: #{deleted}"
+          puts "old archive player records deleted: #{scope.delete_all}"
           false
         else
           true

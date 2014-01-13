@@ -6,5 +6,6 @@ FactoryGirl.define do
     category         "standard"
     cost             35.0
     active           true
+    source           "www2"
   end
 end

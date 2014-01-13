@@ -148,10 +148,8 @@ module ICU
         when count == 0 && changes == 0
           false
         when force
-          deleted = ::Player.delete_all
-          puts "old player records deleted: #{deleted}"
-          deleted = JournalEntry.players.delete_all
-          puts "old player journal entries deleted: #{deleted}"
+          puts "old player records deleted: #{::Player.delete_all}"
+          puts "old player journal entries deleted: #{JournalEntry.players.delete_all}"
           false
         else
           true

@@ -10,9 +10,9 @@ feature "Shop for subscriptions" do
   given!(:under_12_sub)   { create(:subscription_fee, category: "under_12", amount: 20.0) }
   given!(:over_65_sub)    { create(:subscription_fee, category: "over_65", amount: 20.0) }
 
-  given(:season_desc)     { Season.new.desc }
+  given(:season_desc)     { standard_sub.season_desc }
   given(:lifetime_sub)    { create(:subscription, player: player, subscription_fee: nil, category: "lifetime", cost: 0.0, season_desc: nil) }
-  given(:existing_sub)    { create(:subscription, player: player, subscription_fee: nil, category: "standard", cost: 35.0, season_desc: season_desc) }
+  given(:existing_sub)    { create(:subscription, player: player, subscription_fee: standard_sub, category: "standard", cost: 35.0, season_desc: season_desc) }
 
   given(:add_to_cart)     { I18n.t("shop.cart.item.add") }
   given(:cost)            { I18n.t("shop.cart.item.cost") }

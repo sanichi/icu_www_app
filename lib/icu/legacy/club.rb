@@ -58,10 +58,8 @@ module ICU
         when count == 0 && changes == 0
           false
         when force
-          deleted = ::Club.delete_all
-          puts "old club records deleted: #{deleted}"
-          deleted = JournalEntry.clubs.delete_all
-          puts "old club journal entries deleted: #{deleted}"
+          puts "old club records deleted: #{::Club.delete_all}"
+          puts "old club journal entries deleted: #{JournalEntry.clubs.delete_all}"
           false
         else
           true

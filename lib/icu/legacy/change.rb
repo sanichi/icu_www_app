@@ -128,8 +128,7 @@ module ICU
         when count == 0
           false
         when force
-          deleted = JournalEntry.delete_all(source: "www1")
-          puts "old journal entries deleted: #{deleted}"
+          puts "old journal entries deleted: #{JournalEntry.delete_all(source: "www1")}"
           false
         else
           true
