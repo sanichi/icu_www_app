@@ -1,0 +1,26 @@
+- content_for :title, t("fee.type.subscriptions")
+
+= render "utils/search_panel", form: "search_form", title: t("fee.type.subscriptions"), col: "md"
+
+- if @subs.count > 0
+  .row
+    .col-md-8.col-md-offset-2
+      %table{class: "table table-bordered table-striped"}
+        %thead
+          %tr
+            %th= t("player.id")
+            %th= t("shop.cart.item.member")
+            %th= t("fee.subscription.category.category")
+            %th= t("fee.subscription.season")
+            %th= t("shop.cart.item.cost")
+            %th= t("date")
+        %tbody
+          - @subs.matches.each do |sub|
+            %tr
+              %td= sub.player_id
+              %td= sub.player.name(reversed: true)
+              %td= t("fee.subscription.category.#{sub.category}")
+              %td= sub.season_desc
+              %td{class: "righted"}= euros(sub.cost)
+              %td= sub.created_at.strftime("%Y-%m-%d")
+          = render "utils/pagination_links", pager: @subs, columns: 6

@@ -15,6 +15,7 @@ class Ability
 
     if user.membership?
       can :manage, Player
+      can :index, Subscription
     end
 
     if user.translator?
@@ -25,6 +26,7 @@ class Ability
     if user.treasurer?
       can :manage, EntryFee
       can :manage, SubscriptionFee
+      can :index, Subscription
     end
 
     can :show, EntryFee, player_id: user.player_id

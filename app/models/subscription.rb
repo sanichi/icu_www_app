@@ -1,4 +1,5 @@
 class Subscription < ActiveRecord::Base
+  extend Util::Pagination
   include Cartable
 
   belongs_to :player
@@ -33,6 +34,17 @@ class Subscription < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def self.search(params, path)
+    matches = includes(:player).references(:players)
+    matches = matches.order(created_at: :desc).where(active: true)
+    matches = matches.where(player_id: params[:player_id].to_i) if params[:player_id].to_i > 0
+    matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
+    matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
+    matches = matches.where(category: params[:category]) if params[:category].present?
+    matches = matches.where(season_desc: params[:season_desc] == "none" ? nil : params[:season_desc]) if params[:season_desc].present?
+    paginate(matches, params, path)
   end
 
   private
