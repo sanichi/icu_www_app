@@ -3,6 +3,11 @@ module Journalable
 
   included do
     has_many :journal_entries, as: :journalable
+    jtype = self.to_s
+    JournalEntry.class_eval do
+      # Note: needs class that includes Journalable to be loaded (see config/initialize/load_all_models.rb).
+      scope jtype.tableize.to_sym, -> { where(journalable_type: jtype) }
+    end
   end
 
   def journal(action, by, ip)

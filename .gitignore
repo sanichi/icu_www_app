@@ -10,5 +10,5 @@
 /public/assets/
 /config/database.yml
 /config/app_config.yml
-/.sass-cache
-/.DS_Store
+.sass-cache
+.DS_Store
