@@ -5,13 +5,13 @@ class CreateEntries < ActiveRecord::Migration
       t.string   :description
       t.date     :event_start, :event_end
       t.decimal  :cost, precision: 6, scale: 2
-      t.boolean  :active, default: false
-    
+      t.string   :payment_method, limit: 20
+
       t.datetime :created_at
     end
 
     add_index :entries, :player_id
     add_index :entries, :entry_fee_id
-    add_index :entries, :active
+    add_index :entries, :payment_method
   end
 end

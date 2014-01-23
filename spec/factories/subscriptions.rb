@@ -5,7 +5,7 @@ FactoryGirl.define do
     season_desc      { Season.new.desc }
     category         "standard"
     cost             35.0
-    active           true
+    payment_method   "stripe"
     source           "www2"
   end
 end

@@ -17,3 +17,13 @@ en:
         items:
           one: 1 item
           other: "%{count} items"
+    payment:
+      paid: Paid
+      unpaid: Unpaid
+      method:
+        cash: Cash
+        cheque: Cheque
+        free: Free
+        method: Method
+        paypal: PayPal
+        stripe: Stripe        

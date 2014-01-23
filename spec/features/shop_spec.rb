@@ -58,7 +58,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     cart = Cart.last
     cart_item = CartItem.last
@@ -73,8 +73,8 @@ feature "Shop for subscriptions" do
 
     expect(cart.status).to eq "unpaid"
     expect(cart_item.status).to eq "unpaid"
-    expect(subscription.active).to be_false
     expect(subscription.season_desc).to eq season_desc
+    expect(subscription.paid?).to be_false
 
     expect(cart_item.cart).to eq cart
     expect(cart_item.cartable).to eq subscription
@@ -97,7 +97,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
-    expect(Subscription.where(active: false).count).to eq 0
+    expect(Subscription.unpaid.count).to eq 0
   end
 
   scenario "can't add due to existing subscription for the season", js: true do
@@ -115,7 +115,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
-    expect(Subscription.where(active: false).count).to eq 0
+    expect(Subscription.unpaid.count).to eq 0
   end
 
   scenario "can't add due to duplicate subscription in cart", js: true do
@@ -131,7 +131,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     visit shop_path
     click_link unemployed_sub.description
@@ -145,7 +145,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
   end
 
   scenario "can't add due to age (too old)", js: true do
@@ -169,7 +169,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false, category: "under_12").count).to eq 1
+    expect(Subscription.unpaid.where(category: "under_12").count).to eq 1
   end
 
   scenario "can't add due to age (too young)", js: true do
@@ -193,7 +193,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false, category: "over_65").count).to eq 1
+    expect(Subscription.unpaid.where(category: "over_65").count).to eq 1
   end
 
   scenario "delete", js: true do
@@ -209,7 +209,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     visit shop_path
     click_link unemployed_sub.description
@@ -223,7 +223,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 2
-    expect(Subscription.where(active: false).count).to eq 2
+    expect(Subscription.unpaid.count).to eq 2
 
     click_link "✘", match: :first
     confirm_dialog
@@ -232,7 +232,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     click_link "✘", match: :first
     confirm_dialog
@@ -241,7 +241,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 0
-    expect(Subscription.where(active: false).count).to eq 0
+    expect(Subscription.unpaid.count).to eq 0
   end
 
   scenario "can only delete from current cart", js: true do
@@ -255,7 +255,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     cart = Cart.include_cartables.first
     cart_item = cart.cart_items.first
@@ -273,7 +273,7 @@ feature "Shop for subscriptions" do
 
     expect(Cart.count).to eq 2
     expect(CartItem.count).to eq 1
-    expect(Subscription.where(active: false).count).to eq 1
+    expect(Subscription.unpaid.count).to eq 1
 
     expect(cart.items).to eq 0
     expect(other_cart.items).to eq 1
@@ -334,7 +334,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Entry.where(active: false, entry_fee_id: entry_fee.id, player_id: player.id).count).to eq 1
+    expect(Entry.unpaid.where(entry_fee_id: entry_fee.id, player_id: player.id).count).to eq 1
 
     cart = Cart.last
     cart_item = CartItem.last
@@ -349,7 +349,7 @@ feature "Shop for entries" do
 
     expect(cart.status).to eq "unpaid"
     expect(cart_item.status).to eq "unpaid"
-    expect(entry.active).to be_false
+    expect(entry.paid?).to be_false
 
     expect(cart_item.cart).to eq cart
     expect(cart_item.cartable).to eq entry
@@ -378,7 +378,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Entry.where(active: false, entry_fee_id: u1400_fee.id, player_id: beginner.id).count).to eq 1
+    expect(Entry.unpaid.where(entry_fee_id: u1400_fee.id, player_id: beginner.id).count).to eq 1
 
     visit shop_path
     click_link u1400_fee.description
@@ -392,7 +392,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 2
-    expect(Entry.where(active: false, entry_fee_id: u1400_fee.id).count).to eq 2
+    expect(Entry.unpaid.where(entry_fee_id: u1400_fee.id).count).to eq 2
   end
 
   scenario "can't add due to rating (too low)", js: true do
@@ -416,7 +416,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Entry.where(active: false, entry_fee_id: premier_fee.id, player_id: master.id).count).to eq 1
+    expect(Entry.unpaid.where(entry_fee_id: premier_fee.id, player_id: master.id).count).to eq 1
 
     visit shop_path
     click_link premier_fee.description
@@ -430,7 +430,7 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 2
-    expect(Entry.where(active: false, entry_fee_id: premier_fee.id).count).to eq 2
+    expect(Entry.unpaid.where(entry_fee_id: premier_fee.id).count).to eq 2
   end
 
   scenario "can't add due to age", js: true do
@@ -462,6 +462,6 @@ feature "Shop for entries" do
 
     expect(Cart.count).to eq 1
     expect(CartItem.count).to eq 1
-    expect(Entry.where(active: false, entry_fee_id: junior_fee.id, player_id: u16.id).count).to eq 1
+    expect(Entry.unpaid.where(entry_fee_id: junior_fee.id, player_id: u16.id).count).to eq 1
   end
 end

@@ -4,7 +4,7 @@
 
 - if @subs.count > 0
   .row
-    .col-md-8.col-md-offset-2
+    .col-md-10.col-md-offset-1
       %table{class: "table table-bordered table-striped"}
         %thead
           %tr
@@ -13,6 +13,7 @@
             %th= t("fee.subscription.category.category")
             %th= t("fee.subscription.season")
             %th= t("shop.cart.item.cost")
+            %th= t("shop.payment.method.method")
             %th= t("date")
         %tbody
           - @subs.matches.each do |sub|
@@ -22,5 +23,6 @@
               %td= t("fee.subscription.category.#{sub.category}")
               %td= sub.season_desc
               %td{class: "righted"}= euros(sub.cost)
+              %td= t("shop.payment.method.#{sub.payment_method}") if sub.paid?
               %td= sub.created_at.strftime("%Y-%m-%d")
-          = render "utils/pagination_links", pager: @subs, columns: 6
+          = render "utils/pagination_links", pager: @subs, columns: 7

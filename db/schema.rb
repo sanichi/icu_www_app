@@ -62,13 +62,13 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.string   "description"
     t.date     "event_start"
     t.date     "event_end"
-    t.decimal  "cost",         precision: 6, scale: 2
-    t.boolean  "active",                               default: false
+    t.decimal  "cost",                      precision: 6, scale: 2
+    t.string   "payment_method", limit: 20
     t.datetime "created_at"
   end
 
-  add_index "entries", ["active"], name: "index_entries_on_active", using: :btree
   add_index "entries", ["entry_fee_id"], name: "index_entries_on_entry_fee_id", using: :btree
+  add_index "entries", ["payment_method"], name: "index_entries_on_payment_method", using: :btree
   add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
 
   create_table "entry_fees", force: true do |t|
@@ -170,12 +170,12 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.string   "season_desc",         limit: 7
     t.string   "source",              limit: 8,                          default: "www2"
     t.string   "category",            limit: 20
+    t.string   "payment_method",      limit: 20
     t.decimal  "cost",                           precision: 6, scale: 2
-    t.boolean  "active",                                                 default: false
     t.datetime "created_at"
   end
 
-  add_index "subscriptions", ["active"], name: "index_subscriptions_on_active", using: :btree
+  add_index "subscriptions", ["payment_method"], name: "index_subscriptions_on_payment_method", using: :btree
   add_index "subscriptions", ["player_id"], name: "index_subscriptions_on_player_id", using: :btree
   add_index "subscriptions", ["season_desc"], name: "index_subscriptions_on_season_desc", using: :btree
   add_index "subscriptions", ["subscription_fee_id"], name: "index_subscriptions_on_subscription_fee_id", using: :btree

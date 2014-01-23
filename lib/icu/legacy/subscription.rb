@@ -75,8 +75,7 @@ module ICU
 
       def adjust(new_sub, old_sub)
         # Work out the category.
-        new_sub[:category] =
-          case new_sub[:category]
+        new_sub[:category] = case new_sub[:category]
           when "New U18"    then "new_under_18"
           when "Over 65"    then "over_65"
           when "Overseas"   then "overseas"
@@ -86,7 +85,7 @@ module ICU
           when "Unemployed" then "unemployed"
           when nil          then "lifetime"
           else raise "unexpected category (#{new_sub[:category]})"
-          end
+        end
         # Handle a small number of GBP transactions.
         if old_sub[:sof_currency] && old_sub[:sof_currency] != "EUR"
           if old_sub[:sof_currency] == "GBP" && new_sub[:category] == "standard"
@@ -102,25 +101,24 @@ module ICU
         # Handle missing dates (some offline from 2006 & 2007 and all lifetime).
         if new_sub[:created_at].nil?
           if new_sub[:category] == "lifetime"
-            new_sub[:created_at] =
-            case new_sub[:player_id]
-            when 276  then Date.new(2000, 9, 1) # Michael Crowe (guess)
-            when 687  then Date.new(1998, 9, 1) # Brian Kelly (IM title)
-            when 731  then Date.new(2000, 9, 1) # Eamon Keogh (guess)
-            when 955  then Date.new(2006, 9, 1) # Gerry Murphy (2006 AGM?)
-            when 1350 then Date.new(2008, 9, 1) # Mark Orr (IM title)
-            when 1402 then Date.new(2008, 9, 1) # Mark Quinn (IM title)
-            when 1535 then Date.new(2000, 9, 1) # Herbert Scarry (guess)
-            when 1615 then Date.new(2000, 9, 1) # Brian L. Thorpe (guess)
-            when 2042 then Date.new(2006, 9, 1) # Frank Scott (2006 AGM?)
-            when 3000 then Date.new(2000, 9, 1) # Kevin J. O'Connell (guess)
-            when 4017 then Date.new(2008, 9, 1) # Mark Heidenfeld (IM title)
-            when 4564 then Date.new(2012, 9, 1) # Sam E. Collins (IM title)
-            when 5157 then Date.new(2011, 9, 1) # Alex Lopez (IM title)
-            when 5441 then Date.new(2003, 9, 1) # Gavin Wall (IM title)
-            when 6741 then Date.new(2006, 9, 1) # Jack Hennigan (2006 AGM?)
-            when 7085 then Date.new(1996, 9, 1) # Alexander Baburin (GM title)
-            else raise "unexpected lifetime ICU ID (#{new_sub[:player_id]})"
+            new_sub[:created_at] = case new_sub[:player_id]
+              when 276  then Date.new(2000, 9, 1) # Michael Crowe (guess)
+              when 687  then Date.new(1998, 9, 1) # Brian Kelly (IM title)
+              when 731  then Date.new(2000, 9, 1) # Eamon Keogh (guess)
+              when 955  then Date.new(2006, 9, 1) # Gerry Murphy (2006 AGM?)
+              when 1350 then Date.new(2008, 9, 1) # Mark Orr (IM title)
+              when 1402 then Date.new(2008, 9, 1) # Mark Quinn (IM title)
+              when 1535 then Date.new(2000, 9, 1) # Herbert Scarry (guess)
+              when 1615 then Date.new(2000, 9, 1) # Brian L. Thorpe (guess)
+              when 2042 then Date.new(2006, 9, 1) # Frank Scott (2006 AGM?)
+              when 3000 then Date.new(2000, 9, 1) # Kevin J. O'Connell (guess)
+              when 4017 then Date.new(2008, 9, 1) # Mark Heidenfeld (IM title)
+              when 4564 then Date.new(2012, 9, 1) # Sam E. Collins (IM title)
+              when 5157 then Date.new(2011, 9, 1) # Alex Lopez (IM title)
+              when 5441 then Date.new(2003, 9, 1) # Gavin Wall (IM title)
+              when 6741 then Date.new(2006, 9, 1) # Jack Hennigan (2006 AGM?)
+              when 7085 then Date.new(1996, 9, 1) # Alexander Baburin (GM title)
+              else raise "unexpected lifetime ICU ID (#{new_sub[:player_id]})"
             end
           else
             start_date = Date.new(2006, 9, 1)
@@ -131,8 +129,13 @@ module ICU
             end
           end
         end
+        new_sub[:payment_method] = case
+          when old_sub[:sub_id] then "paypal"
+          when old_sub[:sof_id] then "cheque"
+          when old_sub[:sfl_id] then "free"
+          else raise "can't determine payment method for ICU ID (#{new_sub[:player_id]})"
+        end
         new_sub[:source] = "www1"
-        new_sub[:active] = true
       end
 
       def existing_subscriptions?(force)

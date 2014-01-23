@@ -37,13 +37,20 @@ class Subscription < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    matches = includes(:player).references(:players)
-    matches = matches.order(created_at: :desc).where(active: true)
+    matches = includes(:player).references(:players).order(created_at: :desc)
     matches = matches.where(player_id: params[:player_id].to_i) if params[:player_id].to_i > 0
     matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
     matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
     matches = matches.where(category: params[:category]) if params[:category].present?
     matches = matches.where(season_desc: params[:season_desc] == "none" ? nil : params[:season_desc]) if params[:season_desc].present?
+    case params[:payment_method]
+    when "paid"
+      matches = matches.paid
+    when "unpaid"
+      matches = matches.unpaid
+    when *Payment::METHODS
+      matches = matches.where(payment_method: params[:payment_method])
+    end
     paginate(matches, params, path)
   end
 
@@ -64,9 +71,9 @@ class Subscription < ActiveRecord::Base
 
   def no_duplicates
     if player
-      if season_desc && Subscription.where(active: true, player_id: player.id, season_desc: season_desc).count > 0
+      if season_desc && Subscription.paid.where(player_id: player.id, season_desc: season_desc).where.not(id: id).count > 0
         errors.add(:base, I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc))
-      elsif Subscription.where(active: true, player_id: player.id, season_desc: nil).count > 0
+      elsif Subscription.paid.where(player_id: player.id, season_desc: nil).where.not(id: id).count > 0
         errors.add(:base, I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)))
       end
     end
