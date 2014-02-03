@@ -1,6 +1,6 @@
 class Subscription < ActiveRecord::Base
   extend Util::Pagination
-  include Cartable
+  include Cartable, Payable
 
   belongs_to :player
   belongs_to :subscription_fee
@@ -45,10 +45,10 @@ class Subscription < ActiveRecord::Base
     matches = matches.where(season_desc: params[:season_desc] == "none" ? nil : params[:season_desc]) if params[:season_desc].present?
     case params[:payment_method]
     when "paid"
-      matches = matches.paid
+      matches = matches.active
     when "unpaid"
-      matches = matches.unpaid
-    when *Payment::METHODS
+      matches = matches.inactive
+    when *Cart::PAYMENT_METHODS
       matches = matches.where(payment_method: params[:payment_method])
     end
     paginate(matches, params, path)
@@ -71,9 +71,9 @@ class Subscription < ActiveRecord::Base
 
   def no_duplicates
     if player
-      if season_desc && Subscription.paid.where(player_id: player.id, season_desc: season_desc).where.not(id: id).count > 0
+      if season_desc && Subscription.active.where(player_id: player.id, season_desc: season_desc).where.not(id: id).count > 0
         errors.add(:base, I18n.t("fee.subscription.error.already_exists", member: player.name(id: true), season: season_desc))
-      elsif Subscription.paid.where(player_id: player.id, season_desc: nil).where.not(id: id).count > 0
+      elsif Subscription.active.where(player_id: player.id, season_desc: nil).where.not(id: id).count > 0
         errors.add(:base, I18n.t("fee.subscription.error.lifetime_exists", member: player.name(id: true)))
       end
     end

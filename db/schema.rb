@@ -24,7 +24,6 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.string   "cartable_type", limit: 30
     t.integer  "cartable_id"
     t.integer  "cart_id"
-    t.string   "status",        limit: 20, default: "unpaid"
     t.datetime "created_at"
   end
 
@@ -32,8 +31,15 @@ ActiveRecord::Schema.define(version: 20140106190941) do
   add_index "cart_items", ["cartable_type", "cartable_id"], name: "index_cart_items_on_cartable_type_and_cartable_id", using: :btree
 
   create_table "carts", force: true do |t|
+    t.string   "status",             limit: 20,                          default: "unpaid"
+    t.decimal  "total",                          precision: 8, scale: 2
+    t.decimal  "original_total",                 precision: 8, scale: 2
+    t.string   "payment_method",     limit: 20
+    t.string   "payment_ref",        limit: 50
+    t.string   "confirmation_email", limit: 50
+    t.string   "payment_name",       limit: 100
+    t.string   "payment_error"
     t.datetime "payment_completed"
-    t.string   "status",            limit: 20, default: "unpaid"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -63,6 +69,7 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.date     "event_start"
     t.date     "event_end"
     t.decimal  "cost",                      precision: 6, scale: 2
+    t.string   "status",         limit: 20,                         default: "unpaid"
     t.string   "payment_method", limit: 20
     t.datetime "created_at"
   end
@@ -70,6 +77,7 @@ ActiveRecord::Schema.define(version: 20140106190941) do
   add_index "entries", ["entry_fee_id"], name: "index_entries_on_entry_fee_id", using: :btree
   add_index "entries", ["payment_method"], name: "index_entries_on_payment_method", using: :btree
   add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
+  add_index "entries", ["status"], name: "index_entries_on_status", using: :btree
 
   create_table "entry_fees", force: true do |t|
     t.string   "event_name",        limit: 100
@@ -169,15 +177,19 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.integer  "subscription_fee_id"
     t.string   "season_desc",         limit: 7
     t.string   "source",              limit: 8,                          default: "www2"
+    t.string   "status",              limit: 20,                         default: "unpaid"
     t.string   "category",            limit: 20
     t.string   "payment_method",      limit: 20
     t.decimal  "cost",                           precision: 6, scale: 2
     t.datetime "created_at"
   end
 
+  add_index "subscriptions", ["category"], name: "index_subscriptions_on_category", using: :btree
   add_index "subscriptions", ["payment_method"], name: "index_subscriptions_on_payment_method", using: :btree
   add_index "subscriptions", ["player_id"], name: "index_subscriptions_on_player_id", using: :btree
   add_index "subscriptions", ["season_desc"], name: "index_subscriptions_on_season_desc", using: :btree
+  add_index "subscriptions", ["source"], name: "index_subscriptions_on_source", using: :btree
+  add_index "subscriptions", ["status"], name: "index_subscriptions_on_status", using: :btree
   add_index "subscriptions", ["subscription_fee_id"], name: "index_subscriptions_on_subscription_fee_id", using: :btree
 
   create_table "translations", force: true do |t|

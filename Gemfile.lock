@@ -1,5 +1,6 @@
 GEM
   remote: https://rubygems.org/
+  remote: https://code.stripe.com/
   specs:
     actionmailer (4.0.2)
       actionpack (= 4.0.2)
@@ -112,6 +113,8 @@ GEM
     redcarpet (3.0.0)
     redis (3.0.6)
     ref (1.0.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     rspec-core (2.14.7)
     rspec-expectations (2.14.4)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -148,6 +151,10 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
+    stripe (1.10.0)
+      mime-types (~> 1.25)
+      multi_json (>= 1.0.4, < 2)
+      rest-client (~> 1.4)
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     therubyracer (0.12.0)
@@ -197,6 +204,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 4.0.0)
   selenium-webdriver
+  stripe
   therubyracer (= 0.12.0)
   uglifier (>= 1.3.0)
   validates_timeliness (~> 3.0)

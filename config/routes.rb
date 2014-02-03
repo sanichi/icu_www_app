@@ -1,14 +1,18 @@
 IcuWwwApp::Application.routes.draw do
   root to: "pages#home"
 
+  get  "sign_in"  => "sessions#new"
+  get  "sign_out" => "sessions#destroy"
+  get  "redirect" => "redirects#redirect"
+
   %w[home shop system_info].each do |page|
     get page => "pages##{page}"
   end
-  get "sign_in"  => "sessions#new"
-  get "sign_out" => "sessions#destroy"
-  get "redirect" => "redirects#redirect"
 
-  resource  :cart,              only: [:show]
+  %w[cart card charge confirm].each do |page|
+    match page => "payments##{page}", via: page == "charge" ? :post : :get
+  end
+
   resources :cart_items,        only: [:destroy]
   resources :clubs,             only: [:index, :show]
   resources :entries,           only: [:new, :create]

@@ -25,3 +25,15 @@ season_ticket:
 secret_key_base: 4fbd352d214c2118a7fd152173de8dd358dcd07289a8eb751e332e279848a905fd1228b5e51e4ec60c14b41d69c93eetea7a35bb8854d99356a0f13091bd08b7
 
 session_key: www_session
+
+# Stripe keys
+stripe:
+  production:
+    public: "pk_live_aYo71Qp4R1XBgsQ1ObaE8CpM"
+    secret: "sk_live_5ay80yu1hJb45gV9ul6fb2zt"
+  development:
+    public: "pk_test_aYo71Qp4R1XBgsQ1ObaE8CpM"
+    secret: "sk_test_5ay80yu1hJb45gV9ul6fb2zt"
+  test:
+    public: "pk_test_aYo71Qp4R1XBgsQ1ObaE8CpM"
+    secret: "sk_test_5ay80yu1hJb45gV9ul6fb2zt"

@@ -1,5 +1,6 @@
 class Entry < ActiveRecord::Base
   include Cartable
+  include Payable
 
   belongs_to :player
   belongs_to :entry_fee

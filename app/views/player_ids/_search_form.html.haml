@@ -8,7 +8,7 @@
       .form-group
         = label_tag :yob, t("player.abbrev.yob"), class: "control-label col-sm-4"
         %div{class: "col-sm-2"}= select_tag :yob_relation, player_yob_relation_menu(params[:yob_relation]), class: "form-control"
-        %div{class: "col-sm-3"}= text_field_tag :yob, params[:yob], class: "form-control", type: "text"
+        %div{class: "col-sm-3"}= text_field_tag :yob, params[:yob], class: "form-control"
       = render "utils/select_tag", locals.merge(param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true))
       = render "utils/select_tag", locals.merge(param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed]))
 

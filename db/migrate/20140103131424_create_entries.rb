@@ -5,6 +5,7 @@ class CreateEntries < ActiveRecord::Migration
       t.string   :description
       t.date     :event_start, :event_end
       t.decimal  :cost, precision: 6, scale: 2
+      t.string   :status, limit: 20, default: "unpaid"
       t.string   :payment_method, limit: 20
 
       t.datetime :created_at
@@ -12,6 +13,7 @@ class CreateEntries < ActiveRecord::Migration
 
     add_index :entries, :player_id
     add_index :entries, :entry_fee_id
+    add_index :entries, :status
     add_index :entries, :payment_method
   end
 end

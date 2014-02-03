@@ -18,12 +18,25 @@ en:
           one: 1 item
           other: "%{count} items"
     payment:
+      confirmation_email: Email address for confirmation
+      confirmed: Payment confirmed
       paid: Paid
       unpaid: Unpaid
+      card:
+        amount_due: Amount due
+        expiration: Expiration date
+        mm: mm
+        name: Name on card
+        number: Card number
+        pay: Pay
+        security_code: Security number
+        yyyy: yyyy
+      error:
+        gateway: Payment processor error
       method:
         cash: Cash
         cheque: Cheque
         free: Free
         method: Method
         paypal: PayPal
-        stripe: Stripe        
+        stripe: Stripe

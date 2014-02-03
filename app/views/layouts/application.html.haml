@@ -7,6 +7,11 @@
     = stylesheet_link_tag "application", media: "all"
     = stylesheet_link_tag "#{current_user.preferred_theme.downcase}.min", media: "all"
     = javascript_include_tag "application"
+    - if content_for?(:includes)
+      = yield :includes
+    - if content_for?(:javascript)
+      = javascript_tag do
+        = yield :javascript
     = csrf_meta_tags
   %body
     - if current_user.admin? && Rails.root.join("public", "system", "maintenance.html").exist?

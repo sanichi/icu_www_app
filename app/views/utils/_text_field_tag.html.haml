@@ -1,6 +1,11 @@
 - unless defined? type
   - type = "text"
+- unless defined? placeholder
+  - placeholder = nil
+- unless defined? extra
+  - extra = {}
 
 .form-group
   = label_tag param, text, class: "control-label col-#{col}-#{pad}"
-  %div{class: "col-#{col}-#{width}"}= text_field_tag param, params[param], class: "form-control", type: type
+  - opts = { class: "form-control", type: type, placeholder: placeholder }.merge(extra)
+  %div{class: "col-#{col}-#{width}"}= text_field_tag param, params[param], opts

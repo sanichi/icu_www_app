@@ -1,19 +1,19 @@
 - content_for :title, t("shop.shop")
 
-.row
-  .col-sm-3
-
-    - if current_cart
-      = link_to cart_path, class: "btn btn-info btn-sm" do
+- if current_cart
+  .row
+    .col-sm-12.text-center
+      = link_to cart_path, class: "btn btn-info btn-md" do
         = succeed(":") do
           = t("shop.cart.cart")
         = succeed(",") do
           = t("shop.cart.item.items", count: current_cart.items)
-        = euros(current_cart.total)
-
-  .col-sm-6
-
-    - if @subscription_fees.count > 0
+        = euros(current_cart.total_cost)
+  %hr
+- if @subscription_fees.count > 0
+  .row
+    .col-sm-3
+    .col-sm-6
       %h3.text-center= t("fee.type.subscriptions")
       %table.table.table-bordered
         %tbody
@@ -21,8 +21,10 @@
             %tr
               %td.col-sm-10= link_to fee.description, new_subscription_path(subscription_fee_id: fee.id)
               %td.col-sm-2.text-center= euros(fee.amount)
-
-    - if @entry_fees.count > 0
+- if @entry_fees.count > 0
+  .row
+    .col-sm-3
+    .col-sm-6
       %h3.text-center= t("fee.type.entries")
       %table.table.table-bordered
         %tbody

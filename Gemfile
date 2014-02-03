@@ -1,4 +1,5 @@
 source "https://rubygems.org"
+source 'https://code.stripe.com'
 
 gem "rails", "4.0.2"
 gem "mysql2"
@@ -13,6 +14,7 @@ gem "icu_name"
 gem "icu_utils"
 gem "validates_timeliness", "~> 3.0"
 gem "redcarpet"
+gem "stripe"
 
 group :development do
   gem "capistrano"

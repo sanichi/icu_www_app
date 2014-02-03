@@ -3,7 +3,6 @@ class CreateCartItems < ActiveRecord::Migration
     create_table :cart_items do |t|
       t.string   :cartable_type, limit: 30
       t.integer  :cartable_id, :cart_id
-      t.string   :status, limit: 20, default: "unpaid"
       t.datetime :created_at
     end
 

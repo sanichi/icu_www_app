@@ -4,6 +4,7 @@ class CreateSubscriptions < ActiveRecord::Migration
       t.integer  :player_id, :subscription_fee_id
       t.string   :season_desc, limit: 7
       t.string   :source, limit: 8, default: "www2"
+      t.string   :status, limit: 20, default: "unpaid"
       t.string   :category, :payment_method, limit: 20
       t.decimal  :cost, precision: 6, scale: 2
 
@@ -13,6 +14,9 @@ class CreateSubscriptions < ActiveRecord::Migration
     add_index :subscriptions, :player_id
     add_index :subscriptions, :subscription_fee_id
     add_index :subscriptions, :season_desc
+    add_index :subscriptions, :source
+    add_index :subscriptions, :status
+    add_index :subscriptions, :category
     add_index :subscriptions, :payment_method
   end
 end

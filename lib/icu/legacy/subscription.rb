@@ -136,6 +136,7 @@ module ICU
           else raise "can't determine payment method for ICU ID (#{new_sub[:player_id]})"
         end
         new_sub[:source] = "www1"
+        new_sub[:status] = "paid"
       end
 
       def existing_subscriptions?(force)

@@ -1,0 +1,44 @@
+Stripe.setPublishableKey('<%= APP_CONFIG["stripe"][Rails.env]["public"] %>');
+var icuPaymentError = {
+  gateway: '<%= t("shop.payment.error.gateway") %>'
+};
+
+$(function($) {
+  $('#stripe_form').submit(function(event) {
+    disablePayment();
+    Stripe.card.createToken($(this), stripeResponseHandler);
+    return false;
+  });
+});
+
+function stripeResponseHandler(status, response) {
+  if (response.error) {
+    stripeError(response.error.message);
+  } else {
+    var icu_form = $('#icu_form');
+    var stripe_form = $('#stripe_form');
+    icu_form.find('input[name="stripe_token"]').val(response.id);
+    icu_form.find('input[name="payment_name"]').val(stripe_form.find('input[name="payment_name"]').val());
+    icu_form.find('input[name="confirmation_email"]').val(stripe_form.find('input[name="confirmation_email"]').val());
+    icu_form.submit();
+  }
+}
+
+function disablePayment() {
+  $('#stripe_form').find('button').prop('disabled', false);
+  $('#payment_waiting').show();
+  $('#cancel_button').hide();
+  $('#payment_error').hide();
+}
+
+function enablePayment() {
+  $('#stripe_form').find('button').prop('disabled', false);
+  $('#payment_waiting').hide();
+  $('#cancel_button').show();
+}
+
+function stripeError(message) {
+  $('#payment_error_message').text(icuPaymentError['gateway'] + ': "' + message + '"');
+  $('#payment_error').show();
+  enablePayment();
+}

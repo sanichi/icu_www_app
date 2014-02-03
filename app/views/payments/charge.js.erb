@@ -1,0 +1,5 @@
+<%- if @cart.paid? %>
+  window.location.replace('<%= confirm_path %>');
+<%- else %>
+  stripeError('<%= @cart.escape(:payment_error) %>')
+<%- end %>

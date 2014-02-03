@@ -1,8 +1,6 @@
-- content_for :title, t("shop.cart.cart")
-
 .row
-  .col-md-2
-  .col-md-8
+  .col-md-1
+  .col-md-10
     %table{class: "table table-striped table-condensed"}
       %thead
         %tr
@@ -16,17 +14,11 @@
             %td= item.cartable.description
             %td= item.cartable.player.name(id: true)
             %td.text-center= euros(item.cartable.cost)
-            %td.text-center= link_to "✘", item, data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
+            - if @cart.unpaid?
+              %td.text-center= link_to "✘", item, data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
         %tr
           %th{colspan: 2}= t("shop.cart.total")
-          %th.text-center= euros(@cart.total)
-          %th
-.row
+          %th.text-center= euros(@cart.total_cost)
+          - if @cart.unpaid?
+            %th
   .col-md-2
-  .col-md-3.text-center
-    = link_to shop_path, class: "btn btn-info" do
-      = t("shop.cart.continue")
-  .col-md-2
-  .col-md-3.text-center
-    = link_to shop_path, class: "btn btn-info" do
-      = t("shop.cart.checkout")
