@@ -13,39 +13,48 @@ module SessionsHelper
   def current_cart(option=nil)
     # If there's no memoized cart, see if there's one in the session.
     if !@current_cart && session[:cart_id]
-      @current_cart = Cart.include_cartables.find_by(id: session[:cart_id])
+      @current_cart = Cart.include_cartables.find_by(id: session[:cart_id], status: "unpaid")
       unless @current_cart
         logger.error("no cart found for session cart ID #{session[:cart_id]}")
         session.delete(:cart_id)
       end
     end
 
-    # If a cart exists, we might be able to return it immediately.
-    if @current_cart
-      if option == :paid
-        # Sometimes (e.g. for confirmation) we want a paid cart.
-        return @current_cart if @current_cart.paid?
-      else
-        # But normally we want an upaid cart.
-        return @current_cart if @current_cart.unpaid?
-      end
-    end
+    # If an unpaid cart exists return it immediately.
+    return @current_cart if @current_cart && @current_cart.unpaid?
+    
+    # Ensure there's no paid cart hanging around.
+    clear_current_cart
 
-    # Clear the current cart (if there was one). Create a new one if the option is set.
+    # Create a new cart but only if requested.
     if option == :create
       @current_cart = Cart.create
       session[:cart_id] = @current_cart.id
-    else
-      @current_cart = nil
-      session.delete(:cart_id)
     end
 
     # Return whatever we have left at this point (new empty cart or nil).
     @current_cart
   end
 
-  def clear_cart
+  def clear_current_cart
     @current_cart = nil
     session.delete(:cart_id)
+  end
+  
+  def complete_cart(cart_id)
+    clear_current_cart
+    session[:completed_carts] ||= []
+    session[:completed_carts].unshift cart_id
+  end
+
+  def completed_carts
+    cart_ids = session[:completed_carts] || []
+    cart_ids.map { |id| Cart.include_cartables.find_by(id: id, status: "paid") }
+  end
+
+  def last_completed_cart
+    cart_ids = session[:completed_carts] || []
+    return if cart_ids.empty?
+    Cart.include_cartables.find_by(id: cart_ids[0], status: "paid")
   end
 end

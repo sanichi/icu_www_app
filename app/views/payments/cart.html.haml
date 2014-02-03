@@ -8,4 +8,4 @@
       = link_to card_path, class: "btn btn-success btn-md" do
         = t("shop.cart.checkout")
 %hr
-= render "items"
+= render "items", cart: @cart

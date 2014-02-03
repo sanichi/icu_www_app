@@ -1,4 +1,10 @@
 class PaymentsController < ApplicationController
+  def shop
+    @subscription_fees = SubscriptionFee.on_sale.ordered
+    @entry_fees = EntryFee.on_sale.ordered
+    @completed_carts = completed_carts
+  end
+
   def cart
     redirect_to shop_path unless check_cart(:create)
   end
@@ -10,6 +16,7 @@ class PaymentsController < ApplicationController
   def charge
     if check_cart { @cart.items? && request.xhr? }
       @cart.purchase(params)
+      complete_cart(@cart.id) if @cart.paid?
     else
       if request.xhr?
         render nothing: true
@@ -20,7 +27,12 @@ class PaymentsController < ApplicationController
   end
 
   def confirm
-    redirect_to shop_path unless check_cart(:paid)
+    @cart = last_completed_cart
+    redirect_to shop_path unless @cart
+  end
+
+  def completed
+    @completed_carts = completed_carts
   end
 
   private

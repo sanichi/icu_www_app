@@ -19,7 +19,7 @@ feature "Shop for subscriptions" do
   given(:item)            { I18n.t("shop.cart.item.item") }
   given(:member)          { I18n.t("shop.cart.item.member") }
   given(:total)           { I18n.t("shop.cart.total") }
-  given(:cart_link)       { I18n.t("shop.cart.cart") + ":" }
+  given(:cart_link)       { I18n.t("shop.cart.current") + ":" }
   given(:first_name)      { I18n.t("player.first_name") }
   given(:last_name)       { I18n.t("player.last_name") }
   given(:select_member)   { I18n.t("shop.cart.item.select_member") }
@@ -294,7 +294,7 @@ feature "Shop for entries" do
   given(:item)            { I18n.t("shop.cart.item.item") }
   given(:member)          { I18n.t("shop.cart.item.member") }
   given(:total)           { I18n.t("shop.cart.total") }
-  given(:cart_link)       { I18n.t("shop.cart.cart") + ":" }
+  given(:cart_link)       { I18n.t("shop.cart.current") + ":" }
   given(:first_name)      { I18n.t("player.first_name") }
   given(:last_name)       { I18n.t("player.last_name") }
   given(:select_member)   { I18n.t("shop.cart.item.select_member") }

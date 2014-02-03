@@ -5,11 +5,11 @@ IcuWwwApp::Application.routes.draw do
   get  "sign_out" => "sessions#destroy"
   get  "redirect" => "redirects#redirect"
 
-  %w[home shop system_info].each do |page|
+  %w[home system_info].each do |page|
     get page => "pages##{page}"
   end
 
-  %w[cart card charge confirm].each do |page|
+  %w[shop cart card charge confirm completed].each do |page|
     match page => "payments##{page}", via: page == "charge" ? :post : :get
   end
 

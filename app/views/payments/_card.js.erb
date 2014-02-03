@@ -3,7 +3,7 @@ var icuPaymentError = {
   gateway: '<%= t("shop.payment.error.gateway") %>'
 };
 
-$(function($) {
+$(function() {
   $('#stripe_form').submit(function(event) {
     disablePayment();
     Stripe.card.createToken($(this), stripeResponseHandler);

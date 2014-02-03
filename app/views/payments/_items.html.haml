@@ -1,4 +1,7 @@
-.row
+- unless defined?(hidden)
+  - hidden = false
+
+.row{id: "cart-#{cart.id}", style: hidden ? "display: none" : ""}
   .col-md-1
   .col-md-10
     %table{class: "table table-striped table-condensed"}
@@ -9,16 +12,16 @@
           %th.col-sm-2.text-center= t("shop.cart.item.cost")
           %td.col-sm-1
       %tbody
-        - @cart.cart_items.each do |item|
+        - cart.cart_items.each do |item|
           %tr
             %td= item.cartable.description
             %td= item.cartable.player.name(id: true)
             %td.text-center= euros(item.cartable.cost)
-            - if @cart.unpaid?
+            - if cart.unpaid?
               %td.text-center= link_to "✘", item, data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
         %tr
           %th{colspan: 2}= t("shop.cart.total")
-          %th.text-center= euros(@cart.total_cost)
-          - if @cart.unpaid?
+          %th.text-center= euros(cart.total_cost)
+          - if cart.unpaid?
             %th
   .col-md-2

@@ -2,11 +2,6 @@ class PagesController < ApplicationController
   def home
   end
 
-  def shop
-    @subscription_fees = SubscriptionFee.on_sale.ordered
-    @entry_fees = EntryFee.on_sale.ordered
-  end
-
   def system_info
     authorize! :system_info, Page
     @env = Page.environment

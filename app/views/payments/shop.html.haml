@@ -1,14 +1,17 @@
 - content_for :title, t("shop.shop")
 
-- if current_cart
+- if current_cart || @completed_carts.present?
   .row
     .col-sm-12.text-center
-      = link_to cart_path, class: "btn btn-info btn-md" do
-        = succeed(":") do
-          = t("shop.cart.cart")
-        = succeed(",") do
-          = t("shop.cart.item.items", count: current_cart.items)
-        = euros(current_cart.total_cost)
+      - if current_cart
+        = link_to cart_path, class: "btn btn-info btn-md" do
+          = succeed(":") do
+            = t("shop.cart.current")
+          = succeed(",") do
+            = t("shop.cart.item.items", count: current_cart.items)
+          = euros(current_cart.total_cost)
+      - if @completed_carts.present?
+        = link_to t("shop.cart.completed"), completed_path, class: "btn btn-info btn-md"
   %hr
 - if @subscription_fees.count > 0
   .row

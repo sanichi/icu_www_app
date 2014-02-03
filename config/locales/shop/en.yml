@@ -3,8 +3,12 @@ en:
     shop: Shop
     cart:
       cart: Cart
-      continue: Continue Shopping
       checkout: Checkout
+      completed: Completed payments
+      continue: Continue Shopping
+      current: Current cart
+      hide: Hide cart
+      show: Show cart
       total: Total cost
       item:
         add: Add to Cart
@@ -18,9 +22,11 @@ en:
           one: 1 item
           other: "%{count} items"
     payment:
-      confirmation_email: Email address for confirmation
-      confirmed: Payment confirmed
+      confirmation_email: Confirmation email
+      completed: Payment completed
       paid: Paid
+      paid_by: Paid by
+      time_since: Time since payment
       unpaid: Unpaid
       card:
         amount_due: Amount due
@@ -34,9 +40,9 @@ en:
       error:
         gateway: Payment processor error
       method:
-        cash: Cash
-        cheque: Cheque
-        free: Free
-        method: Method
+        cash: cash
+        cheque: cheque
+        free: free
+        method: Payment method
         paypal: PayPal
         stripe: Stripe
