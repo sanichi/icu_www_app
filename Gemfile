@@ -23,7 +23,7 @@ group :development do
   gem "wirble"
 end
 
-group :development, :test do
+group :test do
   gem "rspec-rails"
   gem "capybara"
   gem "selenium-webdriver"

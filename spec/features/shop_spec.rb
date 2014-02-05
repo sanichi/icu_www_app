@@ -72,7 +72,7 @@ feature "Shop for subscriptions" do
     expect(page).to have_link(cart_link)
 
     expect(subscription.season_desc).to eq season_desc
-    expect(subscription.unpaid?).to be_true
+    expect(subscription).to be_unpaid
 
     expect(cart_item.cart).to eq cart
     expect(cart_item.cartable).to eq subscription
@@ -345,8 +345,8 @@ feature "Shop for entries" do
     visit shop_path
     expect(page).to have_link(cart_link)
 
-    expect(cart.unpaid?).to be_true
-    expect(entry.unpaid?).to be_true
+    expect(cart).to be_unpaid
+    expect(entry).to be_unpaid
 
     expect(cart_item.cart).to eq cart
     expect(cart_item.cartable).to eq entry

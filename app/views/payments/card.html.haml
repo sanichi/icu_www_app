@@ -24,13 +24,13 @@
         %button.close{"type" => "button", "data-dismiss" => "alert"} ×
         %span{id: "payment_error_message"}
   .row
-    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.number"), extra: { data: { stripe: "number" }})
+    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.number"), extra: { id: "number", data: { stripe: "number" }})
     .form-group
       = label_tag nil, t("shop.payment.card.expiration"), class: "control-label col-sm-5"
-      .col-sm-2= select_tag nil, card_mm_menu, class: "form-control", data: { stripe: "exp-month" }
-      .col-sm-2= select_tag nil, card_yyyy_menu, class: "form-control", data: { stripe: "exp-year" }
-    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.security_code"), width: 2, extra: { data: { stripe: "cvc" }})
-    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.name"), param: "payment_name", extra: { data: { stripe: "name" }})
+      .col-sm-2= select_tag nil, card_mm_menu, class: "form-control", id: "exp-month", data: { stripe: "exp-month" }
+      .col-sm-2= select_tag nil, card_yyyy_menu, class: "form-control", id: "exp-year", data: { stripe: "exp-year" }
+    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.security_code"), width: 2, extra: { id: "cvc", data: { stripe: "cvc" }})
+    = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.name"), param: "payment_name", extra: { id: "name", data: { stripe: "name" }})
     = render "utils/text_field_tag", locals.merge(text: t("shop.payment.confirmation_email"), param: "confirmation_email")
   %hr
   .row
