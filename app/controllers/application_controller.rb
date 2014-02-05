@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     paths.unshift :last_search
     session[paths.join("_").to_sym] = request.fullpath
   end
-  
+
   private
 
   def set_locale
@@ -30,11 +30,11 @@ class ApplicationController < ActionController::Base
       session[:locale] = I18n.locale = locale
     end
   end
-  
+
   def admin_path?
     controller_path.match(/^admin\//)
   end
-  
+
   def flash_first_base_error(model)
     flash.now.alert = model.errors[:base].first if model.errors[:base].any?
   end

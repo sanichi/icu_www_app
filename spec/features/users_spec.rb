@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Authorization for preferences" do
   given!(:user)           { create(:user) }
   given!(:other_user)     { create(:user) }
-  given(:paths)           { [user_path(user), edit_user_path(user)] }
+  given(:paths)           { [account_path(user), preferences_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
@@ -34,38 +34,35 @@ feature "Edit preferences" do
   given(:theme)           { User::THEMES.sample }
   given(:bootstrap)       { "Bootstrap" }
   given(:theme_label)     { I18n.t("user.theme") }
+  given(:locale_label)    { I18n.t("user.locale") }
   given(:english)         { I18n.t("user.lang.en") }
   given(:irish)           { I18n.t("user.lang.ga") }
-  given(:locale_label)    { I18n.t("user.locale") }
+  given(:locale_label_ga) { I18n.t("user.locale", locale: "ga") }
+  given(:irish_ga)        { I18n.t("user.lang.ga", locale: "ga") }
   given(:preferences)     { I18n.t("user.preferences") }
   given(:updated)         { I18n.t("user.updated") }
   given(:edit)            { I18n.t("edit") }
   given(:save)            { I18n.t("save") }
 
-  scenario "change theme" do
+  scenario "change theme", js: true do
     expect(user.theme).to be_nil
     login user
+    click_link user.player.name
     click_link preferences
-    click_link edit
     select theme, from: theme_label
-    click_button save
-    expect(page).to have_css(success, text: updated)
     expect(page).to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
-    expect(page).to have_xpath("//th[.='#{theme_label}']/following-sibling::td[.='#{theme}']")
+    expect(page).to have_select(theme_label, selected: theme)
     user.reload
     expect(user.theme).to eq(theme)
   end
 
-  scenario "change locale" do
+  scenario "change locale", js: true do
     expect(user.locale).to eq("en")
     login user
+    click_link user.player.name
     click_link preferences
-    expect(page).to have_xpath("//th[.='#{locale_label}']/following-sibling::td[.='#{english}']")
-    click_link edit
     select irish, from: locale_label
-    click_button save
-    expect(page).to have_css(success, text: updated)
-    expect(page).to have_xpath("//th[.='#{locale_label}']/following-sibling::td[.='#{irish}']")
+    expect(page).to have_select(locale_label_ga, selected: irish_ga)
     user.reload
     expect(user.locale).to eq("ga")
   end

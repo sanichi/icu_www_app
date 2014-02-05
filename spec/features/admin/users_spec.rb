@@ -367,7 +367,7 @@ feature "Login as another user" do
     visit admin_user_path(user)
     click_link "Login"
     expect(page).to have_css(success, text: "#{message} #{user.email}")
-    click_link I18n.t("user.preferences")
+    click_link I18n.t("user.account")
     expect(page).to have_content(user.email)
     expect(Login.count).to eq(original_count)
   end

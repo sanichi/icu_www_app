@@ -8,9 +8,11 @@ IcuWwwApp::Application.routes.draw do
   %w[home system_info].each do |page|
     get page => "pages##{page}"
   end
-
   %w[shop cart card charge confirm completed].each do |page|
     match page => "payments##{page}", via: page == "charge" ? :post : :get
+  end
+  %w[account preferences update_preferences].each do |page|
+    match "#{page}/:id" => "users##{page}", via: page.match(/^update/) ? :post : :get, as: page
   end
 
   resources :cart_items,        only: [:destroy]
@@ -20,7 +22,6 @@ IcuWwwApp::Application.routes.draw do
   resources :players,           only: [:index]
   resources :sessions,          only: [:create]
   resources :subscriptions,     only: [:new, :create]
-  resources :users,             only: [:show, :edit, :update]
 
   namespace :admin do
     resources :bad_logins,        only: [:index]

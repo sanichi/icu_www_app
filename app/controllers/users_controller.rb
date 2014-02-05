@@ -1,31 +1,29 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user
 
-  def show
-    authorize! :manage_preferences, @user
+  def account
   end
 
-  def edit
-    authorize! :manage_preferences, @user
+  def preferences
   end
 
-  def update
-    authorize! :manage_preferences, @user
+  def update_preferences
     if @user.update(user_params)
-      switch_locale(@user.locale) if @user.previous_changes[:locale]
-      redirect_to @user, notice: t("user.updated")
-    else
-      render action: "edit"
+      if @user.previous_changes[:locale]
+        switch_locale(@user.locale)
+      end
     end
+    redirect_to preferences_path
   end
 
   private
 
   def set_user
     @user = User.find(params[:id])
+    authorize! :manage_preferences, @user
   end
 
   def user_params
-    params.require(:user).permit(:theme, :locale)
+    params.required(:user).permit(:theme, :locale)
   end
 end

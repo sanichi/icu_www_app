@@ -1,0 +1,18 @@
+- content_for :title, t("user.account")
+
+.row
+  .col-md-8.col-md-offset-2
+    %h1.text-center= t("user.account")
+    %table.table.table-bordered
+      %tr
+        %th= t("user.email")
+        %td= @user.email
+      %tr
+        %th= t("user.expires")
+        %td= @user.expires_on
+      %tr
+        %th= t("user.ticket")
+        %td= @user.season_ticket
+      %tr
+        %th= t("user.roles")
+        %td= @user.human_roles

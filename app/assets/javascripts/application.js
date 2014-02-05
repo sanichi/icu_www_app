@@ -13,3 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+
+// Auto-submit on change.
+$(function() {
+  $('form .auto_submit').change(function() {
+    $(this).parents('form').submit();
+  });
+});
