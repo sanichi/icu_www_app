@@ -39,10 +39,17 @@ class Cart < ActiveRecord::Base
       card: token,
       description: ["Cart #{id}", name, email].reject { |d| d.nil? }.join(", ")
     )
-  rescue => e
+  rescue Stripe::CardError => e
     payment_errors.create(
       message: e.message.presence || "Unknown error",
       details: e.try(:json_body).to_s,
+      payment_name: name,
+      confirmation_email: email
+    )
+  rescue => e
+    payment_errors.create(
+      message: "Something went wrong, please contact webmaster@icu.ie",
+      details: [e.message, e.try(:json_body).to_s].reject{ |m| m.blank? }.join(" | "),
       payment_name: name,
       confirmation_email: email
     )
