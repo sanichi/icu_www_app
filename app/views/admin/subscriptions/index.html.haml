@@ -24,5 +24,5 @@
               %td= sub.season_desc
               %td{class: "righted"}= euros(sub.cost)
               %td= t("shop.payment.method.#{sub.payment_method}") if sub.paid?
-              %td= sub.created_at.strftime("%Y-%m-%d")
+              %td= to_date(sub.created_at)
           = render "utils/pagination_links", pager: @subs, columns: 7

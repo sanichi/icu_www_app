@@ -25,6 +25,7 @@ IcuWwwApp::Application.routes.draw do
 
   namespace :admin do
     resources :bad_logins,        only: [:index]
+    resources :carts,             only: [:index, :show]
     resources :clubs,             only: [:new, :create, :edit, :update]
     resources :entry_fees do
       get :rollover, :clone, on: :member

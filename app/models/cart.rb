@@ -1,4 +1,5 @@
 class Cart < ActiveRecord::Base
+  extend Util::Pagination
   include Payable
 
   has_many :cart_items, dependent: :destroy
@@ -7,13 +8,10 @@ class Cart < ActiveRecord::Base
   scope :include_cartables, -> { includes(cart_items: [:cartable]) }
   scope :include_payment_errors, -> { includes(:payment_errors) }
 
-  def items
-    cart_items.count
-  end
-
-  def items?
-    items > 0
-  end
+  def items() cart_items.count end
+  def items?() items > 0 end
+  def perrors() payment_errors.count end
+  def perrors?() perrors > 0 end
 
   def total_cost
     cart_items.map(&:cartable).map(&:cost).reduce(0.0, :+)
@@ -40,31 +38,33 @@ class Cart < ActiveRecord::Base
       description: ["Cart #{id}", name, email].reject { |d| d.nil? }.join(", ")
     )
   rescue Stripe::CardError => e
-    payment_errors.create(
-      message: e.message.presence || "Unknown error",
-      details: e.try(:json_body).to_s,
-      payment_name: name,
-      confirmation_email: email
-    )
+    payment_errors.build(PaymentError.params(e, name, email))
   rescue => e
-    payment_errors.create(
-      message: "Something went wrong, please contact webmaster@icu.ie",
-      details: [e.message, e.try(:json_body).to_s].reject{ |m| m.blank? }.join(" | "),
-      payment_name: name,
-      confirmation_email: email
-    )
+    payment_errors.build(PaymentError.params(e, name, email, message: "Something went wrong, please contact webmaster@icu.ie"))
   else
     self.status = "paid"
     self.payment_method = "stripe"
     self.payment_ref = charge.id
     self.payment_completed = Time.now
-    self.total = total
-    self.original_total = total
     cart_items.each { |item| item.cartable.update_columns(payment_method: payment_method, status: status) }
   ensure
+    self.total = total
+    self.original_total = total
     self.payment_name = name
     self.confirmation_email = email
     save
+  end
+
+  def self.search(params, path)
+    if (id = params[:id].to_i) > 0
+      matches = where(id: id)
+    else
+      matches = order(updated_at: :desc)
+      matches = matches.where(status: params[:status]) if params[:status].present?
+      matches = matches.where("payment_name LIKE ?", "%#{params[:name]}%") if params[:name].present?
+      matches = matches.where("confirmation_email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    end
+    paginate(matches, params, path)
   end
 
   private

@@ -35,8 +35,12 @@ module ApplicationHelper
   def euros(amount)
     number_to_currency(amount, precision: 2, unit: "€")
   end
-  
+
   def auto_submit(klass, on)
     klass + (on ? " auto_submit" : "")
+  end
+
+  def to_date(time)
+    time.strftime("%Y-%m-%d")
   end
 end

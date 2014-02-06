@@ -1,0 +1,7 @@
+- content_for :title, "Cart"
+
+= render "summary", cart: @cart
+- if @cart.items?
+  = render "items", cart: @cart
+- if @cart.perrors?
+  = render "errors", cart: @cart
