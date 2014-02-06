@@ -38,7 +38,7 @@ en:
         security_code: Security number
         yyyy: yyyy
       error:
-        gateway: Payment processor error
+        gateway: Stripe error
       method:
         cash: cash
         cheque: cheque

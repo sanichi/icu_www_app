@@ -101,7 +101,6 @@ describe PaymentsController do
         payment_ref: "ch_3QMTIr9JTJmjex",
         confirmation_email: "mark@markorr.net",
         payment_name: "DR MARK J L ORR",
-        payment_error: nil,
         payment_completed: Time.now
       )
       cart_item = create(:cart_item, cartable_type: "Subscription", cartable_id: sub.id, cart: cart)

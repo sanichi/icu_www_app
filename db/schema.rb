@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140106190941) do
+ActiveRecord::Schema.define(version: 20140206100922) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.string   "payment_ref",        limit: 50
     t.string   "confirmation_email", limit: 50
     t.string   "payment_name",       limit: 100
-    t.string   "payment_error"
     t.datetime "payment_completed"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -125,6 +124,19 @@ ActiveRecord::Schema.define(version: 20140106190941) do
     t.string   "ip",         limit: 50
     t.datetime "created_at"
   end
+
+  create_table "payment_errors", force: true do |t|
+    t.integer  "cart_id"
+    t.string   "message"
+    t.string   "details"
+    t.string   "payment_name",       limit: 100
+    t.string   "confirmation_email", limit: 50
+    t.datetime "created_at"
+  end
+
+  add_index "payment_errors", ["cart_id"], name: "index_payment_errors_on_cart_id", using: :btree
+  add_index "payment_errors", ["confirmation_email"], name: "index_payment_errors_on_confirmation_email", using: :btree
+  add_index "payment_errors", ["payment_name"], name: "index_payment_errors_on_payment_name", using: :btree
 
   create_table "players", force: true do |t|
     t.string   "first_name",         limit: 50

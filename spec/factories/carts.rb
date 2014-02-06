@@ -7,7 +7,6 @@ FactoryGirl.define do
     payment_ref        nil
     confirmation_email nil
     payment_name       nil
-    payment_error      nil
     payment_completed  nil
   end
 end

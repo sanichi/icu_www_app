@@ -6,7 +6,6 @@ class CreateCarts < ActiveRecord::Migration
       t.string   :payment_method, limit: 20
       t.string   :payment_ref, :confirmation_email, limit: 50
       t.string   :payment_name, limit: 100
-      t.string   :payment_error
       t.datetime :payment_completed
 
       t.timestamps
