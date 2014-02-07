@@ -17,37 +17,37 @@ describe PaymentError do
     let(:weird_error)      { error.new(weird) }
 
     it "card error" do
-      payment_error = PaymentError.factory(card_error, name, email)
-      expect(payment_error.payment_name).to eq name
-      expect(payment_error.confirmation_email).to eq email
-      expect(payment_error.message).to eq card
-      expect(payment_error.details).to match /:type=>\"#{type}\"/
-      expect(payment_error.details).to_not match /:message=>/
+      params = PaymentError.params(card_error, name, email)
+      expect(params[:payment_name]).to eq name
+      expect(params[:confirmation_email]).to eq email
+      expect(params[:message]).to eq card
+      expect(params[:details]).to match /:type=>\"#{type}\"/
+      expect(params[:details]).to_not match /:message=>/
     end
 
     it "other error" do
-      payment_error = PaymentError.factory(other_error, name, email, message: override)
-      expect(payment_error.payment_name).to eq name
-      expect(payment_error.confirmation_email).to eq email
-      expect(payment_error.message).to eq override
-      expect(payment_error.details).to match /:type=>\"#{type}\"/
-      expect(payment_error.details).to match /:message=>\"#{other}\"/
+      params = PaymentError.params(other_error, name, email, message: override)
+      expect(params[:payment_name]).to eq name
+      expect(params[:confirmation_email]).to eq email
+      expect(params[:message]).to eq override
+      expect(params[:details]).to match /:type=>\"#{type}\"/
+      expect(params[:details]).to match /:message=>\"#{other}\"/
     end
 
     it "unexpected error" do
-      payment_error = PaymentError.factory(unexpected_error, name, email, message: override)
-      expect(payment_error.payment_name).to eq name
-      expect(payment_error.confirmation_email).to eq email
-      expect(payment_error.message).to eq override
-      expect(payment_error.details).to eq unexpected
+      params = PaymentError.params(unexpected_error, name, email, message: override)
+      expect(params[:payment_name]).to eq name
+      expect(params[:confirmation_email]).to eq email
+      expect(params[:message]).to eq override
+      expect(params[:details]).to eq unexpected
     end
 
     it "weird error" do
-      payment_error = PaymentError.factory(weird_error, name, email, message: override)
-      expect(payment_error.payment_name).to eq name
-      expect(payment_error.confirmation_email).to eq email
-      expect(payment_error.message).to eq override
-      expect(payment_error.details).to be_nil
+      params = PaymentError.params(weird_error, name, email, message: override)
+      expect(params[:payment_name]).to eq name
+      expect(params[:confirmation_email]).to eq email
+      expect(params[:message]).to eq override
+      expect(params[:details]).to be_nil
     end
   end
 end
