@@ -4,7 +4,8 @@
 
 %h3.text-center= t("shop.cart.completed")
 %hr
+- max = @completed_carts.size
 - @completed_carts.each_with_index do |cart, i|
-  = render "cart_summary", cart: cart, number: i + 1, toggle: true
+  = render "cart_summary", cart: cart, number: i + 1, max: max, toggle: true
   = render "items", cart: cart, hidden: true
   %hr

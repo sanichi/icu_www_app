@@ -3,37 +3,35 @@ require 'spec_helper'
 feature "Pay", slow: true do
   given(:player)             { create(:player) }
 
-  given(:select_member)      { I18n.t("shop.cart.item.select_member") }
-  given(:first_name)         { I18n.t("player.first_name") }
-  given(:last_name)          { I18n.t("player.last_name") }
-  given(:add_to_cart)        { I18n.t("shop.cart.item.add") }
-  given(:checkout)           { I18n.t("shop.cart.checkout") }
-  given(:pay)                { I18n.t("shop.payment.card.pay") }
-  given(:total)              { I18n.t("shop.cart.total") }
-  given(:confirmation_email) { I18n.t("shop.payment.confirmation_email") }
-  given(:time_since)         { I18n.t("shop.payment.time_since") }
-  given(:payment_method)     { I18n.t("shop.payment.method.method") }
-  given(:stripe_label)       { I18n.t("shop.payment.method.stripe") }
-  given(:gateway)            { I18n.t("shop.payment.error.gateway") }
+  given(:select_member)         { I18n.t("shop.cart.item.select_member") }
+  given(:first_name)            { I18n.t("player.first_name") }
+  given(:last_name)             { I18n.t("player.last_name") }
+  given(:add_to_cart)           { I18n.t("shop.cart.item.add") }
+  given(:checkout)              { I18n.t("shop.cart.checkout") }
+  given(:pay)                   { I18n.t("shop.payment.card.pay") }
+  given(:total)                 { I18n.t("shop.cart.total") }
+  given(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
+  given(:payment_time)          { I18n.t("shop.payment.time") }
+  given(:gateway)               { I18n.t("shop.payment.error.gateway") }
 
-  given(:number_id)          { "number" }
-  given(:month_id)           { "exp-month" }
-  given(:year_id)            { "exp-year" }
-  given(:email_id)           { "confirmation_email" }
-  given(:name_id)            { "payment_name" }
-  given(:cvc_id)             { "cvc" }
+  given(:number_id)             { "number" }
+  given(:month_id)              { "exp-month" }
+  given(:year_id)               { "exp-year" }
+  given(:email_id)              { "confirmation_email" }
+  given(:name_id)               { "payment_name" }
+  given(:cvc_id)                { "cvc" }
 
-  given(:stripe)             { "stripe" }
-  given(:number)             { "4242 4242 4242 4242" }
-  given(:mm)                 { "01" }
-  given(:yyyy)               { (Date.today.year + 2).to_s }
-  given(:cvc)                { "123" }
-  given(:force_submit)       { "\n" }
+  given(:stripe)                { "stripe" }
+  given(:number)                { "4242 4242 4242 4242" }
+  given(:mm)                    { "01" }
+  given(:yyyy)                  { (Date.today.year + 2).to_s }
+  given(:cvc)                   { "123" }
+  given(:force_submit)          { "\n" }
 
-  given(:item)               { "li" }
-  given(:error)              { "div.alert-danger" }
-  given(:card_declined)      { "Your card was declined." }
-  given(:expired_card)       { "Your card's expiration date is incorrect." }
+  given(:item)                  { "li" }
+  given(:error)                 { "div.alert-danger" }
+  given(:card_declined)         { "Your card was declined." }
+  given(:expired_card)          { "Your card's expiration date is incorrect." }
 
   def fill_in_all_and_click_pay(opt = {})
     opt.reverse_merge!(number: number, mm: mm, yyyy: yyyy, cvc: cvc, name: player.name, email: player.email)
@@ -85,9 +83,8 @@ feature "Pay", slow: true do
       fill_in_all_and_click_pay
 
       expect(page).to have_css(item, text: /\A#{total}: €#{"%.2f" % subscription.cost}\z/)
-      expect(page).to have_css(item, text: /\A#{time_since}: .+ \(20\d\d-\d\d-\d\d \d\d:\d\d:\d\d\)\z/)
-      expect(page).to have_css(item, text: /\A#{confirmation_email}: #{player.email}\z/)
-      expect(page).to have_css(item, text: /\A#{payment_method}: #{stripe_label}\z/)
+      expect(page).to have_css(item, text: /\A#{payment_time}: 20\d\d-\d\d-\d\d \d\d:\d\d:\d\d GMT\z/)
+      expect(page).to have_css(item, text: /\A#{confirmation_email_to}: #{player.email}\z/)
 
       cart.reload
       expect(cart).to be_paid
@@ -115,7 +112,7 @@ feature "Pay", slow: true do
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
-      
+
       # Expired card.
       fill_in_number_and_click_pay("4000000000000069")
       expect(page).to have_css(error, text: gateway_error(expired_card))

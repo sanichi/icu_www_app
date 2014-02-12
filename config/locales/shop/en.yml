@@ -23,10 +23,11 @@ en:
           other: "%{count} items"
     payment:
       confirmation_email: Confirmation email
+      confirmation_email_to: Confirmation email sent to
       completed: Payment completed
       paid: Paid
       paid_by: Paid by
-      time_since: Time since payment
+      time: Payment completed at
       unpaid: Unpaid
       card:
         amount_due: Amount due
