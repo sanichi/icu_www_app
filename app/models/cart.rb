@@ -38,9 +38,9 @@ class Cart < ActiveRecord::Base
       description: ["Cart #{id}", name, email].reject { |d| d.nil? }.join(", ")
     )
   rescue Stripe::CardError => e
-    payment_errors.build(PaymentError.params(e, name, email))
+    add_payment_error(e, name, email)
   rescue => e
-    payment_errors.build(PaymentError.params(e, name, email, message: "Something went wrong, please contact webmaster@icu.ie"))
+    add_payment_error(e, name, email, "Something went wrong, please contact webmaster@icu.ie")
   else
     self.status = "paid"
     self.payment_method = "stripe"
@@ -71,5 +71,16 @@ class Cart < ActiveRecord::Base
 
   def cents(euros)
     (euros * 100).round
+  end
+  
+  def add_payment_error(error, name, email, message=nil)
+    message ||= error.message || "Unknown error"
+    details = error.try(:json_body)
+    unless details.nil?
+      details = details.fetch(:error) { details } if details.is_a?(Hash)
+      details.delete(:message) if details.is_a?(Hash) && details[:message] == message
+      details = details.to_s
+    end
+    payment_errors.build(message: message, details: details, payment_name: name, confirmation_email: email)
   end
 end
