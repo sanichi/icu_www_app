@@ -25,7 +25,7 @@ class Cart < ActiveRecord::Base
   end
 
   def last_payment_error_message
-    (payment_errors.last.try(:message).presence || "None").gsub("'", "\\\\'")
+    payment_errors.last.try(:message).presence || "None"
   end
 
   def purchase(params)

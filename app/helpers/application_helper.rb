@@ -43,4 +43,8 @@ module ApplicationHelper
   def to_date(time)
     time.strftime("%Y-%m-%d")
   end
+  
+  def escape_single_quotes(string)
+    string.gsub("'", "\\\\'")
+  end
 end
