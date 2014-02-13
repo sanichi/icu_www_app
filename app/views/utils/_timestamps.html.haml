@@ -4,9 +4,11 @@
   - updated_by = nil
 - unless defined? created_by
   - created_by = nil
+- unless defined? format
+  - format = :nosec
 
 - if (ability.nil? || can?(ability, object)) && (object.respond_to?(:updated_at) || object.respond_to?(:created_at))
   - if object.respond_to?(:updated_at)
-    = render "utils/datetime", text: t("updated_at"), datetime: object.updated_at, by: updated_by
+    = render "utils/datetime", text: t("updated_at"), datetime: object.updated_at, by: updated_by, format: format
   - if object.respond_to?(:created_at)
-    = render "utils/datetime", text: t("created_at"), datetime: object.created_at, by: created_by
+    = render "utils/datetime", text: t("created_at"), datetime: object.created_at, by: created_by, format: format

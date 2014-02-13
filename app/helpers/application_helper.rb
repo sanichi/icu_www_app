@@ -44,7 +44,9 @@ module ApplicationHelper
     time.strftime("%Y-%m-%d")
   end
   
-  def escape_single_quotes(string)
-    string.gsub("'", "\\\\'")
+  def escape_single_quoted(string, safe=true)
+    escaped = string.gsub("'", "\\\\'").gsub(/\n/, "\\n")
+    escaped = escaped.html_safe if safe
+    escaped
   end
 end

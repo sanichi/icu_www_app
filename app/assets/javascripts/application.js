@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require_tree .
+//= require bootstrap.min
 
 // Auto-submit on change.
 $(function() {

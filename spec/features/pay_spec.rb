@@ -83,7 +83,7 @@ feature "Pay", slow: true do
       fill_in_all_and_click_pay
 
       expect(page).to have_css(item, text: /\A#{total}: €#{"%.2f" % subscription.cost}\z/)
-      expect(page).to have_css(item, text: /\A#{payment_time}: 20\d\d-\d\d-\d\d \d\d:\d\d:\d\d GMT\z/)
+      expect(page).to have_css(item, text: /\A#{payment_time}: 20\d\d-\d\d-\d\d \d\d:\d\d GMT\z/)
       expect(page).to have_css(item, text: /\A#{confirmation_email_to}: #{player.email}\z/)
 
       cart.reload

@@ -26,14 +26,14 @@ function stripeResponseHandler(status, response) {
 
 function disablePayment() {
   $('#stripe_form').find('button').prop('disabled', false);
-  $('#payment_waiting').show();
+  startSpinner();
   $('#cancel_button').hide();
   $('#payment_error').hide();
 }
 
 function enablePayment() {
   $('#stripe_form').find('button').prop('disabled', false);
-  $('#payment_waiting').hide();
+  stopSpinner();
   $('#cancel_button').show();
 }
 

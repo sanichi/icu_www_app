@@ -10,4 +10,12 @@ class Admin::CartsController < ApplicationController
   def show
     @cart = Cart.include_cartables.include_payment_errors.find(params[:id])
   end
+
+  def show_charge
+    @cart = Cart.find(params[:id])
+    @charge = Stripe::Charge.retrieve(@cart.payment_ref)
+    @json = JSON.pretty_generate(@charge.as_json)
+  rescue => e
+    @error = e.message
+  end
 end

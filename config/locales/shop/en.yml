@@ -27,6 +27,7 @@ en:
       completed: Payment completed
       paid: Paid
       paid_by: Paid by
+      ref_number: Reference number for enquiries
       time: Payment completed at
       unpaid: Unpaid
       card:

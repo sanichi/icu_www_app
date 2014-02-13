@@ -34,9 +34,9 @@
       - if cart.payment_ref.present?
         %tr
           %th Payment reference
-          %td= cart.payment_ref
+          %td= link_to cart.payment_ref, show_charge_admin_cart_path(cart), remote: true, id: "charge_modal_link"
       - if cart.payment_completed.present?
         %tr
           %th Payment completed
-          %td= cart.payment_completed.to_s(:nosec)
-      = render "utils/timestamps", object: cart
+          %td= cart.payment_completed.to_s(:db)
+      = render "utils/timestamps", object: cart, format: :db

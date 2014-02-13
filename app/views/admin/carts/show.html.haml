@@ -1,5 +1,11 @@
 - content_for :title, "Cart"
+- content_for :javascript do
+  = render "modal_control.js"
+- if @cart.payment_ref.present?
+  - content_for :includes do
+    = javascript_include_tag "spin.js"
 
+= render "charge_modal"
 = render "summary", cart: @cart
 - if @cart.items?
   = render "items", cart: @cart
