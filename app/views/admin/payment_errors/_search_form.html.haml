@@ -1,0 +1,7 @@
+= form_tag admin_payment_errors_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :message, text: "Message", size: 12
+  = render "utils/inline_text_field", param: :details, text: "Details", size: 12
+  = render "utils/inline_text_field", param: :payment_name, text: "Name", size: 12
+  = render "utils/inline_text_field", param: :confirmation_email, text: "Email", size: 12
+  = render "utils/inline_text_field", param: :created_at, text: "YYYY-MM-DD", size: 12
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

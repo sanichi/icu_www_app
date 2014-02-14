@@ -28,6 +28,7 @@ class Ability
       can :manage, SubscriptionFee
       can :index, Subscription
       can :read, Cart
+      can :index, PaymentError
     end
 
     can :show, EntryFee, player_id: user.player_id

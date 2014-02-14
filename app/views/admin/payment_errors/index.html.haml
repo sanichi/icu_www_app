@@ -1,0 +1,25 @@
+- content_for :title, "Users"
+
+= render "utils/search_panel", form: "admin/payment_errors/search_form", title: "Payment Errors"
+- if @errors.count > 0
+  .row
+    .col-xs-12
+      %table{class: "table table-bordered table-striped table-condensed", id: "results"}
+        %thead
+          %tr
+            %th.text-center Cart
+            %th Message
+            %th Payment Name
+            %th Confirmation Email
+            %th Created At
+        %tbody
+          - @errors.matches.each do |error|
+            %tr
+              %td.text-center{rowspan: 2, style: "vertical-align: middle"}= link_to error.cart_id, admin_cart_path(error.cart_id)
+              %td= error.message
+              %td= error.payment_name
+              %td= error.confirmation_email
+              %td= error.created_at.to_s(:db)
+            %tr
+              %td{colspan: 4}= error.details
+          = render "utils/pagination_links", pager: @errors, columns: 5

@@ -6,15 +6,15 @@
       %thead
         %tr
           %th Time
+          %th Message
           %th Name
           %th Email
-          %th Message
       %tbody
         - cart.payment_errors.each do |error|
           %tr
             %td{rowspan: 2}= error.created_at.to_s(:db)
+            %td= error.message || "(no message)"
             %td= error.payment_name
             %td= error.confirmation_email
-            %td= error.message || "(no message)"
           %tr
             %td{colspan: 3}= error.details || "(no details)"
