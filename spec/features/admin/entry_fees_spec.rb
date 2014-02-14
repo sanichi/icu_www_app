@@ -13,7 +13,7 @@ feature "Authorization for entry fees" do
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
   given(:paths)           { [admin_entry_fees_path, new_admin_entry_fee_path, admin_entry_fee_path(fee), edit_admin_entry_fee_path(fee)] }
 
-  scenario "the admin and treasurer roles can manage entry fees" do
+  scenario "some roles can manage entry fees" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -24,7 +24,7 @@ feature "Authorization for entry fees" do
     end
   end
 
-  scenario "the contact can only view entry fees" do
+  scenario "the contact can view entry fees" do
     login user
     expect(page).to have_css(success, text: signed_in_as)
     paths.each_with_index do |path, i|
@@ -37,22 +37,18 @@ feature "Authorization for entry fees" do
     end
   end
 
-  scenario "other roles have no access" do
-    not_ok_roles.each do |role|
-      login role
-      expect(page).to have_css(success, text: signed_in_as)
+  scenario "other roles and guests have no access" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)
       end
-    end
-  end
-
-  scenario "guests have no access" do
-    logout
-    paths.each do |path|
-      visit path
-      expect(page).to have_css(failure, text: unauthorized)
     end
   end
 end

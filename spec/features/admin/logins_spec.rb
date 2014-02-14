@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 feature "Authorization for logins" do
-  given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
+  given(:ok_roles)        { %w[admin] }
+  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
   given(:record)          { create(:login) }
   given(:paths)           { [admin_logins_path, admin_login_path(record)] }
   given(:success)         { "div.alert-success" }
@@ -9,32 +10,29 @@ feature "Authorization for logins" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "admin users can view the logins list" do
-    logout
-    login "admin"
-    expect(page).to have_css(success, text: signed_in_as)
-    paths.each do |path|
-      visit path
-      expect(page).to_not have_css(failure)
-    end
-  end
-
-  scenario "non-admin cannot view the logins list" do
-    non_admin_roles.each do |role|
+  scenario "some roles can view the logins list" do
+    ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
       paths.each do |path|
         visit path
-        expect(page).to have_css(failure, text: unauthorized)
+        expect(page).to_not have_css(failure)
       end
     end
   end
 
-  scenario "guests cannot view the logins list" do
-    logout
-    paths.each do |path|
-      visit path
-      expect(page).to have_css(failure, text: unauthorized)
+  scenario "other roles and guests cannot" do
+    not_ok_roles.push("guests").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
+      paths.each do |path|
+        visit path
+        expect(page).to have_css(failure, text: unauthorized)
+      end
     end
   end
 end

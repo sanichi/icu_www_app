@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 
 feature "Authorization for translations" do
@@ -11,7 +10,7 @@ feature "Authorization for translations" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "the admin and translator roles can manage translations" do
+  scenario "some roles can manage translations" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -22,22 +21,18 @@ feature "Authorization for translations" do
     end
   end
 
-  scenario "other roles cannot access translations" do
-    not_ok_roles.each do |role|
-      login role
-      expect(page).to have_css(success, text: signed_in_as)
+  scenario "other roles and guests have no access" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)
       end
-    end
-  end
-
-  scenario "guests cannot access users" do
-    logout
-    paths.each do |path|
-      visit path
-      expect(page).to have_css(failure, text: unauthorized)
     end
   end
 end

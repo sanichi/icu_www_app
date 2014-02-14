@@ -11,7 +11,7 @@ feature "Authorization for subscription fees" do
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
   given(:paths)           { [new_admin_subscription_fee_path, edit_admin_subscription_fee_path(fee), admin_subscription_fees_path, admin_subscription_fee_path(fee)] }
 
-  scenario "the admin and treasurer roles can manage subscription fees" do
+  scenario "some roles can manage subscription fees" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -22,22 +22,18 @@ feature "Authorization for subscription fees" do
     end
   end
 
-  scenario "other roles hae no access" do
-    not_ok_roles.each do |role|
-      login role
-      expect(page).to have_css(success, text: signed_in_as)
+  scenario "other roles and guests have no access" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)
       end
-    end
-  end
-
-  scenario "guests have no access" do
-    logout
-    paths.each do |path|
-      visit path
-      expect(page).to have_css(failure, text: unauthorized)
     end
   end
 end

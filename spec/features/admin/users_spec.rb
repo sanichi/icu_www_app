@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 feature "Authorization for users" do
-  given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
+  given(:ok_roles)        { %w[admin] }
+  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
   given(:user)            { create(:user) }
   given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
@@ -9,31 +10,29 @@ feature "Authorization for users" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "the admin role can manage users" do
-    login "admin"
-    expect(page).to have_css(success, text: signed_in_as)
-    paths.each do |path|
-      visit path
-      expect(page).to_not have_css(failure)
-    end
-  end
-
-  scenario "non-admin roles cannot access users" do
-    non_admin_roles.each do |role|
+  scenario "some roles can manage users" do
+    ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
       paths.each do |path|
         visit path
-        expect(page).to have_css(failure, text: unauthorized)
+        expect(page).to_not have_css(failure)
       end
     end
   end
 
-  scenario "guests cannot access users" do
-    logout
-    paths.each do |path|
-      visit path
-      expect(page).to have_css(failure, text: unauthorized)
+  scenario "non-admin roles cannot access users" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
+      paths.each do |path|
+        visit path
+        expect(page).to have_css(failure, text: unauthorized)
+      end
     end
   end
 end

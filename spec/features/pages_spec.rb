@@ -12,17 +12,15 @@ feature "Authorization for pages" do
     expect(page).to_not have_css(failure)
   end
 
-  scenario "other roles" do
-    non_admin_roles.each do |role|
-      login role
+  scenario "other roles and guests" do
+    non_admin_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+      end
       visit system_info_path
       expect(page).to have_css(failure, text: unauthorized)
     end
-  end
-
-  scenario "guests" do
-    logout
-    visit system_info_path
-    expect(page).to have_css(failure, text: unauthorized)
   end
 end

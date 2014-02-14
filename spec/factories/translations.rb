@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 FactoryGirl.define do
   factory :translation do
     locale      "ga"

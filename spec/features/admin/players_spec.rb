@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 
 feature "Authorization for players" do
@@ -12,7 +11,7 @@ feature "Authorization for players" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "the admin and membership roles can manage players" do
+  scenario "some roles can manage players" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -28,10 +27,14 @@ feature "Authorization for players" do
     end
   end
 
-  scenario "other roles can only index players" do
-    not_ok_roles.each do |role|
-      login role
-      expect(page).to have_css(success, text: signed_in_as)
+  scenario "other roles and guests can only index players" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
       visit new_admin_player_path
       expect(page).to have_css(failure, text: unauthorized)
       visit edit_admin_player_path(player)
@@ -41,18 +44,6 @@ feature "Authorization for players" do
       visit admin_player_path(player)
       expect(page).to have_css(failure, text: unauthorized)
     end
-  end
-
-  scenario "guests can only index players" do
-    logout
-    visit new_admin_player_path
-    expect(page).to have_css(failure, text: unauthorized)
-    visit edit_admin_player_path(player)
-    expect(page).to have_css(failure, text: unauthorized)
-    visit players_path
-    expect(page).to_not have_css(failure)
-    visit admin_player_path(player)
-    expect(page).to have_css(failure, text: unauthorized)
   end
 end
 

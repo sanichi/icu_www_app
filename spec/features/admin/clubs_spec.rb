@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'spec_helper'
 
 feature "Authorization for clubs" do
@@ -12,7 +11,7 @@ feature "Authorization for clubs" do
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "the admin and editor roles can manage clubs" do
+  scenario "some roles can manage clubs as well as view" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -26,10 +25,14 @@ feature "Authorization for clubs" do
     end
   end
 
-  scenario "other roles cannot manage clubs" do
-    not_ok_roles.each do |role|
-      login role
-      expect(page).to have_css(success, text: signed_in_as)
+  scenario "other roles and guests can only view" do
+    not_ok_roles.push("guest").each do |role|
+      if role == "guest"
+        logout
+      else
+        login role
+        expect(page).to have_css(success, text: signed_in_as)
+      end
       visit new_admin_club_path
       expect(page).to have_css(failure, text: unauthorized)
       visit edit_admin_club_path(club)
@@ -38,17 +41,6 @@ feature "Authorization for clubs" do
       expect(page).to have_xpath(header)
       expect(page).to_not have_link(button)
     end
-  end
-
-  scenario "guests cannot manage clubs" do
-    logout
-    visit new_admin_club_path
-    expect(page).to have_css(failure, text: unauthorized)
-    visit edit_admin_club_path(club)
-    expect(page).to have_css(failure, text: unauthorized)
-    visit club_path(club)
-    expect(page).to have_xpath(header)
-    expect(page).to_not have_link(button)
   end
 end
 

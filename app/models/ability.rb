@@ -27,6 +27,7 @@ class Ability
       can :manage, EntryFee
       can :manage, SubscriptionFee
       can :index, Subscription
+      can :read, Cart
     end
 
     can :show, EntryFee, player_id: user.player_id
