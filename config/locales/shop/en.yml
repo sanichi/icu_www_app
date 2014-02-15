@@ -41,6 +41,11 @@ en:
         yyyy: yyyy
       error:
         gateway: Stripe error
+        number: Invalid card number
+        expiry: Invalid card expiry month/year
+        cvc: Invalid card security number
+        name: Missing card owner's name
+        email: Invalid confirmation email address
       method:
         cash: cash
         cheque: cheque

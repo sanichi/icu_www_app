@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature "Pay", slow: true do
-  given(:player)             { create(:player) }
+  given(:player)                { create(:player) }
 
   given(:select_member)         { I18n.t("shop.cart.item.select_member") }
   given(:first_name)            { I18n.t("player.first_name") }
@@ -13,6 +13,11 @@ feature "Pay", slow: true do
   given(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
   given(:payment_time)          { I18n.t("shop.payment.time") }
   given(:gateway)               { I18n.t("shop.payment.error.gateway") }
+  given(:bad_number)            { I18n.t("shop.payment.error.number") }
+  given(:bad_expiry)            { I18n.t("shop.payment.error.expiry") }
+  given(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
+  given(:bad_name)              { I18n.t("shop.payment.error.name") }
+  given(:bad_email)             { I18n.t("shop.payment.error.email") }
 
   given(:number_id)             { "number" }
   given(:month_id)              { "exp-month" }
@@ -126,6 +131,46 @@ feature "Pay", slow: true do
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
+    end
+
+    scenario "client side errors", js: true do
+      expect(PaymentError.count).to eq 0
+
+      # Card.
+      click_button pay
+      expect(page).to have_css(error, text: bad_number)
+      fill_in number_id, with: "1234"
+      click_button pay
+      expect(page).to have_css(error, text: bad_number)
+
+      # Expiry.
+      fill_in number_id, with: number
+      click_button pay
+      expect(page).to have_css(error, text: bad_expiry)
+
+      # CVC.
+      select mm, from: month_id
+      select yyyy, from: year_id
+      click_button pay
+      expect(page).to have_css(error, text: bad_cvc)
+      fill_in cvc_id, with: "1"
+      click_button pay
+      expect(page).to have_css(error, text: bad_cvc)
+      
+      # Name.
+      fill_in cvc_id, with: cvc
+      click_button pay
+      expect(page).to have_css(error, text: bad_name)
+      
+      # Email.
+      fill_in name_id, with: player.name
+      click_button pay
+      expect(page).to have_css(error, text: bad_email)
+      fill_in email_id, with: "rubbish"
+      click_button pay
+      expect(page).to have_css(error, text: bad_email)
+      
+      expect(PaymentError.count).to eq 0
     end
   end
 end

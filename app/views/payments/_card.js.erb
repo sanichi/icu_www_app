@@ -1,15 +1,47 @@
 Stripe.setPublishableKey('<%= APP_CONFIG["stripe"][Rails.env]["public"] %>');
 var icuPaymentError = {
-  gateway: '<%= t("shop.payment.error.gateway") %>'
+  gateway: '<%= escape_single_quoted(t("shop.payment.error.gateway")) %>',
+  number:  '<%= escape_single_quoted(t("shop.payment.error.number")) %>',
+  expiry:  '<%= escape_single_quoted(t("shop.payment.error.expiry")) %>',
+  cvc:     '<%= escape_single_quoted(t("shop.payment.error.cvc")) %>',
+  name:    '<%= escape_single_quoted(t("shop.payment.error.name")) %>',
+  email:   '<%= escape_single_quoted(t("shop.payment.error.email")) %>'
 };
 
 $(function() {
   $('#stripe_form').submit(function(event) {
-    disablePayment();
-    Stripe.card.createToken($(this), stripeResponseHandler);
+    if (!clientErrors()) {
+      disablePayment();
+      Stripe.card.createToken($(this), stripeResponseHandler);
+    }
     return false;
   });
+  $('#number').payment('formatCardNumber');
+  $('#cvc').payment('formatCardCVC');
 });
+
+function clientErrors() {
+  if (!$.payment.validateCardNumber($('#number').val()))                          return clientError('number');
+  if (!$.payment.validateCardExpiry($('#exp-month').val(), $('#exp-year').val())) return clientError('expiry');
+  if (!$.payment.validateCardCVC($('#cvc').val()))                                return clientError('cvc');
+  if (!validName())                                                               return clientError('name');
+  if (!validEmail())                                                              return clientError('email');
+  return false;
+}
+
+function validName() {
+  var el = $('#name');
+  var name = el.val().trim();
+  el.val(name);
+  return name.length > 0;
+}
+
+function validEmail() {
+  var el = $('#email');
+  var email = el.val().trim();
+  el.val(email);
+  return email.match(/^[^\s@]+@[^\s@]+$/);
+}
 
 function stripeResponseHandler(status, response) {
   if (response.error) {
@@ -38,7 +70,21 @@ function enablePayment() {
 }
 
 function stripeError(message) {
-  $('#payment_error_message').text(icuPaymentError['gateway'] + ': "' + message + '"');
-  $('#payment_error').show();
+  showError(icuPaymentError['gateway'] + ': "' + message + '"');
   enablePayment();
+}
+
+function clientError(code) {
+  showError(icuPaymentError[code]);
+  return true;
+}
+
+function showError(message) {
+  $('#payment_error_message').text(message);
+  var el = $('#payment_error');
+  if (el.is(':visible')) {
+    el.fadeOut(100).fadeIn(100)
+  } else {
+    el.show();
+  }
 }
