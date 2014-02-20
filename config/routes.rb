@@ -25,7 +25,7 @@ IcuWwwApp::Application.routes.draw do
 
   namespace :admin do
     resources :bad_logins,        only: [:index]
-    resources :carts,             only: [:index, :show] do
+    resources :carts,             only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member
     end
     resources :clubs,             only: [:new, :create, :edit, :update]

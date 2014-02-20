@@ -1,0 +1,32 @@
+- content_for :title, "Refund"
+- content_for :javascript do
+  = render "refund.js"
+- content_for :includes do
+  = javascript_include_tag "spin.js"
+
+.row
+  .col-md-2
+  .col-md-8
+    = form_tag [:admin, @cart], method: :patch, id: "refund_form", class: "form-horizontal", role: "form" do
+      %table{class: "table table-striped"}
+        %thead
+          %tr
+            %th= t("shop.cart.item.item")
+            %th= t("shop.cart.item.member")
+            %th.text-center= t("shop.cart.item.cost")
+            %th.text-center= t("shop.payment.refund")
+        %tbody
+          %tr
+            %th{colspan: 2}= t("all")
+            %th.text-center= euros(@cart.total)
+            %td.text-center= check_box_tag "all_items"
+          - @cart.cart_items.each do |item|
+            - cartable = item.cartable
+            - if cartable.paid?
+              %tr
+                %td= cartable.description
+                %td= cartable.player.name(id: true)
+                %td.text-center= euros(cartable.cost)
+                %td.text-center= check_box_tag "item_#{item.id}"
+      = submit_tag t("shop.payment.refund"), class: "btn btn-danger", disabled: true, data: { confirm: "Are you sure you want to cancel the selected purchase(s) and refund the credit card?" }
+      = link_to t("cancel"), [:admin, @cart], class: "btn btn-primary"

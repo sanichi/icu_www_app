@@ -1,7 +1,7 @@
 .row
   .col-md-8.col-md-offset-2
     %h1.text-center Cart
-    %table.table.table-bordered.table-striped.table-condensed
+    %table.table.table-bordered.table-striped
       %tr
         %th= "ID"
         %td
@@ -39,4 +39,7 @@
         %tr
           %th Payment completed
           %td= cart.payment_completed.to_s(:db)
-      = render "utils/timestamps", object: cart, format: :db
+      = render "utils/timestamps", object: cart, dt_format: :db
+    - if cart.refundable? && can?(:edit, Cart)
+      = link_to "Refund...", edit_admin_cart_path(cart), class: "btn btn-danger"
+    

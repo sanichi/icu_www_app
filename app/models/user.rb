@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   SessionError = Class.new(RuntimeError)
 
   has_many :logins, dependent: :destroy
+  has_many :refunds, dependent: :nullify
   belongs_to :player
 
   default_scope { order(:email) }

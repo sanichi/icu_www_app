@@ -5,7 +5,7 @@
 - if @players.count > 0
   .row
     .col-sm-8.col-sm-offset-2
-      %table{class: "table table-striped table-condensed", id: "results"}
+      %table{class: "table table-striped", id: "results"}
         %thead
           %tr
             %th= t("player.abbrev.id")
@@ -32,4 +32,4 @@
                 %td= t("player.status.#{player.status}")
                 %td= t("player.source.#{player.source}")
               
-          = render "utils/pagination_links", pager: @players, columns: 7
+          = render "utils/pagination_links", pager: @players, columns: 7 + (current_user.guest? ? 0 : 2)

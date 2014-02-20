@@ -1,12 +1,12 @@
 - unless defined? by
-  - by = nil
-- unless defined? format
-  - format = :nosec
+  - done_by = nil
+- unless defined? dt_format
+  - date_format = :nosec
 
 %tr
   %th= text
   %td
-    %time{datetime: datetime.to_s(:html5)}= datetime.to_s(format)
-    - if by
+    %time{datetime: datetime.to_s(:html5)}= datetime.to_s(dt_format)
+    - if done_by
       = t("by")
-      = by
+      = done_by

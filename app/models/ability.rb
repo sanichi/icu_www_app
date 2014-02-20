@@ -27,7 +27,7 @@ class Ability
       can :manage, EntryFee
       can :manage, SubscriptionFee
       can :index, Subscription
-      can :read, Cart
+      can :manage, Cart
       can :index, PaymentError
     end
 

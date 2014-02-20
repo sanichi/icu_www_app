@@ -2,7 +2,7 @@
 %h3.text-center Cart Items
 .row
   .col-md-12
-    %table{class: "table table-striped table-condensed"}
+    %table{class: "table table-striped"}
       %thead
         %tr
           %th.col-sm-4= t("shop.cart.item.item")
@@ -20,4 +20,3 @@
         %tr
           %th{colspan: 3}= t("shop.cart.total")
           %th.text-center= euros(cart.total_cost)
-  .col-md-2

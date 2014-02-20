@@ -25,11 +25,9 @@ en:
       confirmation_email: Confirmation email
       confirmation_email_to: Confirmation email sent to
       completed: Payment completed
-      paid: Paid
-      paid_by: Paid by
+      refund: Refund
       ref_number: Reference number for enquiries
       time: Payment completed at
-      unpaid: Unpaid
       card:
         amount_due: Amount due
         expiration: Expiration date
@@ -53,3 +51,8 @@ en:
         method: Payment method
         paypal: PayPal
         stripe: Stripe
+      status:
+        paid: Paid
+        part_refunded: Part refunded
+        refunded: Refunded
+        unpaid: Unpaid

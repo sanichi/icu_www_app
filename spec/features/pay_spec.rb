@@ -9,6 +9,7 @@ feature "Pay", slow: true do
   given(:add_to_cart)           { I18n.t("shop.cart.item.add") }
   given(:checkout)              { I18n.t("shop.cart.checkout") }
   given(:pay)                   { I18n.t("shop.payment.card.pay") }
+  given(:completed)             { I18n.t("shop.payment.completed") }
   given(:total)                 { I18n.t("shop.cart.total") }
   given(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
   given(:payment_time)          { I18n.t("shop.payment.time") }
@@ -33,6 +34,7 @@ feature "Pay", slow: true do
   given(:cvc)                   { "123" }
   given(:force_submit)          { "\n" }
 
+  given(:title)                 { "h3" }
   given(:item)                  { "li" }
   given(:error)                 { "div.alert-danger" }
   given(:card_declined)         { "Your card was declined." }
@@ -87,6 +89,7 @@ feature "Pay", slow: true do
 
       fill_in_all_and_click_pay
 
+      expect(page).to have_css(title, text: completed)
       expect(page).to have_css(item, text: /\A#{total}: €#{"%.2f" % subscription.cost}\z/)
       expect(page).to have_css(item, text: /\A#{payment_time}: 20\d\d-\d\d-\d\d \d\d:\d\d GMT\z/)
       expect(page).to have_css(item, text: /\A#{confirmation_email_to}: #{player.email}\z/)
@@ -109,7 +112,7 @@ feature "Pay", slow: true do
       expect(page).to have_css(error, text: gateway_error(card_declined))
       subscription = Subscription.last
       expect(subscription).to be_unpaid
-      cart = Cart.include_payment_errors.last
+      cart = Cart.include_errors.last
       expect(cart).to be_unpaid
       expect(cart.payment_errors.count).to eq 1
       payment_error = cart.payment_errors.last

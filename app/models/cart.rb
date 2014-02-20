@@ -4,14 +4,20 @@ class Cart < ActiveRecord::Base
 
   has_many :cart_items, dependent: :destroy
   has_many :payment_errors, dependent: :destroy
+  has_many :refunds, dependent: :destroy
 
   scope :include_cartables, -> { includes(cart_items: [:cartable]) }
-  scope :include_payment_errors, -> { includes(:payment_errors) }
+  scope :include_errors, -> { includes(:payment_errors) }
+  scope :include_refunds, -> { includes(refunds: [:user]) }
 
   def items() cart_items.count end
   def items?() items > 0 end
   def perrors() payment_errors.count end
   def perrors?() perrors > 0 end
+
+  def refundable?
+    active? && payment_method == "stripe"
+  end
 
   def total_cost
     cart_items.map(&:cartable).map(&:cost).reduce(0.0, :+)
@@ -55,6 +61,28 @@ class Cart < ActiveRecord::Base
     save
   end
 
+  def refund(item_ids, user)
+    refund = Refund.new(user: user, cart: self)
+    charge = Stripe::Charge.retrieve(payment_ref)
+    refund.amount = refund_amount(item_ids, charge)
+    charge.refund(amount: cents(refund.amount))
+  rescue => e
+    refund.error = e.message
+    refund
+  else
+    cart_items.each do |item|
+      if item_ids.include?(item.id)
+        item.cartable.update_column(:status, "refunded")
+      end
+    end
+    self.status = self.total == refund.amount ? "refunded" : "part_refunded"
+    self.total -= refund.amount
+    save
+    refund
+  ensure
+    refund.save
+  end
+
   def self.search(params, path)
     if (id = params[:id].to_i) > 0
       matches = where(id: id)
@@ -72,7 +100,7 @@ class Cart < ActiveRecord::Base
   def cents(euros)
     (euros * 100).round
   end
-  
+
   def add_payment_error(error, name, email, message=nil)
     message ||= error.message || "Unknown error"
     details = error.try(:json_body)
@@ -82,5 +110,51 @@ class Cart < ActiveRecord::Base
       details = details.to_s
     end
     payment_errors.build(message: message, details: details, payment_name: name, confirmation_email: email)
+  end
+
+  def refund_amount(item_ids, charge)
+    # Check that the cart_items to be refunded all belong to this cart and have "paid" status.
+    refund_amount = 0.0
+    item_ids.each do |item_id|
+      item = cart_items.find_by(id: item_id)
+      raise "Cart item #{item_id} does not belong to this cart" unless item
+      cartable = item.cartable
+      raise "Cart item #{item_id} has wrong status (#{cartable.status})" unless cartable.paid?
+      refund_amount += cartable.cost
+    end
+
+    # Check that the ICU cart and Stripe totals are consistent.
+    unless cents(original_total) == charge.amount
+      raise "Cart amount (#{cents(original_total)}) is inconsistent with Stripe amount (#{charge.amount})"
+    end
+
+    # Check any previous refund amounts are consistent.
+    cart_refund = cents(original_total) - cents(total)
+    charge_refund = charge.refunds.map(&:amount).reduce(0, :+)
+    unless cart_refund == charge_refund
+      raise "Previous cart refund (#{cart_refund}) is inconsistent with previous Stripe refund (#{charge_refund})"
+    end
+
+    # Check the proposed refund isn't too large.
+    if refund_amount > total
+      raise "Refund (#{refund_amount}) is larger than remaining cost (#{total})"
+    end
+
+    # Check if the whole cart is being refunded.
+    total_refunds = cart_items.map(&:cartable).select{ |c| c.refunded? }.size + item_ids.size
+    if total_refunds > cart_items.size
+      raise "Too many refunds (#{total_refunds}) for this cart (#{cart_items.size})"
+    elsif total_refunds == cart_items.size
+      unless refund_amount == total
+        raise "Refund amount (#{refund_amount}) doesn't match total (#{total})"
+      end
+    else
+      unless refund_amount < total
+        raise "Refund amount (#{refund_amount}) should be less than total (#{total})"
+      end
+    end
+
+    # Return the refund amount (in Euros).
+    refund_amount
   end
 end
