@@ -1,0 +1,23 @@
+- content_for :title, "Refunds"
+
+= render "utils/search_panel", form: "admin/refunds/search_form", title: "Refunds"
+- if @refunds.count > 0
+  .row
+    .col-xs-12
+      %table{class: "table table-bordered table-striped", id: "results"}
+        %thead
+          %tr
+            %th Cart
+            %th Amount
+            %th Officer
+            %th Date/Time
+            %th Error
+        %tbody
+          - @refunds.matches.each do |refund|
+            %tr
+              %td= link_to refund.cart_id, [:admin, refund.cart]
+              %td= euros(refund.amount)
+              %td= refund.user.player.name
+              %td= refund.created_at.to_s(:db)
+              %td= refund.error || "None"
+          = render "utils/pagination_links", pager: @refunds, columns: 5

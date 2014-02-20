@@ -5,6 +5,7 @@
   - items += 1 if entries = can?(:index, JournalEntry)
   - items += 1 if users   = can?(:manage, User)
   - items += 1 if carts   = can?(:index, Cart)
+  - items += 1 if rfnds   = can?(:index, Refund)
   - items += 1 if perrs   = can?(:index, PaymentError)
   - items += 1 if sfees   = can?(:manage, SubscriptionFee)
   - items += 1 if subs    = can?(:index, Subscription)
@@ -29,6 +30,8 @@
           %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if carts
           %li{class: active("admin/carts")}= link_to "Carts", admin_carts_path
+        - if rfnds
+          %li{class: active("admin/refunds")}= link_to "Refunds", admin_refunds_path
         - if perrs
           %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
         - if sfees

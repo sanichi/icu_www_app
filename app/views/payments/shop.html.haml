@@ -8,7 +8,7 @@
           = succeed(":") do
             = t("shop.cart.current")
           = succeed(",") do
-            = t("shop.cart.item.items", count: current_cart.items)
+            = t("shop.cart.item.items", count: current_cart.cart_items.count)
           = euros(current_cart.total_cost)
       - if @completed_carts.present?
         = link_to t("shop.cart.completed"), completed_path, class: "btn btn-info btn-md"

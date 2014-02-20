@@ -24,11 +24,12 @@ class Ability
     end
 
     if user.treasurer?
+      can :manage, Cart
       can :manage, EntryFee
+      can :index, PaymentError
+      can :index, Refund
       can :manage, SubscriptionFee
       can :index, Subscription
-      can :manage, Cart
-      can :index, PaymentError
     end
 
     can :show, EntryFee, player_id: user.player_id

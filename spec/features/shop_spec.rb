@@ -261,8 +261,8 @@ feature "Shop for subscriptions" do
     cart_item.cart_id = other_cart.id
     cart_item.save
 
-    expect(cart.items).to eq 0
-    expect(other_cart.items).to eq 1
+    expect(cart.cart_items.count).to eq 0
+    expect(other_cart.cart_items.count).to eq 1
 
     click_link "✘", match: :first
     confirm_dialog
@@ -273,8 +273,8 @@ feature "Shop for subscriptions" do
     expect(CartItem.count).to eq 1
     expect(Subscription.inactive.count).to eq 1
 
-    expect(cart.items).to eq 0
-    expect(other_cart.items).to eq 1
+    expect(cart.cart_items.count).to eq 0
+    expect(other_cart.cart_items.count).to eq 1
   end
 end
 

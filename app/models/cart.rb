@@ -8,12 +8,7 @@ class Cart < ActiveRecord::Base
 
   scope :include_cartables, -> { includes(cart_items: [:cartable]) }
   scope :include_errors, -> { includes(:payment_errors) }
-  scope :include_refunds, -> { includes(refunds: [:user]) }
-
-  def items() cart_items.count end
-  def items?() items > 0 end
-  def perrors() payment_errors.count end
-  def perrors?() perrors > 0 end
+  scope :include_refunds, -> { includes(refunds: { user: :player }) }
 
   def refundable?
     active? && payment_method == "stripe"

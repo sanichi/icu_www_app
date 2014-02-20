@@ -7,7 +7,9 @@
 
 = render "charge_modal"
 = render "summary", cart: @cart
-- if @cart.items?
+- unless @cart.cart_items.empty?
   = render "items", cart: @cart
-- if @cart.perrors?
+- unless @cart.refunds.empty?
+  = render "refunds", cart: @cart
+- unless @cart.payment_errors.empty?
   = render "errors", cart: @cart

@@ -119,7 +119,7 @@ describe PaymentsController do
         expect(Cart.count).to eq 2
         cart = Cart.last
         expect(cart.unpaid?).to be_true
-        expect(cart.items?).to be_false
+        expect(cart.cart_items.empty?).to be_true
         expect(session[:cart_id]).to eq cart.id
       end
 
@@ -152,7 +152,7 @@ describe PaymentsController do
         expect(Cart.count).to eq 2
         cart = Cart.last
         expect(cart.unpaid?).to be_true
-        expect(cart.items?).to be_false
+        expect(cart.cart_items.empty?).to be_true
         expect(session[:cart_id]).to eq cart.id
       end
 

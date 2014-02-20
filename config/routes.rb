@@ -36,6 +36,7 @@ IcuWwwApp::Application.routes.draw do
     resources :logins,            only: [:index, :show]
     resources :payment_errors,    only: [:index]
     resources :players,           only: [:show, :new, :create, :edit, :update]
+    resources :refunds,           only: [:index]
     resources :subscriptions,     only: [:index]
     resources :subscription_fees do
       get :rollover, on: :member

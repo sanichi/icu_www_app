@@ -8,7 +8,7 @@
           %strong= cart.id
           = precede("(") do
             = succeed(")") do
-              = "#{pluralize(cart.items, 'item')}, #{pluralize(cart.perrors, 'error')}"
+              = "#{pluralize(cart.cart_items.size, 'item')}, #{pluralize(cart.payment_errors.size, 'error')}"
       %tr
         %th Status
         %td= t("shop.payment.status.#{cart.status}")

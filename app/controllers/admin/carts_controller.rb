@@ -8,7 +8,7 @@ class Admin::CartsController < ApplicationController
   end
 
   def show
-    @cart = Cart.include_cartables.include_errors.find(params[:id])
+    @cart = Cart.include_cartables.include_errors.include_refunds.find(params[:id])
   end
 
   def show_charge

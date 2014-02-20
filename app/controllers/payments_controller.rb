@@ -10,11 +10,11 @@ class PaymentsController < ApplicationController
   end
 
   def card
-    redirect_to shop_path unless check_cart { @cart.items? }
+    redirect_to shop_path unless check_cart { !@cart.cart_items.empty? }
   end
 
   def charge
-    if check_cart { @cart.items? && request.xhr? }
+    if check_cart { !@cart.cart_items.empty? && request.xhr? }
       @cart.purchase(params)
       complete_cart(@cart.id) if @cart.paid?
     else

@@ -66,7 +66,7 @@ feature "Refunds", slow: true do
       expect(page).to have_css(title, text: completed)
     end
 
-    it "can be refunded separately", js: true do
+    it "refunded separately", js: true do
       expect(Cart.count).to eq 1
       cart = Cart.include_cartables.last
       expect(cart).to be_paid
@@ -131,9 +131,54 @@ feature "Refunds", slow: true do
       expect(entry).to be_refunded
 
       expect(cart.refunds.size).to eq 2
-      refund = cart.refunds[1]
+      refund = cart.refunds[0]
       expect(refund.error).to be_nil
       expect(refund.amount).to eq entry.cost
+      expect(refund.user).to eq treasurer
+    end
+
+    it "refunded together", js: true do
+      expect(Cart.count).to eq 1
+      cart = Cart.include_cartables.last
+      expect(cart).to be_paid
+      expect(cart.cart_items.size).to eq 2
+
+      subscription_item = cart.cart_items.detect { |item| item.cartable_type == "Subscription" }
+      entry_item = cart.cart_items.detect { |item| item.cartable_type == "Entry" }
+      subscription = subscription_item.cartable
+      entry = entry_item.cartable
+      expect(subscription).to be_paid
+      expect(entry).to be_paid
+
+      expect(cart.total).to eq subscription.cost + entry.cost
+
+      treasurer = login("treasurer")
+
+      visit admin_carts_path
+      click_link cart.id
+      click_link refund_link
+
+      expect(page).to have_xpath(total, text: "%.2f" % cart.total)
+
+      check "all_items"
+      click_button refund_button
+      confirm_dialog
+
+      expect(page).to have_css(success, refund_ok)
+
+      cart.reload
+      subscription.reload
+      entry.reload
+
+      expect(cart).to be_refunded
+      expect(cart.total).to eq 0.0
+      expect(subscription).to be_refunded
+      expect(entry).to be_refunded
+
+      expect(cart.refunds.size).to eq 1
+      refund = cart.refunds[0]
+      expect(refund.error).to be_nil
+      expect(refund.amount).to eq subscription.cost + entry.cost
       expect(refund.user).to eq treasurer
     end
   end
