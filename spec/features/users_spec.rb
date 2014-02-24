@@ -31,7 +31,7 @@ end
 feature "Edit preferences" do
   given!(:user)           { create(:user) }
   given(:success)         { "div.alert-success" }
-  given(:theme)           { User::THEMES.sample }
+  given(:theme)           { User::THEMES.reject{ |t| t == User::DEFAULT_THEME }.sample }
   given(:bootstrap)       { "Bootstrap" }
   given(:theme_label)     { I18n.t("user.theme") }
   given(:locale_label)    { I18n.t("user.locale") }

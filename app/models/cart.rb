@@ -93,7 +93,7 @@ class Cart < ActiveRecord::Base
   private
 
   def cents(euros)
-    (euros * 100).round
+    (euros * 100).to_i
   end
 
   def add_payment_error(error, name, email, message=nil)
@@ -125,9 +125,8 @@ class Cart < ActiveRecord::Base
 
     # Check any previous refund amounts are consistent.
     cart_refund = cents(original_total) - cents(total)
-    charge_refund = charge.refunds.map(&:amount).reduce(0, :+)
-    unless cart_refund == charge_refund
-      raise "Previous cart refund (#{cart_refund}) is inconsistent with previous Stripe refund (#{charge_refund})"
+    unless cart_refund == charge.amount_refunded
+      raise "Previous cart refund (#{cart_refund}) is inconsistent with previous Stripe refund (#{charge.amount_refunded})"
     end
 
     # Check the proposed refund isn't too large.
