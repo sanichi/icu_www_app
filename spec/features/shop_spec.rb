@@ -1,5 +1,28 @@
 require 'spec_helper'
 
+feature "Cart" do
+  given(:cost)            { I18n.t("shop.cart.item.cost") }
+  given(:item)            { I18n.t("shop.cart.item.item") }
+  given(:member)          { I18n.t("shop.cart.item.member") }
+  given(:total)           { I18n.t("shop.cart.total") }
+
+  def xpath(type, text, *txts)
+    txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|
+      acc + '/following-sibling::%s[contains(.,"%s")]' % [type, txt]
+    end
+  end
+
+  scenario "create before viewing" do
+    expect(Cart.count).to eq 0
+
+    visit cart_path
+    expect(page).to have_xpath(xpath("th", item, member, cost))
+    expect(page).to have_xpath(xpath("th", total, "0.00"))
+
+    expect(Cart.count).to eq 1
+  end
+end
+
 feature "Shop for subscriptions" do
   given!(:player)         { create(:player, dob: 58.years.ago, joined: 30.years.ago) }
   given!(:player2)        { create(:player, dob: 30.years.ago, joined: 20.years.ago) }

@@ -5,6 +5,7 @@ class Cart < ActiveRecord::Base
   has_many :cart_items, dependent: :destroy
   has_many :payment_errors, dependent: :destroy
   has_many :refunds, dependent: :destroy
+  belongs_to :user
 
   scope :include_cartables, -> { includes(cart_items: [:cartable]) }
   scope :include_errors, -> { includes(:payment_errors) }
@@ -29,7 +30,7 @@ class Cart < ActiveRecord::Base
     payment_errors.last.try(:message).presence || "None"
   end
 
-  def purchase(params)
+  def purchase(params, user)
     token, name, email = %i[stripe_token payment_name confirmation_email].map { |n| params[n].presence }
     total = total_cost
     charge = Stripe::Charge.create(
@@ -53,6 +54,7 @@ class Cart < ActiveRecord::Base
     self.original_total = total
     self.payment_name = name
     self.confirmation_email = email
+    self.user = user unless user.guest?
     save
   end
 

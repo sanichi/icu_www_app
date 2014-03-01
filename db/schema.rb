@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20140217144436) do
     t.string   "payment_ref",        limit: 50
     t.string   "confirmation_email", limit: 50
     t.string   "payment_name",       limit: 100
+    t.integer  "user_id"
     t.datetime "payment_completed"
     t.datetime "created_at"
     t.datetime "updated_at"

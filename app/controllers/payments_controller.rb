@@ -15,7 +15,7 @@ class PaymentsController < ApplicationController
 
   def charge
     if check_cart { !@cart.cart_items.empty? && request.xhr? }
-      @cart.purchase(params)
+      @cart.purchase(params, current_user)
       complete_cart(@cart.id) if @cart.paid?
     else
       if request.xhr?

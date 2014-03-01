@@ -2,11 +2,14 @@ require 'spec_helper'
 
 feature "Pay", slow: true do
   given(:player)                { create(:player) }
+  given(:user)                  { create(:user) }
 
   given(:select_member)         { I18n.t("shop.cart.item.select_member") }
   given(:first_name)            { I18n.t("player.first_name") }
   given(:last_name)             { I18n.t("player.last_name") }
   given(:add_to_cart)           { I18n.t("shop.cart.item.add") }
+  given(:shop)                  { I18n.t("shop.shop") }
+  given(:current)               { I18n.t("shop.cart.current") }
   given(:checkout)              { I18n.t("shop.cart.checkout") }
   given(:pay)                   { I18n.t("shop.payment.card.pay") }
   given(:completed)             { I18n.t("shop.payment.completed") }
@@ -39,6 +42,7 @@ feature "Pay", slow: true do
   given(:error)                 { "div.alert-danger" }
   given(:card_declined)         { "Your card was declined." }
   given(:expired_card)          { "Your card's expiration date is incorrect." }
+  given(:incorrect_cvc)         { "Your card's security code is incorrect." }
 
   def fill_in_all_and_click_pay(opt = {})
     opt.reverse_merge!(number: number, mm: mm, yyyy: yyyy, cvc: cvc, name: player.name, email: player.email)
@@ -82,6 +86,7 @@ feature "Pay", slow: true do
       expect(cart.payment_completed).to be_nil
       expect(cart.payment_ref).to be_nil
       expect(cart.payment_method).to be_nil
+      expect(cart.user).to be_nil
 
       expect(subscription).to be_unpaid
       expect(subscription.payment_method).to be_nil
@@ -96,6 +101,7 @@ feature "Pay", slow: true do
 
       cart.reload
       expect(cart).to be_paid
+      expect(cart.user).to be_nil
       expect(cart.payment_completed).to be_present
       expect(cart.payment_ref).to be_present
       expect(cart.payment_method).to eq stripe
@@ -107,13 +113,13 @@ feature "Pay", slow: true do
     end
 
     scenario "stripe errors", js: true do
-      # Card declined.
       fill_in_all_and_click_pay(number: "4000000000000002")
       expect(page).to have_css(error, text: gateway_error(card_declined))
       subscription = Subscription.last
       expect(subscription).to be_unpaid
       cart = Cart.include_errors.last
       expect(cart).to be_unpaid
+      expect(cart.user).to be_nil
       expect(cart.payment_errors.count).to eq 1
       payment_error = cart.payment_errors.last
       expect(payment_error.message).to eq card_declined
@@ -121,16 +127,35 @@ feature "Pay", slow: true do
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
 
-      # Expired card.
       fill_in_number_and_click_pay("4000000000000069")
       expect(page).to have_css(error, text: gateway_error(expired_card))
       subscription.reload
       expect(subscription).to be_unpaid
       cart.reload
       expect(cart).to be_unpaid
+      expect(cart.user).to be_nil
       expect(cart.payment_errors.count).to eq 2
       payment_error = cart.payment_errors.last
       expect(payment_error.message).to eq expired_card
+      expect(payment_error.details).to be_present
+      expect(payment_error.payment_name).to eq player.name
+      expect(payment_error.confirmation_email).to eq player.email
+
+      login(user)
+      click_link shop
+      click_link current
+      click_link checkout
+
+      fill_in_all_and_click_pay(number: "4000000000000127")
+      expect(page).to have_css(error, text: gateway_error(incorrect_cvc))
+      subscription.reload
+      expect(subscription).to be_unpaid
+      cart.reload
+      expect(cart).to be_unpaid
+      expect(cart.user).to eq user
+      expect(cart.payment_errors.count).to eq 3
+      payment_error = cart.payment_errors.last
+      expect(payment_error.message).to eq incorrect_cvc
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
@@ -159,12 +184,12 @@ feature "Pay", slow: true do
       fill_in cvc_id, with: "1"
       click_button pay
       expect(page).to have_css(error, text: bad_cvc)
-      
+
       # Name.
       fill_in cvc_id, with: cvc
       click_button pay
       expect(page).to have_css(error, text: bad_name)
-      
+
       # Email.
       fill_in name_id, with: player.name
       click_button pay
@@ -172,7 +197,7 @@ feature "Pay", slow: true do
       fill_in email_id, with: "rubbish"
       click_button pay
       expect(page).to have_css(error, text: bad_email)
-      
+
       expect(PaymentError.count).to eq 0
     end
   end
