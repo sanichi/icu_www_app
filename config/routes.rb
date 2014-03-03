@@ -5,7 +5,7 @@ IcuWwwApp::Application.routes.draw do
   get  "sign_out" => "sessions#destroy"
   get  "redirect" => "redirects#redirect"
 
-  %w[home system_info].each do |page|
+  %w[home].each do |page|
     get page => "pages##{page}"
   end
   %w[shop cart card charge confirm completed].each do |page|
@@ -24,6 +24,10 @@ IcuWwwApp::Application.routes.draw do
   resources :subscriptions,     only: [:new, :create]
 
   namespace :admin do
+    %w[system_info].each do |page|
+      get page => "pages##{page}"
+    end
+
     resources :bad_logins,        only: [:index]
     resources :carts,             only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member

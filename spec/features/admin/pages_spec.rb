@@ -8,7 +8,7 @@ feature "Authorization for pages" do
 
   scenario "admin role" do
     login "admin"
-    visit system_info_path
+    visit admin_system_info_path
     expect(page).to_not have_css(failure)
   end
 
@@ -19,7 +19,7 @@ feature "Authorization for pages" do
       else
         login role
       end
-      visit system_info_path
+      visit admin_system_info_path
       expect(page).to have_css(failure, text: unauthorized)
     end
   end
