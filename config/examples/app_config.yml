@@ -26,7 +26,7 @@ secret_key_base: 4fbd352d214c2118a7fd152173de8dd358dcd07289a8eb751e332e279848a90
 
 session_key: www_session
 
-# Stripe keys
+# Stripe
 stripe:
   production:
     public: "pk_live_aYo71Qp4R1XBgsQ1ObaE8CpM"
@@ -37,3 +37,7 @@ stripe:
   test:
     public: "pk_test_aYo71Qp4R1XBgsQ1ObaE8CpM"
     secret: "sk_test_5ay80yu1hJb45gV9ul6fb2zt"
+
+# Mailgun
+mailgun:
+  password: "32pw166im7f9"

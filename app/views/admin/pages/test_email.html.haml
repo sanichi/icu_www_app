@@ -1,0 +1,16 @@
+- content_for :title, "Test Email"
+- content_for :javascript do
+  = render "test_email.js"
+
+#message_container.row{style: "display: none"}
+  .col-sm-12
+    #message_alert.text-center.alert.alert-success.alert-dismissable
+      %button.close{"type" => "button", "data-dismiss" => "alert", "aria-hidden" => "true"} ×
+      %span{id: "message_text"}
+
+= form_tag admin_test_email_path, method: :get, class: "form-horizontal", role: "form", remote: true do
+  - locals = { col: "sm", pad: 3, width: 6 }
+  = render "utils/text_field_tag", locals.merge(param: :to, text: "To")
+  = render "utils/text_field_tag", locals.merge(param: :subject, text: "Subject")
+  = render "utils/text_field_tag", locals.merge(param: :message, text: "Message")
+  = render "utils/button_tag", locals.merge(text: "Send", btn_class: "info")

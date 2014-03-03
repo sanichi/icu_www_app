@@ -1,0 +1,7 @@
+- unless defined? btn_class
+  - btn_class = "default"
+
+.row
+  %div{class: "col-#{col}-#{pad}"}
+  %div{class: "col-#{col}-#{width}"}
+    = button_tag text, type: "submit", class: "btn btn-#{btn_class}"

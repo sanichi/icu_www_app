@@ -24,7 +24,7 @@ IcuWwwApp::Application.routes.draw do
   resources :subscriptions,     only: [:new, :create]
 
   namespace :admin do
-    %w[system_info].each do |page|
+    %w[system_info test_email].each do |page|
       get page => "pages##{page}"
     end
 
