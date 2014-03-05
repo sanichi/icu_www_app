@@ -78,6 +78,10 @@ feature "Pay", slow: true do
       click_link checkout
     end
 
+    after(:each) do
+      ActionMailer::Base.deliveries.clear
+    end
+
     scenario "successful", js: true do
       cart = Cart.last
       subscription = Subscription.last
@@ -110,6 +114,16 @@ feature "Pay", slow: true do
       subscription.reload
       expect(subscription).to be_paid
       expect(subscription.payment_method).to eq stripe
+
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      email = ActionMailer::Base.deliveries.last
+      expect(email.from.size).to eq 1
+      expect(email.from.first).to eq IcuMailer::FROM
+      expect(email.to.size).to eq 1
+      expect(email.to.first).to eq player.email
+      expect(email.subject).to eq IcuMailer::CONFIRMATION
+      expect(email.body.decoded).to include(player.name(id: true))
+      expect(email.body.decoded).to include("%.2f" % subscription.cost)
     end
 
     scenario "stripe errors", js: true do
@@ -126,6 +140,7 @@ feature "Pay", slow: true do
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
+      expect(ActionMailer::Base.deliveries).to be_empty
 
       fill_in_number_and_click_pay("4000000000000069")
       expect(page).to have_css(error, text: gateway_error(expired_card))
@@ -140,6 +155,7 @@ feature "Pay", slow: true do
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
+      expect(ActionMailer::Base.deliveries).to be_empty
 
       login(user)
       click_link shop
@@ -159,6 +175,7 @@ feature "Pay", slow: true do
       expect(payment_error.details).to be_present
       expect(payment_error.payment_name).to eq player.name
       expect(payment_error.confirmation_email).to eq player.email
+      expect(ActionMailer::Base.deliveries).to be_empty
     end
 
     scenario "client side errors", js: true do
@@ -199,6 +216,7 @@ feature "Pay", slow: true do
       expect(page).to have_css(error, text: bad_email)
 
       expect(PaymentError.count).to eq 0
+      expect(ActionMailer::Base.deliveries).to be_empty
     end
   end
 end

@@ -22,7 +22,7 @@ module SessionsHelper
 
     # If an unpaid cart exists return it immediately.
     return @current_cart if @current_cart && @current_cart.unpaid?
-    
+
     # Ensure there's no paid cart hanging around.
     clear_current_cart
 
@@ -40,7 +40,7 @@ module SessionsHelper
     @current_cart = nil
     session.delete(:cart_id)
   end
-  
+
   def complete_cart(cart_id)
     clear_current_cart
     session[:completed_carts] ||= []

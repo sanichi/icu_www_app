@@ -13,3 +13,5 @@
   = render "refunds", cart: @cart
 - unless @cart.payment_errors.empty?
   = render "errors", cart: @cart
+- unless @cart.unpaid?
+  = render "payment_receipt", cart: @cart

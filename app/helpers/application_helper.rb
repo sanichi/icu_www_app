@@ -32,10 +32,6 @@ module ApplicationHelper
     session[paths.join("_").to_sym]
   end
 
-  def euros(amount)
-    number_to_currency(amount, precision: 2, unit: "€")
-  end
-
   def auto_submit(klass, on)
     klass + (on ? " auto_submit" : "")
   end
@@ -43,7 +39,7 @@ module ApplicationHelper
   def to_date(time)
     time.strftime("%Y-%m-%d")
   end
-  
+
   def escape_single_quoted(string, safe=true)
     escaped = string.gsub("'", "\\\\'").gsub(/\n/, "\\n")
     escaped = escaped.html_safe if safe

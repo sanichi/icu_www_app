@@ -41,3 +41,5 @@ stripe:
 # Mailgun
 mailgun:
   password: "32pw166im7f9"
+  secret: "key-1uyak4ijwrw1v1xcu1ggdo3eq954mi21"
+  public: "pubkey-1oo8fl2--5ghabi12k32boslf3-576x3"

@@ -66,6 +66,10 @@ feature "Refunds", slow: true do
       expect(page).to have_css(title, text: completed)
     end
 
+    after(:each) do
+      ActionMailer::Base.deliveries.clear
+    end
+
     it "refunded separately", js: true do
       expect(Cart.count).to eq 1
       cart = Cart.include_cartables.last

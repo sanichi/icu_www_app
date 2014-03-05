@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
 
   def destroy
     if session[:user_id]
-      session[:user_id] = nil
+      %i[user_id cart_id completed_carts].each { |key| session.delete(key) }
       switch_locale(session.delete(:old_locale))
       redirect_to sign_in_path, notice: t("session.signed_out")
     else
