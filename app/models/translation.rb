@@ -3,7 +3,7 @@ class Translation < ActiveRecord::Base
 
   include Journalable
   journalize :value, "/admin/translations/%d"
-  
+
   scope :deletable, -> { where(active: false) }
   scope :creatable, -> { where(active: true, value: nil) }
   scope :updatable, -> { where(active: true).where.not(value: nil).where("english != old_english") }
@@ -91,7 +91,7 @@ class Translation < ActiveRecord::Base
 
   def self.check_cache(opt={})
     count = 0
-    if Rails.env == "test" && !opt[:dont_skip_test_env]
+    if Rails.env.test? && !opt[:dont_skip_test_env]
       cache.flushdb
     else
       cachable = all.select{ |t| t.cachable? }.each_with_object({}) do |t, h|
