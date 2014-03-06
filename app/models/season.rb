@@ -10,12 +10,12 @@ class Season
   rescue => e
     @error = e.message
   end
-  
+
   def start
     return nil unless @desc
     Date.new(@desc[0,4].to_i, 9, 1)
   end
-  
+
   def end
     return nil unless @desc
     Date.new(@desc[0,4].to_i + 1, 8, 31)
@@ -31,6 +31,10 @@ class Season
     return nil unless @desc
     year = @desc[0,4].to_i
     "#{year - 1}-#{year.to_s[2,2]}"
+  end
+
+  def to_s
+    @desc
   end
 
   private

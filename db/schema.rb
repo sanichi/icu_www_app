@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140217144436) do
+ActiveRecord::Schema.define(version: 20140306140655) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -102,6 +102,28 @@ ActiveRecord::Schema.define(version: 20140217144436) do
 
   add_index "entry_fees", ["sale_end"], name: "index_entry_fees_on_sale_end", using: :btree
   add_index "entry_fees", ["sale_start"], name: "index_entry_fees_on_sale_start", using: :btree
+
+  create_table "fees", force: true do |t|
+    t.string   "type",              limit: 20
+    t.string   "name",              limit: 100
+    t.decimal  "amount",                        precision: 6, scale: 2
+    t.decimal  "discounted_amount",             precision: 6, scale: 2
+    t.string   "years",             limit: 7
+    t.integer  "year"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.date     "sale_start"
+    t.date     "sale_end"
+    t.date     "age_ref_date"
+    t.date     "discount_deadline"
+    t.integer  "min_age",           limit: 1
+    t.integer  "max_age",           limit: 1
+    t.integer  "min_rating",        limit: 2
+    t.integer  "max_rating",        limit: 2
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "journal_entries", force: true do |t|
     t.integer  "journalable_id"
