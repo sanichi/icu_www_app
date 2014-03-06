@@ -26,7 +26,7 @@ describe Fee::Subscripsion do
     end
 
     it "after update" do
-      fee.years = fee.season.next
+      fee.years = fee.season.next.to_s
       fee.save
       expect(fee.season.to_s).to eq fee.years
       expect(fee.start_date).to eq fee.season.start
@@ -45,7 +45,7 @@ describe Fee::Subscripsion do
       rof = fee.rollover
       expect(rof.name).to eq fee.name
       expect(rof.amount).to eq fee.amount
-      expect(rof.years).to eq fee.season.next
+      expect(rof.years).to eq fee.season.next.to_s
       expect(rof.start_date).to eq fee.start_date.years_since(1)
       expect(rof.end_date).to eq fee.end_date.years_since(1)
       expect(rof.sale_start).to eq fee.sale_start.years_since(1)

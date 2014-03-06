@@ -86,7 +86,7 @@ class EntryFee < ActiveRecord::Base
         self.year_or_season = event_start.year.to_s
       else
         season = Season.new("#{event_start.year} #{event_end.year}")
-        self.year_or_season = season.desc unless season.error
+        self.year_or_season = season.to_s unless season.error
       end
     end
   end
@@ -168,7 +168,7 @@ class EntryFee < ActiveRecord::Base
 
   def next_year_or_season
     if year_or_season.match(/\A\d{4}-\d{2}\z/)
-      Season.new(year_or_season).next
+      Season.new(year_or_season).next.to_s
     else
       (year_or_season.to_i + 1).to_s
     end

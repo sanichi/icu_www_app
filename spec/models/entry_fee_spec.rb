@@ -28,11 +28,11 @@ describe EntryFee do
     end
 
     it "#year_or_season" do
-      expect(fee.year_or_season).to eq Season.new(late_next_year).desc
+      expect(fee.year_or_season).to eq Season.new(late_next_year).to_s
     end
 
     it "#description" do
-      expect(fee.description).to eq "#{fee.event_name} #{Season.new(late_next_year).desc}"
+      expect(fee.description).to eq "#{fee.event_name} #{Season.new(late_next_year).to_s}"
     end
   end
 

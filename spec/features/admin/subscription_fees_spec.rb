@@ -85,7 +85,7 @@ feature "Create and delete a subscription" do
 
     expect(page).to have_css(failure, text: "one per season")
 
-    fill_in season, with: fee.season.next
+    fill_in season, with: fee.season.next.to_s
     click_button save
 
     expect(page).to have_css(success, text: "created")
@@ -122,7 +122,7 @@ feature "Edit a subscription fee" do
     click_link rollover
 
     expect(page).to have_css(success, text: "rolled over")
-    expect(page).to have_xpath(season, text: fee.season.next)
+    expect(page).to have_xpath(season, text: fee.season.next.to_s)
     expect(page).to_not have_link(rollover)
 
     expect(JournalEntry.where(action: "create").count).to eq 1

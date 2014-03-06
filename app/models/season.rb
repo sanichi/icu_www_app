@@ -1,5 +1,6 @@
 class Season
-  attr_reader :desc, :error
+  include Comparable
+  attr_reader :error
 
   def initialize(date_or_desc=Date.today)
     if date_or_desc.is_a?(Date)
@@ -24,17 +25,21 @@ class Season
   def next
     return nil unless @desc
     year = @desc[0,4].to_i
-    "#{year + 1}-#{(year + 2).to_s[2,2]}"
+    Season.new("#{year + 1}-#{(year + 2).to_s[2,2]}")
   end
 
   def last
     return nil unless @desc
     year = @desc[0,4].to_i
-    "#{year - 1}-#{year.to_s[2,2]}"
+    Season.new("#{year - 1}-#{year.to_s[2,2]}")
   end
 
   def to_s
-    @desc
+    @desc.to_s
+  end
+
+  def <=>(another)
+    to_s <=> another.to_s
   end
 
   private

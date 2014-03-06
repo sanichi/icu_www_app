@@ -145,7 +145,7 @@ feature "Create and delete an entry fee" do
     expect(fee.event_end).to eq late_next_year.days_since(5)
     expect(fee.sale_start).to eq last_week
     expect(fee.sale_end).to eq late_next_year.days_ago(1)
-    expect(fee.year_or_season).to eq Season.new(late_next_year).desc
+    expect(fee.year_or_season).to eq Season.new(late_next_year).to_s
     expect(fee.min_rating).to eq 1500
     expect(fee.max_rating).to eq 2000
     expect(fee.journal_entries.count).to eq 1

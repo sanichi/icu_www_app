@@ -39,12 +39,12 @@ class SubscriptionFee < ActiveRecord::Base
 
   def rolloverable?
     return false if season.next > Season.new.next
-    SubscriptionFee.where(category: category, season_desc: season.next).count == 0
+    SubscriptionFee.where(category: category, season_desc: season.next.to_s).count == 0
   end
 
   def rollover
     return unless rolloverable?
-    SubscriptionFee.create(category: category, season_desc: season.next, amount: amount)
+    SubscriptionFee.create(category: category, season_desc: season.next.to_s, amount: amount)
   end
 
   private
@@ -57,7 +57,7 @@ class SubscriptionFee < ActiveRecord::Base
       if season.error
         errors.add(:season_desc, season.error)
       elsif
-        self.season_desc = season.desc
+        self.season_desc = season.to_s
         self.sale_start = season.start.months_ago(1)
         self.sale_end = season.end
         self.age_ref_date = season.start

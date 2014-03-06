@@ -64,7 +64,7 @@ class Subscription < ActiveRecord::Base
       if season.error
         errors.add(:season_desc, season.error)
       elsif
-        self.season_desc = season.desc
+        self.season_desc = season.to_s
       end
     end
   end

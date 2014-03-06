@@ -10,9 +10,9 @@ class Fee::Subscripsion < Fee
 
   def rollover(dry_run=false)
     return if season.next > Season.new.next
-    return unless Fee::Subscripsion.where(name: name, years: season.next).count == 0
+    return unless Fee::Subscripsion.where(name: name, years: season.next.to_s).count == 0
     return true if dry_run
-    Fee::Subscripsion.create(name: name, years: season.next, amount: amount)
+    Fee::Subscripsion.create(name: name, years: season.next.to_s, amount: amount)
   end
 
   private
