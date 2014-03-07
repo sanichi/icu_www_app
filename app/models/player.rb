@@ -73,11 +73,21 @@ class Player < ActiveRecord::Base
     status == "deceased"
   end
 
-  def age(today=Date.today)
+  def age(ref=Date.today)
     return unless dob
-    age = today.year - dob.year
-    age -= 1 if today.month < dob.month || (today.month == dob.month && today.day < dob.day)
+    age = ref.year - dob.year
+    age -= 1 if ref.month < dob.month || (ref.month == dob.month && ref.day < dob.day)
     age
+  end
+
+  def over_age?(max, ref=Date.today)
+    return false unless dob
+    age(ref) > max
+  end
+
+  def under_age?(min, ref=Date.today)
+    return false unless dob
+    age(ref) < min
   end
 
   def federation(code=false)

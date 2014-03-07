@@ -1,9 +1,11 @@
 en:
   item:
-    entry:
-      error:
+    error:
+      age:
+        old: "%{member}'s age on %{date} is over the limit (%{limit})"
+        young: "%{member}'s age on %{date} is under the limit (%{limit})"
+      entry:
         already_entered: "%{member} has already entered this event"
-    subscription:
-      error:
-        lifetime_exists: "%{member} already has a lifetime subscrition"
+      subscription:
+        lifetime_exists: "%{member} already has a lifetime subscription"
         already_exists: "%{member} is already subscribed for %{season}"

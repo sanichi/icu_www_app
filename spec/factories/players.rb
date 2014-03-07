@@ -21,5 +21,10 @@ FactoryGirl.define do
     legacy_games       nil
     source             "officer"
     status             "active"
+
+    factory :player_no_dob do
+      dob    nil
+      source "import"
+    end
   end
 end

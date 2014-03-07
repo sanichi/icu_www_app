@@ -70,4 +70,35 @@ describe Item::Subscripsion do
       expect{create(:subscripsion_item, fee: fee, player: other)}.to_not raise_error
     end
   end
+
+  context "age constraints" do
+    let(:ago10)     { Date.today.years_ago(10) }
+    let(:u18)       { create(:subscripsion_fee, max_age: 18, name: "Under 18") }
+    let(:ago18)     { u18.age_ref_date.years_ago(18) }
+    let(:p18_under) { create(:player, dob: ago18.days_since(1), joined: ago10) }
+    let(:p18_exact) { create(:player, dob: ago18, joined: ago10) }
+    let(:p18_over)  { create(:player, dob: ago18.days_ago(1), joined: ago10) }
+    let(:o65)       { create(:subscripsion_fee, min_age: 65, name: "Over 65") }
+    let(:ago66)     { o65.age_ref_date.years_ago(66) }
+    let(:p66_under) { create(:player, dob: ago66.days_since(1), joined: ago10) }
+    let(:p66_exact) { create(:player, dob: ago66, joined: ago10) }
+    let(:p66_over)  { create(:player, dob: ago66.days_ago(1), joined: ago10) }
+    let(:p_no_dob)  { create(:player_no_dob) }
+
+    it "max age" do
+      #puts "MAX #{p18_under.age(u18.age_ref_date)}|#{p18_exact.age(u18.age_ref_date)}|#{p18_over.age(u18.age_ref_date)}"
+      expect{create(:subscripsion_item, fee: u18, player: p18_under)}.to_not raise_error
+      expect{create(:subscripsion_item, fee: u18, player: p18_exact)}.to raise_error(/over|old/)
+      expect{create(:subscripsion_item, fee: u18, player: p18_over)}.to raise_error(/over|old/)
+      expect{create(:subscripsion_item, fee: u18, player: p_no_dob)}.to_not raise_error
+    end
+
+    it "min age" do
+      #puts "MIN #{p66_under.age(o65.age_ref_date)}|#{p66_exact.age(o65.age_ref_date)}|#{p66_over.age(o65.age_ref_date)}"
+      expect{create(:subscripsion_item, fee: o65, player: p66_under)}.to raise_error(/under|young/)
+      expect{create(:subscripsion_item, fee: o65, player: p66_exact)}.to_not raise_error
+      expect{create(:subscripsion_item, fee: o65, player: p66_over)}.to_not raise_error
+      expect{create(:subscripsion_item, fee: o65, player: p_no_dob)}.to_not raise_error
+    end
+  end
 end
