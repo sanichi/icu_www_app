@@ -51,4 +51,29 @@ describe Item::Entri do
       expect{create(:entri_item, fee: kilkenny, player: reyalp)}.to_not raise_error
     end
   end
+
+  context "rating constraints" do
+    let(:fee)         { create(:entri_fee, min_rating: 1400, max_rating: 1800, name: "Major") }
+    let(:p1400_under) { create(:player, latest_rating: 1399) }
+    let(:p1400_exact) { create(:player, latest_rating: 1400) }
+    let(:p1400_over)  { create(:player, latest_rating: 1401) }
+    let(:p1800_under) { create(:player, latest_rating: 1799) }
+    let(:p1800_exact) { create(:player, latest_rating: 1800) }
+    let(:p1800_over)  { create(:player, latest_rating: 1801) }
+    let(:p_no_rating) { create(:player, latest_rating: nil) }
+
+    it "min rating" do
+      expect{create(:entri_item, fee: fee, player: p1400_under)}.to raise_error(/under/)
+      expect{create(:entri_item, fee: fee, player: p1400_exact)}.to_not raise_error
+      expect{create(:entri_item, fee: fee, player: p1400_over)}.to_not raise_error
+      expect{create(:entri_item, fee: fee, player: p_no_rating)}.to_not raise_error
+    end
+
+    it "max rating" do
+      expect{create(:entri_item, fee: fee, player: p1800_under)}.to_not raise_error
+      expect{create(:entri_item, fee: fee, player: p1800_exact)}.to_not raise_error
+      expect{create(:entri_item, fee: fee, player: p1800_over)}.to raise_error(/over/)
+      expect{create(:entri_item, fee: fee, player: p_no_rating)}.to_not raise_error
+    end
+  end
 end

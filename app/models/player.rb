@@ -90,6 +90,16 @@ class Player < ActiveRecord::Base
     age(ref) < min
   end
 
+  def too_strong?(max)
+    return false unless latest_rating || legacy_rating
+    (latest_rating || legacy_rating) > max
+  end
+
+  def too_weak?(min)
+    return false unless latest_rating || legacy_rating
+    (latest_rating || legacy_rating) < min
+  end
+
   def federation(code=false)
     return unless fed.present?
     federation = ICU::Federation.find(fed).try(:name) || "Unknown"

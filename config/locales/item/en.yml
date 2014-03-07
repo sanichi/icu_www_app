@@ -6,6 +6,9 @@ en:
         young: "%{member}'s age on %{date} is under the limit (%{limit})"
       entry:
         already_entered: "%{member} has already entered this event"
+      rating:
+        too_low: "%{member}'s rating is under the limit (%{limit})"
+        too_high: "%{member}'s rating is over the limit (%{limit})"
       subscription:
         lifetime_exists: "%{member} already has a lifetime subscription"
         already_exists: "%{member} is already subscribed for %{season}"
