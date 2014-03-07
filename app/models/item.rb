@@ -8,9 +8,10 @@ class Item < ActiveRecord::Base
 
   before_validation :copy_fee
 
-  validates :source, inclusion: { in: %w[www1 www2] }
+  validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
-  validates :description, :cost, presence: true
+  validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
+  validates :source, inclusion: { in: %w[www1 www2] }
 
   private
 

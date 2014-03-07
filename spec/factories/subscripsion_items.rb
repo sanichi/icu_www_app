@@ -28,5 +28,13 @@ FactoryGirl.define do
         source         "www1"
       end
     end
+
+    factory :lifetime_subscripsion do
+      fee            nil
+      description    "Life Subscription"
+      payment_method "free"
+      status         "paid"
+      source         "www1"
+    end
   end
 end

@@ -1,0 +1,9 @@
+en:
+  item:
+    entry:
+      error:
+        already_entered: "%{member} has already entered this event"
+    subscription:
+      error:
+        lifetime_exists: "%{member} already has a lifetime subscrition"
+        already_exists: "%{member} is already subscribed for %{season}"
