@@ -1,11 +1,17 @@
 class Fee::Entri < Fee
+  has_many :items, class_name: "Item::Entri", foreign_key: "fee_id", inverse_of: :fee
+
   before_validation :default_attributes
 
   validates :start_date, :end_date, :sale_start, :sale_end, presence: true
   validate :sale_end_date
 
-  def description
-    "#{name} #{year || years}"
+  def description(full=false)
+    parts = []
+    parts.push "Entry fee for" if full
+    parts.push name
+    parts.push year || years
+    parts.join(" ")
   end
 
   private

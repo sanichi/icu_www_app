@@ -1,7 +1,4 @@
 class Fee < ActiveRecord::Base
-  TYPES = %w[Fee::Subscripsion Fee::Entri]
-
-  validates :type, inclusion: { in: TYPES }
   validate :valid_dates, :valid_discount, :valid_url
 
   def season

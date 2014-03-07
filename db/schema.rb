@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306140655) do
+ActiveRecord::Schema.define(version: 20140306214723) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -104,7 +104,7 @@ ActiveRecord::Schema.define(version: 20140306140655) do
   add_index "entry_fees", ["sale_start"], name: "index_entry_fees_on_sale_start", using: :btree
 
   create_table "fees", force: true do |t|
-    t.string   "type",              limit: 20
+    t.string   "type",              limit: 40
     t.string   "name",              limit: 100
     t.decimal  "amount",                        precision: 6, scale: 2
     t.decimal  "discounted_amount",             precision: 6, scale: 2
@@ -121,6 +121,21 @@ ActiveRecord::Schema.define(version: 20140306140655) do
     t.integer  "min_rating",        limit: 2
     t.integer  "max_rating",        limit: 2
     t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "items", force: true do |t|
+    t.string   "type",           limit: 40
+    t.integer  "player_id"
+    t.integer  "fee_id"
+    t.string   "description"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.decimal  "cost",                      precision: 6, scale: 2
+    t.string   "status",         limit: 20,                         default: "unpaid"
+    t.string   "source",         limit: 8,                          default: "www2"
+    t.string   "payment_method", limit: 20
     t.datetime "created_at"
     t.datetime "updated_at"
   end
