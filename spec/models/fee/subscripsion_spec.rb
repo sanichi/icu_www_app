@@ -37,12 +37,15 @@ describe Fee::Subscripsion do
   context "rollover" do
     it "#rolloverable?" do
       expect(fee.rolloverable?).to be_true
-      rof = fee.rollover
+      create(:subscripsion_fee, years: fee.season.next.to_s)
       expect(fee.rolloverable?).to be_false
     end
 
     it "#rollover" do
       rof = fee.rollover
+
+      expect(rof.new_record?).to be_true
+      expect(rof.class).to eq Fee
       expect(rof.name).to eq fee.name
       expect(rof.amount).to eq fee.amount
       expect(rof.years).to eq fee.season.next.to_s

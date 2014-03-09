@@ -18,6 +18,10 @@ class Fee::Subscripsion < Fee
     fee.becomes(Fee)
   end
 
+  def rolloverable?
+    Fee::Subscripsion.where(name: name, years: season.next.to_s).count == 0
+  end
+
   def rollover
     fee = self.dup
     fee.advance_1_year

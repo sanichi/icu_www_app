@@ -81,6 +81,9 @@ describe Fee::Subscripsion do
       expect(Fee::Subscripsion.count).to eq 2
       expect(Fee::Subscripsion.first.season.next).to eq Fee::Subscripsion.last.season
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
+
+      visit admin_fee_path(fee)
+      expect(page).not_to have_button(rollover)
     end
   end
 
