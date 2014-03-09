@@ -36,6 +36,9 @@ IcuWwwApp::Application.routes.draw do
     resources :entry_fees do
       get :rollover, :clone, on: :member
     end
+    resources :fees do
+      get :rollover, :clone, on: :member
+    end
     resources :journal_entries,   only: [:index, :show]
     resources :logins,            only: [:index, :show]
     resources :payment_errors,    only: [:index]

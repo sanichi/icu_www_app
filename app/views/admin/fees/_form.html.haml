@@ -1,0 +1,29 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @fee], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= @fee.new_record? ? "New fee" : "Edit fee"
+        - locals = { form: f, object: @fee, col: "sm", pad: 3, width: 2 }
+        - if @fee.new_record?
+          = render "utils/select_for", locals.merge(param: :type, text: t("fee.type.type"), menu: fee_type_menu(@fee.type))
+        = render "utils/text_field_for", locals.merge(param: :name, text: t("fee.name"), width: 4)
+        = render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"))
+        = render "utils/text_field_for", locals.merge(param: :start_date, text: t("fee.start"), placeholder: "YYYY-MM-DD", width: 3)
+        = render "utils/text_field_for", locals.merge(param: :end_date, text: t("fee.end"), placeholder: "YYYY-MM-DD", width: 3)
+        = render "utils/text_field_for", locals.merge(param: :years, text: t("fee.years"), placeholder: "YYYY-YY")
+        %hr
+        = render "utils/text_field_for", locals.merge(param: :sale_start, text: t("fee.sale_start"), placeholder: "YYYY-MM-DD", width: 3)
+        = render "utils/text_field_for", locals.merge(param: :sale_end, text: t("fee.sale_end"), placeholder: "YYYY-MM-DD", width: 3)
+        %hr
+        = render "utils/text_field_for", locals.merge(param: :discounted_amount, text: t("fee.discounted_amount"))
+        = render "utils/text_field_for", locals.merge(param: :discount_deadline, text: t("fee.discount_deadline"), placeholder: "YYYY-MM-DD", width: 3)
+        = render "utils/text_field_for", locals.merge(param: :min_rating, text: t("fee.rating.min"))
+        = render "utils/text_field_for", locals.merge(param: :max_rating, text: t("fee.rating.max"))
+        = render "utils/text_field_for", locals.merge(param: :min_age, text: t("fee.age.min"))
+        = render "utils/text_field_for", locals.merge(param: :max_age, text: t("fee.age.max"))
+        = render "utils/text_field_for", locals.merge(param: :age_ref_date, text: t("fee.age.ref_date"), placeholder: "YYYY-MM-DD", width: 3)
+        = render "utils/text_field_for", locals.merge(param: :url, text: t("fee.url"), width: 4)
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", @fee.new_record? ? admin_fees_path : [:admin, @fee], class: "btn btn-default"

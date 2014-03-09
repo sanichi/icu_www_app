@@ -16,7 +16,7 @@ module Journalable
     if action == "create" || action == "destroy"
       journal_entries.create!(action: action, by: by, ip: ip)
     else
-      journalable_columns = self.class.journalable_columns
+      journalable_columns = self.class.journalable_columns || self.class.superclass.journalable_columns
       previous_changes.each do |column, changes|
         if journalable_columns.include?(column)
           from, to = Util::Diff.new(*changes).difference

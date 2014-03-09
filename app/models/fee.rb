@@ -1,15 +1,62 @@
 class Fee < ActiveRecord::Base
+  extend Util::Pagination
+  include Journalable
+  journalize %w[
+    name amount start_date end_date sale_start sale_end
+    discounted_amount discount_deadline year years
+    age_ref_date min_age max_age min_rating max_rating url
+  ], "/admin/fees/%d"
+
+  before_validation :normalize_attributes
+
+  validates :name, :amount, presence: true
   validate :valid_dates, :valid_discount, :valid_url
+
+  scope :ordered, -> { order(name: :asc) }
+
+  def self.search(params, path)
+    matches = ordered
+    paginate(matches, params, path, per_page: 10)
+  end
 
   def season
     Season.new(years)
   end
 
+  def subtype
+    self.class.to_s.split("::").last.downcase
+  end
+
+  def deletable?
+    items.count == 0
+  end
+
   def rolloverable?
-    respond_to?(:rollover) && rollover(:dry_run)
+    respond_to?(:rollover)
+  end
+
+  def cloneable?
+    respond_to?(:copy)
+  end
+
+  def advance_1_year
+    %w[start_date end_date sale_start sale_end discount_deadline age_ref_date].each do |date|
+      send("#{date}=", send(date).years_since(1)) if send(date).present?
+    end
+    self.year = year + 1 if year.present?
+    self.years = Season.new(self.years).next.to_s if years.present?
   end
 
   private
+
+  def normalize_attributes
+    %w[name years url].each do |atr|
+      self.send("#{atr}=", nil) if self.send(atr).blank?
+    end
+    if url.present? && url.match(/\A[-\w]+(\.[-\w]+)*(:\d+)?\z/)
+      self.url = "http://#{url}"
+    end
+  end
 
   def valid_season
     season = self.season

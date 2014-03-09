@@ -1,8 +1,5 @@
 class Item < ActiveRecord::Base
-  def self.statuses
-    %w[unpaid paid refunded]
-  end
-  include Payible
+  def self.statuses; %w[unpaid paid refunded] end; include Payible
 
   belongs_to :player
 

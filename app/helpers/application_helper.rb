@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 module ApplicationHelper
   def active(controller, action=nil, active="active", inactive="")
     boolean = params[:controller] == controller

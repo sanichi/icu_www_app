@@ -5,14 +5,20 @@ en:
     description: Description
     discounted_amount: Discounted amount
     discount_deadline: Discount deadline
+    end: End date
+    fees: Fees
+    name: Name
     rollover: Rollover
     sale_start: Sale start
     sale_end: Sale end
-    type:
-      entries: Tournament Entry Fees
-      entry: Tournament Entry Fee
-      subscription: ICU Subscription Fee
-      subscriptions: ICU Subscription Fees
+    start: Start date
+    url: Web page
+    year: Year
+    years: Years
+    age:
+      min: Minimum age
+      max: Maximum age
+      ref_date: Age reference date
     entry:
       early_discount: Early entry discount
       reselect_contact: Reselect Contact
@@ -37,6 +43,9 @@ en:
       rating:
         max: Maximum rating
         min: Minimum rating
+    rating:
+      max: Maximum rating
+      min: Minimum rating
     subscription:
       age_ref_date: Age reference date
       any_season: Any season
@@ -62,3 +71,11 @@ en:
       valid:
         from: Valid from
         to: Valid to
+    type:
+      type: Type
+      entries: Tournament Entry Fees
+      entri: Tournament Entry Fee
+      entry: Tournament Entry Fee
+      subscription: ICU Subscription Fee
+      subscripsion: ICU Subscription Fee
+      subscriptions: ICU Subscription Fees

@@ -8,11 +8,12 @@ describe Journalable do
 
   [
     [Club, "/clubs/%d"],
+    [EntryFee, "/admin/entry_fees/%d"],
+    [Fee, "/admin/fees/%d"],
     [Player, "/admin/players/%d"],
+    [SubscriptionFee, "/admin/subscription_fees/%d"],
     [Translation, "/admin/translations/%d"],
     [User, "/admin/users/%d"],
-    [SubscriptionFee, "/admin/subscription_fees/%d"],
-    [EntryFee, "/admin/entry_fees/%d"],
   ].each do |klass, path|
     context klass do
       it "should be setup correctly" do
