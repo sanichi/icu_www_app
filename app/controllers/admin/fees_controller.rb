@@ -19,8 +19,8 @@ class Admin::FeesController < ApplicationController
       @fee = @fee.copy
       render "new"
     else
-      flash[:alert] = "This fee is cannot be cloned"
-      redirect_to "show"
+      flash[:alert] = "This fee is can't be cloned"
+      redirect_to admin_fee_path(@fee)
     end
   end
 
@@ -29,8 +29,8 @@ class Admin::FeesController < ApplicationController
       @fee = @fee.rollover
       render "new"
     else
-      flash[:alert] = "This fee cannot be rolled over"
-      redirect_to "show"
+      flash[:alert] = "This fee can't be rolled over because it would create a duplicate"
+      redirect_to admin_fee_path(@fee)
     end
   end
 

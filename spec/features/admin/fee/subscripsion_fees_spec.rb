@@ -84,6 +84,9 @@ describe Fee::Subscripsion do
 
       visit admin_fee_path(fee)
       expect(page).not_to have_button(rollover)
+
+      visit rollover_admin_fee_path(fee)
+      expect(page).to have_css(failure, text: "can't be rolled over")
     end
   end
 
