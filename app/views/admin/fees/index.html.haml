@@ -1,10 +1,8 @@
 - content_for :title, t("fee.fees")
 
+= render "utils/search_panel", form: "admin/fees/search_form", title: t("fee.fees"), pad: 2, col: "md"
 .row
   .col-md-6.col-md-offset-3
-
-    %h1.text-center= t("fee.fees")
-
     %table{class: "table table-bordered table-striped"}
       %thead
         %tr

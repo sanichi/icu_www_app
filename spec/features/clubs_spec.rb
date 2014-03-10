@@ -101,7 +101,7 @@ end
 
 feature "Showing a club" do
   def xpath(label)
-    "//table//th[.='#{label}']/following-sibling::td"
+    %Q{//table//th[.="#{label}"]/following-sibling::td}
   end
 
   it "all fields" do

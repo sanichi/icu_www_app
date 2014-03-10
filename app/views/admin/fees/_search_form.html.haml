@@ -1,0 +1,4 @@
+= form_tag admin_fees_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_select", param: :type, text: "Type", menu: fee_type_menu(params[:type], t("all"))
+  = render "utils/inline_select", param: :sale, text: "Past, current or future", menu: fee_sale_menu(params[:sale])
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

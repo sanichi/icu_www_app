@@ -46,7 +46,7 @@ feature "Listing bad logins" do
   given(:ip)       { "127.0.0.1" }
 
   def xpath(text)
-    "//table[@id='results']/tbody/tr/td[.='#{text}']"
+    %Q{//table[@id="results"]/tbody/tr/td[.="#{text}"]}
   end
 
   it "shows user, encryted password and IP" do

@@ -6,7 +6,7 @@
         %legend= @fee.new_record? ? "New fee" : "Edit fee"
         - locals = { form: f, object: @fee, col: "sm", pad: 3, width: 2 }
         - if @fee.new_record?
-          = render "utils/select_for", locals.merge(param: :type, text: t("fee.type.type"), menu: fee_type_menu(@fee.type))
+          = render "utils/select_for", locals.merge(param: :type, text: t("fee.type.type"), menu: fee_type_menu(@fee.type, t("please_select")))
         = render "utils/text_field_for", locals.merge(param: :name, text: t("fee.name"), width: 4)
         = render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"))
         = render "utils/text_field_for", locals.merge(param: :start_date, text: t("fee.start"), placeholder: "YYYY-MM-DD", width: 3)

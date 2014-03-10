@@ -12,10 +12,20 @@ class Fee < ActiveRecord::Base
   validates :type, :name, :amount, presence: true
   validate :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
 
-  scope :ordered, -> { order(name: :asc) }
+  scope :alphabetic, -> { order(name: :asc) }
+  scope :old_to_new, -> { order(end_date: :desc) }
+  scope :new_to_old, -> { order(start_date: :asc) }
 
   def self.search(params, path)
-    matches = ordered
+    today = Date.today.to_s
+    matches = all
+    matches = matches.where(type: params[:type]) if params[:type].present?
+    case params[:sale]
+    when "current" then matches = matches.alphabetic.where("(sale_start IS NULL OR sale_start <= ?) AND (sale_end IS NULL OR sale_end >= ?)", today, today)
+    when "past"    then matches = matches.old_to_new.where("sale_end < ?", today)
+    when "future"  then matches = matches.new_to_old.where("sale_start > ?", today)
+    when "all"     then matches = matches.alphabetic
+    end
     paginate(matches, params, path, per_page: 10)
   end
 

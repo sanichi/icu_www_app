@@ -31,11 +31,11 @@ feature JournalEntry do
   end
 
   def xpath(id, *tds)
-    xpath = "//table[@id='#{id}']/tbody/tr"
+    xpath = %Q{//table[@id="#{id}"]/tbody/tr}
     if tds.any?
-      xpath += "/td[starts-with(.,'#{tds.shift.to_s[0,10]}')]"
+      xpath += %Q{/td[starts-with(.,"#{tds.shift.to_s[0,10]}")]}
       tds.each do |text|
-        xpath += "/following-sibling::td[starts-with(.,'#{text.to_s[0,10]}')]"
+        xpath += %Q{/following-sibling::td[starts-with(.,"#{text.to_s[0,10]}")]}
       end
     end
     xpath
