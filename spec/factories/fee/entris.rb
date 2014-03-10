@@ -6,12 +6,5 @@ FactoryGirl.define do
     end_date          { start_date.days_since(2) }
     sale_start        { Date.today.days_ago(7) }
     sale_end          { start_date.days_ago(1) }
-    discounted_amount nil
-    discount_deadline nil
-    min_rating        nil
-    max_rating        nil
-    min_age           nil
-    max_age           nil
-    age_ref_date      nil
   end
 end

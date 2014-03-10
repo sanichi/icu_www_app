@@ -4,6 +4,8 @@ class Fee::Entri < Fee
   before_validation :default_attributes
 
   validates :start_date, :end_date, :sale_start, :sale_end, presence: true
+  validates :name, uniqueness: { scope: :start_date, message: "duplicate tournament name and start date" }
+
   validate :sale_end_date
 
   def description(full=false)
@@ -12,6 +14,26 @@ class Fee::Entri < Fee
     parts.push name
     parts.push year || years
     parts.join(" ")
+  end
+
+  def copy
+    fee = self.dup
+    fee.name = nil
+    fee.amount = nil
+    fee.becomes(Fee)
+  end
+
+  def rolloverable?
+    dups = Fee::Entri.where(name: name)
+    dups = dups.where(year: year + 1) if year
+    dups = dups.where(years: season.next.to_s) if years
+    dups.count == 0
+  end
+
+  def rollover
+    fee = self.dup
+    fee.advance_1_year
+    fee.becomes(Fee)
   end
 
   private

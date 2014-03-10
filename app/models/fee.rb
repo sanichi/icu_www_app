@@ -9,8 +9,8 @@ class Fee < ActiveRecord::Base
 
   before_validation :normalize_attributes
 
-  validates :name, :amount, presence: true
-  validate :valid_dates, :valid_discount, :valid_url
+  validates :type, :name, :amount, presence: true
+  validate :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
 
   scope :ordered, -> { order(name: :asc) }
 
@@ -87,6 +87,26 @@ class Fee < ActiveRecord::Base
   def valid_discount
     if discounted_amount.present? && discounted_amount > amount
       errors.add(:discounted_amount, "discounted amount should be less than or equal to normal cost")
+    end
+  end
+
+  def valid_age_limits
+    if min_age || max_age
+      unless age_ref_date.present?
+        %i[min_age max_age].each { |m| errors[m] << "Age reference date required" if self.send(m) }
+      end
+    end
+    if min_age && max_age && min_age > max_age
+      errors[:base] << "Age minimum is greater than maximum"
+    end
+  end
+
+  def valid_rating_limits
+    return unless min_rating && max_rating
+    if min_rating > max_rating
+      errors[:base] << "Rating minimum is greater than maximum"
+    elsif min_rating + 100 > max_rating
+      errors[:base] << "Rating limits are too close"
     end
   end
 

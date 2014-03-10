@@ -49,7 +49,7 @@ describe Fee::Subscripsion do
       fill_in season, with: fee.season.to_s
       click_button save
 
-      expect(page).to have_css(help, text: "one per season")
+      expect(page).to have_css(help, text: "duplicate")
 
       fill_in season, with: fee.season.next.to_s
       click_button save
@@ -90,9 +90,7 @@ describe Fee::Subscripsion do
   describe "edit" do
     let(:fee) { create(:subscripsion_fee) }
 
-    it "update amount" do
-      expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 0
-
+    it "amount" do
       visit admin_fee_path(fee)
       click_link edit
       fill_in amount, with: " 9999.99 "

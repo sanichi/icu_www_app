@@ -4,7 +4,7 @@ class Fee::Subscripsion < Fee
   before_validation :set_dates
 
   validates :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, presence: true
-  validates :name, uniqueness: { scope: :end_date, message: "no more than one per season" }
+  validates :name, uniqueness: { scope: :years, message: "duplicate subscription name and season" }
   validate :valid_season
 
   def description(full=false)
