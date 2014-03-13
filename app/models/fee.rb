@@ -7,6 +7,8 @@ class Fee < ActiveRecord::Base
     age_ref_date min_age max_age min_rating max_rating url
   ], "/admin/fees/%d"
 
+  has_many :items
+
   before_validation :normalize_attributes
 
   validates :type, :name, :amount, presence: true
@@ -15,6 +17,7 @@ class Fee < ActiveRecord::Base
   scope :alphabetic, -> { order(name: :asc) }
   scope :old_to_new, -> { order(end_date: :desc) }
   scope :new_to_old, -> { order(start_date: :asc) }
+  scope :on_sale, -> { where("sale_start IS NULL OR sale_start <= ?", Date.today).where("sale_end IS NULL OR sale_end >= ?", Date.today) }
 
   def self.search(params, path)
     today = Date.today.to_s
@@ -29,12 +32,26 @@ class Fee < ActiveRecord::Base
     paginate(matches, params, path, per_page: 10)
   end
 
+  def self.for_sale
+    Fee.on_sale.each_with_object(Hash.new{|h,k| h[k] = []}) do |fee, hash|
+      hash[fee.subtype(:plural)].push(fee)
+    end
+  end
+
   def season
     Season.new(years)
   end
 
-  def subtype
-    self.class.to_s.split("::").last.downcase
+  def subtype(version=:singular)
+    sub_type = self.class.to_s.split("::").last
+    case version
+    when :plural
+      sub_type.downcase.pluralize
+    when :item
+      "Item::#{sub_type}"
+    else
+      sub_type.downcase
+    end
   end
 
   def deletable?

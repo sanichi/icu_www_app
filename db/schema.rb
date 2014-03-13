@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140306214723) do
+ActiveRecord::Schema.define(version: 20140308105947) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20140306214723) do
     t.string   "type",           limit: 40
     t.integer  "player_id"
     t.integer  "fee_id"
+    t.integer  "kart_id"
     t.string   "description"
     t.date     "start_date"
     t.date     "end_date"
@@ -154,6 +155,20 @@ ActiveRecord::Schema.define(version: 20140306214723) do
   end
 
   add_index "journal_entries", ["journalable_id", "journalable_type"], name: "index_journal_entries_on_journalable_id_and_journalable_type", using: :btree
+
+  create_table "karts", force: true do |t|
+    t.string   "status",             limit: 20,                          default: "unpaid"
+    t.decimal  "total",                          precision: 8, scale: 2
+    t.decimal  "original_total",                 precision: 8, scale: 2
+    t.string   "payment_method",     limit: 20
+    t.string   "payment_ref",        limit: 50
+    t.string   "confirmation_email", limit: 50
+    t.string   "payment_name",       limit: 100
+    t.integer  "user_id"
+    t.datetime "payment_completed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"

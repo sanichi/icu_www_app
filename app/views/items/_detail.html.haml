@@ -1,0 +1,6 @@
+- unless defined? id
+  - id = "no_id"
+
+%p
+  %em= term + ":"
+  %strong.pull-right{id: id}= desc

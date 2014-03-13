@@ -1,0 +1,27 @@
+- content_for :title, t("shop.shop")
+
+- if current_kart || @completed_karts.present?
+  .row
+    .col-sm-12.text-center
+      - if current_kart
+        = link_to xcart_path, class: "btn btn-info btn-md" do
+          = succeed(":") do
+            = t("shop.cart.current")
+          = succeed(",") do
+            = t("shop.cart.item.items", count: current_kart.items.count)
+          = euros(current_kart.total_cost)
+      - if @completed_karts.present?
+        = link_to t("shop.cart.completed"), xcompleted_path, class: "btn btn-info btn-md"
+%hr
+- priority = Hash.new(100).merge({ "subscripsions" => 1, "entris" => 2 })
+- @fees.sort_by{ |k,v| priority[k] }.each do |type, fees|
+  .row
+    .col-sm-3
+    .col-sm-6
+      %h3.text-center= t("fee.type.#{type}")
+      %table.table.table-bordered
+        %tbody
+          - fees.sort_by{ |f| f.description }.each do |fee|
+            %tr
+              %td.col-sm-10= link_to fee.description, new_item_path(fee_id: fee.id)
+              %td.col-sm-2.text-center= euros(fee.amount)

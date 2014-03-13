@@ -2,6 +2,8 @@ class Item < ActiveRecord::Base
   def self.statuses; %w[unpaid paid refunded] end; include Payible
 
   belongs_to :player
+  belongs_to :fee
+  belongs_to :kart
 
   before_validation :copy_fee
 

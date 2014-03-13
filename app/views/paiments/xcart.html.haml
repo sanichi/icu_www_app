@@ -1,0 +1,9 @@
+- content_for :title, t("shop.cart.cart")
+
+.row
+  .col-md-12.text-center
+    = link_to t("shop.cart.continue"), xshop_path, class: "btn btn-info btn-md"
+    - if current_kart && current_kart.items.count > 0
+      = link_to t("shop.cart.checkout"), xcard_path, class: "btn btn-success btn-md"
+%hr
+= render "items", cart: @kart, deletable: true

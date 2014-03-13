@@ -1,0 +1,5 @@
+<%- if @kart.paid? %>
+  window.location.replace('<%= xconfirm_path %>');
+<%- else %>
+  stripeError('<%= escape_single_quoted(@cart.last_payment_error_message) %>')
+<%- end %>

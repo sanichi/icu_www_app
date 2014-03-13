@@ -1,6 +1,4 @@
 class Fee::Entri < Fee
-  has_many :items, class_name: "Item::Entri", foreign_key: "fee_id", inverse_of: :fee
-
   before_validation :default_attributes
 
   validates :start_date, :end_date, :sale_start, :sale_end, presence: true

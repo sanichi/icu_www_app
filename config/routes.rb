@@ -11,6 +11,9 @@ IcuWwwApp::Application.routes.draw do
   %w[shop cart card charge confirm completed].each do |page|
     match page => "payments##{page}", via: page == "charge" ? :post : :get
   end
+  %w[xshop xcart xcard xcharge xconfirm xcompleted].each do |page|
+    match page => "paiments##{page}", via: page == "xcharge" ? :post : :get
+  end
   %w[account preferences update_preferences].each do |page|
     match "#{page}/:id" => "users##{page}", via: page.match(/^update/) ? :post : :get, as: page
   end
@@ -18,6 +21,7 @@ IcuWwwApp::Application.routes.draw do
   resources :cart_items,        only: [:destroy]
   resources :clubs,             only: [:index, :show]
   resources :entries,           only: [:new, :create]
+  resources :items,             only: [:new, :create, :destroy]
   resources :player_ids,        only: [:index]
   resources :players,           only: [:index]
   resources :sessions,          only: [:create]

@@ -1,12 +1,19 @@
 class Item::Subscripsion < Item
-  belongs_to :fee, class_name: "Fee::Subscripsion", inverse_of: :items
-
   validates :start_date, :end_date, presence: true, unless: Proc.new { |i| i.description.match(/life/i) }
   validates :player, presence: true
   validate :no_duplicates
 
   def season
     Season.new("#{start_date.try(:year)} #{end_date.try(:year)}")
+  end
+
+  def duplicate_of?(item, add_error=false)
+    if type == item.type && player_id == item.player_id && fee.years == item.fee.years
+      errors.add(:base, I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true))) if add_error
+      true
+    else
+      false
+    end
   end
 
   private

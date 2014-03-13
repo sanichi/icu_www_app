@@ -1,6 +1,4 @@
 class Fee::Subscripsion < Fee
-  has_many :items, class_name: "Item::Subscripsion", foreign_key: "fee_id", inverse_of: :fee
-
   before_validation :set_dates
 
   validates :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, presence: true

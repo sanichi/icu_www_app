@@ -1,0 +1,28 @@
+- unless defined?(number)
+  - number = nil
+- unless defined?(toggle)
+  - toggle = false
+- unless defined?(max)
+  - max = 1
+
+.row
+  .col-md-1= "#{number}." if number && max > 1
+  .col-md-10
+    %ul
+      %li
+        = "#{t("shop.cart.total")}:"
+        %strong= euros(cart.total || cart.total_cost)
+      - if cart.payment_completed
+        %li
+          = "#{t("shop.payment.time")}:"
+          %strong= "#{cart.payment_completed.to_s(:nosec)} GMT"
+      - if cart.confirmation_email
+        %li
+          = "#{t("shop.payment.confirmation_email_to")}:"
+          %strong= cart.confirmation_email
+      %li
+        = "#{t("shop.payment.ref_number")}:"
+        %strong= cart.id
+      - if toggle
+        %li
+          = link_to t("shop.cart.show"), shop_path, id: "toggle-#{cart.id}", data: { toggle: cart.id }

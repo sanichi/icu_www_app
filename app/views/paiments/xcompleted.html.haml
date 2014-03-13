@@ -1,0 +1,11 @@
+- content_for :title, t("shop.cart.completed")
+- content_for :javascript do
+  = render "toggle_cart.js"
+
+%h3.text-center= t("shop.cart.completed")
+%hr
+- max = @completed_karts.size
+- @completed_karts.each_with_index do |cart, i|
+  = render "cart_summary", cart: cart, number: i + 1, max: max, toggle: true
+  = render "items", cart: cart, hidden: true
+  %hr

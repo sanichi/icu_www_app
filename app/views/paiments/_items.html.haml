@@ -1,0 +1,27 @@
+- unless defined?(hidden)
+  - hidden = false
+
+.row{id: "cart-#{cart.id}", style: hidden ? "display: none" : ""}
+  .col-md-1
+  .col-md-10
+    %table{class: "table table-striped"}
+      %thead
+        %tr
+          %th.col-sm-5= t("shop.cart.item.item")
+          %th.col-sm-4= t("shop.cart.item.member")
+          %th.col-sm-2.text-center= t("shop.cart.item.cost")
+          %td.col-sm-1
+      %tbody
+        - cart.items.each do |item|
+          %tr
+            %td= item.description
+            %td= item.player.name(id: true) if item.player
+            %td.text-center= euros(item.cost)
+            - if cart.unpaid?
+              %td.text-center= link_to "✘", item.becomes(Item), data: { confirm: t("shop.cart.item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
+        %tr
+          %th{colspan: 2}= t("shop.cart.total")
+          %th.text-center= euros(cart.total_cost)
+          - if cart.unpaid?
+            %th
+  .col-md-2

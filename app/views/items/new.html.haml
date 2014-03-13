@@ -1,0 +1,28 @@
+- content_for :title, t("fee.type.#{@fee.subtype}")
+
+= form_for @item do |form|
+  = form.hidden_field :type
+  = form.hidden_field :fee_id
+  = form.hidden_field :player_id
+
+  .row
+    .col-md-6.col-md-offset-3
+      .panel.panel-info
+        .panel-heading
+          %h4.panel-title
+            = @fee.description(:full)
+            .pull-right= euros(@fee.amount)
+        .panel-body
+          - if @fee.start_date
+            = render "detail", term: t("fee.start"), desc: @fee.start_date.to_s
+          - if @fee.end_date
+            = render "detail", term: t("fee.end"), desc: @fee.end_date.to_s
+          - if true # player required?
+            = render "detail", term: t("member"), desc: "", id: "player_name"
+        .panel-footer
+          = render "player_ids_button"
+          = render "add_to_cart", form: form
+
+= render "player_ids/modal", title: t("shop.cart.item.select_member")
+%script
+  = render "player_ids_callback.js"
