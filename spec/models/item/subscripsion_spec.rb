@@ -71,6 +71,25 @@ describe Item::Subscripsion do
     end
   end
 
+  context "#duplicate_of?" do
+    let(:player1)   { create(:player) }
+    let(:player2)   { create(:player) }
+    let(:fee1)      { create(:subscripsion_fee, years: "2013-14") }
+    let(:fee2)      { create(:subscripsion_fee, years: "2013-14", name: "Unemployed") }
+    let(:fee3)      { create(:subscripsion_fee, years: "2014-15") }
+    let(:item1)     { create(:subscripsion_item, fee: fee1, player: player1) }
+
+    it "duplicates" do
+      expect(create(:subscripsion_item, fee: fee1, player: player1)).to be_duplicate_of(item1)
+      expect(create(:subscripsion_item, fee: fee2, player: player1)).to be_duplicate_of(item1)
+    end
+
+    it "not duplicates" do
+      expect(create(:subscripsion_item, fee: fee3, player: player1)).to_not be_duplicate_of(item1)
+      expect(create(:subscripsion_item, fee: fee1, player: player2)).to_not be_duplicate_of(item1)
+    end
+  end
+
   context "age constraints" do
     let(:ago10)     { Date.today.years_ago(10) }
     let(:u18)       { create(:subscripsion_fee, max_age: 17, name: "Under 18") }

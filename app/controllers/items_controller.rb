@@ -18,6 +18,7 @@ class ItemsController < ApplicationController
       redirect_to xcart_path(kart)
     else
       flash_first_base_error(@item)
+      @item = @item.becomes(Item)
       render "new"
     end
   end

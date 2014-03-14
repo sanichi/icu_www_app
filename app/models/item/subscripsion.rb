@@ -9,7 +9,7 @@ class Item::Subscripsion < Item
 
   def duplicate_of?(item, add_error=false)
     if type == item.type && player_id == item.player_id && fee.years == item.fee.years
-      errors.add(:base, I18n.t("fee.subscription.error.already_in_cart", member: player.name(id: true))) if add_error
+      errors.add(:base, I18n.t("item.error.subscription.already_in_cart", member: player.name(id: true), season: fee.years)) if add_error
       true
     else
       false

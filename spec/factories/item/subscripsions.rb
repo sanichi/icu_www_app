@@ -2,11 +2,6 @@ FactoryGirl.define do
   factory :subscripsion_item, class: Item::Subscripsion do
     player
     association    :fee, factory: :subscripsion_fee
-    description    nil
-    cost           nil
-    start_date     nil
-    end_date       nil
-    payment_method nil
     status         "unpaid"
     source         "www2"
 

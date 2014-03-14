@@ -12,7 +12,7 @@ module Payible
     validates :status, inclusion: { in: statuses }
     validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_nil: true
     scope :active, -> { where(status: active_statuses) }
-    scope :inactive, -> { where(status: inactive_classes) }
+    scope :inactive, -> { where(status: inactive_statuses) }
     statuses.each do |s|
       scope s.to_sym, -> { where(status: s) }
       define_method("#{s}?".to_sym) { status == s }

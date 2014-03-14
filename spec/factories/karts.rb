@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :cart do
+  factory :kart do
     status "unpaid"
   end
 end

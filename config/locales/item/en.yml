@@ -7,8 +7,9 @@ en:
       entry:
         already_entered: "%{member} has already entered this event"
       rating:
-        too_low: "%{member}'s rating is under the limit (%{limit})"
-        too_high: "%{member}'s rating is over the limit (%{limit})"
+        low: "%{member}'s rating is under the limit (%{limit})"
+        high: "%{member}'s rating is over the limit (%{limit})"
       subscription:
         lifetime_exists: "%{member} already has a lifetime subscription"
         already_exists: "%{member} is already subscribed for %{season}"
+        already_in_cart: "A subscription for %{member} in %{season} is already in your cart"

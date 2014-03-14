@@ -36,10 +36,10 @@ class Item < ActiveRecord::Base
   def rating_constraints
     return unless [player, fee].all?(&:present?)
     if fee.max_rating.present? && player.too_strong?(fee.max_rating)
-      errors.add(:base, I18n.t("item.error.rating.too_high", member: player.name, limit: fee.max_rating))
+      errors.add(:base, I18n.t("item.error.rating.high", member: player.name, limit: fee.max_rating))
     end
     if fee.min_rating.present? && player.too_weak?(fee.min_rating)
-      errors.add(:base, I18n.t("item.error.rating.too_low", member: player.name, limit: fee.min_rating))
+      errors.add(:base, I18n.t("item.error.rating.low", member: player.name, limit: fee.min_rating))
     end
   end
 end

@@ -52,6 +52,23 @@ describe Item::Entri do
     end
   end
 
+  context "#duplicate_of?" do
+    let(:player1)   { create(:player) }
+    let(:player2)   { create(:player) }
+    let(:fee1)      { create(:entri_fee) }
+    let(:fee2)      { create(:entri_fee, name: "Challengers") }
+    let(:item1)     { create(:entri_item, fee: fee1, player: player1) }
+
+    it "duplicates" do
+      expect(create(:entri_item, fee: fee1, player: player1)).to be_duplicate_of(item1)
+    end
+
+    it "not duplicates" do
+      expect(create(:entri_item, fee: fee1, player: player2)).to_not be_duplicate_of(item1)
+      expect(create(:entri_item, fee: fee2, player: player1)).to_not be_duplicate_of(item1)
+    end
+  end
+
   context "rating constraints" do
     let(:fee)         { create(:entri_fee, min_rating: 1400, max_rating: 1800, name: "Major") }
     let(:p1400_under) { create(:player, latest_rating: 1399) }
