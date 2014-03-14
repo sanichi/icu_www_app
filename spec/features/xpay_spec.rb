@@ -1,48 +1,48 @@
 require 'spec_helper'
 
-feature "Pay", slow: true do
-  given(:player)                { create(:player) }
-  given(:user)                  { create(:user) }
+describe "Pay" do
+  let(:player)                { create(:player) }
+  let(:user)                  { create(:user) }
 
-  given(:select_member)         { I18n.t("shop.cart.item.select_member") }
-  given(:first_name)            { I18n.t("player.first_name") }
-  given(:last_name)             { I18n.t("player.last_name") }
-  given(:add_to_cart)           { I18n.t("shop.cart.item.add") }
-  given(:shop)                  { I18n.t("shop.shop") }
-  given(:current)               { I18n.t("shop.cart.current") }
-  given(:checkout)              { I18n.t("shop.cart.checkout") }
-  given(:pay)                   { I18n.t("shop.payment.card.pay") }
-  given(:completed)             { I18n.t("shop.payment.completed") }
-  given(:total)                 { I18n.t("shop.cart.total") }
-  given(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
-  given(:payment_time)          { I18n.t("shop.payment.time") }
-  given(:gateway)               { I18n.t("shop.payment.error.gateway") }
-  given(:bad_number)            { I18n.t("shop.payment.error.number") }
-  given(:bad_expiry)            { I18n.t("shop.payment.error.expiry") }
-  given(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
-  given(:bad_name)              { I18n.t("shop.payment.error.name") }
-  given(:bad_email)             { I18n.t("shop.payment.error.email") }
+  let(:select_member)         { I18n.t("shop.cart.item.select_member") }
+  let(:first_name)            { I18n.t("player.first_name") }
+  let(:last_name)             { I18n.t("player.last_name") }
+  let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
+  let(:xshop)                 { 'x' + I18n.t("shop.shop") }
+  let(:current)               { I18n.t("shop.cart.current") }
+  let(:checkout)              { I18n.t("shop.cart.checkout") }
+  let(:pay)                   { I18n.t("shop.payment.card.pay") }
+  let(:completed)             { I18n.t("shop.payment.completed") }
+  let(:total)                 { I18n.t("shop.cart.total") }
+  let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
+  let(:payment_time)          { I18n.t("shop.payment.time") }
+  let(:gateway)               { I18n.t("shop.payment.error.gateway") }
+  let(:bad_number)            { I18n.t("shop.payment.error.number") }
+  let(:bad_expiry)            { I18n.t("shop.payment.error.expiry") }
+  let(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
+  let(:bad_name)              { I18n.t("shop.payment.error.name") }
+  let(:bad_email)             { I18n.t("shop.payment.error.email") }
 
-  given(:number_id)             { "number" }
-  given(:month_id)              { "exp-month" }
-  given(:year_id)               { "exp-year" }
-  given(:email_id)              { "confirmation_email" }
-  given(:name_id)               { "payment_name" }
-  given(:cvc_id)                { "cvc" }
+  let(:number_id)             { "number" }
+  let(:month_id)              { "exp-month" }
+  let(:year_id)               { "exp-year" }
+  let(:email_id)              { "confirmation_email" }
+  let(:name_id)               { "payment_name" }
+  let(:cvc_id)                { "cvc" }
 
-  given(:stripe)                { "stripe" }
-  given(:number)                { "4242 4242 4242 4242" }
-  given(:mm)                    { "01" }
-  given(:yyyy)                  { (Date.today.year + 2).to_s }
-  given(:cvc)                   { "123" }
-  given(:force_submit)          { "\n" }
+  let(:stripe)                { "stripe" }
+  let(:number)                { "4242 4242 4242 4242" }
+  let(:mm)                    { "01" }
+  let(:yyyy)                  { (Date.today.year + 2).to_s }
+  let(:cvc)                   { "123" }
+  let(:force_submit)          { "\n" }
 
-  given(:title)                 { "h3" }
-  given(:item)                  { "li" }
-  given(:error)                 { "div.alert-danger" }
-  given(:card_declined)         { "Your card was declined." }
-  given(:expired_card)          { "Your card's expiration date is incorrect." }
-  given(:incorrect_cvc)         { "Your card's security code is incorrect." }
+  let(:title)                 { "h3" }
+  let(:item)                  { "li" }
+  let(:error)                 { "div.alert-danger" }
+  let(:card_declined)         { "Your card was declined." }
+  let(:expired_card)          { "Your card's expiration date is incorrect." }
+  let(:incorrect_cvc)         { "Your card's security code is incorrect." }
 
   def fill_in_all_and_click_pay(opt = {})
     opt.reverse_merge!(number: number, mm: mm, yyyy: yyyy, cvc: cvc, name: player.name, email: player.email)
@@ -64,11 +64,11 @@ feature "Pay", slow: true do
     "#{gateway}: \"#{text}\""
   end
 
-  feature "subscription" do
-    given!(:subscription_fee)  { create(:subscription_fee) }
+  context "subscription" do
+    let!(:subscription_fee)  { create(:subscripsion_fee) }
 
     before(:each) do
-      visit shop_path
+      visit xshop_path
       click_link subscription_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -82,9 +82,9 @@ feature "Pay", slow: true do
       ActionMailer::Base.deliveries.clear
     end
 
-    scenario "successful", js: true do
-      cart = Cart.last
-      subscription = Subscription.last
+    it "successful", js: true do
+      cart = Kart.last
+      subscription = Item::Subscripsion.last
 
       expect(cart).to be_unpaid
       expect(cart.payment_completed).to be_nil
@@ -126,12 +126,12 @@ feature "Pay", slow: true do
       expect(email.body.decoded).to include("%.2f" % subscription.cost)
     end
 
-    scenario "stripe errors", js: true do
+    it "stripe errors", js: true do
       fill_in_all_and_click_pay(number: "4000000000000002")
       expect(page).to have_css(error, text: gateway_error(card_declined))
-      subscription = Subscription.last
+      subscription = Item::Subscripsion.last
       expect(subscription).to be_unpaid
-      cart = Cart.include_errors.last
+      cart = Kart.include_errors.last
       expect(cart).to be_unpaid
       expect(cart.user).to be_nil
       expect(cart.payment_errors.count).to eq 1
@@ -158,7 +158,7 @@ feature "Pay", slow: true do
       expect(ActionMailer::Base.deliveries).to be_empty
 
       login(user)
-      click_link shop
+      click_link xshop
       click_link current
       click_link checkout
 
@@ -178,7 +178,7 @@ feature "Pay", slow: true do
       expect(ActionMailer::Base.deliveries).to be_empty
     end
 
-    scenario "client side errors", js: true do
+    it "client side errors", js: true do
       expect(PaymentError.count).to eq 0
 
       # Card.

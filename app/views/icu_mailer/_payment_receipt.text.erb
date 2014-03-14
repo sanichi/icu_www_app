@@ -2,14 +2,14 @@ Hi<%= cart.payment_name.present? ? " #{cart.payment_name}" : "" %>,
 
 This is a receipt from the ICU for your payment of <%= euros(cart.total) %> on <%= cart.payment_completed.to_date.to_s %>.
 
-<%- if cart.cart_items.size == 1 %>
+<%- if cart.items.size == 1 %>
 The purchased item is:
 
-  <%= cart.cart_items.first.to_s %>
+  <%= cart.items.first.to_s %>
 <%- else %>
 The purchased items are as follows:
 
-<%- cart.cart_items.each_with_index do |item, i| %>
+<%- cart.items.each_with_index do |item, i| %>
   <%= i + 1 %>. <%= item.to_s %>
 <%- end %>
 <%- end %>

@@ -1,7 +1,7 @@
 class CreateRefunds < ActiveRecord::Migration
   def change
     create_table :refunds do |t|
-      t.integer  :cart_id, :user_id
+      t.integer  :kart_id, :user_id
       t.string   :error
       t.decimal  :amount, precision: 6, scale: 2
 

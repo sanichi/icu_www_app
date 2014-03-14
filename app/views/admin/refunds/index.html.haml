@@ -15,7 +15,7 @@
         %tbody
           - @refunds.matches.each do |refund|
             %tr
-              %td= link_to refund.cart_id, [:admin, refund.cart]
+              %td= link_to refund.kart_id, [:admin, refund.kart]
               %td= euros(refund.amount)
               %td= refund.user.player.name
               %td= refund.created_at.to_s(:db)

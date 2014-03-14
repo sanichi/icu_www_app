@@ -1,7 +1,7 @@
 class PaymentError < ActiveRecord::Base
   extend Util::Pagination
 
-  belongs_to :cart
+  belongs_to :kart
   default_scope { order(:created_at) }
 
   def self.search(params, path)

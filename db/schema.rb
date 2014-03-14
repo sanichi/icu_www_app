@@ -179,17 +179,13 @@ ActiveRecord::Schema.define(version: 20140308105947) do
   end
 
   create_table "payment_errors", force: true do |t|
-    t.integer  "cart_id"
+    t.integer  "kart_id"
     t.string   "message"
     t.string   "details"
     t.string   "payment_name",       limit: 100
     t.string   "confirmation_email", limit: 50
     t.datetime "created_at"
   end
-
-  add_index "payment_errors", ["cart_id"], name: "index_payment_errors_on_cart_id", using: :btree
-  add_index "payment_errors", ["confirmation_email"], name: "index_payment_errors_on_confirmation_email", using: :btree
-  add_index "payment_errors", ["payment_name"], name: "index_payment_errors_on_payment_name", using: :btree
 
   create_table "players", force: true do |t|
     t.string   "first_name",         limit: 50
@@ -224,7 +220,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
   add_index "players", ["last_name"], name: "index_players_on_last_name", using: :btree
 
   create_table "refunds", force: true do |t|
-    t.integer  "cart_id"
+    t.integer  "kart_id"
     t.integer  "user_id"
     t.string   "error"
     t.decimal  "amount",     precision: 6, scale: 2

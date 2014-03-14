@@ -13,6 +13,16 @@ class Item < ActiveRecord::Base
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints
 
+  # Used in payment receipts.
+  def to_s
+    parts = []
+    parts.push description
+    parts.push player.name(id: true) if player.present?
+    parts.push "€#{'%.2f' % cost}"
+    parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
+    parts.join(", ")
+  end
+
   private
 
   def copy_fee

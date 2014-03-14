@@ -15,7 +15,7 @@
         %tbody
           - @errors.matches.each do |error|
             %tr
-              %td.text-center{rowspan: 2, style: "vertical-align: middle"}= link_to error.cart_id, admin_cart_path(error.cart_id)
+              %td.text-center{rowspan: 2, style: "vertical-align: middle"}= link_to error.kart_id, admin_kart_path(error.kart_id)
               %td= error.message
               %td= error.payment_name
               %td= error.confirmation_email
