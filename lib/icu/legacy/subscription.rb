@@ -6,8 +6,8 @@ module ICU
       ONLINE_MAP = {
         sub_id:        nil,
         sub_icu_id:    :player_id,
-        sub_season:    :season_desc,
-        sub_type:      :category,
+        sub_season:    nil,
+        sub_type:      :description,
         sub_fee:       :cost,
         pay_date:      :created_at,
       }
@@ -15,8 +15,8 @@ module ICU
       OFFLINE_MAP = {
         sof_id:        nil,
         sof_icu_id:    :player_id,
-        sof_season:    :season_desc,
-        sof_type:      :category,
+        sof_season:    nil,
+        sof_type:      :description,
         sof_fee:       :cost,
         sof_pay_date:  :created_at,
         sof_currency:  nil,
@@ -54,54 +54,64 @@ module ICU
         end
         puts "old lifetime records processed: #{lifetime_count}"
 
-        puts "new subscription records created: #{::Subscription.count}"
+        puts "new subscription records created: #{Item::Subscripsion.count}"
       end
 
       private
 
       def create_subscription(old_sub, map)
-        new_sub = map.each_with_object({}) do |(old_attr, new_attr), params|
+        new_item = map.each_with_object({}) do |(old_attr, new_attr), params|
           params[new_attr] = old_sub[old_attr] if new_attr
         end
         id = old_sub[:sub_id] || old_sub[:sof_id] || old_sub[:sfl_id]
         begin
-          adjust(new_sub, old_sub)
-          subscription = ::Subscription.create!(new_sub)
-          puts "#{id} => #{subscription.id}"
+          adjust(new_item, old_sub)
+          item = Item::Subscripsion.create!(new_item)
+          puts "#{id} => #{item.id}"
         rescue => e
           report_error "could not convert subscription ID #{id}: #{e.message}"
         end
       end
 
-      def adjust(new_sub, old_sub)
-        # Work out the category.
-        new_sub[:category] = case new_sub[:category]
-          when "New U18"    then "new_under_18"
-          when "Over 65"    then "over_65"
-          when "Overseas"   then "overseas"
-          when "Standard"   then "standard"
-          when "Under 12"   then "under_12"
-          when "Under 18"   then "under_18"
-          when "Unemployed" then "unemployed"
-          when nil          then "lifetime"
-          else raise "unexpected category (#{new_sub[:category]})"
+      def adjust(new_item, old_sub)
+        # Work out the description.
+        if new_item[:description].nil?
+          new_item[:description] = "Lifetime ICU Subscription"
+          new_item[:cost] = 0.0
+        elsif new_item[:description].match(/\A(New U18|Over 65|Overseas|Standard|Under 12|Under 18|Unemployed)\z/)
+          new_item[:description] += " ICU Subscription"
+        else
+          raise "unexpected description (#{new_item[:description]})"
         end
-        # Handle a small number of GBP transactions.
-        if old_sub[:sof_currency] && old_sub[:sof_currency] != "EUR"
-          if old_sub[:sof_currency] == "GBP" && new_sub[:category] == "standard"
-            new_sub[:cost] = 35.0
-          elsif old_sub[:sof_currency] == "GBP" && new_sub[:category] == "unemployed"
-            new_sub[:cost] = 20.0
+        # Work out start and end dates.
+        years = old_sub[:sub_season] || old_sub[:sof_season]
+        if years.present?
+          if years.match(/\A\d\d\d\d-\d\d\z/)
+            season = Season.new(years)
+            unless season.error
+              new_item[:start_date] = season.start
+              new_item[:end_date] = season.end
+            else
+              raise "can't handle season #{years} (#{season.error})"
+            end
           else
-            raise "can't handle #{old_sub[:sof_currency]} and #{new_sub[:category]}"
+            raise "can't handle season #{years}"
           end
         end
-        # Handle cost for lifetime subs.
-        new_sub[:cost] = 0.0 if new_sub[:category] == "lifetime"
-        # Handle missing dates (some offline from 2006 & 2007 and all lifetime).
-        if new_sub[:created_at].nil?
-          if new_sub[:category] == "lifetime"
-            new_sub[:created_at] = case new_sub[:player_id]
+        # Handle the small number of GBP transactions.
+        if old_sub[:sof_currency] && old_sub[:sof_currency] != "EUR"
+          if old_sub[:sof_currency] == "GBP" && new_item[:category] == "standard"
+            new_item[:cost] = 35.0
+          elsif old_sub[:sof_currency] == "GBP" && new_item[:category] == "unemployed"
+            new_item[:cost] = 20.0
+          else
+            raise "can't handle #{old_sub[:sof_currency]} and #{new_item[:category]}"
+          end
+        end
+        # Handle missing creation dates (some offline from 2006 & 2007 and all lifetime).
+        if new_item[:created_at].nil?
+          if new_item[:description] == "Lifetime ICU Subscription"
+            new_item[:created_at] = case new_item[:player_id]
               when 276  then Date.new(2000, 9, 1) # Michael Crowe (guess)
               when 687  then Date.new(1998, 9, 1) # Brian Kelly (IM title)
               when 731  then Date.new(2000, 9, 1) # Eamon Keogh (guess)
@@ -118,35 +128,37 @@ module ICU
               when 5441 then Date.new(2003, 9, 1) # Gavin Wall (IM title)
               when 6741 then Date.new(2006, 9, 1) # Jack Hennigan (2006 AGM?)
               when 7085 then Date.new(1996, 9, 1) # Alexander Baburin (GM title)
-              else raise "unexpected lifetime ICU ID (#{new_sub[:player_id]})"
+              else raise "unexpected lifetime ICU ID (#{new_item[:player_id]})"
             end
           else
             start_date = Date.new(2006, 9, 1)
             if old_sub[:sof_id] && old_sub[:sof_id] >= 898 && old_sub[:sof_id] <= 1335
-              new_sub[:created_at] = start_date.days_since((395.0 * (old_sub[:sof_id] - 898) / (1335.0 - 898.0)).round)
+              new_item[:created_at] = start_date.days_since((395.0 * (old_sub[:sof_id] - 898) / (1335.0 - 898.0)).round)
             else
-              raise "unexpected nil for created_at"
+              raise "unexpected nil for created_at (#{old_sub[:sub_id]}|#{old_sub[:sof_id]}|#{old_sub[:sfl_id]})"
             end
           end
         end
-        new_sub[:payment_method] = case
+        new_item[:payment_method] = case
           when old_sub[:sub_id] then "paypal"
           when old_sub[:sof_id] then "cheque"
           when old_sub[:sfl_id] then "free"
-          else raise "can't determine payment method for ICU ID (#{new_sub[:player_id]})"
+          else raise "can't determine payment method for ICU ID (#{new_item[:player_id]})"
         end
-        new_sub[:source] = "www1"
-        new_sub[:status] = "paid"
+        new_item[:source] = "www1"
+        new_item[:status] = "paid"
       end
 
       def existing_subscriptions?(force)
-        count = ::Subscription.count
+        count = Item::Subscripsion.count
         case
         when count == 0
           false
         when force
-          puts "old subscription records deleted: #{::Subscription.delete_all}"
-          ActiveRecord::Base.connection.execute("ALTER TABLE subscriptions AUTO_INCREMENT = 1")
+          puts "old subscription records deleted: #{Item.delete_all}"
+          puts "old carts records deleted: #{Kart.delete_all}"
+          ActiveRecord::Base.connection.execute("ALTER TABLE items AUTO_INCREMENT = 1")
+          ActiveRecord::Base.connection.execute("ALTER TABLE karts AUTO_INCREMENT = 1")
           false
         else
           true
