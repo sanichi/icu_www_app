@@ -1,0 +1,7 @@
+= form_tag admin_karts_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_select", param: :status, text: "Status", menu: cart_status_menu(params[:status])
+  = render "utils/inline_text_field", param: :name, text: "Name", size: 8
+  = render "utils/inline_text_field", param: :email, text: "Email", size: 8
+  = render "utils/inline_text_field", param: :date, text: "YYYY-MM-DD", size: 11
+  = render "utils/inline_text_field", param: :id, text: "ID", size: 5
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

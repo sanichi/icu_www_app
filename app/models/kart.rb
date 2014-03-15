@@ -59,7 +59,7 @@ class Kart < ActiveRecord::Base
   end
 
   def refund(item_ids, user)
-    refund = Refund.new(user: user, cart: self)
+    refund = Refund.new(user: user, kart: self)
     charge = Stripe::Charge.retrieve(payment_ref)
     refund.amount = refund_amount(item_ids, charge)
     charge.refund(amount: cents(refund.amount))
@@ -116,7 +116,7 @@ class Kart < ActiveRecord::Base
       item = items.find_by(id: item_id)
       raise "Cart item #{item_id} does not belong to this cart" unless item
       raise "Cart item #{item_id} has wrong status (#{item.status})" unless item.paid?
-      refund_amount += cartable.cost
+      refund_amount += item.cost
     end
 
     # Check that the ICU cart and Stripe totals are consistent.
@@ -137,9 +137,9 @@ class Kart < ActiveRecord::Base
 
     # Check if the whole cart is being refunded.
     total_refunds = items.select{ |c| c.refunded? }.size + item_ids.size
-    if total_refunds > cart_items.size
+    if total_refunds > items.size
       raise "Too many refunds (#{total_refunds}) for this cart (#{items.size})"
-    elsif total_refunds == cart_items.size
+    elsif total_refunds == items.size
       unless refund_amount == total
         raise "Refund amount (#{refund_amount}) doesn't match total (#{total})"
       end

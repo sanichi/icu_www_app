@@ -1,45 +1,45 @@
 require 'spec_helper'
 
-feature "Refunds", slow: true do
-  given(:player)                { create(:player) }
+describe "Refunds" do
+  let(:player)                { create(:player) }
 
-  given(:select_member)         { I18n.t("shop.cart.item.select_member") }
-  given(:first_name)            { I18n.t("player.first_name") }
-  given(:last_name)             { I18n.t("player.last_name") }
-  given(:add_to_cart)           { I18n.t("shop.cart.item.add") }
-  given(:checkout)              { I18n.t("shop.cart.checkout") }
-  given(:continue)              { I18n.t("shop.cart.continue") }
-  given(:pay)                   { I18n.t("shop.payment.card.pay") }
-  given(:completed)             { I18n.t("shop.payment.completed") }
+  let(:select_member)         { I18n.t("shop.cart.item.select_member") }
+  let(:first_name)            { I18n.t("player.first_name") }
+  let(:last_name)             { I18n.t("player.last_name") }
+  let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
+  let(:checkout)              { I18n.t("shop.cart.checkout") }
+  let(:continue)              { I18n.t("shop.cart.continue") }
+  let(:pay)                   { I18n.t("shop.payment.card.pay") }
+  let(:completed)             { I18n.t("shop.payment.completed") }
 
-  given(:number_id)             { "number" }
-  given(:month_id)              { "exp-month" }
-  given(:year_id)               { "exp-year" }
-  given(:email_id)              { "confirmation_email" }
-  given(:name_id)               { "payment_name" }
-  given(:cvc_id)                { "cvc" }
+  let(:number_id)             { "number" }
+  let(:month_id)              { "exp-month" }
+  let(:year_id)               { "exp-year" }
+  let(:email_id)              { "confirmation_email" }
+  let(:name_id)               { "payment_name" }
+  let(:cvc_id)                { "cvc" }
 
-  given(:number)                { "4242 4242 4242 4242" }
-  given(:mm)                    { "01" }
-  given(:yyyy)                  { (Date.today.year + 2).to_s }
-  given(:cvc)                   { "123" }
-  given(:force_submit)          { "\n" }
+  let(:number)                { "4242 4242 4242 4242" }
+  let(:mm)                    { "01" }
+  let(:yyyy)                  { (Date.today.year + 2).to_s }
+  let(:cvc)                   { "123" }
+  let(:force_submit)          { "\n" }
 
-  given(:title)                 { "h3" }
-  given(:refund_link)           { "Refund..." }
-  given(:refund_button)         { "Refund" }
-  given(:total)                 { "//th[.='All']/following-sibling::th" }
-  given(:success)               { "div.alert-success" }
-  given(:refund_ok)             { "Refund was successful" }
+  let(:title)                 { "h3" }
+  let(:refund_link)           { "Refund..." }
+  let(:refund_button)         { "Refund" }
+  let(:total)                 { "//th[.='All']/following-sibling::th" }
+  let(:success)               { "div.alert-success" }
+  let(:refund_ok)             { "Refund was successful" }
 
-  feature "multiple items" do
-    given!(:subscription_fee)  { create(:subscription_fee) }
-    given!(:entry_fee)         { create(:entry_fee) }
+  context "multiple items" do
+    let!(:subscripsion_fee)  { create(:subscripsion_fee) }
+    let!(:entri_fee)         { create(:entri_fee) }
 
     before(:each) do
-      visit shop_path
+      visit xshop_path
 
-      click_link subscription_fee.description
+      click_link subscripsion_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
       fill_in first_name, with: player.first_name + force_submit
@@ -47,7 +47,7 @@ feature "Refunds", slow: true do
       click_button add_to_cart
 
       click_link continue
-      click_link entry_fee.description
+      click_link entri_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
       fill_in first_name, with: player.first_name + force_submit
@@ -70,16 +70,14 @@ feature "Refunds", slow: true do
       ActionMailer::Base.deliveries.clear
     end
 
-    it "refunded separately", js: true do
-      expect(Cart.count).to eq 1
-      cart = Cart.include_cartables.last
+    it "refund separately", js: true do
+      expect(Kart.count).to eq 1
+      cart = Kart.include_items.last
       expect(cart).to be_paid
-      expect(cart.cart_items.size).to eq 2
+      expect(cart.items.size).to eq 2
 
-      subscription_item = cart.cart_items.detect { |item| item.cartable_type == "Subscription" }
-      entry_item = cart.cart_items.detect { |item| item.cartable_type == "Entry" }
-      subscription = subscription_item.cartable
-      entry = entry_item.cartable
+      subscription = cart.items.detect { |item| item.type == "Item::Subscripsion" }
+      entry = cart.items.detect { |item| item.type == "Item::Entri" }
       expect(subscription).to be_paid
       expect(entry).to be_paid
 
@@ -87,13 +85,13 @@ feature "Refunds", slow: true do
 
       treasurer = login("treasurer")
 
-      visit admin_carts_path
+      visit admin_karts_path
       click_link cart.id
       click_link refund_link
 
       expect(page).to have_xpath(total, text: "%.2f" % cart.total)
 
-      check "item_#{subscription_item.id}"
+      check "item_#{subscription.id}"
       click_button refund_button
       confirm_dialog
 
@@ -118,7 +116,7 @@ feature "Refunds", slow: true do
 
       expect(page).to have_xpath(total, text: "%.2f" % cart.total)
 
-      check "item_#{entry_item.id}"
+      check "item_#{entry.id}"
       click_button refund_button
       confirm_dialog
 
@@ -142,15 +140,13 @@ feature "Refunds", slow: true do
     end
 
     it "refunded together", js: true do
-      expect(Cart.count).to eq 1
-      cart = Cart.include_cartables.last
+      expect(Kart.count).to eq 1
+      cart = Kart.include_items.last
       expect(cart).to be_paid
-      expect(cart.cart_items.size).to eq 2
+      expect(cart.items.size).to eq 2
 
-      subscription_item = cart.cart_items.detect { |item| item.cartable_type == "Subscription" }
-      entry_item = cart.cart_items.detect { |item| item.cartable_type == "Entry" }
-      subscription = subscription_item.cartable
-      entry = entry_item.cartable
+      subscription = cart.items.detect { |item| item.type == "Item::Subscripsion" }
+      entry = cart.items.detect { |item| item.type == "Item::Entri" }
       expect(subscription).to be_paid
       expect(entry).to be_paid
 
@@ -158,7 +154,7 @@ feature "Refunds", slow: true do
 
       treasurer = login("treasurer")
 
-      visit admin_carts_path
+      visit admin_karts_path
       click_link cart.id
       click_link refund_link
 

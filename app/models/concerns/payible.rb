@@ -20,10 +20,10 @@ module Payible
   end
 
   def active?
-    active_statuses.include?(status)
+    self.class.active_statuses.include?(status)
   end
 
   def inactive?
-    inactive_statuses.include?(status)
+    self.class.inactive_statuses.include?(status)
   end
 end
