@@ -25,9 +25,10 @@ class Ability
 
     if user.treasurer?
       can :manage, Cart
-      can :manage, Kart
       can :manage, EntryFee
       can :manage, Fee
+      can :index, Item
+      can :manage, Kart
       can :index, PaymentError
       can :index, Refund
       can :manage, SubscriptionFee

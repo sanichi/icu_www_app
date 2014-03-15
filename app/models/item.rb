@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  extend Util::Pagination
   def self.statuses; %w[unpaid paid refunded] end; include Payible
 
   belongs_to :player
@@ -12,6 +13,17 @@ class Item < ActiveRecord::Base
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints
+
+  def self.search(params, path)
+    matches = includes(:player).references(:players).order(created_at: :desc)
+    matches = matches.where(type: params[:type]) if params[:type].present?
+    matches = matches.where(status: params[:status]) if params[:status].present?
+    matches = matches.where(payment_method: params[:payment_method]) if params[:payment_method].present?
+    matches = matches.where(player_id: params[:player_id].to_i) if params[:player_id].to_i > 0
+    matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
+    matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
+    paginate(matches, params, path)
+  end
 
   # Used in payment receipts.
   def to_s

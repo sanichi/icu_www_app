@@ -1,0 +1,28 @@
+- content_for :title, t("shop.cart.items")
+
+= render "utils/search_panel", form: "search_form", title: t("shop.cart.items"), col: "md"
+
+- if @items.count > 0
+  .row
+    .col-md-10.col-md-offset-1
+      %table{class: "table table-bordered table-striped"}
+        %thead
+          %tr
+            %th= t("fee.description")
+            %th= t("player.player")
+            %th= t("shop.cart.item.cost")
+            %th= t("shop.payment.status.status")
+            %th= t("shop.payment.method.method")
+            %th= t("date")
+            %th= t("shop.cart.cart_id")
+        %tbody
+          - @items.matches.each do |item|
+            %tr
+              %td= item.description
+              %td= item.player.name(reversed: true, id: true) if item.player
+              %td{class: "righted"}= euros(item.cost)
+              %td= t("shop.payment.status.#{item.status}")
+              %td= t("shop.payment.method.#{item.payment_method}") if item.payment_method
+              %td= to_date(item.created_at)
+              %td.text-center= link_to item.kart_id, admin_karts_path(item.kart_id) if item.kart_id
+          = render "utils/pagination_links", pager: @items, columns: 7

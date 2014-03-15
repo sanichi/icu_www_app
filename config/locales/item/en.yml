@@ -13,3 +13,8 @@ en:
         lifetime_exists: "%{member} already has a lifetime subscription"
         already_exists: "%{member} is already subscribed for %{season}"
         already_in_cart: "A subscription for %{member} in %{season} is already in your cart"
+    type:
+      any: Any type
+      entry: Entry
+      subscription: Subscription
+      type: Type

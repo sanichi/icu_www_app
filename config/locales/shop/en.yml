@@ -3,11 +3,13 @@ en:
     shop: Shop
     cart:
       cart: Cart
+      cart_id: Cart ID
       checkout: Checkout
       completed: Completed payments
       continue: Continue Shopping
       current: Current cart
       hide: Hide cart
+      items: Purchases
       show: Show cart
       total: Total cost
       item:
@@ -45,6 +47,7 @@ en:
         name: Missing card owner's name
         email: Invalid confirmation email address
       method:
+        any: Any method
         cash: cash
         cheque: cheque
         free: free
@@ -52,7 +55,9 @@ en:
         paypal: PayPal
         stripe: Stripe
       status:
+        any: Any status
         paid: Paid
         part_refunded: Part refunded
         refunded: Refunded
+        status: Status
         unpaid: Unpaid

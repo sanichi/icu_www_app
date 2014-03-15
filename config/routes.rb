@@ -46,6 +46,7 @@ IcuWwwApp::Application.routes.draw do
     resources :fees do
       get :rollover, :clone, on: :member
     end
+    resources :items,             only: [:index]
     resources :journal_entries,   only: [:index, :show]
     resources :logins,            only: [:index, :show]
     resources :payment_errors,    only: [:index]
