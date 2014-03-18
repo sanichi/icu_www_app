@@ -5,11 +5,11 @@ class PaimentsController < ApplicationController
   end
 
   def xcart
-    redirect_to shop_path unless check_kart(:create)
+    redirect_to xshop_path unless check_kart(:create)
   end
 
   def xcard
-    redirect_to shop_path unless check_kart { !@kart.items.empty? }
+    redirect_to xshop_path unless check_kart { !@kart.items.empty? }
   end
 
   def xcharge
@@ -27,14 +27,14 @@ class PaimentsController < ApplicationController
       if request.xhr?
         render nothing: true
       else
-        redirect_to shop_path
+        redirect_to xshop_path
       end
     end
   end
 
   def xconfirm
     @kart = last_completed_kart
-    redirect_to shop_path unless @kart
+    redirect_to xshop_path unless @kart
   end
 
   def xcompleted
