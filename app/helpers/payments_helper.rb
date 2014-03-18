@@ -1,6 +1,6 @@
 module PaymentsHelper
   def payment_method_menu(selected, opt={paid: true, unpaid: true})
-    meths = Subscription::PAYMENT_METHODS.map { |m| [t("shop.payment.method.#{m}"), m] }
+    meths = Kart::PAYMENT_METHODS.map { |m| [t("shop.payment.method.#{m}"), m] }
     meths.unshift [t("shop.payment.paid"), "paid"] if opt[:paid]
     meths.push [t("shop.payment.unpaid"), "unpaid"] if opt[:unpaid]
     options_for_select(meths, selected)
@@ -20,7 +20,7 @@ module PaymentsHelper
   end
 
   def cart_status_menu(selected, default="any")
-    counties = Cart::STATUSES.map { |s| [t("shop.payment.status.#{s}"), s] }
+    counties = Kart.statuses.map { |s| [t("shop.payment.status.#{s}"), s] }
     counties.unshift [t(default), ""]
     options_for_select(counties, selected)
   end

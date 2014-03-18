@@ -15,7 +15,6 @@ class Ability
 
     if user.membership?
       can :manage, Player
-      can :index, Subscription
     end
 
     if user.translator?
@@ -24,18 +23,13 @@ class Ability
     end
 
     if user.treasurer?
-      can :manage, Cart
-      can :manage, EntryFee
       can :manage, Fee
       can :index, Item
       can :manage, Kart
       can :index, PaymentError
       can :index, Refund
-      can :manage, SubscriptionFee
-      can :index, Subscription
     end
 
-    can :show, EntryFee, player_id: user.player_id
     can :show, Player, id: user.player_id
     can :manage_preferences, User, id: user.id
   end

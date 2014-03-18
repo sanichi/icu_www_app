@@ -20,30 +20,6 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.datetime "created_at"
   end
 
-  create_table "cart_items", force: true do |t|
-    t.string   "cartable_type", limit: 30
-    t.integer  "cartable_id"
-    t.integer  "cart_id"
-    t.datetime "created_at"
-  end
-
-  add_index "cart_items", ["cart_id"], name: "index_cart_items_on_cart_id", using: :btree
-  add_index "cart_items", ["cartable_type", "cartable_id"], name: "index_cart_items_on_cartable_type_and_cartable_id", using: :btree
-
-  create_table "carts", force: true do |t|
-    t.string   "status",             limit: 20,                          default: "unpaid"
-    t.decimal  "total",                          precision: 8, scale: 2
-    t.decimal  "original_total",                 precision: 8, scale: 2
-    t.string   "payment_method",     limit: 20
-    t.string   "payment_ref",        limit: 50
-    t.string   "confirmation_email", limit: 50
-    t.string   "payment_name",       limit: 100
-    t.integer  "user_id"
-    t.datetime "payment_completed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
     t.string   "name",       limit: 50
@@ -61,47 +37,6 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "entries", force: true do |t|
-    t.integer  "player_id"
-    t.integer  "entry_fee_id"
-    t.string   "description"
-    t.date     "event_start"
-    t.date     "event_end"
-    t.decimal  "cost",                      precision: 6, scale: 2
-    t.string   "status",         limit: 20,                         default: "unpaid"
-    t.string   "payment_method", limit: 20
-    t.datetime "created_at"
-  end
-
-  add_index "entries", ["entry_fee_id"], name: "index_entries_on_entry_fee_id", using: :btree
-  add_index "entries", ["payment_method"], name: "index_entries_on_payment_method", using: :btree
-  add_index "entries", ["player_id"], name: "index_entries_on_player_id", using: :btree
-  add_index "entries", ["status"], name: "index_entries_on_status", using: :btree
-
-  create_table "entry_fees", force: true do |t|
-    t.string   "event_name",        limit: 100
-    t.string   "year_or_season",    limit: 7
-    t.decimal  "amount",                        precision: 6, scale: 2
-    t.decimal  "discounted_amount",             precision: 6, scale: 2
-    t.date     "sale_start"
-    t.date     "sale_end"
-    t.date     "discount_deadline"
-    t.date     "event_start"
-    t.date     "event_end"
-    t.date     "age_ref_date"
-    t.integer  "min_age"
-    t.integer  "max_age"
-    t.string   "event_website"
-    t.integer  "player_id"
-    t.integer  "min_rating",        limit: 2
-    t.integer  "max_rating",        limit: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "entry_fees", ["sale_end"], name: "index_entry_fees_on_sale_end", using: :btree
-  add_index "entry_fees", ["sale_start"], name: "index_entry_fees_on_sale_start", using: :btree
 
   create_table "fees", force: true do |t|
     t.string   "type",              limit: 40
@@ -226,40 +161,6 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.decimal  "amount",     precision: 6, scale: 2
     t.datetime "created_at"
   end
-
-  create_table "subscription_fees", force: true do |t|
-    t.string   "category",     limit: 20
-    t.decimal  "amount",                  precision: 6, scale: 2
-    t.string   "season_desc",  limit: 7
-    t.date     "sale_start"
-    t.date     "sale_end"
-    t.date     "age_ref_date"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "subscription_fees", ["sale_end"], name: "index_subscription_fees_on_sale_end", using: :btree
-  add_index "subscription_fees", ["sale_start"], name: "index_subscription_fees_on_sale_start", using: :btree
-
-  create_table "subscriptions", force: true do |t|
-    t.integer  "player_id"
-    t.integer  "subscription_fee_id"
-    t.string   "season_desc",         limit: 7
-    t.string   "source",              limit: 8,                          default: "www2"
-    t.string   "status",              limit: 20,                         default: "unpaid"
-    t.string   "category",            limit: 20
-    t.string   "payment_method",      limit: 20
-    t.decimal  "cost",                           precision: 6, scale: 2
-    t.datetime "created_at"
-  end
-
-  add_index "subscriptions", ["category"], name: "index_subscriptions_on_category", using: :btree
-  add_index "subscriptions", ["payment_method"], name: "index_subscriptions_on_payment_method", using: :btree
-  add_index "subscriptions", ["player_id"], name: "index_subscriptions_on_player_id", using: :btree
-  add_index "subscriptions", ["season_desc"], name: "index_subscriptions_on_season_desc", using: :btree
-  add_index "subscriptions", ["source"], name: "index_subscriptions_on_source", using: :btree
-  add_index "subscriptions", ["status"], name: "index_subscriptions_on_status", using: :btree
-  add_index "subscriptions", ["subscription_fee_id"], name: "index_subscriptions_on_subscription_fee_id", using: :btree
 
   create_table "translations", force: true do |t|
     t.string   "locale",      limit: 2

@@ -1,8 +1,0 @@
-= form_tag admin_subscriptions_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :player_id, text: t("player.id"), size: 5
-  = render "utils/inline_text_field", param: :last_name, text: t("player.last_name"), size: 8
-  = render "utils/inline_text_field", param: :first_name, text: t("player.first_name"), size: 8
-  = render "utils/inline_select", param: :category, text: t("fee.subscription.category.category"), menu: subscription_category_menu(params[:category])
-  = render "utils/inline_select", param: :season_desc, text: t("fee.subscription.season"), menu: subscription_season_menu(params[:season_desc])
-  = render "utils/inline_select", param: :payment_method, text: t("shop.payment.method.method"), menu: payment_method_menu(params[:payment_method])
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

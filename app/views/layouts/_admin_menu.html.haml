@@ -4,13 +4,10 @@
   - items += 1 if bdlgns  = can?(:manage, BadLogin)
   - items += 1 if entries = can?(:index, JournalEntry)
   - items += 1 if users   = can?(:manage, User)
-  - items += 1 if carts   = can?(:index, Cart)
+  - items += 1 if carts   = can?(:index, Kart)
   - items += 1 if rfnds   = can?(:index, Refund)
   - items += 1 if perrs   = can?(:index, PaymentError)
   - items += 1 if nfees   = can?(:manage, Fee)
-  - items += 1 if sfees   = can?(:manage, SubscriptionFee)
-  - items += 1 if subs    = can?(:index, Subscription)
-  - items += 1 if efees   = can?(:manage, EntryFee)
   - items += 1 if trans   = can?(:manage, Translation)
   - items += 1 if players = can?(:manage, Player)
   - items += 1 if clubs   = can?(:manage, Club)
@@ -30,19 +27,13 @@
         - if users
           %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if carts
-          %li{class: active("admin/carts")}= link_to "Carts", admin_carts_path
+          %li{class: active("admin/carts")}= link_to "Carts", admin_karts_path
         - if rfnds
           %li{class: active("admin/refunds")}= link_to "Refunds", admin_refunds_path
         - if perrs
           %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
         - if nfees
           %li{class: active("admin/fees")}= link_to "Fees", admin_fees_path
-        - if sfees
-          %li{class: active("admin/subscription_fees")}= link_to "Subscription Fees", admin_subscription_fees_path
-        - if subs
-          %li{class: active("admin/subscriptions")}= link_to "Subscriptions", admin_subscriptions_path
-        - if efees
-          %li{class: active("admin/entry_fees")}= link_to "Entry Fees", admin_entry_fees_path
         - if trans
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
         - if players

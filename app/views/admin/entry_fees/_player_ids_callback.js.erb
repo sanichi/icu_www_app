@@ -1,9 +1,0 @@
-function player_ids_callback(icu_id, name) {
-  $('#entry_fee_player_id').val(icu_id);
-  $('#player_name').text(name + ' (' + icu_id + ')');
-  $('#player_ids_modal').modal('hide');
-  $('.alert').hide();
-  btn = $('#player_ids_button');
-  btn.removeClass('btn-info').addClass('btn-default');
-  btn.text(btn.data('alt'));
-}
