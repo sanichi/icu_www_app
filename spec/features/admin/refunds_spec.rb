@@ -71,8 +71,8 @@ describe "Refunds" do
     end
 
     it "refund separately", js: true do
-      expect(Kart.count).to eq 1
-      cart = Kart.include_items.last
+      expect(Cart.count).to eq 1
+      cart = Cart.include_items.last
       expect(cart).to be_paid
       expect(cart.items.size).to eq 2
 
@@ -85,7 +85,7 @@ describe "Refunds" do
 
       treasurer = login("treasurer")
 
-      visit admin_karts_path
+      visit admin_carts_path
       click_link cart.id
       click_link refund_link
 
@@ -140,8 +140,8 @@ describe "Refunds" do
     end
 
     it "refunded together", js: true do
-      expect(Kart.count).to eq 1
-      cart = Kart.include_items.last
+      expect(Cart.count).to eq 1
+      cart = Cart.include_items.last
       expect(cart).to be_paid
       expect(cart.items.size).to eq 2
 
@@ -154,7 +154,7 @@ describe "Refunds" do
 
       treasurer = login("treasurer")
 
-      visit admin_karts_path
+      visit admin_carts_path
       click_link cart.id
       click_link refund_link
 

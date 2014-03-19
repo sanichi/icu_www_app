@@ -34,12 +34,12 @@
       - if cart.payment_ref.present?
         %tr
           %th Payment reference
-          %td= link_to cart.payment_ref, show_charge_admin_kart_path(cart), remote: true, id: "charge_modal_link"
+          %td= link_to cart.payment_ref, show_charge_admin_cart_path(cart), remote: true, id: "charge_modal_link"
       - if cart.payment_completed.present?
         %tr
           %th Payment completed
           %td= cart.payment_completed.to_s(:db)
       = render "utils/timestamps", object: cart, dt_format: :db
-    - if cart.refundable? && can?(:edit, Kart)
-      = link_to "Refund...", edit_admin_kart_path(cart), class: "btn btn-danger"
+    - if cart.refundable? && can?(:edit, Cart)
+      = link_to "Refund...", edit_admin_cart_path(cart), class: "btn btn-danger"
 

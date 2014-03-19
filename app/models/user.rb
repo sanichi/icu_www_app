@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
 
   has_many :logins, dependent: :destroy
   has_many :refunds, dependent: :nullify
-  has_many :karts, dependent: :nullify
+  has_many :carts, dependent: :nullify
   belongs_to :player
 
   default_scope { order(:email) }

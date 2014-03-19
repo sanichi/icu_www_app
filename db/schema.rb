@@ -20,6 +20,20 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.datetime "created_at"
   end
 
+  create_table "carts", force: true do |t|
+    t.string   "status",             limit: 20,                          default: "unpaid"
+    t.decimal  "total",                          precision: 8, scale: 2
+    t.decimal  "original_total",                 precision: 8, scale: 2
+    t.string   "payment_method",     limit: 20
+    t.string   "payment_ref",        limit: 50
+    t.string   "confirmation_email", limit: 50
+    t.string   "payment_name",       limit: 100
+    t.integer  "user_id"
+    t.datetime "payment_completed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20
     t.string   "name",       limit: 50
@@ -64,7 +78,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.string   "type",           limit: 40
     t.integer  "player_id"
     t.integer  "fee_id"
-    t.integer  "kart_id"
+    t.integer  "cart_id"
     t.string   "description"
     t.date     "start_date"
     t.date     "end_date"
@@ -91,20 +105,6 @@ ActiveRecord::Schema.define(version: 20140308105947) do
 
   add_index "journal_entries", ["journalable_id", "journalable_type"], name: "index_journal_entries_on_journalable_id_and_journalable_type", using: :btree
 
-  create_table "karts", force: true do |t|
-    t.string   "status",             limit: 20,                          default: "unpaid"
-    t.decimal  "total",                          precision: 8, scale: 2
-    t.decimal  "original_total",                 precision: 8, scale: 2
-    t.string   "payment_method",     limit: 20
-    t.string   "payment_ref",        limit: 50
-    t.string   "confirmation_email", limit: 50
-    t.string   "payment_name",       limit: 100
-    t.integer  "user_id"
-    t.datetime "payment_completed"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "logins", force: true do |t|
     t.integer  "user_id"
     t.string   "error"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
   end
 
   create_table "payment_errors", force: true do |t|
-    t.integer  "kart_id"
+    t.integer  "cart_id"
     t.string   "message"
     t.string   "details"
     t.string   "payment_name",       limit: 100
@@ -155,7 +155,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
   add_index "players", ["last_name"], name: "index_players_on_last_name", using: :btree
 
   create_table "refunds", force: true do |t|
-    t.integer  "kart_id"
+    t.integer  "cart_id"
     t.integer  "user_id"
     t.string   "error"
     t.decimal  "amount",     precision: 6, scale: 2

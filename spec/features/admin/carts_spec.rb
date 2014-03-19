@@ -3,8 +3,8 @@ require 'spec_helper'
 feature "Authorization for carts" do
   given(:ok_roles)        { %w[admin treasurer] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:kart)            { create(:kart) }
-  given(:paths)           { [admin_karts_path, admin_kart_path(kart), edit_admin_kart_path(kart)] }
+  given(:cart)            { create(:cart) }
+  given(:paths)           { [admin_carts_path, admin_cart_path(cart), edit_admin_cart_path(cart)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }

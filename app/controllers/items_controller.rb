@@ -11,11 +11,11 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     @fee = @item.fee
-    kart = current_kart(:create)
+    cart = current_cart(:create)
 
-    if kart.does_not_already_have?(@item) && @item.save
-      kart.items << @item
-      redirect_to xcart_path(kart)
+    if cart.does_not_already_have?(@item) && @item.save
+      cart.items << @item
+      redirect_to xcart_path(cart)
     else
       flash_first_base_error(@item)
       @item = @item.becomes(Item)
@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    item = current_kart.items.find do |item|
+    item = current_cart.items.find do |item|
       item.id = params[:id].to_i
     end
     item.destroy

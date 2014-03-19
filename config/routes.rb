@@ -27,7 +27,7 @@ IcuWwwApp::Application.routes.draw do
     end
 
     resources :bad_logins,        only: [:index]
-    resources :karts,             only: [:index, :show, :edit, :update] do
+    resources :carts,             only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member
     end
     resources :clubs,             only: [:new, :create, :edit, :update]

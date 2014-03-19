@@ -1,4 +1,4 @@
-class Kart < ActiveRecord::Base
+class Cart < ActiveRecord::Base
   def self.statuses; %w[unpaid paid part_refunded refunded] end; include Payible
   extend Util::Pagination
 
@@ -59,7 +59,7 @@ class Kart < ActiveRecord::Base
   end
 
   def refund(item_ids, user)
-    refund = Refund.new(user: user, kart: self)
+    refund = Refund.new(user: user, cart: self)
     charge = Stripe::Charge.retrieve(payment_ref)
     refund.amount = refund_amount(item_ids, charge)
     charge.refund(amount: cents(refund.amount))

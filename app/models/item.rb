@@ -4,7 +4,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :player
   belongs_to :fee
-  belongs_to :kart
+  belongs_to :cart
 
   before_validation :copy_fee
 

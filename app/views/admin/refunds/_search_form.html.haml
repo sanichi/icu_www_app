@@ -1,5 +1,5 @@
 = form_tag admin_refunds_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :kart_id, text: "Cart ID", size: 8
+  = render "utils/inline_text_field", param: :cart_id, text: "Cart ID", size: 8
   = render "utils/inline_select", param: :user_id, text: "Officer", width: 3, menu: refund_officer_menu(params[:user_id])
   = render "utils/inline_text_field", param: :created_at, text: "YYYY-MM-DD", size: 12
   = render "utils/inline_text_field", param: :message, text: "Error message", size: 12

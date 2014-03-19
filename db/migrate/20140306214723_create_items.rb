@@ -2,7 +2,7 @@ class CreateItems < ActiveRecord::Migration
   def change
     create_table :items do |t|
       t.string   :type, limit: 40
-      t.integer  :player_id, :fee_id, :kart_id
+      t.integer  :player_id, :fee_id, :cart_id
       t.string   :description
       t.date     :start_date, :end_date
       t.decimal  :cost, precision: 6, scale: 2

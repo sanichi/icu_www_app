@@ -83,7 +83,7 @@ describe "Pay" do
     end
 
     it "successful", js: true do
-      cart = Kart.last
+      cart = Cart.last
       subscription = Item::Subscripsion.last
 
       expect(cart).to be_unpaid
@@ -131,7 +131,7 @@ describe "Pay" do
       expect(page).to have_css(error, text: gateway_error(card_declined))
       subscription = Item::Subscripsion.last
       expect(subscription).to be_unpaid
-      cart = Kart.include_errors.last
+      cart = Cart.include_errors.last
       expect(cart).to be_unpaid
       expect(cart.user).to be_nil
       expect(cart.payment_errors.count).to eq 1

@@ -1,4 +1,4 @@
-= form_tag admin_karts_path, method: :get, class: "form-inline", role: "form" do
+= form_tag admin_carts_path, method: :get, class: "form-inline", role: "form" do
   = render "utils/inline_select", param: :status, text: "Status", menu: cart_status_menu(params[:status])
   = render "utils/inline_text_field", param: :name, text: "Name", size: 8
   = render "utils/inline_text_field", param: :email, text: "Email", size: 8

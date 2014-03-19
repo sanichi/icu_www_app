@@ -14,7 +14,7 @@ class IcuMailer < ActionMailer::Base
   end
 
   def payment_receipt(cart_id)
-    @cart = Kart.find(cart_id)
+    @cart = Cart.find(cart_id)
     to = Rails.env.development? ? "webmaster@icu.ie" : @cart.confirmation_email
     raise "invalid confirmation email (#{to})" unless Rails.env.test? || Util::Mailgun.validate(to)
     mail(to: to, subject: CONFIRMATION)

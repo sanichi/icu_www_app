@@ -18,7 +18,7 @@
       = link_to xcart_path, class: "btn btn-info btn-md" do
         = succeed(":") do
           = t("shop.payment.card.amount_due")
-        = euros(current_kart.total_cost)
+        = euros(current_cart.total_cost)
   %hr
   .row
     = render "utils/text_field_tag", locals.merge(text: t("shop.payment.card.number"), extra: { id: "number", data: { stripe: "number" } })

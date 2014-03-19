@@ -9,7 +9,7 @@ module ItemsHelper
   end
 
   def item_payment_method_menu(selected, default)
-    methods = Kart::PAYMENT_METHODS.map { |m| [t("shop.payment.method.#{m}"), m] }
+    methods = Cart::PAYMENT_METHODS.map { |m| [t("shop.payment.method.#{m}"), m] }
     methods.unshift [t(default), ""]
     options_for_select(methods, selected)
   end

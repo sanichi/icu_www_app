@@ -24,13 +24,13 @@ describe "Shop" do
 
   context "empty cart" do
     it "create before viewing" do
-      expect(Kart.count).to eq 0
+      expect(Cart.count).to eq 0
 
       visit xcart_path
       expect(page).to have_xpath(xpath("th", item, member, cost))
       expect(page).to have_xpath(xpath("th", total, "0.00"))
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
     end
   end
 
@@ -69,11 +69,11 @@ describe "Shop" do
       expect(page).to have_button(reselect_member)
       click_button add_to_cart
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.count).to eq 1
       expect(Item::Subscripsion.inactive.where(fee: standard_sub, player: player).count).to eq 1
 
-      kart = Kart.last
+      cart = Cart.last
       subscripsion = Item::Subscripsion.last
 
       expect(page).to have_xpath(xpath("th", item, member, cost))
@@ -81,7 +81,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount))
 
       expect(subscripsion).to be_unpaid
-      expect(subscripsion.kart).to eq kart
+      expect(subscripsion.cart).to eq cart
       expect(subscripsion.fee).to eq standard_sub
       expect(subscripsion.player).to eq player
 
@@ -102,7 +102,7 @@ describe "Shop" do
 
       expect(page).to have_css(failure, text: lifetime_error)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 0
     end
 
@@ -119,7 +119,7 @@ describe "Shop" do
 
       expect(page).to have_css(failure, text: exists_error)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 0
     end
 
@@ -134,7 +134,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
 
       visit xshop_path
@@ -147,7 +147,7 @@ describe "Shop" do
 
       expect(page).to have_css(failure, text: in_cart_error)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
     end
 
@@ -162,7 +162,7 @@ describe "Shop" do
 
       expect(page).to have_css(failure, text: too_old_error)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 0
 
       click_button select_member
@@ -173,7 +173,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
     end
 
@@ -188,7 +188,7 @@ describe "Shop" do
 
       expect(page).to have_css(failure, text: too_young_error)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 0
 
       click_button select_member
@@ -199,7 +199,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
     end
 
@@ -214,7 +214,7 @@ describe "Shop" do
 
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount))
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
 
       visit xshop_path
@@ -227,7 +227,7 @@ describe "Shop" do
 
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount + unemployed_sub.amount))
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 2
 
       click_link delete, match: :first
@@ -235,7 +235,7 @@ describe "Shop" do
 
       expect(page).to have_xpath(xpath("th", total, unemployed_sub.amount))
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
 
       click_link delete, match: :first
@@ -243,7 +243,7 @@ describe "Shop" do
 
       expect(page).to have_xpath(xpath("th", total, 0.0))
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 0
     end
 
@@ -256,13 +256,13 @@ describe "Shop" do
       click_link player.id
       click_button add_to_cart
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Subscripsion.inactive.count).to eq 1
 
-      cart = Kart.include_items.first
+      cart = Cart.include_items.first
       item = cart.items.first
-      other_cart = create(:kart)
-      item.kart_id = other_cart.id
+      other_cart = create(:cart)
+      item.cart_id = other_cart.id
       item.save
 
       expect(cart.items.count).to eq 0
@@ -273,7 +273,7 @@ describe "Shop" do
 
       expect(page).to have_link(cart_link)
 
-      expect(Kart.count).to eq 2
+      expect(Cart.count).to eq 2
       expect(Item::Subscripsion.inactive.count).to eq 1
 
       expect(cart.items.count).to eq 0
@@ -314,10 +314,10 @@ describe "Shop" do
       expect(page).to have_button(reselect_member)
       click_button add_to_cart
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.where(fee: entry_fee, player: player).count).to eq 1
 
-      cart = Kart.last
+      cart = Cart.last
       entry = Item::Entri.last
 
       expect(page).to have_xpath(xpath("th", item, member, cost))
@@ -328,7 +328,7 @@ describe "Shop" do
       expect(page).to have_link(cart_link)
 
       expect(cart).to be_unpaid
-      expect(entry.kart).to eq cart
+      expect(entry.cart).to eq cart
       expect(entry.fee).to eq entry_fee
       expect(entry.player).to eq player
 
@@ -355,7 +355,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.count).to eq 1
 
       visit xshop_path
@@ -368,7 +368,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.count).to eq 2
     end
 
@@ -391,7 +391,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.count).to eq 1
 
       visit xshop_path
@@ -404,7 +404,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.count).to eq 2
     end
 
@@ -435,7 +435,7 @@ describe "Shop" do
 
       expect(page).to_not have_css(failure)
 
-      expect(Kart.count).to eq 1
+      expect(Cart.count).to eq 1
       expect(Item::Entri.inactive.count).to eq 1
     end
   end
