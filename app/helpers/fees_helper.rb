@@ -2,7 +2,7 @@ module FeesHelper
   def fee_type_menu(selected, default)
     types = [
       [default, ""],
-      [t("fee.type.subscription"), "Fee::Subscripsion"],
+      [t("fee.type.subscription"), "Fee::Subscription"],
       [t("fee.type.entry"), "Fee::Entri"],
     ]
     options_for_select(types, selected)

@@ -39,12 +39,12 @@ describe "Shop" do
     let!(:player2)        { create(:player, dob: 30.years.ago, joined: 20.years.ago) }
     let!(:junior)         { create(:player, dob: 10.years.ago, joined: 2.years.ago) }
     let!(:oldie)          { create(:player, dob: 70.years.ago, joined: 50.years.ago) }
-    let!(:standard_sub)   { create(:subscripsion_fee, name: "Standard", amount: 35.0) }
-    let!(:unemployed_sub) { create(:subscripsion_fee, name: "Unemployed", amount: 20.0) }
-    let!(:under_12_sub)   { create(:subscripsion_fee, name: "Under 12", amount: 20.0, max_age: 12) }
-    let!(:over_65_sub)    { create(:subscripsion_fee, name: "Over 65", amount: 20.0, min_age: 65) }
-    let(:lifetime_sub)    { create(:lifetime_subscripsion, player: player) }
-    let(:existing_sub)    { create(:paid_subscripsion_item, player: player, fee: standard_sub) }
+    let!(:standard_sub)   { create(:subscription_fee, name: "Standard", amount: 35.0) }
+    let!(:unemployed_sub) { create(:subscription_fee, name: "Unemployed", amount: 20.0) }
+    let!(:under_12_sub)   { create(:subscription_fee, name: "Under 12", amount: 20.0, max_age: 12) }
+    let!(:over_65_sub)    { create(:subscription_fee, name: "Over 65", amount: 20.0, min_age: 65) }
+    let(:lifetime_sub)    { create(:lifetime_subscription, player: player) }
+    let(:existing_sub)    { create(:paid_subscription_item, player: player, fee: standard_sub) }
 
     let(:lifetime_error)  { I18n.t("item.error.subscription.lifetime_exists", member: player.name(id: true)) }
     let(:exists_error)    { I18n.t("item.error.subscription.already_exists", member: player.name(id: true), season: standard_sub.season.to_s) }
@@ -70,20 +70,20 @@ describe "Shop" do
       click_button add_to_cart
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.count).to eq 1
-      expect(Item::Subscripsion.inactive.where(fee: standard_sub, player: player).count).to eq 1
+      expect(Item::Subscription.count).to eq 1
+      expect(Item::Subscription.inactive.where(fee: standard_sub, player: player).count).to eq 1
 
       cart = Cart.last
-      subscripsion = Item::Subscripsion.last
+      subscription = Item::Subscription.last
 
       expect(page).to have_xpath(xpath("th", item, member, cost))
-      expect(page).to have_xpath(xpath("td", subscripsion.description, player.name(id: true), subscripsion.cost))
+      expect(page).to have_xpath(xpath("td", subscription.description, player.name(id: true), subscription.cost))
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount))
 
-      expect(subscripsion).to be_unpaid
-      expect(subscripsion.cart).to eq cart
-      expect(subscripsion.fee).to eq standard_sub
-      expect(subscripsion.player).to eq player
+      expect(subscription).to be_unpaid
+      expect(subscription.cart).to eq cart
+      expect(subscription.fee).to eq standard_sub
+      expect(subscription.player).to eq player
 
       visit xshop_path
       expect(page).to have_link(cart_link)
@@ -103,7 +103,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: lifetime_error)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 0
+      expect(Item::Subscription.inactive.count).to eq 0
     end
 
     it "blocked by existing subscription", js: true do
@@ -120,7 +120,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: exists_error)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 0
+      expect(Item::Subscription.inactive.count).to eq 0
     end
 
     it "blocked by cart duplicate", js: true do
@@ -135,7 +135,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
 
       visit xshop_path
       click_link unemployed_sub.description
@@ -148,7 +148,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: in_cart_error)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
     end
 
     it "too old", js: true do
@@ -163,7 +163,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: too_old_error)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 0
+      expect(Item::Subscription.inactive.count).to eq 0
 
       click_button select_member
       fill_in last_name, with: junior.last_name + force_submit
@@ -174,7 +174,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
     end
 
     it "too young", js: true do
@@ -189,7 +189,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: too_young_error)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 0
+      expect(Item::Subscription.inactive.count).to eq 0
 
       click_button select_member
       fill_in last_name, with: oldie.last_name + force_submit
@@ -200,7 +200,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
     end
 
     it "delete", js: true do
@@ -215,7 +215,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount))
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
 
       visit xshop_path
       click_link unemployed_sub.description
@@ -228,7 +228,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("th", total, standard_sub.amount + unemployed_sub.amount))
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 2
+      expect(Item::Subscription.inactive.count).to eq 2
 
       click_link delete, match: :first
       confirm_dialog
@@ -236,7 +236,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("th", total, unemployed_sub.amount))
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
 
       click_link delete, match: :first
       confirm_dialog
@@ -244,7 +244,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("th", total, 0.0))
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 0
+      expect(Item::Subscription.inactive.count).to eq 0
     end
 
     it "delete from other cart", js: true do
@@ -257,7 +257,7 @@ describe "Shop" do
       click_button add_to_cart
 
       expect(Cart.count).to eq 1
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
 
       cart = Cart.include_items.first
       item = cart.items.first
@@ -274,7 +274,7 @@ describe "Shop" do
       expect(page).to have_link(cart_link)
 
       expect(Cart.count).to eq 2
-      expect(Item::Subscripsion.inactive.count).to eq 1
+      expect(Item::Subscription.inactive.count).to eq 1
 
       expect(cart.items.count).to eq 0
       expect(other_cart.items.count).to eq 1

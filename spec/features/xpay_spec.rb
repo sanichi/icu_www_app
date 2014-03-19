@@ -65,7 +65,7 @@ describe "Pay" do
   end
 
   context "subscription" do
-    let!(:subscription_fee)  { create(:subscripsion_fee) }
+    let!(:subscription_fee)  { create(:subscription_fee) }
 
     before(:each) do
       visit xshop_path
@@ -84,7 +84,7 @@ describe "Pay" do
 
     it "successful", js: true do
       cart = Cart.last
-      subscription = Item::Subscripsion.last
+      subscription = Item::Subscription.last
 
       expect(cart).to be_unpaid
       expect(cart.payment_completed).to be_nil
@@ -129,7 +129,7 @@ describe "Pay" do
     it "stripe errors", js: true do
       fill_in_all_and_click_pay(number: "4000000000000002")
       expect(page).to have_css(error, text: gateway_error(card_declined))
-      subscription = Item::Subscripsion.last
+      subscription = Item::Subscription.last
       expect(subscription).to be_unpaid
       cart = Cart.include_errors.last
       expect(cart).to be_unpaid

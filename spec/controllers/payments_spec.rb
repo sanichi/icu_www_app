@@ -92,7 +92,7 @@ describe PaimentsController do
 
   context "a paid cart" do
     before(:each) do
-      fee = create(:subscripsion_fee)
+      fee = create(:subscription_fee)
       cart = create(:cart,
         status: "paid",
         total: fee.amount,
@@ -103,7 +103,7 @@ describe PaimentsController do
         payment_name: "DR MARK J L ORR",
         payment_completed: Time.now
       )
-      item = create(:paid_subscripsion_item, fee: fee, cart: cart)
+      item = create(:paid_subscription_item, fee: fee, cart: cart)
       @cart_id = cart.id
     end
 

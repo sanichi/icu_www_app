@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Fee::Subscripsion do
+describe Fee::Subscription do
   before(:each) do
     login("treasurer")
   end
@@ -20,7 +20,7 @@ describe Fee::Subscripsion do
   let(:delete)       { I18n.t("delete") }
 
   describe "create" do
-    let(:fee) { create(:subscripsion_fee) }
+    let(:fee) { create(:subscription_fee) }
 
     it "new" do
       visit new_admin_fee_path
@@ -32,7 +32,7 @@ describe Fee::Subscripsion do
 
       expect(page).to have_css(success, text: "created")
 
-      fee = Fee::Subscripsion.last
+      fee = Fee::Subscription.last
       expect(fee.amount).to eq 35.5
       expect(fee.years).to eq "2013-14"
       expect(fee.sale_start.to_s).to eq "2013-08-01"
@@ -66,8 +66,8 @@ describe Fee::Subscripsion do
 
       expect(page).to have_css(success, text: "created")
 
-      expect(Fee::Subscripsion.count).to eq 2
-      expect(Fee::Subscripsion.first.season).to eq Fee::Subscripsion.last.season
+      expect(Fee::Subscription.count).to eq 2
+      expect(Fee::Subscription.first.season).to eq Fee::Subscription.last.season
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -78,8 +78,8 @@ describe Fee::Subscripsion do
 
       expect(page).to have_css(success, text: "created")
 
-      expect(Fee::Subscripsion.count).to eq 2
-      expect(Fee::Subscripsion.first.season.next).to eq Fee::Subscripsion.last.season
+      expect(Fee::Subscription.count).to eq 2
+      expect(Fee::Subscription.first.season.next).to eq Fee::Subscription.last.season
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
 
       visit admin_fee_path(fee)
@@ -91,7 +91,7 @@ describe Fee::Subscripsion do
   end
 
   describe "edit" do
-    let(:fee) { create(:subscripsion_fee) }
+    let(:fee) { create(:subscription_fee) }
 
     it "amount" do
       visit admin_fee_path(fee)
@@ -107,8 +107,8 @@ describe Fee::Subscripsion do
   end
 
   describe "delete" do
-    let(:fee) { create(:subscripsion_fee, name: "Special") }
-    let(:item) { create(:subscripsion_item) }
+    let(:fee) { create(:subscription_fee, name: "Special") }
+    let(:item) { create(:subscription_item) }
 
     it "without items" do
       visit admin_fee_path(fee)
@@ -116,7 +116,7 @@ describe Fee::Subscripsion do
 
       expect(page).to have_css(success, text: /successfully deleted/)
 
-      expect(Fee::Subscripsion.count).to eq 0
+      expect(Fee::Subscription.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
     end
 
@@ -128,8 +128,8 @@ describe Fee::Subscripsion do
       click_link delete
 
       expect(page).to have_css(failure, text: /can't be deleted/)
-      expect(Fee::Subscripsion.count).to eq 1
-      expect(Item::Subscripsion.count).to eq 1
+      expect(Fee::Subscription.count).to eq 1
+      expect(Item::Subscription.count).to eq 1
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 0
 
       item.fee.items.each { |item| item.destroy }
@@ -139,8 +139,8 @@ describe Fee::Subscripsion do
 
       expect(page).to have_css(success, text: /successfully deleted/)
 
-      expect(Fee::Subscripsion.count).to eq 0
-      expect(Item::Subscripsion.count).to eq 0
+      expect(Fee::Subscription.count).to eq 0
+      expect(Item::Subscription.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
     end
   end

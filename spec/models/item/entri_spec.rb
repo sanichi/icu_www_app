@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Item::Entri do
   context "relation to fee" do
     let(:item)   { create(:entri_item) }
-    let!(:other) { create(:subscripsion_item) }
+    let!(:other) { create(:subscription_item) }
 
     it "copied attributes" do
       expect(item.description).to eq item.fee.description(:full)

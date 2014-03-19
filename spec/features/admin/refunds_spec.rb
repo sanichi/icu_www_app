@@ -33,13 +33,13 @@ describe "Refunds" do
   let(:refund_ok)             { "Refund was successful" }
 
   context "multiple items" do
-    let!(:subscripsion_fee)  { create(:subscripsion_fee) }
+    let!(:subscription_fee)  { create(:subscription_fee) }
     let!(:entri_fee)         { create(:entri_fee) }
 
     before(:each) do
       visit xshop_path
 
-      click_link subscripsion_fee.description
+      click_link subscription_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
       fill_in first_name, with: player.first_name + force_submit
@@ -76,7 +76,7 @@ describe "Refunds" do
       expect(cart).to be_paid
       expect(cart.items.size).to eq 2
 
-      subscription = cart.items.detect { |item| item.type == "Item::Subscripsion" }
+      subscription = cart.items.detect { |item| item.type == "Item::Subscription" }
       entry = cart.items.detect { |item| item.type == "Item::Entri" }
       expect(subscription).to be_paid
       expect(entry).to be_paid
@@ -145,7 +145,7 @@ describe "Refunds" do
       expect(cart).to be_paid
       expect(cart.items.size).to eq 2
 
-      subscription = cart.items.detect { |item| item.type == "Item::Subscripsion" }
+      subscription = cart.items.detect { |item| item.type == "Item::Subscription" }
       entry = cart.items.detect { |item| item.type == "Item::Entri" }
       expect(subscription).to be_paid
       expect(entry).to be_paid

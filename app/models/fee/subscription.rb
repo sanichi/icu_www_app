@@ -1,4 +1,4 @@
-class Fee::Subscripsion < Fee
+class Fee::Subscription < Fee
   before_validation :set_dates
 
   validates :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, presence: true
@@ -17,7 +17,7 @@ class Fee::Subscripsion < Fee
   end
 
   def rolloverable?
-    Fee::Subscripsion.where(name: name, years: season.next.to_s).count == 0
+    Fee::Subscription.where(name: name, years: season.next.to_s).count == 0
   end
 
   def rollover

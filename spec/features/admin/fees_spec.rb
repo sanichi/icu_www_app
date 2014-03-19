@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Authorization for fees" do
   given(:ok_roles)        { %w[admin treasurer] }
   given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:fee)             { create(:subscripsion_fee) }
+  given(:fee)             { create(:subscription_fee) }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:button)          { I18n.t("edit") }

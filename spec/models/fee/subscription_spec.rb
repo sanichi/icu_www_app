@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Fee::Subscripsion do
-  let(:fee) { create(:subscripsion_fee, years: "2013-14", name: "Standard") }
+describe Fee::Subscription do
+  let(:fee) { create(:subscription_fee, years: "2013-14", name: "Standard") }
 
   context "implicitly set attributes" do
     it "sale start and end dates" do
@@ -37,7 +37,7 @@ describe Fee::Subscripsion do
   context "rollover" do
     it "#rolloverable?" do
       expect(fee.rolloverable?).to be_true
-      create(:subscripsion_fee, years: fee.season.next.to_s)
+      create(:subscription_fee, years: fee.season.next.to_s)
       expect(fee.rolloverable?).to be_false
     end
 

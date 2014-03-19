@@ -54,7 +54,7 @@ module ICU
         end
         puts "old lifetime records processed: #{lifetime_count}"
 
-        puts "new subscription records created: #{Item::Subscripsion.count}"
+        puts "new subscription records created: #{Item::Subscription.count}"
       end
 
       private
@@ -66,7 +66,7 @@ module ICU
         id = old_sub[:sub_id] || old_sub[:sof_id] || old_sub[:sfl_id]
         begin
           adjust(new_item, old_sub)
-          item = Item::Subscripsion.create!(new_item)
+          item = Item::Subscription.create!(new_item)
           puts "#{id} => #{item.id}"
         rescue => e
           report_error "could not convert subscription ID #{id}: #{e.message}"
@@ -150,7 +150,7 @@ module ICU
       end
 
       def existing_subscriptions?(force)
-        count = Item::Subscripsion.count
+        count = Item::Subscription.count
         case
         when count == 0
           false

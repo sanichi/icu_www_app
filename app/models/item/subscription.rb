@@ -1,4 +1,4 @@
-class Item::Subscripsion < Item
+class Item::Subscription < Item
   validates :start_date, :end_date, presence: true, unless: Proc.new { |i| i.description.match(/life/i) }
   validates :player, presence: true
   validate :no_duplicates
@@ -20,9 +20,9 @@ class Item::Subscripsion < Item
 
   def no_duplicates
     if player
-      if end_date.present? && Item::Subscripsion.active.where(player_id: player.id, end_date: end_date).where.not(id: id).count > 0
+      if end_date.present? && Item::Subscription.active.where(player_id: player.id, end_date: end_date).where.not(id: id).count > 0
         errors.add(:base, I18n.t("item.error.subscription.already_exists", member: player.name(id: true), season: season.to_s))
-      elsif Item::Subscripsion.active.where(player_id: player.id, start_date: nil, end_date: nil).where.not(id: id).count > 0
+      elsif Item::Subscription.active.where(player_id: player.id, start_date: nil, end_date: nil).where.not(id: id).count > 0
         errors.add(:base, I18n.t("item.error.subscription.lifetime_exists", member: player.name(id: true)))
       end
     end

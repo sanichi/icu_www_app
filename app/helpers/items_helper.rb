@@ -2,7 +2,7 @@ module ItemsHelper
   def item_type_menu(selected, default)
     types = [
       [t(default), ""],
-      [t("item.type.subscription"), "Item::Subscripsion"],
+      [t("item.type.subscription"), "Item::Subscription"],
       [t("item.type.entry"), "Item::Entri"],
     ]
     options_for_select(types, selected)
