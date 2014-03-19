@@ -1,4 +1,4 @@
-class Fee::Entri < Fee
+class Fee::Entry < Fee
   before_validation :default_attributes
 
   validates :start_date, :end_date, :sale_start, :sale_end, presence: true
@@ -22,7 +22,7 @@ class Fee::Entri < Fee
   end
 
   def rolloverable?
-    dups = Fee::Entri.where(name: name)
+    dups = Fee::Entry.where(name: name)
     dups = dups.where(year: year + 1) if year
     dups = dups.where(years: season.next.to_s) if years
     dups.count == 0

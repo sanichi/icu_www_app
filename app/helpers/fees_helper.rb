@@ -3,7 +3,7 @@ module FeesHelper
     types = [
       [default, ""],
       [t("fee.type.subscription"), "Fee::Subscription"],
-      [t("fee.type.entry"), "Fee::Entri"],
+      [t("fee.type.entry"), "Fee::Entry"],
     ]
     options_for_select(types, selected)
   end

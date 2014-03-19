@@ -3,7 +3,7 @@ module ItemsHelper
     types = [
       [t(default), ""],
       [t("item.type.subscription"), "Item::Subscription"],
-      [t("item.type.entry"), "Item::Entri"],
+      [t("item.type.entry"), "Item::Entry"],
     ]
     options_for_select(types, selected)
   end

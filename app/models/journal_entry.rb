@@ -12,7 +12,7 @@ class JournalEntry < ActiveRecord::Base
   validates :column, presence: true, if: Proc.new { |e| e.action == "update" }
   validates :ip, presence: true, unless: Proc.new { |e| e.source == "www1" }
   validates :source, inclusion: { in: %w[www1 www2] }
-  
+
   def journalable_type_id
     "#{journalable_type} #{journalable_id}"
   end

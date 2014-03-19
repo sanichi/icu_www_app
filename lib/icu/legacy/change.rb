@@ -63,7 +63,7 @@ module ICU
         params[:source] = "www1"
         params[:action] = "update"
         params[:journalable_type] = "Player"
-        
+
         # The person doing the change.
         if change[:pch_mem_id] > 0
           if user = @users[change[:pch_mem_id]]
@@ -76,11 +76,11 @@ module ICU
             raise "no user ID or name for change #{change[:pch_id]}"
           end
         end
-        
+
         # Never blanks but nils/nulls.
         params[:from] = nil if params[:from].blank?
         params[:to] = nil if params[:to].blank?
-        
+
         # The column being changed.
         params[:column] =
           case params[:column]
@@ -103,7 +103,7 @@ module ICU
           when "Work phome"    then "work_phone"    # spelling mistake in legacy DB
           else raise "can't handle column #{params[:column]}"
           end
-        
+
         # Further adjustments.
         if params[:column] == "status"
           params[:from] = params[:from] == "No" ? nil : "deceased"

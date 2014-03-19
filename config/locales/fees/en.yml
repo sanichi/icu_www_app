@@ -74,8 +74,8 @@ en:
     type:
       type: Type
       entries: Tournament Entry Fees
-      entri: Tournament Entry Fee
-      entris: Tournament Entry Fees
+      entry: Tournament Entry Fee
+      entrys: Tournament Entry Fees
       entry: Tournament Entry Fee
       subscription: ICU Subscription Fee
       subscription: ICU Subscription Fee

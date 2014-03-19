@@ -287,10 +287,10 @@ describe "Shop" do
     let!(:beginner)       { create(:player, latest_rating: 1000) }
     let!(:u16)            { create(:player, dob: Date.today.years_ago(15), joined: Date.today.years_ago(5)) }
     let!(:u10)            { create(:player, dob: Date.today.years_ago(9), joined: Date.today.years_ago(1)) }
-    let!(:entry_fee)      { create(:entri_fee) }
-    let!(:u1400_fee)      { create(:entri_fee, name: "Limerick U1400", max_rating: 1400) }
-    let!(:premier_fee)    { create(:entri_fee, name: "Kilbunny Premier", min_rating: 2000) }
-    let!(:junior_fee)     { create(:entri_fee, name: "Irish U16", max_age: 15, min_age: 13, age_ref_date: Date.today.months_ago(1)) }
+    let!(:entry_fee)      { create(:entry_fee) }
+    let!(:u1400_fee)      { create(:entry_fee, name: "Limerick U1400", max_rating: 1400) }
+    let!(:premier_fee)    { create(:entry_fee, name: "Kilbunny Premier", min_rating: 2000) }
+    let!(:junior_fee)     { create(:entry_fee, name: "Irish U16", max_age: 15, min_age: 13, age_ref_date: Date.today.months_ago(1)) }
 
     let(:too_high_error)  { I18n.t("item.error.rating.high", member: master.name, limit: u1400_fee.max_rating) }
     let(:too_low_error)   { I18n.t("item.error.rating.low", member: beginner.name, limit: premier_fee.min_rating) }
@@ -315,10 +315,10 @@ describe "Shop" do
       click_button add_to_cart
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.where(fee: entry_fee, player: player).count).to eq 1
+      expect(Item::Entry.inactive.where(fee: entry_fee, player: player).count).to eq 1
 
       cart = Cart.last
-      entry = Item::Entri.last
+      entry = Item::Entry.last
 
       expect(page).to have_xpath(xpath("th", item, member, cost))
       expect(page).to have_xpath(xpath("td", entry.description, player.name(id: true), entry.cost))
@@ -356,7 +356,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 1
 
       visit xshop_path
       click_link u1400_fee.description
@@ -369,7 +369,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.count).to eq 2
+      expect(Item::Entry.inactive.count).to eq 2
     end
 
     it "too weak", js: true do
@@ -392,7 +392,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 1
 
       visit xshop_path
       click_link premier_fee.description
@@ -405,7 +405,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.count).to eq 2
+      expect(Item::Entry.inactive.count).to eq 2
     end
 
     it "too old or young", js: true do
@@ -436,7 +436,7 @@ describe "Shop" do
       expect(page).to_not have_css(failure)
 
       expect(Cart.count).to eq 1
-      expect(Item::Entri.inactive.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 1
     end
   end
 end

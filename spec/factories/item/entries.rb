@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :entri_item, class: Item::Entri do
+  factory :entry_item, class: Item::Entry do
     player
-    association :fee, factory: :entri_fee
+    association :fee, factory: :entry_fee
     description    nil
     cost           nil
     start_date     nil
@@ -10,7 +10,7 @@ FactoryGirl.define do
     status         "unpaid"
     source         "www2"
 
-    factory :paid_entri_item do
+    factory :paid_entry_item do
       payment_method "stripe"
       status         "paid"
     end

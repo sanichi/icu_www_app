@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Fee::Entri do
+describe Fee::Entry do
   before(:each) do
     login("treasurer")
   end
@@ -34,7 +34,7 @@ describe Fee::Entri do
   let(:late_next_year)    { Date.today.next_year.at_end_of_year.days_ago(1) }
 
   describe "create" do
-    let(:fee) { create(:entri_fee) }
+    let(:fee) { create(:entry_fee) }
 
     it "new" do
       visit new_admin_fee_path
@@ -49,7 +49,7 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: "created")
 
-      fee = Fee::Entri.last
+      fee = Fee::Entry.last
       expect(fee.name).to eq "Bunratty Masters"
       expect(fee.amount).to eq 50.0
       expect(fee.discounted_amount).to be_nil
@@ -70,7 +70,7 @@ describe Fee::Entri do
     end
 
     it "duplicate" do
-      fee = create(:entri_fee)
+      fee = create(:entry_fee)
 
       visit new_admin_fee_path
       select entry, from: type
@@ -103,7 +103,7 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: "created")
 
-      expect(Fee::Entri.count).to eq 2
+      expect(Fee::Entry.count).to eq 2
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -114,7 +114,7 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: "created")
 
-      expect(Fee::Entri.count).to eq 2
+      expect(Fee::Entry.count).to eq 2
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
 
       visit admin_fee_path(fee)
@@ -144,7 +144,7 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: "created")
 
-      fee = Fee::Entri.last
+      fee = Fee::Entry.last
       expect(fee.name).to eq "Bangor U12"
       expect(fee.amount).to eq 35.0
       expect(fee.discounted_amount).to eq 30.0
@@ -217,7 +217,7 @@ describe Fee::Entri do
   end
 
   describe "edit" do
-    let(:fee) { create(:entri_fee, name: "Bunratty Masters") }
+    let(:fee) { create(:entry_fee, name: "Bunratty Masters") }
 
     it "amount" do
       visit admin_fee_path(fee)
@@ -233,8 +233,8 @@ describe Fee::Entri do
   end
 
   describe "delete" do
-    let(:fee) { create(:entri_fee, name: "Bunratty Special") }
-    let(:item) { create(:entri_item) }
+    let(:fee) { create(:entry_fee, name: "Bunratty Special") }
+    let(:item) { create(:entry_item) }
 
     it "without items" do
       visit admin_fee_path(fee)
@@ -242,7 +242,7 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: /successfully deleted/)
 
-      expect(Fee::Entri.count).to eq 0
+      expect(Fee::Entry.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
     end
 
@@ -254,8 +254,8 @@ describe Fee::Entri do
       click_link delete
 
       expect(page).to have_css(failure, text: /can't be deleted/)
-      expect(Fee::Entri.count).to eq 1
-      expect(Item::Entri.count).to eq 1
+      expect(Fee::Entry.count).to eq 1
+      expect(Item::Entry.count).to eq 1
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 0
 
       item.fee.items.each { |item| item.destroy }
@@ -265,8 +265,8 @@ describe Fee::Entri do
 
       expect(page).to have_css(success, text: /successfully deleted/)
 
-      expect(Fee::Entri.count).to eq 0
-      expect(Item::Entri.count).to eq 0
+      expect(Fee::Entry.count).to eq 0
+      expect(Item::Entry.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
     end
   end
