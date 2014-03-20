@@ -9,7 +9,7 @@ IcuWwwApp::Application.routes.draw do
     get page => "pages##{page}"
   end
   %w[shop cart card charge confirm completed].each do |page|
-    match page => "paiments##{page}", via: page == "charge" ? :post : :get
+    match page => "payments##{page}", via: page == "charge" ? :post : :get
   end
   %w[account preferences update_preferences].each do |page|
     match "#{page}/:id" => "users##{page}", via: page.match(/^update/) ? :post : :get, as: page

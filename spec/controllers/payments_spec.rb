@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe PaimentsController do
+describe PaymentsController do
   context "no cart exists" do
     it "cart page creates one" do
       expect(Cart.count).to eq 0

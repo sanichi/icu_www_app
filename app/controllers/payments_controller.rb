@@ -1,7 +1,6 @@
 class PaymentsController < ApplicationController
   def shop
-    @subscription_fees = SubscriptionFee.on_sale.ordered
-    @entry_fees = EntryFee.on_sale.ordered
+    @fees = Fee.for_sale
     @completed_carts = completed_carts
   end
 
@@ -10,11 +9,11 @@ class PaymentsController < ApplicationController
   end
 
   def card
-    redirect_to shop_path unless check_cart { !@cart.cart_items.empty? }
+    redirect_to shop_path unless check_cart { !@cart.items.empty? }
   end
 
   def charge
-    if check_cart { !@cart.cart_items.empty? && request.xhr? }
+    if check_cart { !@cart.items.empty? && request.xhr? }
       @cart.purchase(params, current_user)
       if @cart.paid?
         complete_cart(@cart.id)
