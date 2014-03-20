@@ -1,5 +1,5 @@
 class Cart < ActiveRecord::Base
-  def self.statuses; %w[unpaid paid part_refunded refunded] end; include Payable
+  include Payable
   extend Util::Pagination
 
   has_many :items, dependent: :destroy

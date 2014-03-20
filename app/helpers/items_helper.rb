@@ -15,7 +15,7 @@ module ItemsHelper
   end
 
   def item_status_menu(selected, default)
-    statuses = Item::statuses.map { |s| [t("shop.payment.status.#{s}"), s] }
+    statuses = Item::STATUSES.map { |s| [t("shop.payment.status.#{s}"), s] }
     statuses.unshift [t(default), ""]
     options_for_select(statuses, selected)
   end

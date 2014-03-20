@@ -20,7 +20,7 @@ module PaymentsHelper
   end
 
   def cart_status_menu(selected, default="any")
-    counties = Cart.statuses.map { |s| [t("shop.payment.status.#{s}"), s] }
+    counties = Cart::STATUSES.map { |s| [t("shop.payment.status.#{s}"), s] }
     counties.unshift [t(default), ""]
     options_for_select(counties, selected)
   end

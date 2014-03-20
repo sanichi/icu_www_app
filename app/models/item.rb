@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   extend Util::Pagination
-  def self.statuses; %w[unpaid paid refunded] end; include Payable
+  include Payable
 
   belongs_to :player
   belongs_to :fee
@@ -8,6 +8,7 @@ class Item < ActiveRecord::Base
 
   before_validation :copy_fee
 
+  validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
