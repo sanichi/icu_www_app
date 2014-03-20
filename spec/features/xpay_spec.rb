@@ -8,7 +8,7 @@ describe "Pay" do
   let(:first_name)            { I18n.t("player.first_name") }
   let(:last_name)             { I18n.t("player.last_name") }
   let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
-  let(:xshop)                 { 'x' + I18n.t("shop.shop") }
+  let(:xshop)                 { I18n.t("shop.shop") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:pay)                   { I18n.t("shop.payment.card.pay") }
