@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   extend Util::Pagination
-  def self.statuses; %w[unpaid paid refunded] end; include Payible
+  def self.statuses; %w[unpaid paid refunded] end; include Payable
 
   belongs_to :player
   belongs_to :fee
