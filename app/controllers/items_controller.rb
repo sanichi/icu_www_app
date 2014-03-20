@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
     if @fee
       @item = Item.new(fee: @fee, type: @fee.subtype(:item)).becomes(Item)
     else
-      redirect_to xshop_path
+      redirect_to shop_path
     end
   end
 
@@ -15,7 +15,7 @@ class ItemsController < ApplicationController
 
     if cart.does_not_already_have?(@item) && @item.save
       cart.items << @item
-      redirect_to xcart_path(cart)
+      redirect_to cart_path(cart)
     else
       flash_first_base_error(@item)
       @item = @item.becomes(Item)
@@ -28,9 +28,9 @@ class ItemsController < ApplicationController
       item.id = params[:id].to_i
     end
     item.destroy
-    redirect_to xcart_path
+    redirect_to cart_path
   rescue
-    redirect_to xshop_path
+    redirect_to shop_path
   end
 
   private

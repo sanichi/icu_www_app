@@ -4,7 +4,7 @@ describe PaimentsController do
   context "no cart exists" do
     it "cart page creates one" do
       expect(Cart.count).to eq 0
-      get "xcart"
+      get "cart"
       expect(response).to_not be_redirect
       expect(Cart.count).to eq 1
       cart = Cart.last
@@ -14,16 +14,16 @@ describe PaimentsController do
 
     it "card page gets a redirect and doesn't set the session" do
       expect(Cart.count).to eq 0
-      get "xcard"
-      expect(response).to redirect_to xshop_path
+      get "card"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 0
       expect(session[:cart_id]).to be_nil
     end
 
     it "confirm page gets a redirect and doesn't set the session" do
       expect(Cart.count).to eq 0
-      get "xconfirm"
-      expect(response).to redirect_to xshop_path
+      get "confirm"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 0
       expect(session[:cart_id]).to be_nil
     end
@@ -36,7 +36,7 @@ describe PaimentsController do
 
     it "cart page creates a new cart" do
       expect(Cart.count).to eq 1
-      get "xcart"
+      get "cart"
       expect(response).to_not be_redirect
       expect(Cart.count).to eq 2
       expect(session[:cart_id]).to eq @cart_id + 1
@@ -44,16 +44,16 @@ describe PaimentsController do
 
     it "card page gets a redirect and doesn't set the session" do
       expect(Cart.count).to eq 1
-      get "xcard"
-      expect(response).to redirect_to xshop_path
+      get "card"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 1
       expect(session[:cart_id]).to be_nil
     end
 
     it "confirm page gets a redirect and doesn't set the session" do
       expect(Cart.count).to eq 1
-      get "xconfirm"
-      expect(response).to redirect_to xshop_path
+      get "confirm"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 1
       expect(session[:cart_id]).to be_nil
     end
@@ -67,7 +67,7 @@ describe PaimentsController do
 
     it "cart page shows the cart" do
       expect(Cart.count).to eq 1
-      get "xcart"
+      get "cart"
       expect(response).to_not be_redirect
       expect(Cart.count).to eq 1
       expect(session[:cart_id]).to eq @cart_id
@@ -75,16 +75,16 @@ describe PaimentsController do
 
     it "card page gets a redirect and doesn't alter the session" do
       expect(Cart.count).to eq 1
-      get "xcard"
-      expect(response).to redirect_to xshop_path
+      get "card"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 1
       expect(session[:cart_id]).to eq @cart_id
     end
 
     it "confirm page gets a redirect and doesn't alter the session" do
       expect(Cart.count).to eq 1
-      get "xconfirm"
-      expect(response).to redirect_to xshop_path
+      get "confirm"
+      expect(response).to redirect_to shop_path
       expect(Cart.count).to eq 1
       expect(session[:cart_id]).to eq @cart_id
     end
@@ -114,7 +114,7 @@ describe PaimentsController do
 
       it "cart page clears the session and creates a new empty cart" do
         expect(Cart.count).to eq 1
-        get "xcart"
+        get "cart"
         expect(response).to_not be_redirect
         expect(Cart.count).to eq 2
         cart = Cart.last
@@ -125,16 +125,16 @@ describe PaimentsController do
 
       it "card page clears the current cart and gets a redirect" do
         expect(Cart.count).to eq 1
-        get "xcard"
-        expect(response).to redirect_to xshop_path
+        get "card"
+        expect(response).to redirect_to shop_path
         expect(Cart.count).to eq 1
         expect(session[:cart_id]).to eq nil
       end
 
       it "confirm page gets a redirect but doesn't alter the current cart" do
         expect(Cart.count).to eq 1
-        get "xconfirm"
-        expect(response).to redirect_to xshop_path
+        get "confirm"
+        expect(response).to redirect_to shop_path
         expect(Cart.count).to eq 1
         expect(session[:cart_id]).to eq @cart_id
       end
@@ -147,7 +147,7 @@ describe PaimentsController do
 
       it "cart page creates a new empty unpaid cart" do
         expect(Cart.count).to eq 1
-        get "xcart"
+        get "cart"
         expect(response).to_not be_redirect
         expect(Cart.count).to eq 2
         cart = Cart.last
@@ -158,15 +158,15 @@ describe PaimentsController do
 
       it "card page gets a redirect and leaves the current cart alone" do
         expect(Cart.count).to eq 1
-        get "xcard"
-        expect(response).to redirect_to xshop_path
+        get "card"
+        expect(response).to redirect_to shop_path
         expect(Cart.count).to eq 1
         expect(session[:cart_id]).to eq nil
       end
 
       it "confirm page doesn't get a redirect and doesn't alter the current cart" do
         expect(Cart.count).to eq 1
-        get "xconfirm"
+        get "confirm"
         expect(response).to_not be_redirect
         expect(Cart.count).to eq 1
         expect(session[:cart_id]).to eq nil

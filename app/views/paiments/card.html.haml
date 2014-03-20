@@ -6,7 +6,7 @@
 - content_for :javascript do
   = render "card.js"
 
-= form_tag xcharge_path(format: "js"), id: "icu_form", remote: true do
+= form_tag charge_path(format: "js"), id: "icu_form", remote: true do
   = hidden_field_tag :stripe_token
   = hidden_field_tag :payment_name
   = hidden_field_tag :confirmation_email
@@ -15,7 +15,7 @@
   - locals = { col: "sm", pad: 5, width: 3, param: nil}
   .row
     .col-sm-12.text-center
-      = link_to xcart_path, class: "btn btn-info btn-md" do
+      = link_to cart_path, class: "btn btn-info btn-md" do
         = succeed(":") do
           = t("shop.payment.card.amount_due")
         = euros(current_cart.total_cost)
@@ -34,7 +34,7 @@
     .col-sm-5
     .col-sm-7
       = button_tag t("shop.payment.card.pay"), type: "submit", class: "btn btn-success btn-md"
-      = link_to t("cancel"), xcart_path, class: "btn btn-info btn-md", id: "cancel_button"
+      = link_to t("cancel"), cart_path, class: "btn btn-info btn-md", id: "cancel_button"
   %hr
   #payment_error.row{style: "display: none"}
     .col-sm-12

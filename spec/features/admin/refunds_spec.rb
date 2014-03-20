@@ -37,7 +37,7 @@ describe "Refunds" do
     let!(:entry_fee)         { create(:entry_fee) }
 
     before(:each) do
-      visit xshop_path
+      visit shop_path
 
       click_link subscription_fee.description
       click_button select_member

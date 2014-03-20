@@ -2,8 +2,8 @@
 
 .row
   .col-md-12.text-center
-    = link_to t("shop.cart.continue"), xshop_path, class: "btn btn-info btn-md"
+    = link_to t("shop.cart.continue"), shop_path, class: "btn btn-info btn-md"
     - if current_cart && current_cart.items.count > 0
-      = link_to t("shop.cart.checkout"), xcard_path, class: "btn btn-success btn-md"
+      = link_to t("shop.cart.checkout"), card_path, class: "btn btn-success btn-md"
 %hr
 = render "items", cart: @cart, deletable: true

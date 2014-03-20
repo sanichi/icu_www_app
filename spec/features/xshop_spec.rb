@@ -26,7 +26,7 @@ describe "Shop" do
     it "create before viewing" do
       expect(Cart.count).to eq 0
 
-      visit xcart_path
+      visit cart_path
       expect(page).to have_xpath(xpath("th", item, member, cost))
       expect(page).to have_xpath(xpath("th", total, "0.00"))
 
@@ -53,7 +53,7 @@ describe "Shop" do
     let(:too_young_error) { I18n.t("item.error.age.young", member: player.name, date: over_65_sub.age_ref_date.to_s, limit: over_65_sub.min_age) }
 
     it "add", js: true do
-      visit xshop_path
+      visit shop_path
       expect(page).to_not have_link(cart_link)
       click_link standard_sub.description
 
@@ -85,14 +85,14 @@ describe "Shop" do
       expect(subscription.fee).to eq standard_sub
       expect(subscription.player).to eq player
 
-      visit xshop_path
+      visit shop_path
       expect(page).to have_link(cart_link)
     end
 
     it "blocked by lifetime subscription", js: true do
       expect(lifetime_sub.player).to eq player
 
-      visit xshop_path
+      visit shop_path
       click_link standard_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -109,7 +109,7 @@ describe "Shop" do
     it "blocked by existing subscription", js: true do
       expect(existing_sub.player).to eq player
 
-      visit xshop_path
+      visit shop_path
       click_link standard_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -124,7 +124,7 @@ describe "Shop" do
     end
 
     it "blocked by cart duplicate", js: true do
-      visit xshop_path
+      visit shop_path
       click_link standard_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -137,7 +137,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Subscription.inactive.count).to eq 1
 
-      visit xshop_path
+      visit shop_path
       click_link unemployed_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -152,7 +152,7 @@ describe "Shop" do
     end
 
     it "too old", js: true do
-      visit xshop_path
+      visit shop_path
       click_link under_12_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -178,7 +178,7 @@ describe "Shop" do
     end
 
     it "too young", js: true do
-      visit xshop_path
+      visit shop_path
       click_link over_65_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -204,7 +204,7 @@ describe "Shop" do
     end
 
     it "delete", js: true do
-      visit xshop_path
+      visit shop_path
       click_link standard_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -217,7 +217,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Subscription.inactive.count).to eq 1
 
-      visit xshop_path
+      visit shop_path
       click_link unemployed_sub.description
       click_button select_member
       fill_in last_name, with: player2.last_name + force_submit
@@ -248,7 +248,7 @@ describe "Shop" do
     end
 
     it "delete from other cart", js: true do
-      visit xshop_path
+      visit shop_path
       click_link standard_sub.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -298,7 +298,7 @@ describe "Shop" do
     let(:too_young_error) { I18n.t("item.error.age.young", member: u10.name, date: junior_fee.age_ref_date.to_s, limit: junior_fee.min_age) }
 
     it "add", js: true do
-      visit xshop_path
+      visit shop_path
       expect(page).to_not have_link(cart_link)
       click_link entry_fee.description
 
@@ -324,7 +324,7 @@ describe "Shop" do
       expect(page).to have_xpath(xpath("td", entry.description, player.name(id: true), entry.cost))
       expect(page).to have_xpath(xpath("th", total, entry.cost))
 
-      visit xshop_path
+      visit shop_path
       expect(page).to have_link(cart_link)
 
       expect(cart).to be_unpaid
@@ -332,12 +332,12 @@ describe "Shop" do
       expect(entry.fee).to eq entry_fee
       expect(entry.player).to eq player
 
-      visit xshop_path
+      visit shop_path
       expect(page).to have_link(cart_link)
     end
 
     it "too strong", js: true do
-      visit xshop_path
+      visit shop_path
       click_link u1400_fee.description
       click_button select_member
       fill_in last_name, with: master.last_name + force_submit
@@ -358,7 +358,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Entry.inactive.count).to eq 1
 
-      visit xshop_path
+      visit shop_path
       click_link u1400_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -373,7 +373,7 @@ describe "Shop" do
     end
 
     it "too weak", js: true do
-      visit xshop_path
+      visit shop_path
       click_link premier_fee.description
       click_button select_member
       fill_in last_name, with: beginner.last_name + force_submit
@@ -394,7 +394,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Entry.inactive.count).to eq 1
 
-      visit xshop_path
+      visit shop_path
       click_link premier_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -409,7 +409,7 @@ describe "Shop" do
     end
 
     it "too old or young", js: true do
-      visit xshop_path
+      visit shop_path
       click_link junior_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit

@@ -1,18 +1,18 @@
 class PaimentsController < ApplicationController
-  def xshop
+  def shop
     @fees = Fee.for_sale
     @completed_carts = completed_carts
   end
 
-  def xcart
-    redirect_to xshop_path unless check_cart(:create)
+  def cart
+    redirect_to shop_path unless check_cart(:create)
   end
 
-  def xcard
-    redirect_to xshop_path unless check_cart { !@cart.items.empty? }
+  def card
+    redirect_to shop_path unless check_cart { !@cart.items.empty? }
   end
 
-  def xcharge
+  def charge
     if check_cart { !@cart.items.empty? && request.xhr? }
       @cart.purchase(params, current_user)
       if @cart.paid?
@@ -27,17 +27,17 @@ class PaimentsController < ApplicationController
       if request.xhr?
         render nothing: true
       else
-        redirect_to xshop_path
+        redirect_to shop_path
       end
     end
   end
 
-  def xconfirm
+  def confirm
     @cart = last_completed_cart
-    redirect_to xshop_path unless @cart
+    redirect_to shop_path unless @cart
   end
 
-  def xcompleted
+  def completed
     @completed_carts = completed_carts
   end
 

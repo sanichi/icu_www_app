@@ -8,7 +8,7 @@ describe "Pay" do
   let(:first_name)            { I18n.t("player.first_name") }
   let(:last_name)             { I18n.t("player.last_name") }
   let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
-  let(:xshop)                 { I18n.t("shop.shop") }
+  let(:shop)                 { I18n.t("shop.shop") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:pay)                   { I18n.t("shop.payment.card.pay") }
@@ -68,7 +68,7 @@ describe "Pay" do
     let!(:subscription_fee)  { create(:subscription_fee) }
 
     before(:each) do
-      visit xshop_path
+      visit shop_path
       click_link subscription_fee.description
       click_button select_member
       fill_in last_name, with: player.last_name + force_submit
@@ -158,7 +158,7 @@ describe "Pay" do
       expect(ActionMailer::Base.deliveries).to be_empty
 
       login(user)
-      click_link xshop
+      click_link shop
       click_link current
       click_link checkout
 

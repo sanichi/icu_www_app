@@ -4,14 +4,14 @@
   .row
     .col-sm-12.text-center
       - if current_cart
-        = link_to xcart_path, class: "btn btn-info btn-md" do
+        = link_to cart_path, class: "btn btn-info btn-md" do
           = succeed(":") do
             = t("shop.cart.current")
           = succeed(",") do
             = t("shop.cart.item.items", count: current_cart.items.count)
           = euros(current_cart.total_cost)
       - if @completed_carts.present?
-        = link_to t("shop.cart.completed"), xcompleted_path, class: "btn btn-info btn-md"
+        = link_to t("shop.cart.completed"), completed_path, class: "btn btn-info btn-md"
 %hr
 - priority = Hash.new(100).merge({ "subscriptions" => 1, "entrys" => 2 })
 - @fees.sort_by{ |k,v| priority[k] }.each do |type, fees|
