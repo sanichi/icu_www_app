@@ -8,7 +8,7 @@ describe "Pay" do
   let(:first_name)            { I18n.t("player.first_name") }
   let(:last_name)             { I18n.t("player.last_name") }
   let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
-  let(:shop)                 { I18n.t("shop.shop") }
+  let(:shop)                  { I18n.t("shop.shop") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:pay)                   { I18n.t("shop.payment.card.pay") }
@@ -24,16 +24,14 @@ describe "Pay" do
   let(:bad_email)             { I18n.t("shop.payment.error.email") }
 
   let(:number_id)             { "number" }
-  let(:month_id)              { "exp-month" }
-  let(:year_id)               { "exp-year" }
+  let(:expiry_id)             { "expiry" }
   let(:email_id)              { "confirmation_email" }
   let(:name_id)               { "payment_name" }
   let(:cvc_id)                { "cvc" }
 
   let(:stripe)                { "stripe" }
   let(:number)                { "4242 4242 4242 4242" }
-  let(:mm)                    { "01" }
-  let(:yyyy)                  { (Date.today.year + 2).to_s }
+  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:cvc)                   { "123" }
   let(:force_submit)          { "\n" }
 
@@ -45,10 +43,9 @@ describe "Pay" do
   let(:incorrect_cvc)         { "Your card's security code is incorrect." }
 
   def fill_in_all_and_click_pay(opt = {})
-    opt.reverse_merge!(number: number, mm: mm, yyyy: yyyy, cvc: cvc, name: player.name, email: player.email)
+    opt.reverse_merge!(number: number, expiry: expiry, cvc: cvc, name: player.name, email: player.email)
     fill_in number_id, with: opt[:number] if opt[:number]
-    select opt[:mm], from: month_id       if opt[:mm]
-    select opt[:yyyy], from: year_id      if opt[:yyyy]
+    fill_in expiry_id, with: opt[:expiry] if opt[:expiry]
     fill_in cvc_id, with: opt[:cvc]       if opt[:cvc]
     fill_in name_id, with: opt[:name]     if opt[:name]
     fill_in email_id, with: opt[:email]   if opt[:email]
@@ -142,7 +139,7 @@ describe "Pay" do
       expect(payment_error.confirmation_email).to eq player.email
       expect(ActionMailer::Base.deliveries).to be_empty
 
-      fill_in_number_and_click_pay("4000000000000069")
+      fill_in_number_and_click_pay(number: "4000000000000069")
       expect(page).to have_css(error, text: gateway_error(expired_card))
       subscription.reload
       expect(subscription).to be_unpaid
@@ -192,10 +189,12 @@ describe "Pay" do
       fill_in number_id, with: number
       click_button pay
       expect(page).to have_css(error, text: bad_expiry)
+      fill_in expiry_id, with: "99"
+      click_button pay
+      expect(page).to have_css(error, text: bad_expiry)
 
       # CVC.
-      select mm, from: month_id
-      select yyyy, from: year_id
+      fill_in expiry_id, with: expiry
       click_button pay
       expect(page).to have_css(error, text: bad_cvc)
       fill_in cvc_id, with: "1"

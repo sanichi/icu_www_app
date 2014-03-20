@@ -32,7 +32,7 @@ en:
       time: Payment completed at
       card:
         amount_due: Amount due
-        expiration: Expiration date
+        expiration: Expiration date (MM/YYYY)
         mm: mm
         name: Name on card
         number: Card number

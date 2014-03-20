@@ -13,15 +13,13 @@ describe "Refunds" do
   let(:completed)             { I18n.t("shop.payment.completed") }
 
   let(:number_id)             { "number" }
-  let(:month_id)              { "exp-month" }
-  let(:year_id)               { "exp-year" }
+  let(:expiry_id)             { "expiry" }
   let(:email_id)              { "confirmation_email" }
   let(:name_id)               { "payment_name" }
   let(:cvc_id)                { "cvc" }
 
   let(:number)                { "4242 4242 4242 4242" }
-  let(:mm)                    { "01" }
-  let(:yyyy)                  { (Date.today.year + 2).to_s }
+  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:cvc)                   { "123" }
   let(:force_submit)          { "\n" }
 
@@ -56,8 +54,7 @@ describe "Refunds" do
 
       click_link checkout
       fill_in number_id, with: number
-      select mm, from: month_id
-      select yyyy, from: year_id
+      fill_in expiry_id, with: expiry
       fill_in cvc_id, with: cvc
       fill_in name_id, with: player.name
       fill_in email_id, with: player.email

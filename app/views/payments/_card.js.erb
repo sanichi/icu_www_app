@@ -16,17 +16,26 @@ $(function() {
     }
     return false;
   });
+  $('#expiry').payment('formatCardExpiry');
   $('#number').payment('formatCardNumber');
   $('#cvc').payment('formatCardCVC');
 });
 
 function clientErrors() {
   if (!$.payment.validateCardNumber($('#number').val()))                          return clientError('number');
+  splitExpiry();
   if (!$.payment.validateCardExpiry($('#exp-month').val(), $('#exp-year').val())) return clientError('expiry');
   if (!$.payment.validateCardCVC($('#cvc').val()))                                return clientError('cvc');
   if (!validName())                                                               return clientError('name');
   if (!validEmail())                                                              return clientError('email');
   return false;
+}
+
+function splitExpiry()
+{
+  var expiry = $.payment.cardExpiryVal($('#expiry').val());
+  $('#exp-month').val(expiry['month']);
+  $('#exp-year').val(expiry['year']);
 }
 
 function validName() {
