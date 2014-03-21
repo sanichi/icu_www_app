@@ -1,0 +1,159 @@
+#!/usr/local/bin/perl
+use strict;
+use Getopt::Std;
+use File::Find;
+use YAML::XS qw/LoadFile/;
+
+# Data.
+my @dirs = qw[app/models app/views app/helpers spec];
+my %definitions;
+my %missing;
+my %duplicate_translations;
+
+# Options.
+my %opt;
+my $opt = 'hmtd';
+getopts($opt, \%opt);
+sub help
+{
+    print <<EOH;
+$0 [$opt]
+print stats about locale strings used in this app
+  -h  print this help
+  -m  list missing codes
+  -t  list translations
+  -d  list duplicate translations
+EOH
+    exit 0;
+}
+&help() if $opt{h};
+
+# Sanity check.
+check_current_dir();
+
+# Main program.
+find(\&gather_definitions, "config/locales");
+find(\&gather_usages, @dirs);
+list_missing() if $opt{m};
+list_duplicates() if $opt{d};
+list_translations() if $opt{t};
+
+#
+# Utilities.
+#
+
+# Check we're in a suitable working directory.
+sub check_current_dir
+{
+    my @absent;
+    foreach my $dir (@dirs, "config/locales")
+    {
+        push @absent, $dir unless -d $dir;
+    }
+    die sprintf("doesn't look like you're in an app directory (where %s: %s)\n", @absent == 1 ? 'is' : 'are', join(', ', @absent)) if @absent;
+}
+
+# Gather the definitions.
+sub gather_definitions
+{
+    if (-f && /\.yml$/)
+    {
+        my $hash = LoadFile($_);
+        &register_definitions($hash, $File::Find::name);
+    }
+
+    @{$duplicate_translations{$_}} == 1 && delete $duplicate_translations{$_} for keys %duplicate_translations;
+}
+sub register_definitions
+{
+    my ($hash, $dir) = @_;
+
+    # A string to indicate the location of the definitions being registered.
+    $dir =~ s/config\/locales\///;
+    my @dir = split(/\//, $dir);
+    pop @dir;
+    $dir = join('/', @dir) || 'default';
+
+    # Recursively register each definition in the hash.
+    &register_definition($hash, $dir);
+}
+sub register_definition
+{
+    my ($data, $dir, @keys) = @_;
+
+    if (ref $data eq 'HASH')
+    {
+        foreach my $key (keys(%{$data}))
+        {
+            &register_definition($data->{$key}, $dir, @keys, $key);
+        }
+    }
+    else
+    {
+        shift @keys; # don't need 'en'
+        my $keys = join('.', @keys);
+        $definitions{$keys} = { tran => $data, dir => $dir, hits => 0 };
+        push @{$duplicate_translations{$data}}, $keys;
+    }
+}
+
+# List definitions.
+sub list_translations
+{
+    my $max = 0; $max < length($_) && ($max = length($_)) for keys %definitions;
+    foreach my $code (sort keys %definitions)
+    {
+        my $def = $definitions{$code};
+        printf "%-${max}s %-16s %3d %s\n", $code, $def->{dir}, $def->{hits}, $def->{tran};
+    }
+}
+
+# Gather the usages.
+sub gather_usages
+{
+    if (-f && /\.(rb|haml|erb)$/)
+    {
+        die "can't open $Find::File::name" unless open FILE, $_;
+        foreach my $line (<FILE>)
+        {
+            if ($line =~ /\bt\("([._a-z0-9]+)"\)/i)
+            {
+                my $code = $1;
+                if ($definitions{$code})
+                {
+                    $definitions{$code}->{hits}++;
+                }
+                else
+                {
+                    push @{$missing{$code}}, $File::Find::name;
+                }
+            }
+        }
+        close FILE;
+    }
+}
+
+# List codes which result in the same tramslation.
+sub list_duplicates
+{
+    printf "duplicate translations: %d\n", scalar(keys(%duplicate_translations));
+    my $max = 0; $max < length($_) && ($max = length($_)) for keys %duplicate_translations;
+    foreach my $trans (sort keys %duplicate_translations)
+    {
+        my @codes = sort @{$duplicate_translations{$trans}};
+        printf "  %-${max}s %s\n", $trans, join(', ', @codes);
+    }
+}
+
+# List used codes which don't appear to be used.
+# Warning: this will include those using dynamic codes which are actually in use (e.g. t("cart.status.#{status}")).
+sub list_missing
+{
+    printf "missing codes: %d\n", scalar(keys(%missing));
+    my $max = 0; $max < length($_) && ($max = length($_)) for keys %missing;
+    foreach my $code (sort keys %missing)
+    {
+        my @files = sort @{$missing{$code}};
+        printf "  %-${max}s %s\n", $code, join(', ', @files);
+    }
+}
