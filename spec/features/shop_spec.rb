@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe "Shop" do
-  let(:add_to_cart)     { I18n.t("shop.cart.item.add") }
+  let(:add_to_cart)     { I18n.t("item.add") }
   let(:cart_link)       { I18n.t("shop.cart.current") + ":" }
-  let(:cost)            { I18n.t("shop.cart.item.cost") }
+  let(:cost)            { I18n.t("item.cost") }
   let(:first_name)      { I18n.t("player.first_name") }
-  let(:item)            { I18n.t("shop.cart.item.item") }
+  let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
-  let(:member)          { I18n.t("shop.cart.item.member") }
-  let(:reselect_member) { I18n.t("shop.cart.item.reselect_member") }
-  let(:select_member)   { I18n.t("shop.cart.item.select_member") }
+  let(:member)          { I18n.t("member") }
+  let(:reselect_member) { I18n.t("item.reselect_member") }
+  let(:select_member)   { I18n.t("item.select_member") }
   let(:total)           { I18n.t("shop.cart.total") }
 
   let(:delete)          { "✘" }

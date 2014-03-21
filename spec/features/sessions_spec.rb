@@ -13,7 +13,7 @@ feature "Sessions" do
   given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" }.sample(2).sort.join(" ") }
   given(:sign_in_button)  { I18n.t("session.sign_in") }
   given(:sign_in_title)   { I18n.t("session.sign_in") }
-  given(:email_text)      { I18n.t("user.email") }
+  given(:email_text)      { I18n.t("email") }
   given(:password_text)   { I18n.t("user.password") }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }

@@ -12,17 +12,6 @@ en:
       items: Purchases
       show: Show cart
       total: Total cost
-      item:
-        add: Add to Cart
-        confirm_delete: Sure you want to delete this item?
-        cost: Cost
-        item: Item
-        member: Member
-        reselect_member: Reselect Member
-        select_member: Select Member
-        items:
-          one: 1 item
-          other: "%{count} items"
     payment:
       confirmation_email: Confirmation email
       confirmation_email_to: Confirmation email sent to

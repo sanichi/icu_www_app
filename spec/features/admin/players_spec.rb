@@ -62,8 +62,8 @@ feature "Create players" do
   given(:male)       { I18n.t("player.gender.M") }
   given(:female)     { I18n.t("player.gender.F") }
   given(:federation) { I18n.t("player.federation") }
-  given(:email)      { I18n.t("player.email") }
-  given(:address)    { I18n.t("player.address") }
+  given(:email)      { I18n.t("email") }
+  given(:address)    { I18n.t("address") }
   given(:home)       { I18n.t("player.phone.home") }
   given(:mobile)     { I18n.t("player.phone.mobile") }
   given(:work)       { I18n.t("player.phone.work") }
@@ -129,7 +129,7 @@ feature "Create players" do
     expect(player.status).to eq "active"
     expect(player.player_id).to be_nil
   end
-  
+
   scenario "join date and dob should be consistent" do
     click_link "New Player"
     fill_in first_name, with: "Penny"
@@ -151,7 +151,7 @@ feature "Create players" do
     click_button save
     expect(page).to have_css(help, text: "future")
   end
-  
+
   scenario "create a guest user" do
     click_link "New Player"
     fill_in first_name, with: "Guest"

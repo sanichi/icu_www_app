@@ -1,7 +1,6 @@
 en:
   club:
     active: Active
-    address: Address
     city: City
     club: Club
     clubs: Clubs
@@ -9,7 +8,6 @@ en:
     co: Co.
     county: County
     district: District
-    email: Email
     inactive: Inactive
     lat: Latitude
     location: Location

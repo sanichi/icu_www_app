@@ -5,7 +5,7 @@
     = form_tag sessions_path, class: "form-horizontal", role: "form" do
       %fieldset
         - locals = { col: "sm", pad: 4, width: 4 }
-        = render "utils/text_field_tag", locals.merge(param: :email, text: t("user.email"))
+        = render "utils/text_field_tag", locals.merge(param: :email, text: t("email"))
         = render "utils/text_field_tag", locals.merge(param: :password, text: t("user.password"), type: "password")
         %hr
         = submit_tag t("session.sign_in"), class: "btn btn-primary"

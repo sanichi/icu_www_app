@@ -5,14 +5,14 @@ use File::Find;
 use YAML::XS qw/LoadFile/;
 
 # Data.
-my @dirs = qw[app/models app/views app/helpers spec];
+my @dirs = qw[app spec lib];
 my %definitions;
 my %missing;
 my %duplicate_translations;
 
 # Options.
 my %opt;
-my $opt = 'hmtd';
+my $opt = 'hmtdA';
 getopts($opt, \%opt);
 sub help
 {
@@ -23,6 +23,7 @@ print stats about locale strings used in this app
   -m  list missing codes
   -t  list translations
   -d  list duplicate translations
+  -A  don't remove allowed duplicated
 EOH
     exit 0;
 }
@@ -33,6 +34,7 @@ check_current_dir();
 
 # Main program.
 find(\&gather_definitions, "config/locales");
+prune_duplicates();
 find(\&gather_usages, @dirs);
 list_missing() if $opt{m};
 list_duplicates() if $opt{d};
@@ -61,8 +63,6 @@ sub gather_definitions
         my $hash = LoadFile($_);
         &register_definitions($hash, $File::Find::name);
     }
-
-    @{$duplicate_translations{$_}} == 1 && delete $duplicate_translations{$_} for keys %duplicate_translations;
 }
 sub register_definitions
 {
@@ -96,6 +96,46 @@ sub register_definition
         push @{$duplicate_translations{$data}}, $keys;
     }
 }
+sub prune_duplicates
+{
+    # Remove non-duplicates.
+    @{$duplicate_translations{$_}} == 1 && delete $duplicate_translations{$_} for keys %duplicate_translations;
+
+    # Certain duplicates are allowed, so remove them.
+    my %allow =
+    (
+        'Active'                    => ['club.active', 'player.status.active'],
+        'Foreign'                   => ['player.foreign', 'player.status.foreign'],
+        'Inactive'                  => ['club.inactive', 'player.status.inactive'],
+        'Invalid email or password' => ['session.invalid_email', 'session.invalid_password'],
+        'Name'                      => ['club.name', 'fee.name', 'player.name'],
+        'Status'                    => ['player.status.status', 'shop.payment.status.status'],
+        'Subscription'              => ['item.type.subscription', 'player.source.subscription'],
+    );
+    unless ($opt{A})
+    {
+        foreach my $trans (keys %allow)
+        {
+            if ($duplicate_translations{$trans})
+            {
+                my %dup; $dup{$_} = 1 for @{$allow{$trans}};
+                my @old = @{$duplicate_translations{$trans}};
+                my @new = grep !$dup{$_}, @old;
+                if ((scalar(@old) - scalar(@new)) == scalar(keys %dup))
+                {
+                    if (scalar(@new) == 0)
+                    {
+                        delete $duplicate_translations{$trans};
+                    }
+                    else
+                    {
+                        $duplicate_translations{$trans} = [@new];
+                    }
+                }
+            }
+        }
+    }
+}
 
 # List definitions.
 sub list_translations
@@ -116,7 +156,7 @@ sub gather_usages
         die "can't open $Find::File::name" unless open FILE, $_;
         foreach my $line (<FILE>)
         {
-            if ($line =~ /\bt\("([._a-z0-9]+)"\)/i)
+            if ($line =~ /\bt\(["']([._a-z0-9]+)["'][),]/i)
             {
                 my $code = $1;
                 if ($definitions{$code})
@@ -125,7 +165,7 @@ sub gather_usages
                 }
                 else
                 {
-                    push @{$missing{$code}}, $File::Find::name;
+                    $missing{$code}->{$File::Find::name} = 1 unless &missing_ok($code, $File::Find::name);
                 }
             }
         }
@@ -133,7 +173,17 @@ sub gather_usages
     }
 }
 
-# List codes which result in the same tramslation.
+# For some translations that appear to be missing there's a reason.
+sub missing_ok
+{
+    my ($code, $file) = @_;
+
+    return 1 if $code eq 'not.here' && $file eq 'spec/models/translation_spec.rb'; # test for missing translation
+    return 1 if $code eq 'item.n_items'; # pluralised
+    return 0;
+}
+
+# List codes which result in the same translation.
 sub list_duplicates
 {
     printf "duplicate translations: %d\n", scalar(keys(%duplicate_translations));
@@ -153,7 +203,7 @@ sub list_missing
     my $max = 0; $max < length($_) && ($max = length($_)) for keys %missing;
     foreach my $code (sort keys %missing)
     {
-        my @files = sort @{$missing{$code}};
+        my @files = sort keys %{$missing{$code}};
         printf "  %-${max}s %s\n", $code, join(', ', @files);
     }
 }

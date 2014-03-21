@@ -6,7 +6,7 @@
   = render "utils/inline_select", param: :yob_relation, text: "", menu: player_yob_relation_menu(params[:yob_relation])
   = render "utils/inline_text_field", param: :yob, text: t("player.abbrev.yob"), size: 4
   - unless current_user.guest?
-    = render "utils/inline_select", param: :status, text: t("player.status"), menu: player_status_menu(params[:status], any: true, duplicate: true)
+    = render "utils/inline_select", param: :status, text: t("player.status.status"), menu: player_status_menu(params[:status], any: true, duplicate: true)
   = render "utils/inline_select", param: :order, text: t("order"), menu: player_order_menu(params[:order])
   .voffset2
   = render "utils/inline_select", param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed])

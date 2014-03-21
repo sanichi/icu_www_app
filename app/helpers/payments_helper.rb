@@ -1,8 +1,8 @@
 module PaymentsHelper
   def payment_method_menu(selected, opt={paid: true, unpaid: true})
     meths = Cart::PAYMENT_METHODS.map { |m| [t("shop.payment.method.#{m}"), m] }
-    meths.unshift [t("shop.payment.paid"), "paid"] if opt[:paid]
-    meths.push [t("shop.payment.unpaid"), "unpaid"] if opt[:unpaid]
+    meths.unshift [t("shop.payment.status.paid"), "paid"] if opt[:paid]
+    meths.push [t("shop.payment.status.unpaid"), "unpaid"] if opt[:unpaid]
     options_for_select(meths, selected)
   end
 

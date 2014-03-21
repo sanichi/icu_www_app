@@ -19,5 +19,5 @@
               %td= player.dob.year if player.dob
               %td= player.club.name if player.club
               %td= player.fed
-              
+
           = render "utils/pagination_links", pager: @players, columns: 6

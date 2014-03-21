@@ -1,6 +1,5 @@
 en:
   player:
-    address: Address
     age: Age
     any_club: Any club
     any_federation: Any federation
@@ -10,7 +9,6 @@ en:
     duplicate: Duplicate
     duplicates: Duplicates
     duplicate_of: Duplicate of
-    email: Email
     federation: Federation
     first_name: First name
     foreign: Foreign
@@ -47,12 +45,6 @@ en:
       rating: Legacy rating
       games: Legacy games
       rating_type: Legacy rating type
-    legacy_rating:
-      rating: Legacy rating
-      games: Legacy games
-      type: Legacy rating type
-      full: Full
-      provisional: Provisional
     phone:
       phones: Phones
       home: Home phone
@@ -65,7 +57,7 @@ en:
     rating:
       type:
         full: Full
-        provisional: Provisional        
+        provisional: Provisional
     source:
       source: Source
       archive: Archive

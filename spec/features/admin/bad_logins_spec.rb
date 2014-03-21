@@ -34,7 +34,7 @@ end
 feature "Listing bad logins" do
   before(:each) do
     visit "/sign_in"
-    fill_in I18n.t("user.email"), with: email
+    fill_in I18n.t("email"), with: email
     fill_in I18n.t("user.password"), with: password
     click_button I18n.t("session.sign_in")
     login("admin")

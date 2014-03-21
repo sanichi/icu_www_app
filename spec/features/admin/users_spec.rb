@@ -60,22 +60,22 @@ feature "Creating users" do
     fill_in "Password", with: password
     fill_in "Expires on", with: expires_on
     select I18n.t("user.role.#{role}"), from: "Roles"
-    
+
     click_button "Save"
     expect(page).to have_css(failure, text: "taken")
-    
+
     fill_in "Email", with: email
     click_button "Save"
     expect(page).to have_css(success, text: created)
-    
+
     new_user = User.find_by(email: email)
     expect(new_user.roles).to eq role
     expect(new_user.player_id).to eq player.id
     expect(new_user.status).to eq User::OK
     expect(new_user.verified?).to be_true
-    
+
     click_link I18n.t("session.sign_out")
-    fill_in I18n.t("user.email"), with: email
+    fill_in I18n.t("email"), with: email
     fill_in I18n.t("user.password"), with: password
     click_button I18n.t("session.sign_in")
     expect(page).to have_css(success, text: signed_in_as)

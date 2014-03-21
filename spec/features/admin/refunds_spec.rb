@@ -3,10 +3,10 @@ require 'spec_helper'
 describe "Refunds" do
   let(:player)                { create(:player) }
 
-  let(:select_member)         { I18n.t("shop.cart.item.select_member") }
+  let(:select_member)         { I18n.t("item.select_member") }
   let(:first_name)            { I18n.t("player.first_name") }
   let(:last_name)             { I18n.t("player.last_name") }
-  let(:add_to_cart)           { I18n.t("shop.cart.item.add") }
+  let(:add_to_cart)           { I18n.t("item.add") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:continue)              { I18n.t("shop.cart.continue") }
   let(:pay)                   { I18n.t("shop.payment.card.pay") }

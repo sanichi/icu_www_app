@@ -5,10 +5,10 @@
     %table{class: "table table-striped"}
       %thead
         %tr
-          %th.col-sm-4= t("shop.cart.item.item")
-          %th.col-sm-4= t("shop.cart.item.member")
+          %th.col-sm-4= t("item.item")
+          %th.col-sm-4= t("member")
           %th.col-sm-2= t("shop.payment.status.status")
-          %th.col-sm-2.text-center= t("shop.cart.item.cost")
+          %th.col-sm-2.text-center= t("item.cost")
       %tbody
         - cart.items.each do |item|
           %tr

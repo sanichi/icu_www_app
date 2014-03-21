@@ -12,7 +12,7 @@ describe Fee::Subscription do
   let(:amount)       { I18n.t("fee.amount") }
   let(:clone)        { I18n.t("fee.clone") }
   let(:rollover)     { I18n.t("fee.rollover") }
-  let(:type)         { I18n.t("fee.type.type") }
+  let(:type)         { I18n.t("type") }
   let(:subscription) { I18n.t("fee.type.subscription") }
   let(:season)       { I18n.t("fee.years") }
   let(:save)         { I18n.t("save") }

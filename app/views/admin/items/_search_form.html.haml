@@ -1,5 +1,5 @@
 = form_tag admin_items_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_select", param: :type, text: t("item.type.type"), menu: item_type_menu(params[:type], "item.type.any")
+  = render "utils/inline_select", param: :type, text: t("type"), menu: item_type_menu(params[:type], "item.type.any")
   = render "utils/inline_select", param: :status, text: t("shop.payment.status.status"), menu: item_status_menu(params[:status], "shop.payment.status.any")
   = render "utils/inline_select", param: :payment_method, text: t("shop.payment.method.method"), menu: item_payment_method_menu(params[:payment_method], "shop.payment.method.any")
   = render "utils/inline_text_field", param: :player_id, text: t("player.id"), size: 5

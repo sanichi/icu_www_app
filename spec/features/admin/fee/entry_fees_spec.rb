@@ -8,7 +8,7 @@ describe Fee::Entry do
   let(:success)           { "div.alert-success" }
   let(:failure)           { "div.alert-danger" }
   let(:help)              { "div.help-block" }
-  let(:type)              { I18n.t("fee.type.type") }
+  let(:type)              { I18n.t("type") }
   let(:entry)             { I18n.t("fee.type.entry") }
   let(:clone)             { I18n.t("fee.clone") }
   let(:rollover)          { I18n.t("fee.rollover") }

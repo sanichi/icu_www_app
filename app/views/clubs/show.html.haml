@@ -11,7 +11,7 @@
         %th= t("club.meet")
         %td= @club.meet
       %tr
-        %th= t("club.address")
+        %th= t("address")
         %td= @club.address
       %tr
         %th= t("club.district")
@@ -35,7 +35,7 @@
         %th= t("club.contact")
         %td= @club.contact
       %tr
-        %th= t("club.email")
+        %th= t("email")
         %td= mail_to @club.email, @club.email if @club.email.present?
       %tr
         %th= t("club.phone")

@@ -1,7 +1,6 @@
 en:
   user:
     account: User account
-    email: Email
     expires: Expires on
     locale: Language
     password: Password

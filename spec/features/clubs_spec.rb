@@ -123,17 +123,18 @@ feature "Showing a club" do
     bangor = create(:club, params)
     visit club_path(bangor)
     params.each do |param, value|
+      label = %i(address email).include?(param) ? I18n.t(param) : I18n.t("club.#{param}")
       case param
       when :name
         expect(page).to have_css("h1", text: bangor.name)
       when :web
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: bangor.web_simple)
+        expect(page).to have_xpath(xpath(label), text: bangor.web_simple)
       when :county
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t("ireland.co.#{value}"))
+        expect(page).to have_xpath(xpath(label), text: I18n.t("ireland.co.#{value}"))
       when :active
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: I18n.t(value ? "yes" : "no"))
+        expect(page).to have_xpath(xpath(label), text: I18n.t(value ? "yes" : "no"))
       else
-        expect(page).to have_xpath(xpath(I18n.t("club.#{param}")), text: value)
+        expect(page).to have_xpath(xpath(label), text: value)
       end
     end
   end

@@ -1,6 +1,6 @@
-- content_for :title, t("shop.cart.items")
+- content_for :title, t("item.items")
 
-= render "utils/search_panel", form: "search_form", title: t("shop.cart.items"), col: "md"
+= render "utils/search_panel", form: "search_form", title: t("item.items"), col: "md"
 
 - if @items.count > 0
   .row
@@ -10,7 +10,7 @@
           %tr
             %th= t("fee.description")
             %th= t("player.player")
-            %th= t("shop.cart.item.cost")
+            %th= t("item.cost")
             %th= t("shop.payment.status.status")
             %th= t("shop.payment.method.method")
             %th= t("date")
