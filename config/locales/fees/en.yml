@@ -2,7 +2,6 @@ en:
   fee:
     amount: Amount
     clone: Clone
-    description: Description
     discounted_amount: Discounted amount
     discount_deadline: Discount deadline
     end: End date

@@ -8,6 +8,7 @@ en:
   created_at: Created
   date: Date
   delete: Delete
+  description: Description
   edit: Edit
   either: Either
   email: Email
