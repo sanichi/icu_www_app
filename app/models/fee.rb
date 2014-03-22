@@ -34,7 +34,7 @@ class Fee < ActiveRecord::Base
 
   def self.for_sale
     Fee.on_sale.each_with_object(Hash.new{|h,k| h[k] = []}) do |fee, hash|
-      hash[fee.subtype(:plural)].push(fee)
+      hash[fee.type].push(fee)
     end
   end
 
@@ -42,20 +42,14 @@ class Fee < ActiveRecord::Base
     Season.new(years)
   end
 
-  def subtype(version=:singular)
-    sub_type = (type.presence || self.class.to_s).split("::").last
-    case version
-    when :plural
-      sub_type.downcase.pluralize
-    when :item
-      "Item::#{sub_type}"
-    else
-      sub_type.downcase
-    end
+  def subtype(version=nil)
+    Fee.subtype(type.presence || self.class.to_s, version)
   end
 
-  def self.subtype(type)
-    type.to_s.split("::").last.downcase
+  def self.subtype(type, version=nil)
+    sub_type = type.to_s.split("::").last
+    return "Item::#{sub_type}" if version == :item
+    sub_type.downcase
   end
 
   def deletable?

@@ -12,18 +12,25 @@ my %duplicate_translations;
 
 # Options.
 my %opt;
-my $opt = 'hmtdA';
+my $opt = 'htdDmM';
 getopts($opt, \%opt);
 sub help
 {
     print <<EOH;
-$0 [$opt]
+$0 -[$opt]
 print stats about locale strings used in this app
   -h  print this help
-  -m  list missing codes
   -t  list translations
   -d  list duplicate translations
-  -A  don't remove allowed duplicated
+  -m  list missing codes
+  -D  ignore allowed duplicated
+  -M  ignore allowed missing translations
+examples
+  $0 -dm   # quick check there are no duplicates or missing translations
+  $0 -dD   # list duplicates, even allowed ones
+  $0 -mM   # list missing translations, even allowed ones
+  $0 -t    # list all translations
+  $0       # just list the total number of translations
 EOH
     exit 0;
 }
@@ -39,6 +46,7 @@ find(\&gather_usages, @dirs);
 list_missing() if $opt{m};
 list_duplicates() if $opt{d};
 list_translations() if $opt{t};
+count_translations();
 
 #
 # Utilities.
@@ -112,7 +120,7 @@ sub prune_duplicates
         'Status'                    => ['player.status.status', 'shop.payment.status.status'],
         'Subscription'              => ['item.type.subscription', 'player.source.subscription'],
     );
-    unless ($opt{A})
+    unless ($opt{D})
     {
         foreach my $trans (keys %allow)
         {
@@ -178,6 +186,7 @@ sub missing_ok
 {
     my ($code, $file) = @_;
 
+    return 0 if $opt{M};
     return 1 if $code eq 'not.here' && $file eq 'spec/models/translation_spec.rb'; # test for missing translation
     return 1 if $code eq 'item.n_items'; # pluralised
     return 0;
@@ -206,4 +215,10 @@ sub list_missing
         my @files = sort keys %{$missing{$code}};
         printf "  %-${max}s %s\n", $code, join(', ', @files);
     }
+}
+
+# Output a count of definitions.
+sub count_translations
+{
+    printf "translations: %d\n", scalar(keys %definitions);
 }

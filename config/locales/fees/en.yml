@@ -22,7 +22,8 @@ en:
       max: Maximum rating
       min: Minimum rating
     type:
-      entries: Tournament Entry Fees
       entry: Tournament Entry Fee
       subscription: ICU Subscription Fee
-      subscriptions: ICU Subscription Fees
+      plural:
+        entry: Tournament Entry Fees
+        subscription: ICU Subscription Fees
