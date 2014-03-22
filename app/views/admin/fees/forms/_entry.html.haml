@@ -1,0 +1,16 @@
+= render "utils/text_field_for", locals.merge(param: :name, text: t("fee.name"), mark: "required", width: 4)
+= render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"), mark: "required")
+= render "utils/text_field_for", locals.merge(param: :start_date, text: t("fee.start"), mark: "required", placeholder: "YYYY-MM-DD", width: 3)
+= render "utils/text_field_for", locals.merge(param: :end_date, text: t("fee.end"), mark: "required", placeholder: "YYYY-MM-DD", width: 3)
+%hr
+= render "utils/text_field_for", locals.merge(param: :sale_start, text: t("fee.sale_start"), mark: "defaulted", placeholder: "YYYY-MM-DD", width: 3)
+= render "utils/text_field_for", locals.merge(param: :sale_end, text: t("fee.sale_end"), mark: "defaulted", placeholder: "YYYY-MM-DD", width: 3)
+%hr
+= render "utils/text_field_for", locals.merge(param: :discounted_amount, text: t("fee.discounted_amount"))
+= render "utils/text_field_for", locals.merge(param: :discount_deadline, text: t("fee.discount_deadline"), placeholder: "YYYY-MM-DD", width: 3)
+= render "utils/text_field_for", locals.merge(param: :min_rating, text: t("fee.rating.min"))
+= render "utils/text_field_for", locals.merge(param: :max_rating, text: t("fee.rating.max"))
+= render "utils/text_field_for", locals.merge(param: :min_age, text: t("fee.age.min"))
+= render "utils/text_field_for", locals.merge(param: :max_age, text: t("fee.age.max"))
+= render "utils/text_field_for", locals.merge(param: :age_ref_date, text: t("fee.age.ref_date"), placeholder: "YYYY-MM-DD", width: 3)
+= render "utils/text_field_for", locals.merge(param: :url, text: t("fee.url"), width: 4)

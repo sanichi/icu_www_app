@@ -43,4 +43,12 @@ module ApplicationHelper
     escaped = escaped.html_safe if safe
     escaped
   end
+
+  def mark(mark)
+    case mark.to_s
+    when "required"  then "*"
+    when "defaulted" then "†"
+    else ""
+    end
+  end
 end

@@ -1,10 +1,9 @@
 module FeesHelper
   def fee_type_menu(selected, default)
-    types = [
-      [default, ""],
-      [t("fee.type.subscription"), "Fee::Subscription"],
-      [t("fee.type.entry"), "Fee::Entry"],
-    ]
+    types = Fee::TYPES.map do |type|
+      [t("fee.type.#{Fee.subtype(type)}"), type]
+    end
+    types.unshift [default, ""]
     options_for_select(types, selected)
   end
 

@@ -38,7 +38,7 @@ describe Fee::Entry do
 
     it "new" do
       visit new_admin_fee_path
-      select entry, from: type
+      click_link entry
       fill_in name, with: "Bunratty Masters"
       fill_in amount, with: "50"
       fill_in start_date, with: next_year.to_s
@@ -73,7 +73,7 @@ describe Fee::Entry do
       fee = create(:entry_fee)
 
       visit new_admin_fee_path
-      select entry, from: type
+      click_link entry
       fill_in name, with: fee.name
       fill_in amount, with: fee.amount.to_s
       fill_in start_date, with: fee.start_date.to_s
@@ -126,7 +126,7 @@ describe Fee::Entry do
 
     it "discount, rating and age" do
       visit new_admin_fee_path
-      select entry, from: type
+      click_link entry
       fill_in name, with: "Bangor U12"
       fill_in amount, with: "35"
       fill_in discounted_amount, with: "30"
@@ -166,7 +166,7 @@ describe Fee::Entry do
 
     it "bad age" do
       visit new_admin_fee_path
-      select entry, from: type
+      click_link entry
       fill_in name, with: "Leinster U15"
       fill_in amount, with: "30"
       fill_in start_date, with: next_year.to_s
@@ -191,7 +191,7 @@ describe Fee::Entry do
 
     it "bad rating" do
       visit new_admin_fee_path
-      select entry, from: type
+      click_link entry
       fill_in name, with: "Bunratty Challengers"
       fill_in amount, with: "30"
       fill_in start_date, with: next_year.to_s

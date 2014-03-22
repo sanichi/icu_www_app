@@ -1,2 +1,8 @@
 - content_for :title, "New Fee"
-= render "form"
+
+- if @fee.type.present?
+  = render "form"
+- else
+  %h2.text-center= "New Fee"
+  - Fee::TYPES.each do |type|
+    .text-center.voffset3= link_to t("fee.type.#{Fee.subtype(type)}"), new_admin_fee_path(type: type), type: type, class: "btn btn-info"

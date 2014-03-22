@@ -12,6 +12,7 @@ class Admin::FeesController < ApplicationController
 
   def new
     @fee = Fee.new
+    @fee.type = params[:type] if Fee::TYPES.include?(params[:type])
   end
 
   def clone
@@ -35,7 +36,7 @@ class Admin::FeesController < ApplicationController
   end
 
   def create
-    @fee = Fee.new(fee_params, :new_record)
+    @fee = Fee.new(fee_params(:new_record))
 
     if @fee.save
       @fee.journal(:create, current_user, request.ip)
@@ -81,12 +82,12 @@ class Admin::FeesController < ApplicationController
   end
 
   def fee_params(new_record=false)
-    attrs =
-      %i[name amount discounted_amount] +
-      %i[start_date end_date sale_start sale_end discount_deadline] +
-      %i[age_ref_date min_age max_age] +
-      %i[min_rating max_rating] +
-      %i[years url type]
+    attrs = case params[:fee][:type]
+    when "Fee::Subscription" then %i[name amount years min_age max_age]
+    when "Fee::Entry"        then Fee::ATTRS.reject{ |n| n.match(/\A(year|years)\z/) }.map(&:to_s)
+    else []
+    end
+    attrs.push(:type) if new_record
     params[:fee].permit(attrs)
   end
 end

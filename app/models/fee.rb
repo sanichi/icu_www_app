@@ -1,17 +1,17 @@
 class Fee < ActiveRecord::Base
   extend Util::Pagination
   include Journalable
-  journalize %w[
-    name amount start_date end_date sale_start sale_end
-    discounted_amount discount_deadline year years
-    age_ref_date min_age max_age min_rating max_rating url
-  ], "/admin/fees/%d"
+  ATTRS = column_names.reject{ |n| n.match(/\A(id|type|created_at|updated_at)\z/) }
+  journalize ATTRS, "/admin/fees/%d"
+
+  TYPES = %w[Fee::Subscription Fee::Entry]
 
   has_many :items
 
   before_validation :normalize_attributes
 
-  validates :type, :name, :amount, presence: true
+  validates :type, inclusion: { in: TYPES }
+  validates :name, :amount, presence: true
   validate :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
 
   scope :alphabetic, -> { order(name: :asc) }
@@ -43,7 +43,7 @@ class Fee < ActiveRecord::Base
   end
 
   def subtype(version=:singular)
-    sub_type = self.class.to_s.split("::").last
+    sub_type = (type.presence || self.class.to_s).split("::").last
     case version
     when :plural
       sub_type.downcase.pluralize
@@ -52,6 +52,10 @@ class Fee < ActiveRecord::Base
     else
       sub_type.downcase
     end
+  end
+
+  def self.subtype(type)
+    type.to_s.split("::").last.downcase
   end
 
   def deletable?

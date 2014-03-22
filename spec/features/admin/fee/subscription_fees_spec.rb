@@ -14,7 +14,7 @@ describe Fee::Subscription do
   let(:rollover)     { I18n.t("fee.rollover") }
   let(:type)         { I18n.t("type") }
   let(:subscription) { I18n.t("fee.type.subscription") }
-  let(:season)       { I18n.t("fee.years") }
+  let(:season)       { I18n.t("season") }
   let(:save)         { I18n.t("save") }
   let(:edit)         { I18n.t("edit") }
   let(:delete)       { I18n.t("delete") }
@@ -24,7 +24,7 @@ describe Fee::Subscription do
 
     it "new" do
       visit new_admin_fee_path
-      select subscription, from: type
+      click_link subscription
       fill_in name, with: "Standard"
       fill_in amount, with: "35.50"
       fill_in season, with: "2013 to 2014"
@@ -43,7 +43,7 @@ describe Fee::Subscription do
 
     it "duplicate" do
       visit new_admin_fee_path
-      select subscription, from: type
+      click_link subscription
       fill_in name, with: fee.name
       fill_in amount, with: fee.amount
       fill_in season, with: fee.season.to_s
