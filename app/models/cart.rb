@@ -81,13 +81,14 @@ class Cart < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    if (id = params[:id].to_i) > 0
-      matches = where(id: id)
-    else
-      matches = order(updated_at: :desc)
-      matches = matches.where(status: params[:status]) if params[:status].present?
-      matches = matches.where("payment_name LIKE ?", "%#{params[:name]}%") if params[:name].present?
-      matches = matches.where("confirmation_email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    matches = where(id: params[:id].to_i) if params[:id].to_i > 0
+    matches = order(updated_at: :desc)
+    matches = matches.where(status: params[:status]) if params[:status].present?
+    matches = matches.where("payment_name LIKE ?", "%#{params[:name]}%") if params[:name].present?
+    matches = matches.where("confirmation_email LIKE ?", "%#{params[:email]}%") if params[:email].present?
+    if params[:date].present?
+      date = "%#{params[:date]}%"
+      matches = matches.where("created_at LIKE ? OR updated_at LIKE ?", date, date)
     end
     paginate(matches, params, path)
   end

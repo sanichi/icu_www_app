@@ -25,7 +25,7 @@ class ItemsController < ApplicationController
 
   def destroy
     item = current_cart.items.find do |item|
-      item.id = params[:id].to_i
+      item.id == params[:id].to_i && item.unpaid?
     end
     item.destroy
     redirect_to cart_path
