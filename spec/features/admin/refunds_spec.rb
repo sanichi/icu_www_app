@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Refunds" do
   let(:player)                { create(:player) }
 
-  let(:select_member)         { I18n.t("item.select_member") }
+  let(:select_member)         { I18n.t("item.member.select") }
   let(:first_name)            { I18n.t("player.first_name") }
   let(:last_name)             { I18n.t("player.last_name") }
   let(:add_to_cart)           { I18n.t("item.add") }

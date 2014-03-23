@@ -8,8 +8,8 @@ describe "Shop" do
   let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
   let(:member)          { I18n.t("member") }
-  let(:reselect_member) { I18n.t("item.reselect_member") }
-  let(:select_member)   { I18n.t("item.select_member") }
+  let(:reselect_member) { I18n.t("item.member.reselect") }
+  let(:select_member)   { I18n.t("item.member.select") }
   let(:total)           { I18n.t("shop.cart.total") }
 
   let(:delete)          { "✘" }
