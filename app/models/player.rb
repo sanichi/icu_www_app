@@ -41,16 +41,8 @@ class Player < ActiveRecord::Base
   validates :legacy_rating_type, inclusion: { in: RATING_TYPES }, allow_nil: true
   validates :legacy_games, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
-  validates_date :dob, on_or_after: "1900-01-01",
-                       on_or_after_message: "too far in the past",
-                       on_or_before: -> { Date.today },
-                       on_or_before_message: "too far in the future",
-                       allow_nil: true
-  validates_date :joined, on_or_after: "1960-01-01",
-                          on_or_after_message: "too far in the past",
-                          on_or_before: -> { Date.today },
-                          on_or_before_message: "too far in the future",
-                          allow_nil: true
+  validates_date :dob, on_or_after: "1900-01-01", on_or_before: -> { Date.today }, allow_nil: true
+  validates_date :joined, on_or_after: "1960-01-01", on_or_before: -> { Date.today }, allow_nil: true
 
   validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones, :validate_legacy_rating
 

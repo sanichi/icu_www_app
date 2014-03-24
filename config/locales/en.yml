@@ -7,6 +7,7 @@ en:
   cancel: Cancel
   created_at: Created
   date: Date
+  date_format: YYYY-MM-DD
   delete: Delete
   description: Description
   edit: Edit

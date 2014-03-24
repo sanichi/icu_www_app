@@ -6,7 +6,7 @@ feature "Authorization for preferences" do
   given(:paths)           { [account_path(user), preferences_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "a user can manage their own login" do

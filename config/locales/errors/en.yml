@@ -1,4 +1,28 @@
 en:
   errors:
-    messages:
+    alerts:
+      application: System error — please send screenshot to webmaster@icu.ie
       unauthorized: You are not authorized to view this page
+    messages:
+      accepted: must be accepted
+      after: must be after %{restriction}
+      before: must be before %{restriction}
+      blank: can't be blank
+      exclusion: is reserved
+      greater_than: must be more than %{count}
+      greater_than_or_equal_to: must be ≥ to %{count}
+      inclusion: invalid
+      invalid: invalid
+      invalid_date: invalid date
+      invalid_datetime: invalid datetime
+      invalid_time: invalid time
+      is_at: must be at %{restriction}
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be ≤ to %{count}
+      not_a_number: not a number
+      not_an_integer: not an integer
+      odd: must be odd
+      on_or_after: must be on or after %{restriction}
+      on_or_before: must be on or before %{restriction}
+      present: must be blank
+

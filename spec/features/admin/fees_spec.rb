@@ -7,7 +7,7 @@ feature "Authorization for fees" do
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
   given(:button)          { I18n.t("edit") }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
   given(:paths)           { [admin_fees_path, admin_fee_path(fee), edit_admin_fee_path(fee), new_admin_fee_path, clone_admin_fee_path(fee), rollover_admin_fee_path(fee)] }
 

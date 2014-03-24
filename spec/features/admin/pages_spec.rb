@@ -5,7 +5,7 @@ feature "Authorization for pages" do
   given(:paths)           { [admin_system_info_path, admin_test_email_path] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
 
   scenario "admin role" do
     login "admin"

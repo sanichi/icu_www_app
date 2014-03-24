@@ -7,7 +7,7 @@ feature "Authorization for logins" do
   given(:paths)           { [admin_logins_path, admin_login_path(record)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "some roles can view the logins list" do

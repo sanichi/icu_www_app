@@ -52,7 +52,7 @@ feature JournalEntry do
 
   given(:success)      { "div.alert-success" }
   given(:failure)      { "div.alert-danger" }
-  given(:unauthorized) { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
 
   scenario "admin view" do
     login "admin"

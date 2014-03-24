@@ -7,7 +7,7 @@ feature "Authorization for users" do
   given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "some roles can manage users" do

@@ -26,7 +26,7 @@ describe User do
 
     it "ICU ID should be positive" do
       expect { create(:user, player_id: nil) }.to raise_error(/not.*number/i)
-      expect { create(:user, player_id: 0) }.to raise_error(/greater.*than.*0/i)
+      expect { create(:user, player_id: 0) }.to raise_error(/more.*than.*0/i)
     end
   end
 

@@ -7,7 +7,7 @@ feature "Authorization for translations" do
   given(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
   given(:success)         { "div.alert-success" }
   given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "some roles can manage translations" do

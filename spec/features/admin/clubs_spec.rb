@@ -8,7 +8,7 @@ feature "Authorization for clubs" do
   given(:failure)         { "div.alert-danger" }
   given(:header)          { "//h1[.='#{club.name}']" }
   given(:button)          { I18n.t("edit") }
-  given(:unauthorized)    { I18n.t("errors.messages.unauthorized") }
+  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
   given(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   scenario "some roles can manage clubs as well as view" do
