@@ -19,9 +19,11 @@ en:
         lifetime_exists: "%{member} already has a lifetime subscription"
         already_exists: "%{member} is already subscribed for %{season}"
         already_in_cart: "A subscription for %{member} in %{season} is already in your cart"
+        new_player_duplicate:
+          db: "Not a new player: matches %{matches}"
+          cart: "The same new player (%{name}, %{dob}) is already in your cart"
     member:
       new: New Member
-      reselect: Reselect Member
       select: Select Member
     n_items:
       one: 1 item

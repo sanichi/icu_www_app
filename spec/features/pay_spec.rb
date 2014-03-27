@@ -4,13 +4,20 @@ describe "Pay" do
   let(:player)                { create(:player) }
   let(:user)                  { create(:user) }
 
-  let(:select_member)         { I18n.t("item.member.select") }
-  let(:first_name)            { I18n.t("player.first_name") }
-  let(:last_name)             { I18n.t("player.last_name") }
   let(:add_to_cart)           { I18n.t("item.add") }
-  let(:shop)                  { I18n.t("shop.shop") }
-  let(:current)               { I18n.t("shop.cart.current") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
+  let(:current)               { I18n.t("shop.cart.current") }
+  let(:dob)                   { I18n.t("player.abbrev.dob") }
+  let(:email)                 { I18n.t("email") }
+  let(:fed)                   { I18n.t("player.federation") }
+  let(:first_name)            { I18n.t("player.first_name") }
+  let(:gender)                { I18n.t("player.gender.gender") }
+  let(:last_name)             { I18n.t("player.last_name") }
+  let(:new_member)            { I18n.t("item.member.new") }
+  let(:save)                  { I18n.t("save") }
+  let(:select_member)         { I18n.t("item.member.select") }
+  let(:shop)                  { I18n.t("shop.shop") }
+
   let(:pay)                   { I18n.t("shop.payment.card.pay") }
   let(:completed)             { I18n.t("shop.payment.completed") }
   let(:total)                 { I18n.t("shop.cart.total") }
@@ -42,6 +49,8 @@ describe "Pay" do
   let(:expired_card)          { "Your card's expiration date is incorrect." }
   let(:incorrect_cvc)         { "Your card's security code is incorrect." }
 
+  let!(:subscription_fee)     { create(:subscription_fee) }
+
   def fill_in_all_and_click_pay(opt = {})
     opt.reverse_merge!(number: number, expiry: expiry, cvc: cvc, name: player.name, email: player.email)
     fill_in number_id, with: opt[:number] if opt[:number]
@@ -61,9 +70,11 @@ describe "Pay" do
     "#{gateway}: \"#{text}\""
   end
 
-  context "subscription" do
-    let!(:subscription_fee)  { create(:subscription_fee) }
+  after(:each) do
+    ActionMailer::Base.deliveries.clear
+  end
 
+  context "subscription" do
     before(:each) do
       visit shop_path
       click_link subscription_fee.description
@@ -73,10 +84,6 @@ describe "Pay" do
       click_link player.id
       click_button add_to_cart
       click_link checkout
-    end
-
-    after(:each) do
-      ActionMailer::Base.deliveries.clear
     end
 
     it "successful", js: true do
@@ -216,6 +223,55 @@ describe "Pay" do
 
       expect(PaymentError.count).to eq 0
       expect(ActionMailer::Base.deliveries).to be_empty
+    end
+  end
+
+  context "new member" do
+    let(:newbie)     { build(:new_player) }
+    let(:newbie_fed) { ICU::Federation.find(newbie.fed).name }
+    let(:newbie_sex) { I18n.t("player.gender.#{newbie.gender}") }
+
+    before(:each) do
+      visit shop_path
+      click_link subscription_fee.description
+      click_button new_member
+      fill_in last_name, with: newbie.last_name
+      fill_in first_name, with: newbie.first_name
+      fill_in dob, with: newbie.dob.to_s
+      select newbie_sex, from: gender
+      select newbie_fed, from: fed
+      fill_in email, with: newbie.email
+      click_button save
+      expect(page).to_not have_css(error)
+      click_button add_to_cart
+      click_link checkout
+    end
+
+    it "successful", js: true do
+      subscription = Item::Subscription.last
+      expect(subscription.player_id).to be_nil
+      expect(subscription.player_data).to be_present
+
+      fill_in_all_and_click_pay
+
+      expect(page).to have_css(title, text: completed)
+      subscription.reload
+      expect(subscription).to be_paid
+
+      new_player = subscription.player
+      expect(new_player).to be_present
+      expect(new_player.first_name).to eq newbie.first_name
+      expect(new_player.last_name).to eq newbie.last_name
+      expect(new_player.dob).to eq newbie.dob
+      expect(new_player.fed).to eq newbie.fed
+      expect(new_player.gender).to eq newbie.gender
+      expect(new_player.email).to eq newbie.email
+      expect(new_player.status).to eq "active"
+      expect(new_player.source).to eq "subscription"
+
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      email = ActionMailer::Base.deliveries.last
+      expect(email.body.decoded).to include(new_player.name(id: true))
     end
   end
 end

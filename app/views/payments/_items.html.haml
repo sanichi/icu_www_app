@@ -15,7 +15,7 @@
         - cart.items.each do |item|
           %tr
             %td= item.description
-            %td= item.player.name(id: true) if item.player
+            %td= item.player_name
             %td.text-center= euros(item.cost)
             - if cart.unpaid?
               %td.text-center= link_to "✘", item.becomes(Item), data: { confirm: t("item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"

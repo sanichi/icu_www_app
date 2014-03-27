@@ -3,6 +3,7 @@ class ItemsController < ApplicationController
     @fee = Fee.on_sale.where(id: params[:fee_id]).first
     if @fee
       @item = Item.new(fee: @fee, type: @fee.subtype(:item)).becomes(Item)
+      @new_player = NewPlayer.new if @fee.subtype == "subscription"
     else
       redirect_to shop_path
     end
@@ -19,6 +20,7 @@ class ItemsController < ApplicationController
     else
       flash_first_base_error(@item)
       @item = @item.becomes(Item)
+      @new_player = NewPlayer.new if @fee.subtype == "subscription"
       render "new"
     end
   end
@@ -36,6 +38,6 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params[:item].permit(:type, :fee_id, :player_id)
+    params[:item].permit(:type, :fee_id, :player_id, :player_data)
   end
 end

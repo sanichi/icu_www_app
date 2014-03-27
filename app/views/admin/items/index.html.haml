@@ -19,7 +19,7 @@
           - @items.matches.each do |item|
             %tr
               %td= item.description
-              %td= item.player.name(reversed: true, id: true) if item.player
+              %td= item.player_name
               %td{class: "righted"}= euros(item.cost)
               %td= t("shop.payment.status.#{item.status}")
               %td= t("shop.payment.method.#{item.payment_method}") if item.payment_method

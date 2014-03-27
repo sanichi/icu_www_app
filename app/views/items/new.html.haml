@@ -4,6 +4,7 @@
   = form.hidden_field :type
   = form.hidden_field :fee_id
   = form.hidden_field :player_id
+  = form.hidden_field :player_data
 
   .row
     .col-md-6.col-md-offset-3
@@ -21,9 +22,15 @@
             = render "detail", term: t("member"), desc: "", id: "player_name"
         .panel-footer
           = render "player_ids_button"
+          - if @fee.subtype == "subscription"
+            = render "new_player_button"
           = link_to t("cancel"), shop_path, class: "btn btn-default btn-sm"
           = render "add_to_cart", form: form
 
-= render "player_ids/modal", title: t("item.select_member")
+= render "player_ids/modal", title: t("item.member.select")
 %script
   = render "player_ids_callback.js"
+- if @fee.subtype == "subscription"
+  = render "new_players/modal", title: t("item.member.new")
+  %script
+    = render "new_player_callback.js"

@@ -6,12 +6,13 @@ class Item < ActiveRecord::Base
   belongs_to :fee
   belongs_to :cart
 
-  before_validation :copy_fee
+  before_validation :copy_fee, :normalise
 
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
+  validates :player_data, absence: true, unless: Proc.new { |i| i.type == "Item::Subscription" }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints
 
@@ -26,14 +27,41 @@ class Item < ActiveRecord::Base
     paginate(matches, params, path)
   end
 
-  # Used in payment receipts.
+  def complete(payment_method)
+    update_columns(payment_method: payment_method, status: "paid")
+    if player_id.blank? && player_data.present?
+      begin
+        player = new_player.to_player
+        player.save!
+        update_column(:player_id, player.id)
+      rescue => e
+        logger.error "coundn't create new player record; data: #{player_data}, error: #{e.message}"
+      end
+    end
+  end
+
+  def new_player
+    return unless player_data.present?
+    @new_player ||= NewPlayer.from_json(player_data)
+  end
+
+  def player_name
+    if player.present?
+      player.name(id: true)
+    elsif new_player = self.new_player
+      new_player.name
+    else
+      nil
+    end
+  end
+
   def to_s
     parts = []
     parts.push description
-    parts.push player.name(id: true) if player.present?
+    parts.push player_name
     parts.push "€#{'%.2f' % cost}"
     parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
-    parts.join(", ")
+    parts.reject(&:blank?).join(", ")
   end
 
   private
@@ -44,6 +72,10 @@ class Item < ActiveRecord::Base
     self.start_date  = fee.start_date         unless start_date.present?
     self.end_date    = fee.end_date           unless end_date.present?
     self.cost        = fee.amount             unless cost.present?
+  end
+
+  def normalise
+    self.player_data = player_data.presence
   end
 
   def age_constraints

@@ -1,0 +1,5 @@
+<%- valid = @new_player.valid? %>
+$("#new_player_fields").html("<%= j render('fields') %>");
+<%- if valid %>
+new_player_callback('<%= escape_single_quoted(@new_player.to_json) %>', '<%= escape_single_quoted(@new_player.name) %>');
+<%- end %>

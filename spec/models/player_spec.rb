@@ -125,6 +125,8 @@ describe Player do
       expect(player.name(reversed: true)).to eq "Orr, Mark"
       expect(player.name(id: true)).to eq "Mark Orr (#{player.id})"
       expect(player.name(reversed: true, id: true)).to eq "Orr, Mark (#{player.id})"
+      player = build(:player, first_name: "Mark", last_name: "Orr")
+      expect(player.name(id: true)).to eq "Mark Orr (#{I18n.t('new')})"
     end
   end
 end

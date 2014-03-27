@@ -6,6 +6,8 @@ module PlayersHelper
       feds.insert(2, [t("unknown"), "???"])
       feds.insert(2, [t("player.not_foreign"), "NNN"])
       feds.insert(2, [t("player.foreign"), "FFF"])
+    elsif type == "select"
+      feds.unshift([t("please_select"), ""])
     else
       feds.unshift([t("unknown"), ""])
     end
@@ -13,9 +15,9 @@ module PlayersHelper
   end
 
   def player_gender_menu(selected, default="any")
-    counties = Player::GENDERS.map { |g| [t("player.gender.#{g}"), g] }
-    counties.unshift [t(default), ""]
-    options_for_select(counties, selected)
+    genders = Player::GENDERS.map { |g| [t("player.gender.#{g}"), g] }
+    genders.unshift [t(default), ""]
+    options_for_select(genders, selected)
   end
 
   def player_order_menu(selected)

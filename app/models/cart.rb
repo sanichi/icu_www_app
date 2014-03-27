@@ -48,7 +48,7 @@ class Cart < ActiveRecord::Base
     self.payment_method = "stripe"
     self.payment_ref = charge.id
     self.payment_completed = Time.now
-    items.each { |item| item.update_columns(payment_method: payment_method, status: status) }
+    items.each { |item| item.complete(payment_method) }
   ensure
     self.total = total
     self.original_total = total

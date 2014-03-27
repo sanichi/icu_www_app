@@ -1,18 +1,19 @@
 - unless current_user.guest? || current_user.roles.nil?
-  - items = 0
-  - items += 1 if logins  = can?(:manage, Login)
-  - items += 1 if bdlgns  = can?(:manage, BadLogin)
-  - items += 1 if entries = can?(:index, JournalEntry)
-  - items += 1 if users   = can?(:manage, User)
-  - items += 1 if carts   = can?(:index, Cart)
-  - items += 1 if rfnds   = can?(:index, Refund)
-  - items += 1 if perrs   = can?(:index, PaymentError)
-  - items += 1 if nfees   = can?(:manage, Fee)
-  - items += 1 if trans   = can?(:manage, Translation)
-  - items += 1 if players = can?(:manage, Player)
-  - items += 1 if clubs   = can?(:manage, Club)
-  - items += 1 if pages   = can?(:read, Page)
-  - if items > 0
+  - links = 0
+  - links += 1 if logins  = can?(:manage, Login)
+  - links += 1 if bdlgns  = can?(:manage, BadLogin)
+  - links += 1 if entries = can?(:index, JournalEntry)
+  - links += 1 if users   = can?(:manage, User)
+  - links += 1 if carts   = can?(:index, Cart)
+  - links += 1 if rfnds   = can?(:index, Refund)
+  - links += 1 if perrs   = can?(:index, PaymentError)
+  - links += 1 if nfees   = can?(:manage, Fee)
+  - links += 1 if items   = can?(:index, Item)
+  - links += 1 if trans   = can?(:manage, Translation)
+  - links += 1 if players = can?(:manage, Player)
+  - links += 1 if clubs   = can?(:manage, Club)
+  - links += 1 if pages   = can?(:read, Page)
+  - if links > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
         Admin
@@ -34,6 +35,8 @@
           %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
         - if nfees
           %li{class: active("admin/fees")}= link_to "Fees", admin_fees_path
+        - if items
+          %li{class: active("admin/items")}= link_to "Items", admin_items_path
         - if trans
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
         - if players

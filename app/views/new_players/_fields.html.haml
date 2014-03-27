@@ -1,0 +1,17 @@
+= form_for @new_player, html: { class: "form-horizontal", role: "form" }, remote: true do |f|
+  - locals = { form: f, object: @new_player, col: "sm", pad: 3, width: 5, mark: "required" }
+  = render "utils/text_field_for", locals.merge(param: :first_name, text: t("player.first_name"))
+  = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"))
+  = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.abbrev.dob"), placeholder: t("date_format"))
+  = render "utils/select_for", locals.merge(param: :gender, text: t("player.gender.gender"), width: 4, menu: player_gender_menu(@new_player.gender, "please_select"))
+  = render "utils/select_for", locals.merge(param: :fed, text: t("player.federation"), width: 6, menu: player_federation_menu(@new_player.fed, "select"))
+  = render "utils/select_for", locals.merge(param: :club_id, text: t("club.club"), mark: "none", width: 6, menu: club_menu(@new_player.club_id, none: true))
+  = render "utils/text_field_for", locals.merge(param: :email, text: t("email"), mark: "none", width: 6)
+  - if @new_player.errors[:base].any?
+    .text-center{class: "alert alert-danger"}
+      %button.close{"type" => "button", "data-dismiss" => "alert"} ×
+      = @new_player.errors[:base].first
+  %hr
+  = f.submit t("save"), class: "btn btn-primary"
+  = link_to "Cancel", "#", class: "btn btn-default", id: "cancel_new_player"
+

@@ -1,0 +1,8 @@
+#new_player_modal{class: "modal fade", tabindex: "-2", role: "dialog", "aria-labelledby" => "modal_label", "aria-hidden" => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        %h4.modal-title#modal_label= title
+      .modal-body
+        = render "new_players/form"

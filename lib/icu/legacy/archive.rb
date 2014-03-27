@@ -16,6 +16,8 @@ module ICU
         note:       :note,
       }
 
+      SUSPICIOUS_DOBS = %w/1975-01-02 1976-01-01 1985-01-02 1950-09-01 1985-01-01 1955-01-01 1970-01-01 1977-01-01/
+
       def synchronize(force=false)
         if existing_archive_players?(force)
           report_error "can't synchronize when archive players exist unless force is used"
@@ -83,6 +85,22 @@ module ICU
           params[:note].gsub!(/\[(\d+)\]\(\/admin\/old_players\/\d+\)/, '[\1](/admin/players/\1)')
           params[:note].gsub!(/with current member/, "with player")
           params[:note].gsub!(/with former member/, "with archive player")
+        end
+
+        # Some DOBs can't be trusted (because they are 1st of the month and occur with a
+        # suspiciously high frequency compared to others). They probably YOBs or guesses.
+        if params[:dob]
+          date = params[:dob].to_s
+          if SUSPICIOUS_DOBS.include?(date)
+            if params[:note].present?
+              params[:note].strip!
+              params[:note] += "\n\n"
+            else
+              params[:note] = ""
+            end
+            params[:note] += "Old records suggest this player was born in #{params[:dob].year}."
+            params[:dob] = nil
+          end
         end
       end
 

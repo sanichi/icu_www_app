@@ -93,4 +93,17 @@ describe Item::Entry do
       expect{create(:entry_item, fee: fee, player: p_no_rating)}.to_not raise_error
     end
   end
+
+  context "player data" do
+    it "blank" do
+      item = build(:entry_item, player_data: "")
+      expect(item).to be_valid
+      expect(item.player_data).to be_nil
+    end
+
+    it "present" do
+      item = build(:entry_item, player_data: "{}")
+      expect(item).to_not be_valid
+    end
+  end
 end

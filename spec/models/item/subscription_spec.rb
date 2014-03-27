@@ -105,7 +105,6 @@ describe Item::Subscription do
     let(:p_no_dob)  { create(:player_no_dob) }
 
     it "max age" do
-      #puts "MAX #{p18_under.age(u18.age_ref_date)}|#{p18_exact.age(u18.age_ref_date)}|#{p18_over.age(u18.age_ref_date)}"
       expect{create(:subscription_item, fee: u18, player: p18_under)}.to_not raise_error
       expect{create(:subscription_item, fee: u18, player: p18_exact)}.to raise_error(/over|old/)
       expect{create(:subscription_item, fee: u18, player: p18_over)}.to raise_error(/over|old/)
@@ -113,11 +112,28 @@ describe Item::Subscription do
     end
 
     it "min age" do
-      #puts "MIN #{p66_under.age(o65.age_ref_date)}|#{p66_exact.age(o65.age_ref_date)}|#{p66_over.age(o65.age_ref_date)}"
       expect{create(:subscription_item, fee: o65, player: p66_under)}.to raise_error(/under|young/)
       expect{create(:subscription_item, fee: o65, player: p66_exact)}.to_not raise_error
       expect{create(:subscription_item, fee: o65, player: p66_over)}.to_not raise_error
       expect{create(:subscription_item, fee: o65, player: p_no_dob)}.to_not raise_error
+    end
+  end
+
+  context "player data" do
+    let(:new_player_json) { build(:new_player).to_json }
+
+    it "blank" do
+      item = build(:subscription_item, player_data: "")
+      expect(item).to be_valid
+      expect(item.player_data).to be_nil
+    end
+
+    it "present with player" do
+      expect(build(:subscription_item, player_data: new_player_json)).to be_valid
+    end
+
+    it "present without player" do
+      expect(build(:subscription_item, player_data: new_player_json, player: nil)).to be_valid
     end
   end
 end

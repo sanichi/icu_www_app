@@ -23,6 +23,7 @@ class Player < ActiveRecord::Base
   RATING_TYPES = %w[full provisional]
 
   default_scope { includes(:club) }
+  scope :non_duplicates, -> { where("player_id IS NULL") }
 
   before_validation :normalize_attributes, :conditional_adjustment
 
@@ -46,10 +47,10 @@ class Player < ActiveRecord::Base
 
   validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones, :validate_legacy_rating
 
-  def name(opt={})
+  def name(reversed: false, id: false)
     names = []
-    names << (opt[:reversed] ? "#{last_name}, #{first_name}" : "#{first_name} #{last_name}")
-    names << "(#{id})" if opt[:id]
+    names << (reversed ? "#{last_name}, #{first_name}" : "#{first_name} #{last_name}")
+    names << "(#{self.id || I18n.t('new')})" if id
     names.join(" ")
   end
 

@@ -3,13 +3,19 @@ require 'spec_helper'
 describe "Shop" do
   let(:add_to_cart)     { I18n.t("item.add") }
   let(:cart_link)       { I18n.t("shop.cart.current") + ":" }
+  let(:continue)        { I18n.t("shop.cart.continue") }
   let(:cost)            { I18n.t("item.cost") }
+  let(:dob)             { I18n.t("player.abbrev.dob") }
+  let(:email)           { I18n.t("email") }
+  let(:fed)             { I18n.t("player.federation") }
   let(:first_name)      { I18n.t("player.first_name") }
+  let(:gender)          { I18n.t("player.gender.gender") }
   let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
   let(:member)          { I18n.t("member") }
-  let(:reselect_member) { I18n.t("item.member.reselect") }
+  let(:save)            { I18n.t("save") }
   let(:select_member)   { I18n.t("item.member.select") }
+  let(:new_member)      { I18n.t("item.member.new") }
   let(:total)           { I18n.t("shop.cart.total") }
 
   let(:delete)          { "✘" }
@@ -35,16 +41,17 @@ describe "Shop" do
   end
 
   context "subscriptions" do
-    let!(:player)         { create(:player, dob: 58.years.ago, joined: 30.years.ago) }
-    let!(:player2)        { create(:player, dob: 30.years.ago, joined: 20.years.ago) }
-    let!(:junior)         { create(:player, dob: 10.years.ago, joined: 2.years.ago) }
-    let!(:oldie)          { create(:player, dob: 70.years.ago, joined: 50.years.ago) }
+    let!(:player)         { create(:player, dob: 58.years.ago.to_date, joined: 30.years.ago.to_date) }
+    let!(:player2)        { create(:player, dob: 30.years.ago.to_date, joined: 20.years.ago.to_date) }
+    let!(:junior)         { create(:player, dob: 10.years.ago.to_date, joined: 2.years.ago.to_date) }
+    let!(:oldie)          { create(:player, dob: 70.years.ago.to_date, joined: 50.years.ago.to_date) }
     let!(:standard_sub)   { create(:subscription_fee, name: "Standard", amount: 35.0) }
     let!(:unemployed_sub) { create(:subscription_fee, name: "Unemployed", amount: 20.0) }
     let!(:under_12_sub)   { create(:subscription_fee, name: "Under 12", amount: 20.0, max_age: 12) }
     let!(:over_65_sub)    { create(:subscription_fee, name: "Over 65", amount: 20.0, min_age: 65) }
     let(:lifetime_sub)    { create(:lifetime_subscription, player: player) }
     let(:existing_sub)    { create(:paid_subscription_item, player: player, fee: standard_sub) }
+    let(:newbie)          { build(:new_player, dob: 15.years.ago.to_date) }
 
     let(:lifetime_error)  { I18n.t("item.error.subscription.lifetime_exists", member: player.name(id: true)) }
     let(:exists_error)    { I18n.t("item.error.subscription.already_exists", member: player.name(id: true), season: standard_sub.season.to_s) }
@@ -65,8 +72,6 @@ describe "Shop" do
 
       click_link player.id
 
-      expect(page).to_not have_button(select_member)
-      expect(page).to have_button(reselect_member)
       click_button add_to_cart
 
       expect(Cart.count).to eq 1
@@ -87,6 +92,78 @@ describe "Shop" do
 
       visit shop_path
       expect(page).to have_link(cart_link)
+    end
+
+    it "new member", js: true do
+      newbie_fed = ICU::Federation.find(newbie.fed).name
+      newbie_sex = I18n.t("player.gender.#{newbie.gender}")
+
+      visit shop_path
+      click_link standard_sub.description
+      click_button new_member
+
+      fill_in first_name, with: newbie.first_name
+      fill_in last_name, with: newbie.last_name
+      fill_in dob, with: newbie.dob.to_s
+      select newbie_sex, from: gender
+      select newbie_fed, from: fed
+      fill_in email, with: newbie.email
+
+      click_button save
+      expect(page).to_not have_css(failure)
+
+      click_button add_to_cart
+
+      expect(Cart.count).to eq 1
+      expect(Item::Subscription.count).to eq 1
+      expect(Item::Subscription.inactive.where(fee: standard_sub, player_id: nil).count).to eq 1
+
+      cart = Cart.last
+      subscription = Item::Subscription.last
+
+      expect(page).to have_xpath(xpath("th", item, member, cost))
+      expect(page).to have_xpath(xpath("td", subscription.description, newbie.name, subscription.cost))
+      expect(page).to have_xpath(xpath("th", total, standard_sub.amount))
+
+      expect(subscription).to be_unpaid
+      expect(subscription.cart).to eq cart
+      expect(subscription.fee).to eq standard_sub
+      expect(subscription.player).to be_nil
+      expect(subscription.new_player == newbie).to eq true
+
+      click_link continue
+      click_link standard_sub.description
+      click_button new_member
+
+      fill_in first_name, with: newbie.first_name
+      fill_in last_name, with: newbie.last_name
+      fill_in dob, with: newbie.dob.to_s
+      select newbie_sex, from: gender
+      select newbie_fed, from: fed
+      fill_in email, with: newbie.email
+
+      click_button save
+      click_button add_to_cart
+      expect(page).to have_css(failure, text: /already in.*cart/)
+    end
+
+    it "duplicate new member", js: true do
+      newbie_fed = ICU::Federation.find(player.fed).name
+      newbie_sex = I18n.t("player.gender.#{player.gender}")
+
+      visit shop_path
+      click_link standard_sub.description
+      click_button new_member
+
+      fill_in first_name, with: player.first_name
+      fill_in last_name, with: player.last_name
+      fill_in dob, with: player.dob.to_s
+      select newbie_sex, from: gender
+      select newbie_fed, from: fed
+
+      click_button save
+      expect(page).to have_css(failure, text: /matches.*#{player.id}/)
+      expect(page).to_not have_button(add_to_cart)
     end
 
     it "blocked by lifetime subscription", js: true do
@@ -310,8 +387,6 @@ describe "Shop" do
 
       click_link player.id
 
-      expect(page).to_not have_button(select_member)
-      expect(page).to have_button(reselect_member)
       click_button add_to_cart
 
       expect(Cart.count).to eq 1

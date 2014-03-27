@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.integer  "fee_id"
     t.integer  "cart_id"
     t.string   "description"
+    t.string   "player_data"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "cost",                      precision: 6, scale: 2

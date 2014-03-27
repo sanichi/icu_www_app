@@ -1,0 +1,16 @@
+function new_player_callback(json, name) {
+  $('#item_player_data').val(json);
+  $('#item_player_id').val("");
+  $('#player_name').text(name);
+  $('#new_player_modal').modal('hide');
+  $('input[type="submit"]').show();
+  $('.alert').hide();
+  $('button.select-player').removeClass('btn-info').addClass('btn-default');
+}
+
+$(function() {
+  $('#new_player_fields').on('click', '#cancel_new_player', function(e) {
+    e.preventDefault();
+    $('#new_player_modal').modal('hide');
+  });
+});
