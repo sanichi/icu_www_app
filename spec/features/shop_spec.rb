@@ -7,6 +7,7 @@ describe "Shop" do
   let(:cost)            { I18n.t("item.cost") }
   let(:dob)             { I18n.t("player.abbrev.dob") }
   let(:email)           { I18n.t("email") }
+  let(:empty)           { I18n.t("shop.cart.empty") }
   let(:fed)             { I18n.t("player.federation") }
   let(:first_name)      { I18n.t("player.first_name") }
   let(:gender)          { I18n.t("player.gender.gender") }
@@ -21,6 +22,7 @@ describe "Shop" do
   let(:delete)          { "✘" }
   let(:failure)         { "div.alert-danger" }
   let(:force_submit)    { "\n" }
+  let(:warning)         { "div.alert-warning" }
 
   def xpath(type, text, *txts)
     txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|
@@ -33,8 +35,7 @@ describe "Shop" do
       expect(Cart.count).to eq 0
 
       visit cart_path
-      expect(page).to have_xpath(xpath("th", item, member, cost))
-      expect(page).to have_xpath(xpath("th", total, "0.00"))
+      expect(page).to have_css(warning, text: empty)
 
       expect(Cart.count).to eq 1
     end
@@ -318,7 +319,7 @@ describe "Shop" do
       click_link delete, match: :first
       confirm_dialog
 
-      expect(page).to have_xpath(xpath("th", total, 0.0))
+      expect(page).to have_css(warning, text: empty)
 
       expect(Cart.count).to eq 1
       expect(Item::Subscription.inactive.count).to eq 0

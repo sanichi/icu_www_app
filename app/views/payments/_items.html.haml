@@ -2,26 +2,30 @@
   - hidden = false
 
 .row{id: "cart-#{cart.id}", style: hidden ? "display: none" : ""}
-  .col-md-1
-  .col-md-10
-    %table{class: "table table-striped"}
-      %thead
-        %tr
-          %th.col-sm-5= t("item.item")
-          %th.col-sm-4= t("member")
-          %th.col-sm-2.text-center= t("item.cost")
-          %td.col-sm-1
-      %tbody
-        - cart.items.each do |item|
+  - if cart.items.any?
+    .col-md-1
+    .col-md-10
+      %table{class: "table table-striped"}
+        %thead
           %tr
-            %td= item.description
-            %td= item.player_name
-            %td.text-center= euros(item.cost)
+            %th.col-sm-5= t("item.item")
+            %th.col-sm-4= t("member")
+            %th.col-sm-2.text-center= t("item.cost")
+            %td.col-sm-1
+        %tbody
+          - cart.items.each do |item|
+            %tr
+              %td= item.description
+              %td= item.player_name
+              %td.text-center= euros(item.cost)
+              - if cart.unpaid?
+                %td.text-center= link_to "✘", item.becomes(Item), data: { confirm: t("item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
+          %tr
+            %th{colspan: 2}= t("shop.cart.total")
+            %th.text-center= euros(cart.total_cost)
             - if cart.unpaid?
-              %td.text-center= link_to "✘", item.becomes(Item), data: { confirm: t("item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
-        %tr
-          %th{colspan: 2}= t("shop.cart.total")
-          %th.text-center= euros(cart.total_cost)
-          - if cart.unpaid?
-            %th
-  .col-md-2
+              %th
+  - else
+    .col-md-3
+    .col-md-6
+      .alert.alert-warning.text-center= t("shop.cart.empty")

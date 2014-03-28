@@ -8,6 +8,7 @@ en:
       completed: Completed payments
       continue: Continue Shopping
       current: Current cart
+      empty: Your cart is empty
       hide: Hide cart
       items: Purchases
       show: Show cart
