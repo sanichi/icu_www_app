@@ -12,8 +12,9 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
-# Be patient with Ajax wait times (this includes waiting for Stripe).
-Capybara.default_wait_time = 15
+Capybara.configure do |config|
+  config.default_wait_time = 15 # be patient with Ajax wait times (includes waiting for Stripe)
+end
 
 RSpec.configure do |config|
   config.mock_with :rspec
