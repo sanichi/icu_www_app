@@ -40,7 +40,7 @@ describe "Shop" do
     end
   end
 
-  context "subscriptions" do
+  context "subscriptions", js: true do
     let!(:player)         { create(:player, dob: 58.years.ago.to_date, joined: 30.years.ago.to_date) }
     let!(:player2)        { create(:player, dob: 30.years.ago.to_date, joined: 20.years.ago.to_date) }
     let!(:junior)         { create(:player, dob: 10.years.ago.to_date, joined: 2.years.ago.to_date) }
@@ -59,7 +59,7 @@ describe "Shop" do
     let(:too_old_error)   { I18n.t("item.error.age.old", member: player.name, date: under_12_sub.age_ref_date.to_s, limit: under_12_sub.max_age) }
     let(:too_young_error) { I18n.t("item.error.age.young", member: player.name, date: over_65_sub.age_ref_date.to_s, limit: over_65_sub.min_age) }
 
-    it "add", js: true do
+    it "add" do
       visit shop_path
       expect(page).to_not have_link(cart_link)
       click_link standard_sub.description
@@ -94,7 +94,7 @@ describe "Shop" do
       expect(page).to have_link(cart_link)
     end
 
-    it "new member", js: true do
+    it "new member" do
       newbie_fed = ICU::Federation.find(newbie.fed).name
       newbie_sex = I18n.t("player.gender.#{newbie.gender}")
 
@@ -147,7 +147,7 @@ describe "Shop" do
       expect(page).to have_css(failure, text: /already in.*cart/)
     end
 
-    it "duplicate new member", js: true do
+    it "duplicate new member" do
       newbie_fed = ICU::Federation.find(player.fed).name
       newbie_sex = I18n.t("player.gender.#{player.gender}")
 
@@ -166,7 +166,7 @@ describe "Shop" do
       expect(page).to_not have_button(add_to_cart)
     end
 
-    it "blocked by lifetime subscription", js: true do
+    it "blocked by lifetime subscription" do
       expect(lifetime_sub.player).to eq player
 
       visit shop_path
@@ -183,7 +183,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 0
     end
 
-    it "blocked by existing subscription", js: true do
+    it "blocked by existing subscription" do
       expect(existing_sub.player).to eq player
 
       visit shop_path
@@ -200,7 +200,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 0
     end
 
-    it "blocked by cart duplicate", js: true do
+    it "blocked by cart duplicate" do
       visit shop_path
       click_link standard_sub.description
       click_button select_member
@@ -228,7 +228,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 1
     end
 
-    it "too old", js: true do
+    it "too old" do
       visit shop_path
       click_link under_12_sub.description
       click_button select_member
@@ -254,7 +254,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 1
     end
 
-    it "too young", js: true do
+    it "too young" do
       visit shop_path
       click_link over_65_sub.description
       click_button select_member
@@ -280,7 +280,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 1
     end
 
-    it "delete", js: true do
+    it "delete" do
       visit shop_path
       click_link standard_sub.description
       click_button select_member
@@ -324,7 +324,7 @@ describe "Shop" do
       expect(Item::Subscription.inactive.count).to eq 0
     end
 
-    it "delete from other cart", js: true do
+    it "delete from other cart" do
       visit shop_path
       click_link standard_sub.description
       click_button select_member
@@ -358,7 +358,7 @@ describe "Shop" do
     end
   end
 
-  context "entries" do
+  context "entries", js: true do
     let!(:player)         { create(:player) }
     let!(:master)         { create(:player, latest_rating: 2400) }
     let!(:beginner)       { create(:player, latest_rating: 1000) }
@@ -378,7 +378,7 @@ describe "Shop" do
 
     let(:existing_entry)  { create(:paid_entry_item, player: player, fee: entry_fee) }
 
-    it "add", js: true do
+    it "add" do
       visit shop_path
       expect(page).to_not have_link(cart_link)
       click_link entry_fee.description
@@ -415,7 +415,7 @@ describe "Shop" do
       expect(page).to have_link(cart_link)
     end
 
-    it "blocked by existing entry", js: true do
+    it "blocked by existing entry" do
       expect(existing_entry.player).to eq player
 
       visit shop_path
@@ -432,7 +432,7 @@ describe "Shop" do
       expect(Item::Entry.inactive.count).to eq 0
     end
 
-    it "blocked by cart duplicate", js: true do
+    it "blocked by cart duplicate" do
       visit shop_path
       click_link entry_fee.description
       click_button select_member
@@ -460,7 +460,7 @@ describe "Shop" do
       expect(Item::Entry.inactive.count).to eq 1
     end
 
-    it "too strong", js: true do
+    it "too strong" do
       visit shop_path
       click_link u1400_fee.description
       click_button select_member
@@ -496,7 +496,7 @@ describe "Shop" do
       expect(Item::Entry.inactive.count).to eq 2
     end
 
-    it "too weak", js: true do
+    it "too weak" do
       visit shop_path
       click_link premier_fee.description
       click_button select_member
@@ -532,7 +532,7 @@ describe "Shop" do
       expect(Item::Entry.inactive.count).to eq 2
     end
 
-    it "too old or young", js: true do
+    it "too old or young" do
       visit shop_path
       click_link junior_fee.description
       click_button select_member

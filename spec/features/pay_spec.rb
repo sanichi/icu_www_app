@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Pay" do
+describe "Pay", js: true do
   let(:player)                { create(:player) }
   let(:user)                  { create(:user) }
 
@@ -86,7 +86,7 @@ describe "Pay" do
       click_link checkout
     end
 
-    it "successful", js: true do
+    it "successful" do
       cart = Cart.last
       subscription = Item::Subscription.last
 
@@ -130,7 +130,7 @@ describe "Pay" do
       expect(email.body.decoded).to include("%.2f" % subscription.cost)
     end
 
-    it "stripe errors", js: true do
+    it "stripe errors" do
       fill_in_all_and_click_pay(number: "4000000000000002")
       expect(page).to have_css(error, text: gateway_error(card_declined))
       subscription = Item::Subscription.last
@@ -182,7 +182,7 @@ describe "Pay" do
       expect(ActionMailer::Base.deliveries).to be_empty
     end
 
-    it "client side errors", js: true do
+    it "client side errors" do
       expect(PaymentError.count).to eq 0
 
       # Card.
@@ -247,7 +247,7 @@ describe "Pay" do
       click_link checkout
     end
 
-    it "successful", js: true do
+    it "successful" do
       subscription = Item::Subscription.last
       expect(subscription.player_id).to be_nil
       expect(subscription.player_data).to be_present
