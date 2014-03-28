@@ -5,5 +5,14 @@ function player_ids_callback(icu_id, name) {
   $('#player_ids_modal').modal('hide');
   $('input[type="submit"]').show();
   $('.alert').hide();
-  $('button.select-player').removeClass('btn-info').addClass('btn-default');
+  $('.select-player-button').removeClass('btn-info').addClass('btn-default');
 }
+
+<%- unless current_user.guest? %>
+$(function() {
+  $('#select_user_button').on('click', function(e) {
+    e.preventDefault();
+    player_ids_callback(<%= current_user.player_id %>, '<%= escape_single_quoted(current_user.player.name) %>')
+  });
+});
+<%- end %>

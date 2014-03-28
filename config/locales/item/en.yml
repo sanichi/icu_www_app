@@ -25,6 +25,7 @@ en:
     member:
       new: New Member
       select: Select Member
+      me: Select Me
     n_items:
       one: 1 item
       other: "%{count} items"

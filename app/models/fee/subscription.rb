@@ -26,6 +26,12 @@ class Fee::Subscription < Fee
     fee.becomes(Fee)
   end
 
+  def applies_to?(user)
+    return false unless user.player
+    return false if Item::Subscription.any_duplicates(user.player, end_date).exists?
+    true
+  end
+
   private
 
   def set_dates

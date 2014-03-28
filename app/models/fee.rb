@@ -72,6 +72,10 @@ class Fee < ActiveRecord::Base
     self.years = Season.new(self.years).next.to_s if years.present?
   end
 
+  def applies_to?(user)
+    false # override in subclasses if required
+  end
+
   private
 
   def normalize_attributes

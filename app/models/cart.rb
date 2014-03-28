@@ -19,9 +19,12 @@ class Cart < ActiveRecord::Base
     active? && payment_method == "stripe"
   end
 
-  def does_not_already_have?(new_item)
-    return true if items.none? do |item|
-      new_item.duplicate_of?(item, :add_error)
+  def duplicates?(new_item, add_error: false)
+    items.each do |item|
+      if error = new_item.duplicate_of?(item)
+        new_item.errors.add(:base, error) if add_error
+        return true
+      end
     end
     false
   end

@@ -22,6 +22,8 @@
             = render "detail", term: t("member"), desc: "", id: "player_name"
         .panel-footer
           = render "player_ids_button"
+          - if @fee.applies_to?(current_user)
+            = render "select_user_button"
           - if @fee.subtype == "subscription"
             = render "new_player_button"
           = link_to t("cancel"), shop_path, class: "btn btn-default btn-sm"

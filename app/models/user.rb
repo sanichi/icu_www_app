@@ -107,6 +107,10 @@ class User < ActiveRecord::Base
       true
     end
 
+    def player
+      nil
+    end
+
     def roles
       nil
     end

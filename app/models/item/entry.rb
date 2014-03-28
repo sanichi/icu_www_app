@@ -2,10 +2,11 @@ class Item::Entry < Item
   validates :start_date, :end_date, :player, presence: true
   validate :no_duplicates
 
-  def duplicate_of?(item, add_error=false)
+  scope :any_duplicates, ->(player, fee) { active.where(player_id: player.id).where(fee_id: fee.id) }
+
+  def duplicate_of?(item)
     if type == item.type && player_id == item.player_id && fee_id == item.fee_id
-      errors.add(:base, I18n.t("item.error.entry.already_in_cart", member: player.name(id: true))) if add_error
-      true
+      I18n.t("item.error.entry.already_in_cart", member: player.name(id: true))
     else
       false
     end
@@ -14,8 +15,8 @@ class Item::Entry < Item
   private
 
   def no_duplicates
-    if [player, start_date, end_date, description].all?(&:present?)
-      if Item::Entry.active.where(player_id: player.id, description: description, start_date: start_date, end_date: end_date).where.not(id: id).count > 0
+    if new_record? && [player, fee].all?(&:present?)
+      if self.class.any_duplicates(player, fee).count > 0
         errors.add(:base, I18n.t("item.error.entry.already_entered", member: player.name(id: true)))
       end
     end

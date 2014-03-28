@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
     @fee = @item.fee
     cart = current_cart(:create)
 
-    if cart.does_not_already_have?(@item) && @item.save
+    if !cart.duplicates?(@item, add_error: true) && @item.save
       cart.items << @item
       redirect_to cart_path
     else

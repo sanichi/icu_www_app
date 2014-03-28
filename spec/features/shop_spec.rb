@@ -373,6 +373,10 @@ describe "Shop" do
     let(:too_low_error)   { I18n.t("item.error.rating.low", member: beginner.name, limit: premier_fee.min_rating) }
     let(:too_old_error)   { I18n.t("item.error.age.old", member: player.name, date: junior_fee.age_ref_date.to_s, limit: junior_fee.max_age) }
     let(:too_young_error) { I18n.t("item.error.age.young", member: u10.name, date: junior_fee.age_ref_date.to_s, limit: junior_fee.min_age) }
+    let(:exists_error)    { I18n.t("item.error.entry.already_entered", member: player.name(id: true)) }
+    let(:in_cart_error)   { I18n.t("item.error.entry.already_in_cart", member: player.name(id: true)) }
+
+    let(:existing_entry)  { create(:paid_entry_item, player: player, fee: entry_fee) }
 
     it "add", js: true do
       visit shop_path
@@ -409,6 +413,51 @@ describe "Shop" do
 
       visit shop_path
       expect(page).to have_link(cart_link)
+    end
+
+    it "blocked by existing entry", js: true do
+      expect(existing_entry.player).to eq player
+
+      visit shop_path
+      click_link entry_fee.description
+      click_button select_member
+      fill_in last_name, with: player.last_name + force_submit
+      fill_in first_name, with: player.first_name + force_submit
+      click_link player.id
+      click_button add_to_cart
+
+      expect(page).to have_css(failure, text: exists_error)
+
+      expect(Cart.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 0
+    end
+
+    it "blocked by cart duplicate", js: true do
+      visit shop_path
+      click_link entry_fee.description
+      click_button select_member
+      fill_in last_name, with: player.last_name + force_submit
+      fill_in first_name, with: player.first_name + force_submit
+      click_link player.id
+      click_button add_to_cart
+
+      expect(page).to_not have_css(failure)
+
+      expect(Cart.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 1
+
+      visit shop_path
+      click_link entry_fee.description
+      click_button select_member
+      fill_in last_name, with: player.last_name + force_submit
+      fill_in first_name, with: player.first_name + force_submit
+      click_link player.id
+      click_button add_to_cart
+
+      expect(page).to have_css(failure, text: in_cart_error)
+
+      expect(Cart.count).to eq 1
+      expect(Item::Entry.inactive.count).to eq 1
     end
 
     it "too strong", js: true do
@@ -512,6 +561,51 @@ describe "Shop" do
 
       expect(Cart.count).to eq 1
       expect(Item::Entry.inactive.count).to eq 1
+    end
+  end
+
+  context "select me", js: true do
+    let!(:user)             { create(:user) }
+    let!(:subscription_fee) { create(:subscription_fee) }
+    let!(:entry_fee)        { create(:entry_fee) }
+
+    let(:existing_sub)      { create(:paid_subscription_item, player: user.player, fee: subscription_fee) }
+    let(:existing_entry)    { create(:paid_entry_item, player: user.player, fee: entry_fee) }
+
+    let(:cancel)            { I18n.t("cancel") }
+    let(:select_me)         { I18n.t("item.member.me") }
+
+    it "guest" do
+      visit shop_path
+      click_link subscription_fee.description
+      expect(page).to_not have_link(select_me, exact: true)
+
+      click_link cancel
+      click_link entry_fee.description
+      expect(page).to_not have_link(select_me, exact: true)
+    end
+
+    it "logged in" do
+      login(user)
+
+      visit shop_path
+      click_link subscription_fee.description
+      expect(page).to have_link(select_me, exact: true)
+
+      click_link cancel
+      click_link entry_fee.description
+      expect(page).to have_link(select_me, exact: true)
+
+      expect(existing_sub.player).to eq user.player
+      expect(existing_entry.player).to eq user.player
+
+      click_link cancel
+      click_link subscription_fee.description
+      expect(page).to_not have_link(select_me, exact: true)
+
+      click_link cancel
+      click_link entry_fee.description
+      expect(page).to_not have_link(select_me, exact: true)
     end
   end
 end

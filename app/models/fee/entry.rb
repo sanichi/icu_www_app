@@ -34,6 +34,12 @@ class Fee::Entry < Fee
     fee.becomes(Fee)
   end
 
+  def applies_to?(user)
+    return false unless user.player
+    return false if Item::Entry.any_duplicates(user.player, self).exists?
+    true
+  end
+
   private
 
   def default_attributes
