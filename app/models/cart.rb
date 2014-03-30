@@ -114,16 +114,14 @@ class Cart < ActiveRecord::Base
   end
 
   def send_receipt
-    if paid? && confirmation_email.present?
-      begin
-        IcuMailer.payment_receipt(id).deliver
-        update_columns(confirmation_sent: true)
-      rescue => e
-        update_columns(confirmation_sent: false, confirmation_error: e.message.gsub(/\s+/, ' ').truncate(255))
-      end
-    else
-      update_columns(confirmation_sent: false, confirmation_error: "no email address available")
-    end
+    return unless paid?
+    mail = IcuMailer.payment_receipt(id)
+    update_column(:confirmation_text, mail.body.decoded)
+    raise "no email address available" unless confirmation_email.present?
+    mail.deliver
+    update_column(:confirmation_sent, true)
+  rescue => e
+    update_columns(confirmation_sent: false, confirmation_error: e.message.gsub(/\s+/, ' ').truncate(255))
   end
 
   def cents(euros)

@@ -124,6 +124,7 @@ describe "Pay", js: true do
       expect(cart.payment_errors.count).to eq 0
       expect(cart.confirmation_sent).to be_true
       expect(cart.confirmation_error).to be_nil
+      expect(cart.confirmation_text).to be_present
 
       subscription.reload
       expect(subscription).to be_paid
@@ -136,8 +137,11 @@ describe "Pay", js: true do
       expect(email.to.size).to eq 1
       expect(email.to.first).to eq player.email
       expect(email.subject).to eq IcuMailer::CONFIRMATION
-      expect(email.body.decoded).to include(player.name(id: true))
-      expect(email.body.decoded).to include("%.2f" % subscription.cost)
+
+      text = email.body.decoded
+      expect(text).to include(player.name(id: true))
+      expect(text).to include("%.2f" % subscription.cost)
+      expect(text).to eq cart.confirmation_text
     end
 
     it "stripe errors" do
@@ -237,6 +241,11 @@ describe "Pay", js: true do
   end
 
   context "pay with cash" do
+    let(:payer_first_name) { "Payer's first name" }
+    let(:payer_email)      { "Payer's email" }
+    let(:payer_last_name)  { "Payer's last name" }
+    let(:payer_method)     { "Payment method" }
+
     before(:each) do
       add_something_to_cart
     end
@@ -248,12 +257,12 @@ describe "Pay", js: true do
       officer = login("membership")
       visit cart_path
       expect(page).to have_link(checkout)
-      click_link(payment_received)
+      click_link payment_received
 
-      fill_in "Payer's first name", with: player.first_name
-      fill_in "Payer's last name", with: player.last_name
-      select cheque, from: "Payment method"
-      fill_in "Payer's email", with: player.email
+      fill_in payer_first_name, with: player.first_name
+      fill_in payer_last_name, with: player.last_name
+      select cheque, from: payer_method
+      fill_in payer_email, with: player.email
       click_button confirm
 
       expect(page).to have_css(success, text: payment_registered)
@@ -268,6 +277,7 @@ describe "Pay", js: true do
       expect(cart.items.count).to eq 1
       expect(cart.confirmation_sent).to be_true
       expect(cart.confirmation_error).to be_nil
+      expect(cart.confirmation_text).to be_present
 
       subscription = cart.items.first
       expect(subscription).to be_paid
@@ -281,8 +291,36 @@ describe "Pay", js: true do
       expect(email.to.size).to eq 1
       expect(email.to.first).to eq player.email
       expect(email.subject).to eq IcuMailer::CONFIRMATION
-      expect(email.body.decoded).to include(player.name(id: true))
-      expect(email.body.decoded).to include("%.2f" % subscription.cost)
+
+      text = email.body.decoded
+      expect(text).to include(player.name(id: true))
+      expect(text).to include("%.2f" % subscription.cost)
+      expect(text).to eq cart.confirmation_text
+    end
+
+    it "without email" do
+      login("membership")
+      visit cart_path
+      click_link payment_received
+
+      fill_in payer_first_name, with: player.first_name
+      fill_in payer_last_name, with: player.last_name
+      select cheque, from: payer_method
+      click_button confirm
+
+      expect(page).to have_css(success, text: payment_registered)
+
+      cart = Cart.last
+      expect(cart).to be_paid
+      expect(cart.confirmation_sent).to be_false
+      expect(cart.confirmation_error).to eq "no email address available"
+      expect(cart.confirmation_text).to be_present
+
+      expect(ActionMailer::Base.deliveries.size).to eq 0
+
+      text = cart.confirmation_text
+      expect(text).to include(player.name(id: true))
+      expect(text).to include("%.2f" % cart.total)
     end
   end
 

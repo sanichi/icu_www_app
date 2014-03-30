@@ -6,6 +6,8 @@
     = "sent"
   - else
     = "not sent; problem: #{cart.confirmation_error.presence || 'unknown'}"
-.row
-  .col-md-12
-    %pre= render "icu_mailer/payment_receipt.text", cart: cart
+%pre
+  - if cart.confirmation_text.present?
+    = cart.confirmation_text
+  - else
+    = render "icu_mailer/payment_receipt.text", cart: cart
