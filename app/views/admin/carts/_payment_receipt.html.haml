@@ -1,13 +1,18 @@
 %hr
 %h3.text-center Payment Receipt
-.well.well-sm.small.text-center
-  = "Status: "
+.well.well-sm.small{class: cart.confirmation_error.to_s.length > 50 ? "" : "text-center"}
+  = "This message "
   - if cart.confirmation_sent
-    = "sent"
+    = "was sent when the payment was first made"
   - else
-    = "not sent; problem: #{cart.confirmation_error.presence || 'unknown'}"
-%pre
-  - if cart.confirmation_text.present?
-    = cart.confirmation_text
-  - else
-    = render "icu_mailer/payment_receipt.text", cart: cart
+    = "has NOT been sent "
+    - if cart.confirmation_error.present?
+      = "because of the following problem: #{cart.confirmation_error}"
+    - else
+      = "and the cause of problem is unknown"
+
+/ Warning: need each <pre> and it's input on the same line to stop HAML adding indentation.
+- if cart.confirmation_text.present?
+  %pre= cart.confirmation_text
+- else
+  %pre= render "icu_mailer/payment_receipt.text", cart: cart
