@@ -5,6 +5,7 @@ en:
   any: Any
   by: by
   cancel: Cancel
+  confirm: Confirm
   created_at: Created
   date: Date
   date_format: YYYY-MM-DD

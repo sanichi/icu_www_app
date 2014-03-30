@@ -31,6 +31,7 @@ IcuWwwApp::Application.routes.draw do
     resources :carts,           only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member
     end
+    resources :cash_payments,   only: [:new, :create]
     resources :clubs,           only: [:new, :create, :edit, :update]
     resources :fees do
       get :rollover, :clone, on: :member

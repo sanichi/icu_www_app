@@ -5,51 +5,65 @@ describe "Pay", js: true do
   let(:user)                  { create(:user) }
 
   let(:add_to_cart)           { I18n.t("item.add") }
+  let(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
+  let(:bad_email)             { I18n.t("shop.payment.error.email") }
+  let(:bad_expiry)            { I18n.t("shop.payment.error.expiry") }
+  let(:bad_name)              { I18n.t("shop.payment.error.name") }
+  let(:bad_number)            { I18n.t("shop.payment.error.number") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
+  let(:cheque)                { I18n.t("shop.payment.method.cheque") }
+  let(:completed)             { I18n.t("shop.payment.completed") }
+  let(:confirm)               { I18n.t("confirm") }
+  let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:dob)                   { I18n.t("player.abbrev.dob") }
   let(:email)                 { I18n.t("email") }
   let(:fed)                   { I18n.t("player.federation") }
   let(:first_name)            { I18n.t("player.first_name") }
+  let(:gateway)               { I18n.t("shop.payment.error.gateway") }
   let(:gender)                { I18n.t("player.gender.gender") }
   let(:last_name)             { I18n.t("player.last_name") }
   let(:new_member)            { I18n.t("item.member.new") }
+  let(:pay)                   { I18n.t("shop.payment.card.pay") }
+  let(:payment_received)      { I18n.t("shop.payment.received") }
+  let(:payment_registered)    { I18n.t("shop.payment.registered") }
+  let(:payment_time)          { I18n.t("shop.payment.time") }
   let(:save)                  { I18n.t("save") }
   let(:select_member)         { I18n.t("item.member.select") }
   let(:shop)                  { I18n.t("shop.shop") }
-
-  let(:pay)                   { I18n.t("shop.payment.card.pay") }
-  let(:completed)             { I18n.t("shop.payment.completed") }
   let(:total)                 { I18n.t("shop.cart.total") }
-  let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
-  let(:payment_time)          { I18n.t("shop.payment.time") }
-  let(:gateway)               { I18n.t("shop.payment.error.gateway") }
-  let(:bad_number)            { I18n.t("shop.payment.error.number") }
-  let(:bad_expiry)            { I18n.t("shop.payment.error.expiry") }
-  let(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
-  let(:bad_name)              { I18n.t("shop.payment.error.name") }
-  let(:bad_email)             { I18n.t("shop.payment.error.email") }
 
-  let(:number_id)             { "number" }
-  let(:expiry_id)             { "expiry" }
-  let(:email_id)              { "confirmation_email" }
-  let(:name_id)               { "payment_name" }
   let(:cvc_id)                { "cvc" }
+  let(:email_id)              { "confirmation_email" }
+  let(:expiry_id)             { "expiry" }
+  let(:name_id)               { "payment_name" }
+  let(:number_id)             { "number" }
 
-  let(:stripe)                { "stripe" }
-  let(:number)                { "4242 4242 4242 4242" }
-  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:cvc)                   { "123" }
+  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:force_submit)          { "\n" }
+  let(:number)                { "4242 4242 4242 4242" }
+  let(:stripe)                { "stripe" }
 
-  let(:title)                 { "h3" }
-  let(:item)                  { "li" }
-  let(:error)                 { "div.alert-danger" }
   let(:card_declined)         { "Your card was declined." }
+  let(:error)                 { "div.alert-danger" }
   let(:expired_card)          { "Your card's expiration date is incorrect." }
   let(:incorrect_cvc)         { "Your card's security code is incorrect." }
+  let(:item)                  { "li" }
+  let(:success)               { "div.alert-success" }
+  let(:title)                 { "h3" }
 
   let!(:subscription_fee)     { create(:subscription_fee) }
+
+  def add_something_to_cart
+    visit shop_path
+    click_link subscription_fee.description
+    click_button select_member
+    fill_in last_name, with: player.last_name + force_submit
+    fill_in first_name, with: player.first_name + force_submit
+    click_link player.id
+    click_button add_to_cart
+  end
 
   def fill_in_all_and_click_pay(opt = {})
     opt.reverse_merge!(number: number, expiry: expiry, cvc: cvc, name: player.name, email: player.email)
@@ -74,28 +88,22 @@ describe "Pay", js: true do
     ActionMailer::Base.deliveries.clear
   end
 
-  context "subscription" do
+  context "pay with card" do
     before(:each) do
-      visit shop_path
-      click_link subscription_fee.description
-      click_button select_member
-      fill_in last_name, with: player.last_name + force_submit
-      fill_in first_name, with: player.first_name + force_submit
-      click_link player.id
-      click_button add_to_cart
+      add_something_to_cart
       click_link checkout
     end
 
     it "successful" do
       cart = Cart.last
-      subscription = Item::Subscription.last
-
       expect(cart).to be_unpaid
       expect(cart.payment_completed).to be_nil
       expect(cart.payment_ref).to be_nil
       expect(cart.payment_method).to be_nil
       expect(cart.user).to be_nil
+      expect(cart.items.count).to eq 1
 
+      subscription = cart.items.first
       expect(subscription).to be_unpaid
       expect(subscription.payment_method).to be_nil
       expect(subscription.source).to eq "www2"
@@ -226,8 +234,46 @@ describe "Pay", js: true do
     end
   end
 
+  context "pay with cash" do
+    before(:each) do
+      add_something_to_cart
+    end
+
+    it "successful" do
+      expect(page).to have_link(checkout)
+      expect(page).to_not have_link(payment_received)
+
+      officer = login("membership")
+      visit cart_path
+      expect(page).to have_link(checkout)
+      click_link(payment_received)
+
+      fill_in "Payer's first name", with: player.first_name
+      fill_in "Payer's last name", with: player.last_name
+      select cheque, from: "Payment method"
+      fill_in "Payer's email", with: player.email
+      click_button confirm
+
+      expect(page).to have_css(success, text: payment_registered)
+
+      cart = Cart.last
+      expect(cart).to be_paid
+      expect(cart.payment_completed).to be_present
+      expect(cart.payment_ref).to be_nil
+      expect(cart.payment_method).to eq "cheque"
+      expect(cart.user).to eq officer
+      expect(cart.payment_errors.count).to eq 0
+      expect(cart.items.count).to eq 1
+
+      subscription = cart.items.first
+      expect(subscription).to be_paid
+      expect(subscription.payment_method).to eq "cheque"
+      expect(subscription.source).to eq "www2"
+    end
+  end
+
   context "new member" do
-    let(:newbie)     { build(:new_player) }
+    let(:newbie)     { create(:new_player) }
     let(:newbie_fed) { ICU::Federation.find(newbie.fed).name }
     let(:newbie_sex) { I18n.t("player.gender.#{newbie.gender}") }
 

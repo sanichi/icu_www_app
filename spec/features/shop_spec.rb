@@ -52,7 +52,7 @@ describe "Shop" do
     let!(:over_65_sub)    { create(:subscription_fee, name: "Over 65", amount: 20.0, min_age: 65) }
     let(:lifetime_sub)    { create(:lifetime_subscription, player: player) }
     let(:existing_sub)    { create(:paid_subscription_item, player: player, fee: standard_sub) }
-    let(:newbie)          { build(:new_player, dob: 15.years.ago.to_date) }
+    let(:newbie)          { create(:new_player, dob: 15.years.ago.to_date) }
 
     let(:lifetime_error)  { I18n.t("item.error.subscription.lifetime_exists", member: player.name(id: true)) }
     let(:exists_error)    { I18n.t("item.error.subscription.already_exists", member: player.name(id: true), season: standard_sub.season.to_s) }

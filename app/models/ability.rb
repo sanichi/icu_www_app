@@ -15,6 +15,7 @@ class Ability
 
     if user.membership?
       can :manage, Player
+      can :create, CashPayment
     end
 
     if user.translator?
@@ -28,6 +29,7 @@ class Ability
       can :manage, Cart
       can :index, PaymentError
       can :index, Refund
+      can :create, CashPayment
     end
 
     can :show, Player, id: user.player_id

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe NewPlayer do
   let(:blank) { NewPlayer.new }
-  let(:valid) { NewPlayer.new(attributes_for(:new_player)) }
+  let(:valid) { create(:new_player) }
 
   # Adapted from https://github.com/rails/rails/blob/master/activemodel/lib/active_model/lint.rb.
   context "lint" do
@@ -70,7 +70,7 @@ describe NewPlayer do
   end
 
   context "canonicalisation" do
-    let(:untidy) { NewPlayer.new(attributes_for(:new_player, first_name: " marK ", last_name: " lowRy - O rEillY  ", email: " ", club_id: "")) }
+    let(:untidy) { create(:new_player, first_name: " marK ", last_name: " lowRy - O rEillY  ", email: " ", club_id: "") }
 
     it "name" do
       expect(untidy.first_name).to eq "Mark"
@@ -103,9 +103,9 @@ describe NewPlayer do
   context "#no_duplicates" do
     let!(:player)    { create(:player) }
     let!(:db_dup)    { create(:player, player_id: player.id) }
-    let(:new_player) { build(:new_player) }
-    let(:duplicate)  { build(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob) }
-    let(:not_a_dup)  { build(:new_player, first_name: db_dup.first_name, last_name: db_dup.last_name, dob: db_dup.dob) }
+    let(:new_player) { create(:new_player) }
+    let(:duplicate)  { create(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob) }
+    let(:not_a_dup)  { create(:new_player, first_name: db_dup.first_name, last_name: db_dup.last_name, dob: db_dup.dob) }
 
     it "non-duplicate" do
       expect(new_player).to be_valid
@@ -125,12 +125,12 @@ describe NewPlayer do
   end
 
   context "#==" do
-    let(:player)  { build(:new_player) }
-    let(:player1) { build(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob) }
-    let(:player2) { build(:new_player, first_name: player.first_name + " X.", last_name: player.last_name, dob: player.dob) }
-    let(:player3) { build(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob, gender: player.gender == "M" ? "F" : "M") }
-    let(:player4) { build(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob.years_ago(1)) }
-    let(:player5) { build(:new_player, first_name: player.first_name, last_name: player.last_name + "son", dob: player.dob) }
+    let(:player)  { create(:new_player) }
+    let(:player1) { create(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob) }
+    let(:player2) { create(:new_player, first_name: player.first_name + " X.", last_name: player.last_name, dob: player.dob) }
+    let(:player3) { create(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob, gender: player.gender == "M" ? "F" : "M") }
+    let(:player4) { create(:new_player, first_name: player.first_name, last_name: player.last_name, dob: player.dob.years_ago(1)) }
+    let(:player5) { create(:new_player, first_name: player.first_name, last_name: player.last_name + "son", dob: player.dob) }
 
     it "equal" do
       expect(player1 == player).to eq true

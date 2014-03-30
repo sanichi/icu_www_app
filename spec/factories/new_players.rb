@@ -8,5 +8,8 @@ FactoryGirl.define do
     fed        "IRL"
     email      { Faker::Internet.email }
     club_id    nil
+
+    initialize_with { new(attributes) }
+    skip_create
   end
 end

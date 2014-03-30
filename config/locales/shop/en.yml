@@ -17,6 +17,8 @@ en:
       confirmation_email: Confirmation email
       confirmation_email_to: Confirmation email sent to
       completed: Payment completed
+      received: Payment Received
+      registered: Payment registered
       refund: Refund
       ref_number: Reference number for enquiries
       time: Payment completed at
@@ -38,9 +40,9 @@ en:
         email: Invalid confirmation email address
       method:
         any: Any method
-        cash: cash
-        cheque: cheque
-        free: free
+        cash: Cash
+        cheque: Cheque
+        free: Free
         method: Payment method
         paypal: PayPal
         stripe: Stripe

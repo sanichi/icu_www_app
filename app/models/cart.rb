@@ -47,18 +47,14 @@ class Cart < ActiveRecord::Base
   rescue => e
     add_payment_error(e, name, email, "Something went wrong, please contact webmaster@icu.ie")
   else
-    self.status = "paid"
-    self.payment_method = "stripe"
-    self.payment_ref = charge.id
-    self.payment_completed = Time.now
-    items.each { |item| item.complete(payment_method) }
+    successful_payment("stripe", charge.id)
   ensure
-    self.total = total
-    self.original_total = total
-    self.payment_name = name
-    self.confirmation_email = email
-    self.user = user unless user.guest?
-    save
+    update_cart(total, name, email, user)
+  end
+
+  def pay_with_cash(cash_payment, user)
+    successful_payment(cash_payment.payment_method)
+    update_cart(cash_payment.amount, cash_payment.name, cash_payment.email, user)
   end
 
   def refund(item_ids, user)
@@ -97,6 +93,23 @@ class Cart < ActiveRecord::Base
   end
 
   private
+
+  def successful_payment(payment_method, charge_id=nil)
+    self.status = "paid"
+    self.payment_method = payment_method
+    self.payment_ref = charge_id
+    self.payment_completed = Time.now
+    items.each { |item| item.complete(payment_method) }
+  end
+
+  def update_cart(total, name, email, user)
+    self.total = total
+    self.original_total = total
+    self.payment_name = name
+    self.confirmation_email = email
+    self.user = user unless user.guest?
+    save
+  end
 
   def cents(euros)
     (euros * 100).to_i
