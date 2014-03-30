@@ -50,11 +50,13 @@ class Cart < ActiveRecord::Base
     successful_payment("stripe", charge.id)
   ensure
     update_cart(total, name, email, user)
+    send_receipt
   end
 
   def pay_with_cash(cash_payment, user)
     successful_payment(cash_payment.payment_method)
     update_cart(cash_payment.amount, cash_payment.name, cash_payment.email, user)
+    send_receipt
   end
 
   def refund(item_ids, user)
@@ -109,6 +111,19 @@ class Cart < ActiveRecord::Base
     self.confirmation_email = email
     self.user = user unless user.guest?
     save
+  end
+
+  def send_receipt
+    if paid? && confirmation_email.present?
+      begin
+        IcuMailer.payment_receipt(id).deliver
+        update_column(:confirmation_status, "sent at #{Time.now.to_s(:db)}")
+      rescue => e
+        update_column(:confirmation_status, "not sent: #{e.message.gsub(/\s+/, ' ')}".truncate(255))
+      end
+    else
+      update_column(:confirmation_status, "not sent: no email address available")
+    end
   end
 
   def cents(euros)

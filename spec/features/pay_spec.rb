@@ -122,6 +122,7 @@ describe "Pay", js: true do
       expect(cart.payment_ref).to be_present
       expect(cart.payment_method).to eq stripe
       expect(cart.payment_errors.count).to eq 0
+      expect(cart.confirmation_status).to match(/sent at \d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
 
       subscription.reload
       expect(subscription).to be_paid
@@ -264,11 +265,22 @@ describe "Pay", js: true do
       expect(cart.user).to eq officer
       expect(cart.payment_errors.count).to eq 0
       expect(cart.items.count).to eq 1
+      expect(cart.confirmation_status).to match(/sent at \d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
 
       subscription = cart.items.first
       expect(subscription).to be_paid
       expect(subscription.payment_method).to eq "cheque"
       expect(subscription.source).to eq "www2"
+
+      expect(ActionMailer::Base.deliveries.size).to eq 1
+      email = ActionMailer::Base.deliveries.last
+      expect(email.from.size).to eq 1
+      expect(email.from.first).to eq IcuMailer::FROM
+      expect(email.to.size).to eq 1
+      expect(email.to.first).to eq player.email
+      expect(email.subject).to eq IcuMailer::CONFIRMATION
+      expect(email.body.decoded).to include(player.name(id: true))
+      expect(email.body.decoded).to include("%.2f" % subscription.cost)
     end
   end
 

@@ -21,13 +21,14 @@ ActiveRecord::Schema.define(version: 20140308105947) do
   end
 
   create_table "carts", force: true do |t|
-    t.string   "status",             limit: 20,                          default: "unpaid"
-    t.decimal  "total",                          precision: 8, scale: 2
-    t.decimal  "original_total",                 precision: 8, scale: 2
-    t.string   "payment_method",     limit: 20
-    t.string   "payment_ref",        limit: 50
-    t.string   "confirmation_email", limit: 50
-    t.string   "payment_name",       limit: 100
+    t.string   "status",              limit: 20,                          default: "unpaid"
+    t.decimal  "total",                           precision: 8, scale: 2
+    t.decimal  "original_total",                  precision: 8, scale: 2
+    t.string   "payment_method",      limit: 20
+    t.string   "payment_ref",         limit: 50
+    t.string   "confirmation_email",  limit: 50
+    t.string   "confirmation_status"
+    t.string   "payment_name",        limit: 100
     t.integer  "user_id"
     t.datetime "payment_completed"
     t.datetime "created_at"

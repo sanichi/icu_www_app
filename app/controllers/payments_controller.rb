@@ -15,14 +15,7 @@ class PaymentsController < ApplicationController
   def charge
     if check_cart { !@cart.items.empty? && request.xhr? }
       @cart.purchase(params, current_user)
-      if @cart.paid?
-        complete_cart(@cart.id)
-        begin
-          IcuMailer.payment_receipt(@cart.id).deliver
-        rescue => e
-          logger.error "payment receipt for cart #{@cart.id} failed: #{e.message}"
-        end
-      end
+      complete_cart(@cart.id) if @cart.paid?
     else
       if request.xhr?
         render nothing: true
