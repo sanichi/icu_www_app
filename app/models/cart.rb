@@ -117,12 +117,12 @@ class Cart < ActiveRecord::Base
     if paid? && confirmation_email.present?
       begin
         IcuMailer.payment_receipt(id).deliver
-        update_column(:confirmation_status, "sent at #{Time.now.to_s(:db)}")
+        update_columns(confirmation_sent: true)
       rescue => e
-        update_column(:confirmation_status, "not sent: #{e.message.gsub(/\s+/, ' ')}".truncate(255))
+        update_columns(confirmation_sent: false, confirmation_error: e.message.gsub(/\s+/, ' ').truncate(255))
       end
     else
-      update_column(:confirmation_status, "not sent: no email address available")
+      update_columns(confirmation_sent: false, confirmation_error: "no email address available")
     end
   end
 

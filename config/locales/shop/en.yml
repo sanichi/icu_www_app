@@ -15,7 +15,6 @@ en:
       total: Total cost
     payment:
       confirmation_email: Confirmation email
-      confirmation_email_to: Confirmation email sent to
       completed: Payment completed
       received: Payment Received
       registered: Payment registered
@@ -31,6 +30,9 @@ en:
         pay: Pay
         security_code: Security number
         yyyy: yyyy
+      confirmation_sent:
+        success: Confirmation email sent to
+        failure: Problem sending confirmation to
       error:
         gateway: Stripe error
         number: Invalid card number

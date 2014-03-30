@@ -5,7 +5,8 @@ class CreateCarts < ActiveRecord::Migration
       t.decimal  :total, :original_total, precision: 8, scale: 2
       t.string   :payment_method, limit: 20
       t.string   :payment_ref, :confirmation_email, limit: 50
-      t.string   :confirmation_status
+      t.string   :confirmation_error
+      t.boolean  :confirmation_sent, default: false
       t.string   :payment_name, limit: 100
       t.integer  :user_id
       t.datetime :payment_completed

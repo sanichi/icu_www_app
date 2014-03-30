@@ -1,5 +1,11 @@
 %hr
 %h3.text-center Payment Receipt
+.well.well-sm.small.text-center
+  = "Status: "
+  - if cart.confirmation_sent
+    = "sent"
+  - else
+    = "not sent; problem: #{cart.confirmation_error.presence || 'unknown'}"
 .row
   .col-md-12
     %pre= render "icu_mailer/payment_receipt.text", cart: cart

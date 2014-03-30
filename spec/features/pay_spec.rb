@@ -14,7 +14,7 @@ describe "Pay", js: true do
   let(:cheque)                { I18n.t("shop.payment.method.cheque") }
   let(:completed)             { I18n.t("shop.payment.completed") }
   let(:confirm)               { I18n.t("confirm") }
-  let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_email_to") }
+  let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_sent.success") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:dob)                   { I18n.t("player.abbrev.dob") }
   let(:email)                 { I18n.t("email") }
@@ -122,7 +122,8 @@ describe "Pay", js: true do
       expect(cart.payment_ref).to be_present
       expect(cart.payment_method).to eq stripe
       expect(cart.payment_errors.count).to eq 0
-      expect(cart.confirmation_status).to match(/sent at \d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
+      expect(cart.confirmation_sent).to be_true
+      expect(cart.confirmation_error).to be_nil
 
       subscription.reload
       expect(subscription).to be_paid
@@ -265,7 +266,8 @@ describe "Pay", js: true do
       expect(cart.user).to eq officer
       expect(cart.payment_errors.count).to eq 0
       expect(cart.items.count).to eq 1
-      expect(cart.confirmation_status).to match(/sent at \d{4}-\d{2}-\d{2} \d{2}:\d{2}/)
+      expect(cart.confirmation_sent).to be_true
+      expect(cart.confirmation_error).to be_nil
 
       subscription = cart.items.first
       expect(subscription).to be_paid

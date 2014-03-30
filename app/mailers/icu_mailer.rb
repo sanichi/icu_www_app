@@ -1,7 +1,7 @@
 class IcuMailer < ActionMailer::Base
   add_template_helper(CartsHelper)
 
-  FROM = "no-reply@icu.ie"
+  FROM = "NO-REPLY@icu.ie"
   CONFIRMATION = "Confirmation of your Payment to the ICU"
 
   default from: FROM

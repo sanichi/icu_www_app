@@ -18,7 +18,7 @@
           %strong= "#{cart.payment_completed.to_s(:nosec)} GMT"
       - if cart.confirmation_email
         %li
-          = "#{t("shop.payment.confirmation_email_to")}:"
+          = t("shop.payment.confirmation_sent.#{cart.confirmation_sent ? 'success' : 'failure'}") + ":"
           %strong= cart.confirmation_email
       %li
         = "#{t("shop.payment.ref_number")}:"
