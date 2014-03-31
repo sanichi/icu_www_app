@@ -4,8 +4,8 @@ var toggleLinkText = {
 };
 
 $(function() {
-  $('a[data-toggle]').click(function() {
-    var number = $(this).data("toggle");
+  $('a[data-coggle]').click(function() {
+    var number = $(this).data("coggle");
     toggleCart(number);
     return false;
   });
@@ -13,7 +13,7 @@ $(function() {
 
 function toggleCart(n) {
   var cart = $('#cart-' + n);
-  var link = $('#toggle-' + n);
+  var link = $('#coggle-' + n);
   if (cart.is(':visible'))
   {
     cart.hide();

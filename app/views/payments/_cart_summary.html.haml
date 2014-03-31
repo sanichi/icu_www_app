@@ -25,4 +25,4 @@
         %strong= cart.id
       - if toggle
         %li
-          = link_to t("shop.cart.show"), shop_path, id: "toggle-#{cart.id}", data: { toggle: cart.id }
+          = link_to t("shop.cart.show"), shop_path, id: "coggle-#{cart.id}", data: { coggle: cart.id }
