@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
     @fee = Fee.on_sale.where(id: params[:fee_id]).first
     if @fee
       @item = Item.new(fee: @fee, type: @fee.subtype(:item)).becomes(Item)
-      @new_player = NewPlayer.new if @fee.subtype == "subscription"
+      @new_player = NewPlayer.new if @fee.new_player_allowed?
     else
       redirect_to shop_path
     end

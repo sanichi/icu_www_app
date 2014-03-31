@@ -32,6 +32,10 @@ class Fee::Subscription < Fee
     true
   end
 
+  def new_player_allowed?
+    true
+  end
+
   private
 
   def set_dates

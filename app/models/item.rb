@@ -12,7 +12,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
-  validates :player_data, absence: true, unless: Proc.new { |i| i.type == "Item::Subscription" }
+  validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints
 

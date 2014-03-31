@@ -72,9 +72,10 @@ class Fee < ActiveRecord::Base
     self.years = Season.new(self.years).next.to_s if years.present?
   end
 
-  def applies_to?(user)
-    false # override in subclasses if required
-  end
+  # Default behaviours. Can be overridden in subclasses.
+  def applies_to?(user);   false; end  # Should the user have a select me button?
+  def player_required?;     true; end  # Does an item charged to this fee belong to a player?
+  def new_player_allowed?; false; end  # Can paying this fee create a new player?
 
   private
 

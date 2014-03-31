@@ -24,15 +24,17 @@
           = render "player_ids_button"
           - if @fee.applies_to?(current_user)
             = render "select_user_button"
-          - if @fee.subtype == "subscription"
+          - if @fee.new_player_allowed?
             = render "new_player_button"
           = link_to t("cancel"), shop_path, class: "btn btn-default btn-sm"
           = render "add_to_cart", form: form
 
-= render "player_ids/modal", title: t("item.member.select")
-%script
-  = render "player_ids_callback.js"
-- if @fee.subtype == "subscription"
+- if @fee.player_required?
+  = render "player_ids/modal", title: t("item.member.select")
+  %script
+    = render "player_ids_callback.js"
+
+- if @fee.new_player_allowed?
   = render "new_players/modal", title: t("item.member.new")
   %script
     = render "new_player_callback.js"
