@@ -19,9 +19,7 @@ class ItemsController < ApplicationController
       redirect_to cart_path
     else
       flash_first_base_error(@item)
-      @item = @item.becomes(Item)
-      @new_player = NewPlayer.new if @fee.subtype == "subscription"
-      render "new"
+      redirect_to new_item_path(fee_id: @fee.id)
     end
   end
 

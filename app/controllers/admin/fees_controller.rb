@@ -42,7 +42,7 @@ class Admin::FeesController < ApplicationController
       @fee.journal(:create, current_user, request.ip)
       redirect_to admin_fee_path(@fee), notice: "Fee was successfully created"
     else
-      flash_first_base_error(@fee)
+      flash_first_base_error(@fee, now: true)
       @fee = @fee.becomes(Fee)
       render "new"
     end
@@ -57,7 +57,7 @@ class Admin::FeesController < ApplicationController
       @fee.journal(:update, current_user, request.ip)
       redirect_to admin_fee_path(@fee), notice: "Fee was successfully updated"
     else
-      flash_first_base_error(@fee)
+      flash_first_base_error(@fee, now: true)
       @fee = @fee.becomes(Fee)
       render "edit"
     end
