@@ -73,9 +73,9 @@ class Fee < ActiveRecord::Base
   end
 
   # Default behaviours. Can be overridden in subclasses.
-  def applies_to?(user);   false; end  # Should the user have a select me button?
-  def player_required?;     true; end  # Does an item charged to this fee belong to a player?
-  def new_player_allowed?; false; end  # Can paying this fee create a new player?
+  def applies_to?(user);   false end  # Should the user have a select me button?
+  def player_required?;     true end  # Does an item charged to this fee belong to a player?
+  def new_player_allowed?; false end  # Can paying this fee create a new player?
 
   private
 
