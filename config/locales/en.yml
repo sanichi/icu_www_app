@@ -1,5 +1,6 @@
 en:
   ICU: ICU
+  active: Active
   address: Address
   all: All
   any: Any
@@ -17,6 +18,7 @@ en:
   home: Home
   icu: Irish Chess Union
   icu_logo: ICU Logo
+  inactive: Inactive
   last_search: Last Search
   member: Member
   new: new

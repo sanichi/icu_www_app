@@ -10,6 +10,7 @@ class CreateFees < ActiveRecord::Migration
       t.integer  :min_age, :max_age, limit: 1
       t.integer  :min_rating, :max_rating, limit: 2
       t.string   :url
+      t.boolean  :active, default: false
 
       t.timestamps
     end

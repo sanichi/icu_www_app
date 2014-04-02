@@ -3,5 +3,5 @@
   = render "utils/inline_text_field", param: :city, text: t("club.city")
   = render "utils/inline_select", param: :county, text: t("club.county"), menu: club_county_menu(params[:county])
   = render "utils/inline_select", param: :province, text: t("club.province"), menu: club_province_menu(params[:province])
-  = render "utils/inline_select", param: :active, text: t("club.active"), menu: club_active_menu(params[:active])
+  = render "utils/inline_select", param: :active, text: t("active"), menu: club_active_menu(params[:active])
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

@@ -5,7 +5,9 @@
       %fieldset
         %legend= "#{@fee.new_record? ? 'New' : 'Edit'} " + t("fee.type.#{@fee.subtype}")
         = form.hidden_field :type
-        = render "admin/fees/forms/#{@fee.subtype}", f: form, locals: { form: form, object: @fee, col: "sm", pad: 3, width: 2 }
+        - locals = { form: form, object: @fee, col: "sm", pad: 3, width: 2 }
+        = render "admin/fees/forms/#{@fee.subtype}", f: form, locals: locals
+        = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1)
         %hr
         = form.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", @fee.new_record? ? admin_fees_path : [:admin, @fee], class: "btn btn-default"

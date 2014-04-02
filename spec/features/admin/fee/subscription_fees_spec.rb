@@ -5,19 +5,21 @@ describe Fee::Subscription do
     login("treasurer")
   end
 
-  let(:success)      { "div.alert-success" }
-  let(:failure)      { "div.alert-danger" }
-  let(:help)         { "div.help-block" }
-  let(:name)         { I18n.t("fee.name") }
+  let(:active)       { I18n.t("active") }
   let(:amount)       { I18n.t("fee.amount") }
   let(:clone)        { I18n.t("fee.clone") }
-  let(:rollover)     { I18n.t("fee.rollover") }
-  let(:type)         { I18n.t("type") }
-  let(:subscription) { I18n.t("fee.type.subscription") }
-  let(:season)       { I18n.t("season") }
-  let(:save)         { I18n.t("save") }
-  let(:edit)         { I18n.t("edit") }
   let(:delete)       { I18n.t("delete") }
+  let(:edit)         { I18n.t("edit") }
+  let(:name)         { I18n.t("fee.name") }
+  let(:rollover)     { I18n.t("fee.rollover") }
+  let(:save)         { I18n.t("save") }
+  let(:season)       { I18n.t("season") }
+  let(:subscription) { I18n.t("fee.type.subscription") }
+  let(:type)         { I18n.t("type") }
+
+  let(:failure)      { "div.alert-danger" }
+  let(:help)         { "div.help-block" }
+  let(:success)      { "div.alert-success" }
 
   describe "create" do
     let(:fee) { create(:subscription_fee) }
@@ -28,6 +30,7 @@ describe Fee::Subscription do
       fill_in name, with: "Standard"
       fill_in amount, with: "35.50"
       fill_in season, with: "2013 to 2014"
+      check active
       click_button save
 
       expect(page).to have_css(success, text: "created")
@@ -38,6 +41,7 @@ describe Fee::Subscription do
       expect(fee.sale_start.to_s).to eq "2013-08-01"
       expect(fee.sale_end.to_s).to eq "2014-08-31"
       expect(fee.journal_entries.count).to eq 1
+      expect(fee.active).to be_true
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -101,6 +105,18 @@ describe Fee::Subscription do
 
       fee.reload
       expect(fee.amount).to eq 9999.99
+
+      expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 1
+    end
+
+    it "active" do
+      visit admin_fee_path(fee)
+      click_link edit
+      uncheck active
+      click_button save
+
+      fee.reload
+      expect(fee.active).to be_false
 
       expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 1
     end

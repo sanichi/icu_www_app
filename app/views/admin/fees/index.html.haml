@@ -1,19 +1,25 @@
 - content_for :title, t("fee.fees")
 
-= render "utils/search_panel", form: "admin/fees/search_form", title: t("fee.fees"), pad: 2, col: "md"
+= render "utils/search_panel", form: "admin/fees/search_form", title: t("fee.fees"), pad: 1, col: "md"
 .row
-  .col-md-6.col-md-offset-3
+  .col-md-10.col-md-offset-1
     %table{class: "table table-bordered table-striped"}
       %thead
         %tr
           %th=t("description")
-          %th=t("fee.amount")
+          %th.text-center=t("fee.amount")
+          %th.text-center=t("active")
+          %th.text-center= "In sale period"
+          %th.text-center= "On sale now"
       - if @fees.count > 0
         %tbody
           - @fees.matches.each do |fee|
             %tr
               %td= link_to fee.description(:full), admin_fee_path(fee)
-              %td{class: "righted"}= euros(fee.amount)
-          = render "utils/pagination_links", pager: @fees, columns: 2
+              %td.text-center= euros(fee.amount)
+              %td.text-center= fee.active ? "✔" : "✘"
+              %td.text-center= fee.within_sale_dates? ? "✔" : "✘"
+              %td.text-center= fee.active && fee.within_sale_dates? ? "✔" : "✘"
+          = render "utils/pagination_links", pager: @fees, columns: 5
 
     = link_to "New", new_admin_fee_path, class: "btn btn-info"

@@ -87,6 +87,7 @@ class Admin::FeesController < ApplicationController
     when "Fee::Entry"        then Fee::ATTRS.reject{ |n| n.match(/\A(year|years)\z/) }.map(&:to_s)
     else []
     end
+    attrs.push(:active)
     attrs.push(:type) if new_record
     params[:fee].permit(attrs)
   end

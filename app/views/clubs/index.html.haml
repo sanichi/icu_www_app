@@ -9,7 +9,7 @@
         %div{class: "panel panel-default", id: "club_#{club.id}"}
           .panel-heading
             = link_to club.name, club
-            = "(#{t('club.inactive')})" unless club.active
+            = "(#{t('inactive')})" unless club.active
           %ul.list-group
             %li.list-group-item
               %em= "#{t('club.location')}:"

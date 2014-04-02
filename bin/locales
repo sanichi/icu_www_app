@@ -112,9 +112,9 @@ sub prune_duplicates
     # Certain duplicates are allowed, so remove them.
     my %allow =
     (
-        'Active'                    => ['club.active', 'player.status.active'],
+        'Active'                    => ['active', 'player.status.active'],
         'Foreign'                   => ['player.foreign', 'player.status.foreign'],
-        'Inactive'                  => ['club.inactive', 'player.status.inactive'],
+        'Inactive'                  => ['inactive', 'player.status.inactive'],
         'Invalid email or password' => ['session.invalid_email', 'session.invalid_password'],
         'Name'                      => ['club.name', 'fee.name', 'player.name'],
         'Status'                    => ['player.status.status', 'shop.payment.status.status'],

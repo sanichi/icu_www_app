@@ -68,14 +68,14 @@ feature "Searching clubs" do
   end
 
   it "find records by whether active or not" do
-    label = I18n.t("club.active")
+    label = I18n.t("active")
     select I18n.t("either"), from: label
     click_button @search
     expect(page).to have_xpath(@row, count: 4)
-    select I18n.t("club.active"), from: label
+    select I18n.t("active"), from: label
     click_button @search
     expect(page).to have_xpath(@row, count: 3)
-    select I18n.t("club.inactive"), from: label
+    select I18n.t("inactive"), from: label
     click_button @search
     expect(page).to have_xpath(@row, count: 1)
     expect(page).to have_xpath(@row, text: "Cortex")
@@ -123,7 +123,7 @@ feature "Showing a club" do
     bangor = create(:club, params)
     visit club_path(bangor)
     params.each do |param, value|
-      label = %i(address email).include?(param) ? I18n.t(param) : I18n.t("club.#{param}")
+      label = %i(address email active).include?(param) ? I18n.t(param) : I18n.t("club.#{param}")
       case param
       when :name
         expect(page).to have_css("h1", text: bangor.name)

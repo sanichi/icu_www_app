@@ -1,6 +1,5 @@
 en:
   club:
-    active: Active
     city: City
     club: Club
     clubs: Clubs
@@ -8,7 +7,6 @@ en:
     co: Co.
     county: County
     district: District
-    inactive: Inactive
     lat: Latitude
     location: Location
     long: Longitude

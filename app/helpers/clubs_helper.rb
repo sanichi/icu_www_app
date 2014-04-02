@@ -1,6 +1,6 @@
 module ClubsHelper
   def club_active_menu(selected, default="either")
-    statuses = [[t("club.active"), "true"], [t("club.inactive"), "false"]]
+    statuses = [[t("active"), "true"], [t("inactive"), "false"]]
     statuses.push [t(default), ""] if default
     options_for_select(statuses, selected)
   end

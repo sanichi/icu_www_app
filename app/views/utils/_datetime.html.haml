@@ -3,10 +3,9 @@
 - unless defined? dt_format
   - date_format = :nosec
 
-%tr
-  %th= text
-  %td
-    %time{datetime: datetime.to_s(:html5)}= datetime.to_s(dt_format)
-    - if done_by
-      = t("by")
-      = done_by
+%th= text
+%td
+  %time{datetime: datetime.to_s(:html5)}= datetime.to_s(dt_format)
+  - if done_by
+    = t("by")
+    = done_by

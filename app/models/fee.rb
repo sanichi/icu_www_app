@@ -17,12 +17,13 @@ class Fee < ActiveRecord::Base
   scope :alphabetic, -> { order(name: :asc) }
   scope :old_to_new, -> { order(end_date: :desc) }
   scope :new_to_old, -> { order(start_date: :asc) }
-  scope :on_sale, -> { where("sale_start IS NULL OR sale_start <= ?", Date.today).where("sale_end IS NULL OR sale_end >= ?", Date.today) }
+  scope :on_sale, -> { where(active: true).where("sale_start IS NULL OR sale_start <= ?", Date.today).where("sale_end IS NULL OR sale_end >= ?", Date.today) }
 
   def self.search(params, path)
     today = Date.today.to_s
     matches = all
     matches = matches.where(type: params[:type]) if params[:type].present?
+    matches = matches.where(active: params[:active] == "true" ? true : false) if params[:active].present?
     case params[:sale]
     when "current" then matches = matches.alphabetic.where("(sale_start IS NULL OR sale_start <= ?) AND (sale_end IS NULL OR sale_end >= ?)", today, today)
     when "past"    then matches = matches.old_to_new.where("sale_end < ?", today)
@@ -62,6 +63,12 @@ class Fee < ActiveRecord::Base
 
   def cloneable?
     respond_to?(:copy)
+  end
+
+  def within_sale_dates?
+    return false if sale_start.present? && sale_start > Date.today
+    return false if sale_end.present?   && sale_end   < Date.today
+    true
   end
 
   def advance_1_year

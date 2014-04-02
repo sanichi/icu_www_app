@@ -5,33 +5,36 @@ describe Fee::Entry do
     login("treasurer")
   end
 
-  let(:success)           { "div.alert-success" }
-  let(:failure)           { "div.alert-danger" }
-  let(:help)              { "div.help-block" }
-  let(:type)              { I18n.t("type") }
-  let(:entry)             { I18n.t("fee.type.entry") }
-  let(:clone)             { I18n.t("fee.clone") }
-  let(:rollover)          { I18n.t("fee.rollover") }
-  let(:name)              { I18n.t("fee.name") }
+  let(:active)            { I18n.t("active") }
+  let(:age_ref)           { I18n.t("fee.age.ref_date") }
   let(:amount)            { I18n.t("fee.amount") }
-  let(:start_date)        { I18n.t("fee.start") }
-  let(:end_date)          { I18n.t("fee.end") }
-  let(:sale_start)        { I18n.t("fee.sale_start") }
-  let(:sale_end)          { I18n.t("fee.sale_end") }
-  let(:discounted_amount) { I18n.t("fee.discounted_amount") }
+  let(:clone)             { I18n.t("fee.clone") }
+  let(:delete)            { I18n.t("delete") }
   let(:discount_deadline) { I18n.t("fee.discount_deadline") }
-  let(:min_rating)        { I18n.t("fee.rating.min") }
+  let(:discounted_amount) { I18n.t("fee.discounted_amount") }
+  let(:edit)              { I18n.t("edit") }
+  let(:end_date)          { I18n.t("fee.end") }
+  let(:entry)             { I18n.t("fee.type.entry") }
+  let(:max_age)           { I18n.t("fee.age.max") }
   let(:max_rating)        { I18n.t("fee.rating.max") }
   let(:min_age)           { I18n.t("fee.age.min") }
-  let(:max_age)           { I18n.t("fee.age.max") }
-  let(:age_ref)           { I18n.t("fee.age.ref_date") }
+  let(:min_rating)        { I18n.t("fee.rating.min") }
+  let(:name)              { I18n.t("fee.name") }
+  let(:rollover)          { I18n.t("fee.rollover") }
+  let(:sale_end)          { I18n.t("fee.sale_end") }
+  let(:sale_start)        { I18n.t("fee.sale_start") }
   let(:save)              { I18n.t("save") }
-  let(:edit)              { I18n.t("edit") }
-  let(:delete)            { I18n.t("delete") }
+  let(:start_date)        { I18n.t("fee.start") }
+  let(:type)              { I18n.t("type") }
+
+  let(:failure)           { "div.alert-danger" }
+  let(:help)              { "div.help-block" }
+  let(:success)           { "div.alert-success" }
+
   let(:last_week)         { Date.today.days_ago(7) }
+  let(:late_next_year)    { Date.today.next_year.at_end_of_year.days_ago(1) }
   let(:next_year)         { Date.today.at_end_of_year.days_since(40) }
   let(:week_ago)          { Date.today.days_ago(7) }
-  let(:late_next_year)    { Date.today.next_year.at_end_of_year.days_ago(1) }
 
   describe "create" do
     let(:fee) { create(:entry_fee) }
@@ -45,6 +48,7 @@ describe Fee::Entry do
       fill_in end_date, with: next_year.days_since(2).to_s
       fill_in sale_start, with: last_week.to_s
       fill_in sale_end, with: next_year.to_s
+      check active
       click_button save
 
       expect(page).to have_css(success, text: "created")
@@ -66,6 +70,7 @@ describe Fee::Entry do
       expect(fee.max_age).to be_nil
       expect(fee.age_ref_date).to be_nil
       expect(fee.journal_entries.count).to eq 1
+      expect(fee.active).to be true
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -140,6 +145,7 @@ describe Fee::Entry do
       fill_in min_age, with: "10"
       fill_in max_age, with: "12"
       fill_in age_ref, with: late_next_year.to_s
+      check active
       click_button save
 
       expect(page).to have_css(success, text: "created")
@@ -161,6 +167,7 @@ describe Fee::Entry do
       expect(fee.max_age).to eq 12
       expect(fee.age_ref_date).to eq late_next_year
       expect(fee.journal_entries.count).to eq 1
+      expect(fee.active).to be_true
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -227,6 +234,18 @@ describe Fee::Entry do
 
       fee.reload
       expect(fee.amount).to eq 99.0
+
+      expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 1
+    end
+
+    it "active" do
+      visit admin_fee_path(fee)
+      click_link edit
+      uncheck active
+      click_button save
+
+      fee.reload
+      expect(fee.active).to be false
 
       expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 1
     end
