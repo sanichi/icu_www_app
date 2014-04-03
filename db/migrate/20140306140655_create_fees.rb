@@ -5,7 +5,7 @@ class CreateFees < ActiveRecord::Migration
       t.string   :name, limit: 100
       t.decimal  :amount, :discounted_amount, precision: 6, scale: 2
       t.string   :years, limit: 7
-      t.integer  :year
+      t.integer  :year, :days, limit: 2
       t.date     :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, :discount_deadline
       t.integer  :min_age, :max_age, limit: 1
       t.integer  :min_rating, :max_rating, limit: 2

@@ -23,7 +23,9 @@ en:
       min: Minimum rating
     type:
       entry: Tournament Entry Fee
+      other: Other Fee
       subscription: ICU Subscription Fee
       plural:
         entry: Tournament Entry Fees
+        other: Other Fees
         subscription: ICU Subscription Fees

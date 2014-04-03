@@ -61,7 +61,8 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.decimal  "amount",                        precision: 6, scale: 2
     t.decimal  "discounted_amount",             precision: 6, scale: 2
     t.string   "years",             limit: 7
-    t.integer  "year"
+    t.integer  "year",              limit: 2
+    t.integer  "days",              limit: 2
     t.date     "start_date"
     t.date     "end_date"
     t.date     "sale_start"

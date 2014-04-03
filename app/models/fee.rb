@@ -4,7 +4,7 @@ class Fee < ActiveRecord::Base
   ATTRS = column_names.reject{ |n| n.match(/\A(id|type|created_at|updated_at)\z/) }
   journalize ATTRS, "/admin/fees/%d"
 
-  TYPES = %w[Fee::Subscription Fee::Entry]
+  TYPES = %w[Fee::Subscription Fee::Entry Fee::Other]
 
   has_many :items
 
@@ -12,7 +12,8 @@ class Fee < ActiveRecord::Base
 
   validates :type, inclusion: { in: TYPES }
   validates :name, :amount, presence: true
-  validate :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
+  validates :days, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
+  validate :valid_days, :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
 
   scope :alphabetic, -> { order(name: :asc) }
   scope :old_to_new, -> { order(end_date: :desc) }
@@ -97,6 +98,16 @@ class Fee < ActiveRecord::Base
   def valid_season
     season = self.season
     errors.add(:years, season.error) if season.error
+  end
+
+  def valid_days
+    if days.present? && days > 0
+      if start_date.present? || end_date.present?
+        self.end_date = start_date.days_since(days) if end_date.blank?
+        self.start_date = end_date.days_ago(days) if start_date.blank?
+        self.days = nil
+      end
+    end
   end
 
   def valid_dates

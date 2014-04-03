@@ -18,6 +18,10 @@
         %th= @fee.start_date.to_s
         %td= t("fee.end")
         %th= @fee.end_date.to_s
+      - if @fee.days.present?
+        %tr
+          %td= t("fee.days")
+          %th= @fee.days
       %tr
         %td= t("fee.sale_start")
         %th= @fee.sale_start.to_s
