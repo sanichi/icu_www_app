@@ -1,5 +1,4 @@
-- unless defined?(hidden)
-  - hidden = false
+- defined?(hidden) || hidden = false
 
 .row{id: "cart-#{cart.id}", style: hidden ? "display: none" : ""}
   - if cart.items.any?

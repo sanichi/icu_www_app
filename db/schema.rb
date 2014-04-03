@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.integer  "max_rating",        limit: 2
     t.string   "url"
     t.boolean  "active",                                                default: false
+    t.boolean  "player_required",                                       default: true
     t.datetime "created_at"
     t.datetime "updated_at"
   end

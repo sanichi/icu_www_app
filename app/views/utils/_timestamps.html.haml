@@ -1,23 +1,20 @@
-- unless defined? ability
-  - ability = nil
-- unless defined? updated_by
-  - updated_by = nil
-- unless defined? created_by
-  - created_by = nil
-- unless defined? dt_format
-  - dt_format = :nosec
-- unless defined? two_col
-  - two_col = false
+- defined?(ability)    || ability    = nil
+- defined?(created_by) || created_by = nil
+- defined?(dt_format)  || dt_format  = :nosec
+- defined?(tdth)       || tdth       = false
+- defined?(two_col)    || two_col    = false
+- defined?(updated_by) || updated_by = nil
 
 - if (ability.nil? || can?(ability, object)) && (object.respond_to?(:updated_at) || object.respond_to?(:created_at))
+  - locals = { datetime: object.updated_at, dt_format: dt_format, tdth: tdth }
   - if two_col
     %tr
-      = render "utils/datetime", text: t("updated_at"), datetime: object.updated_at, done_by: updated_by, dt_format: dt_format
-      = render "utils/datetime", text: t("created_at"), datetime: object.created_at, done_by: created_by, dt_format: dt_format
+      = render "utils/datetime_row", locals.merge(text: t("updated_at"), done_by: updated_by)
+      = render "utils/datetime_row", locals.merge(text: t("created_at"), done_by: created_by)
   - else
     - if object.respond_to?(:updated_at)
       %tr
-        = render "utils/datetime", text: t("updated_at"), datetime: object.updated_at, done_by: updated_by, dt_format: dt_format
+        = render "utils/datetime_row", locals.merge(text: t("updated_at"), done_by: updated_by)
     - if object.respond_to?(:created_at)
       %tr
-        = render "utils/datetime", text: t("created_at"), datetime: object.created_at, done_by: created_by, dt_format: dt_format
+        = render "utils/datetime_row", locals.merge(text: t("created_at"), done_by: created_by)

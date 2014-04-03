@@ -11,6 +11,7 @@ class CreateFees < ActiveRecord::Migration
       t.integer  :min_rating, :max_rating, limit: 2
       t.string   :url
       t.boolean  :active, default: false
+      t.boolean  :player_required, default: true
 
       t.timestamps
     end

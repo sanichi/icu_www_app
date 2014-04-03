@@ -1,5 +1,4 @@
-- unless defined? btn_class
-  - btn_class = "default"
+- defined?(btn_class) || btn_class = "default"
 
 .row
   %div{class: "col-#{col}-#{pad}"}

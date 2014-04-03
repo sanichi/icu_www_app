@@ -16,7 +16,7 @@
         .panel-body
           = render "fees/#{@fee.subtype}", fee: @fee
         .panel-footer
-          - if @fee.player_required?
+          - if @fee.player_required
             = render "player_ids_button"
             - if @fee.applies_to?(current_user)
               = render "select_user_button"
@@ -25,7 +25,7 @@
           = link_to t("cancel"), shop_path, class: "btn btn-default btn-sm"
           = render "add_to_cart", form: form
 
-- if @fee.player_required?
+- if @fee.player_required
   = render "player_ids/modal", title: t("item.member.select")
   %script
     = render "player_ids_callback.js"

@@ -1,9 +1,6 @@
-- unless defined? type
-  - type = "text"
-- unless defined? placeholder
-  - placeholder = nil
-- unless defined? mark
-  - mark = "none"
+- defined?(mark)        || mark        = "none"
+- defined?(placeholder) || placeholder = nil
+- defined?(type)        || type        = "text"
 
 .form-group{class: object.errors[param].any? ? "has-error" : ""}
   = form.label param, text + mark(mark), class: "control-label col-#{col}-#{pad}"

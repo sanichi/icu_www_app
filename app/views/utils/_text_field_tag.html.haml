@@ -1,9 +1,6 @@
-- unless defined? type
-  - type = "text"
-- unless defined? placeholder
-  - placeholder = nil
-- unless defined? extra
-  - extra = {}
+- defined?(extra)       || extra       = {}
+- defined?(placeholder) || placeholder = nil
+- defined?(type)        || type        = "text"
 
 .form-group
   = label_tag param, text, class: "control-label col-#{col}-#{pad}"

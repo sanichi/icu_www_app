@@ -1,0 +1,12 @@
+- defined?(done_by)   || done_by   = nil
+- defined?(dt_format) || dt_format = :nosec
+- defined?(tdth)      || tdth      = false
+
+- date = render "utils/datetime", datetime: datetime, dt_format: dt_format, done_by: done_by
+
+- if tdth
+  %td= text
+  %th= date
+- else
+  %th= text
+  %td= date

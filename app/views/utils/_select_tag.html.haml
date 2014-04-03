@@ -1,5 +1,4 @@
-- unless defined?(auto)
-  - auto = false
+- defined?(auto) || auto = false
 
 .form-group
   = label_tag param, text, class: "control-label col-#{col}-#{pad}"

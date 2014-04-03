@@ -1,7 +1,5 @@
-- unless defined? pad
-  - pad = 0
-- unless defined? col
-  - col = "sm"
+- defined?(pad) || pad = 0
+- defined?(col) || col = "sm"
 
 .row
   %div{class: "col-#{col}-#{12-pad-pad} col-#{col}-offset-#{pad}"}

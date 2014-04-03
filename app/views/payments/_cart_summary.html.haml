@@ -1,9 +1,6 @@
-- unless defined?(number)
-  - number = nil
-- unless defined?(toggle)
-  - toggle = false
-- unless defined?(max)
-  - max = 1
+- defined?(max)    || max    = 1
+- defined?(number) || number = nil
+- defined?(toggle) || toggle = false
 
 .row
   .col-md-1= "#{number}." if number && max > 1
