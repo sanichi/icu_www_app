@@ -4,6 +4,15 @@ class Item::Entry < Item
 
   scope :any_duplicates, ->(player, fee) { active.where(player_id: player.id).where(fee_id: fee.id) }
 
+  def to_s
+    parts = []
+    parts.push description
+    parts.push player_name
+    parts.push "€#{'%.2f' % cost}"
+    parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
+    parts.reject(&:blank?).join(", ")
+  end
+
   def duplicate_of?(item)
     if type == item.type && player_id == item.player_id && fee_id == item.fee_id
       I18n.t("item.error.entry.already_in_cart", member: player.name(id: true))

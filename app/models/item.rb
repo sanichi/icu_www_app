@@ -55,15 +55,6 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def to_s
-    parts = []
-    parts.push description
-    parts.push player_name
-    parts.push "€#{'%.2f' % cost}"
-    parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
-    parts.reject(&:blank?).join(", ")
-  end
-
   private
 
   def copy_fee

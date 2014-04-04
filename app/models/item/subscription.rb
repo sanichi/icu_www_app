@@ -7,6 +7,17 @@ class Item::Subscription < Item
   scope :season_duplicates,   ->(player, end_date) { active.where(player_id: player.id, end_date: end_date) }
   scope :any_duplicates,      ->(player, end_date) { active.where(player_id: player.id).where("end_date = ? OR end_date IS NULL", end_date) }
 
+  def to_s
+    ticket = season_ticket if active?
+    parts = []
+    parts.push description
+    parts.push player_name
+    parts.push "€#{'%.2f' % cost}"
+    parts.push "#{I18n.t('user.ticket', locale: :en)}: #{ticket}" if ticket
+    parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
+    parts.reject(&:blank?).join(", ")
+  end
+
   def season
     Season.new("#{start_date.try(:year)} #{end_date.try(:year)}")
   end
@@ -47,5 +58,14 @@ class Item::Subscription < Item
         errors.add(:base, I18n.t("errors.alerts.application"))
       end
     end
+  end
+
+  def season_ticket
+    t = SeasonTicket.new(player.id, end_date.at_end_of_year)
+    raise t.error if t.error
+    t.ticket
+  rescue => e
+    logger.error("subscription season ticket error, cart: #{cart.present? && cart.id}, player: #{player.present? && player.id}, end date: #{end_date.present? && end_date.to_s}, error: #{e.message}")
+    nil
   end
 end

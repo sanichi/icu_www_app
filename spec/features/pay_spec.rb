@@ -29,6 +29,7 @@ describe "Pay", js: true do
   let(:payment_registered)    { I18n.t("shop.payment.registered") }
   let(:payment_time)          { I18n.t("shop.payment.time") }
   let(:save)                  { I18n.t("save") }
+  let(:season_ticket)         { I18n.t("user.ticket") }
   let(:select_member)         { I18n.t("item.member.select") }
   let(:shop)                  { I18n.t("shop.shop") }
   let(:total)                 { I18n.t("shop.cart.total") }
@@ -141,6 +142,7 @@ describe "Pay", js: true do
       text = email.body.decoded
       expect(text).to include(player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).ticket}")
       expect(text).to eq cart.confirmation_text
     end
 
@@ -295,6 +297,7 @@ describe "Pay", js: true do
       text = email.body.decoded
       expect(text).to include(player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).ticket}")
       expect(text).to eq cart.confirmation_text
     end
 
@@ -369,7 +372,11 @@ describe "Pay", js: true do
 
       expect(ActionMailer::Base.deliveries.size).to eq 1
       email = ActionMailer::Base.deliveries.last
-      expect(email.body.decoded).to include(new_player.name(id: true))
+
+      text = email.body.decoded
+      expect(text).to include(new_player.name(id: true))
+      expect(text).to include("%.2f" % subscription.cost)
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(new_player.id, subscription.end_date.at_end_of_year).ticket}")
     end
   end
 end
