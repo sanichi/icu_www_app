@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140308105947) do
+ActiveRecord::Schema.define(version: 20140409095810) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -89,10 +89,11 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.string   "player_data"
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "cost",                      precision: 6, scale: 2
-    t.string   "status",         limit: 20,                         default: "unpaid"
-    t.string   "source",         limit: 8,                          default: "www2"
+    t.decimal  "cost",                        precision: 6, scale: 2
+    t.string   "status",         limit: 20,                           default: "unpaid"
+    t.string   "source",         limit: 8,                            default: "www2"
     t.string   "payment_method", limit: 20
+    t.string   "notes",          limit: 1000
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -179,6 +180,12 @@ ActiveRecord::Schema.define(version: 20140308105947) do
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "user_inputs", force: true do |t|
+    t.integer "fee_id"
+    t.string  "type",   limit: 40
+    t.string  "label",  limit: 100
   end
 
   create_table "users", force: true do |t|

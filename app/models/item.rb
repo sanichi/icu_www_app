@@ -2,11 +2,14 @@ class Item < ActiveRecord::Base
   extend Util::Pagination
   include Payable
 
+  serialize :notes, Array
+
   belongs_to :player
   belongs_to :fee
   belongs_to :cart
 
   before_validation :copy_fee, :normalise
+  after_initialize :default_notes
 
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
@@ -40,6 +43,17 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def full_description
+    parts = []
+    parts.push description
+    parts.push player_name
+    parts.push "€#{'%.2f' % cost}"
+    parts += additional_information if respond_to?(:additional_information)
+    parts += notes
+    parts.push I18n.t("shop.payment.status.#{status}", locale: :en) unless paid?
+    parts.reject(&:blank?).join(", ")
+  end
+
   def new_player
     return unless player_data.present?
     @new_player ||= NewPlayer.from_json(player_data)
@@ -52,6 +66,13 @@ class Item < ActiveRecord::Base
       new_player.name
     else
       nil
+    end
+  end
+
+  def note_references(all_notes)
+    notes.each_with_object([]) do |note, refs|
+      number = all_notes[note]
+      refs.push number if number
     end
   end
 
@@ -87,5 +108,9 @@ class Item < ActiveRecord::Base
     if fee.min_rating.present? && player.too_weak?(fee.min_rating)
       errors.add(:base, I18n.t("item.error.rating.low", member: player.name, limit: fee.min_rating))
     end
+  end
+
+  def default_notes
+    self.notes ||= [] # needed because text columns can't have defaults in MySQL
   end
 end

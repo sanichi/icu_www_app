@@ -43,6 +43,7 @@ IcuWwwApp::Application.routes.draw do
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
     resources :translations,    only: [:index, :show, :edit, :update, :destroy]
+    resources :user_inputs,     only: [:show, :new, :create, :edit, :update, :destroy]
     resources :users do
       get :login, on: :member
     end

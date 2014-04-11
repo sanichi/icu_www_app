@@ -58,6 +58,7 @@
       = render "utils/timestamps", object: @fee, two_col: true, tdth: true
 
     = link_to "Edit", edit_admin_fee_path(@fee), class: "btn btn-primary"
+    = link_to "Add User Input", new_admin_user_input_path(fee_id: @fee.id), class: "btn btn-primary"
     - if @fee.deletable? || params[:show_delete_button_for_test]
       = link_to "Delete", admin_fee_path(@fee), data: { confirm: "Sure you want to delete this fee?" }, method: :delete, class: "btn btn-danger"
     - if @fee.cloneable?
@@ -66,4 +67,5 @@
       = link_to "Rollover", rollover_admin_fee_path(@fee), class: "btn btn-info"
     = link_to "Fees", admin_fees_path, class: "btn btn-default"
 
+= render "user_inputs", inputs: @inputs
 = render "admin/journal_entries/changes", entries: @entries

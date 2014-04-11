@@ -7,6 +7,7 @@ class Fee < ActiveRecord::Base
   TYPES = %w[Fee::Subscription Fee::Entry Fee::Other]
 
   has_many :items
+  has_many :user_inputs
 
   before_validation :normalize_attributes
 

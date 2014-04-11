@@ -1,0 +1,15 @@
+.row
+  .col-sm-2
+  .col-sm-8
+    - new_record = @user_input.new_record?
+    = form_for [:admin, @user_input], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{new_record ? "New" : "Edit"} User Input"
+        - locals = { form: f, object: @user_input, col: "sm", pad: 2, width: 4 }
+        - if new_record
+          = f.hidden_field :fee_id
+        = render "utils/select_for", locals.merge(param: :type, text: "Type", width: 3, menu: user_input_type_menu(@user_input.type, new_record))
+        = render "utils/text_field_for", locals.merge(param: :label, text: "Label", width: 6)
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        = link_to "Cancel", new_record ? [:admin, @fee] : [:admin, @user_input], class: "btn btn-default"

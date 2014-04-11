@@ -14,9 +14,9 @@ describe "Shop" do
   let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
   let(:member)          { I18n.t("member") }
+  let(:new_member)      { I18n.t("item.member.new") }
   let(:save)            { I18n.t("save") }
   let(:select_member)   { I18n.t("item.member.select") }
-  let(:new_member)      { I18n.t("item.member.new") }
   let(:total)           { I18n.t("shop.cart.total") }
 
   let(:delete)          { "✘" }
@@ -607,6 +607,47 @@ describe "Shop" do
       click_link cancel
       click_link entry_fee.description
       expect(page).to_not have_link(select_me, exact: true)
+    end
+  end
+
+  context "user inputs", js: true do
+    let!(:player1)        { create(:player) }
+    let!(:player2)        { create(:player) }
+    let!(:entry_fee)      { create(:entry_fee) }
+    let!(:half_point_bye) { create(:half_point_bye, fee: entry_fee) }
+
+    it "option" do
+      visit shop_path
+      click_link entry_fee.description
+
+      click_button select_member
+      fill_in last_name, with: player1.last_name + force_submit
+      fill_in first_name, with: player1.first_name + force_submit
+      click_link player1.id
+      check half_point_bye.label
+      click_button add_to_cart
+
+      expect(Item::Entry.inactive.where(fee: entry_fee, player: player1).count).to eq 1
+      entry = Item::Entry.last
+
+      expect(entry.player).to eq player1
+      expect(entry.notes.size).to eq 1
+      expect(entry.notes.first).to eq half_point_bye.label
+
+      click_link continue
+      click_link entry_fee.description
+
+      click_button select_member
+      fill_in last_name, with: player2.last_name + force_submit
+      fill_in first_name, with: player2.first_name + force_submit
+      click_link player2.id
+      click_button add_to_cart
+
+      expect(Item::Entry.inactive.where(fee: entry_fee, player: player2).count).to eq 1
+      entry = Item::Entry.last
+
+      expect(entry.player).to eq player2
+      expect(entry.notes).to be_empty
     end
   end
 end

@@ -27,6 +27,12 @@ describe Fee::Entry do
   let(:start_date)        { I18n.t("fee.start") }
   let(:type)              { I18n.t("type") }
 
+  let(:new_user_input)    { "Add User Input" }
+  let(:user_input_type)   { "Type" }
+  let(:user_input_label)  { "Label" }
+  let(:half_point_bye)    { "½-point bye in R1" }
+  let(:option)            { "Option" }
+
   let(:failure)           { "div.alert-danger" }
   let(:help)              { "div.help-block" }
   let(:success)           { "div.alert-success" }
@@ -171,6 +177,27 @@ describe Fee::Entry do
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
+    it "user inputs" do
+      fee = create(:entry_fee)
+      expect(fee.user_inputs.size).to eq 0
+
+      visit admin_fee_path(fee)
+      click_link new_user_input
+
+      fill_in user_input_label, with: half_point_bye
+      select option, from: user_input_type
+      click_button save
+
+      expect(page).to have_css(success, text: "created")
+
+      fee.reload
+      expect(fee.user_inputs.size).to eq 1
+
+      user_input = fee.user_inputs.first
+      expect(user_input.label).to eq half_point_bye
+      expect(user_input.type).to eq "UserInput::Option"
+    end
+
     it "bad age" do
       visit new_admin_fee_path
       click_link entry
@@ -266,6 +293,7 @@ describe Fee::Entry do
     end
 
     it "with items" do
+      expect(item.fee.user_inputs).to_not be_nil
       visit admin_fee_path(item.fee)
       expect(page).to_not have_link(delete)
 

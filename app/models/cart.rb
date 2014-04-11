@@ -94,6 +94,14 @@ class Cart < ActiveRecord::Base
     paginate(matches, params, path)
   end
 
+  def all_notes
+    items.each_with_object({}) do |item, notes|
+      item.notes.each do |note|
+        notes[note] ||= notes.size + 1
+      end
+    end
+  end
+
   private
 
   def successful_payment(payment_method, charge_id=nil)

@@ -1,0 +1,19 @@
+- content_for :title, "User Input"
+
+.row
+  .col-sm-8.col-sm-offset-2
+    %h1.text-center User Input
+    %table.table.table-bordered
+      %tr
+        %th Fee
+        %td= link_to @fee.description(:full), [:admin, @fee.becomes(Fee)]
+      %tr
+        %th Label
+        %td= @user_input.label
+      %tr
+        %th Type
+        %td= @user_input.subtype.capitalize
+    = link_to "Edit", edit_admin_user_input_path(@user_input), class: "btn btn-primary"
+    = link_to "Delete", admin_user_input_path(@user_input), data: { confirm: "Sure you want to delete this user input?" }, method: :delete, class: "btn btn-danger"
+
+= render "admin/journal_entries/changes", entries: @entries

@@ -12,9 +12,14 @@
             %th.col-sm-2.text-center= t("item.cost")
             %td.col-sm-1
         %tbody
+          - all_notes = cart.all_notes
           - cart.items.each do |item|
             %tr
-              %td= item.description
+              %td
+                = item.description
+                - note_references = item.note_references(all_notes)
+                - if note_references.any?
+                  %sup= "[#{note_references.join(',')}]"
               %td= item.player_name
               %td.text-center= euros(item.cost)
               - if cart.unpaid?
@@ -24,6 +29,10 @@
             %th.text-center= euros(cart.total_cost)
             - if cart.unpaid?
               %th
+      - if all_notes.any?
+        %hr
+        - all_notes.each do |note, number|
+          %p.small= "[#{number}] #{note}"
   - else
     .col-md-3
     .col-md-6

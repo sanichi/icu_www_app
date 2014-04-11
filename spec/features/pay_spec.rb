@@ -89,7 +89,7 @@ describe "Pay", js: true do
     ActionMailer::Base.deliveries.clear
   end
 
-  context "pay with card" do
+  context "with card" do
     before(:each) do
       add_something_to_cart
       click_link checkout
@@ -242,7 +242,7 @@ describe "Pay", js: true do
     end
   end
 
-  context "pay with cash" do
+  context "with cash" do
     let(:payer_first_name) { "Payer's first name" }
     let(:payer_email)      { "Payer's email" }
     let(:payer_last_name)  { "Payer's last name" }

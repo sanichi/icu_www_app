@@ -15,7 +15,6 @@ describe Item::Entry do
     it "reverse association" do
       expect(item.fee.items.size).to eq 1
       expect(item.fee.items.first).to eq item
-      # expect(item.fee.items.first.object_id).to eq item.object_id
     end
   end
 

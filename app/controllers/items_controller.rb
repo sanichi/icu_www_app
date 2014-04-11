@@ -36,6 +36,6 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params[:item].permit(:type, :fee_id, :player_id, :player_data)
+    params.required(:item).permit(:type, :fee_id, :player_id, :player_data, notes: [])
   end
 end

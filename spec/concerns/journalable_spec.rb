@@ -12,9 +12,10 @@ describe Journalable do
     [Player, "/admin/players/%d"],
     [Translation, "/admin/translations/%d"],
     [User, "/admin/users/%d"],
+    [UserInput, "/admin/user_inputs/%d"],
   ].each do |klass, path|
     context klass do
-      it "should be setup correctly" do
+      it "setup correctly" do
         expect(invalid(klass)).to eq ""
         expect(klass.journalable_path).to eq path
       end

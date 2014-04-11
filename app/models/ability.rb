@@ -24,12 +24,13 @@ class Ability
     end
 
     if user.treasurer?
-      can :manage, Fee
+      can :create, CashPayment
       can :index, Item
-      can :manage, Cart
       can :index, PaymentError
       can :index, Refund
-      can :create, CashPayment
+      can :manage, Cart
+      can :manage, Fee
+      can :manage, UserInput
     end
 
     can :show, Player, id: user.player_id

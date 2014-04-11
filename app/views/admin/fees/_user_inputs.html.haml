@@ -1,0 +1,16 @@
+- if inputs.any?
+  .voffset2
+  .row
+    .col-sm-2
+    .col-sm-8
+      %h4.text-center User Inputs
+      %table{class: "table table-bordered table-striped"}
+        %thead
+          %tr
+            %th Label
+            %th Type
+        %tbody
+          - inputs.each do |input|
+            %tr
+              %td= link_to input.label, [:admin, input.becomes(UserInput)]
+              %td= input.subtype.capitalize

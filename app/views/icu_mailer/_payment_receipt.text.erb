@@ -5,12 +5,12 @@ This is a receipt from the ICU for your payment of <%= euros(cart.total) %> on <
 <%- if cart.items.size == 1 %>
 The purchased item is:
 
-  <%= cart.items.first.to_s %>
+  <%= cart.items.first.full_description %>
 <%- else %>
 The purchased items are as follows:
 
 <%- cart.items.each_with_index do |item, i| %>
-  <%= i + 1 %>. <%= item.to_s %>
+  <%= i + 1 %>. <%= item.full_description %>
 <%- end %>
 <%- end %>
 

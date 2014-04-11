@@ -1,0 +1,4 @@
+= item.description
+- note_references = item.note_references(all_notes)
+- if note_references.any?
+  %sup= "[#{note_references.join(',')}]"

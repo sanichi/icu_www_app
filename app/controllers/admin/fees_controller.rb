@@ -7,7 +7,7 @@ class Admin::FeesController < ApplicationController
   end
 
   def show
-    @entries = @fee.journal_entries if current_user.roles.present?
+    stuff_for_show
   end
 
   def new
@@ -70,7 +70,7 @@ class Admin::FeesController < ApplicationController
       redirect_to admin_fees_path, notice: "Fee was successfully deleted"
     else
       flash.now[:alert] = "This fee can't be deleted as it is linked to one or more cart items"
-      @entries = @fee.journal_entries if current_user.roles.present?
+      stuff_for_show
       render "show"
     end
   end
@@ -90,5 +90,10 @@ class Admin::FeesController < ApplicationController
     attrs.push(:active)
     attrs.push(:type) if new_record
     params[:fee].permit(attrs)
+  end
+
+  def stuff_for_show
+    @entries = @fee.journal_entries if current_user.roles.present?
+    @inputs = @fee.user_inputs
   end
 end
