@@ -8,8 +8,7 @@ class Item < ActiveRecord::Base
   belongs_to :fee
   belongs_to :cart
 
-  before_validation :copy_fee, :normalise
-  after_initialize :default_notes
+  before_validation :copy_fee, :normalise, :compensate_for_unchecked_options, :set_cost_from_user_input
 
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
@@ -17,7 +16,7 @@ class Item < ActiveRecord::Base
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
   validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
   validates :source, inclusion: { in: %w[www1 www2] }
-  validate :age_constraints, :rating_constraints
+  validate :age_constraints, :rating_constraints, :check_user_inputs
 
   def self.search(params, path)
     matches = includes(:player).references(:players).order(created_at: :desc)
@@ -79,7 +78,7 @@ class Item < ActiveRecord::Base
   private
 
   def copy_fee
-    return unless fee.present?
+    return unless new_record? && fee.present?
     self.description = fee.description(:full) unless description.present?
     self.start_date  = fee.start_date         unless start_date.present?
     self.end_date    = fee.end_date           unless end_date.present?
@@ -90,8 +89,18 @@ class Item < ActiveRecord::Base
     self.player_data = player_data.presence
   end
 
+  def compensate_for_unchecked_options
+    return unless new_record? && fee && notes.size < fee.user_inputs.size
+    new_notes = []
+    fee.user_inputs.each_with_index do |user_input, i|
+      new_notes.push("") if user_input.subtype == "option" && notes[i] != user_input.label
+      new_notes.push(notes[i]) unless i >= notes.size
+    end
+    self.notes = new_notes
+  end
+
   def age_constraints
-    return unless [player, fee.try(:age_ref_date)].all?(&:present?)
+    return unless player && fee.try(:age_ref_date)
     if fee.max_age.present? && player.over_age?(fee.max_age, fee.age_ref_date)
       errors.add(:base, I18n.t("item.error.age.old", member: player.name, date: fee.age_ref_date.to_s, limit: fee.max_age))
     end
@@ -101,7 +110,7 @@ class Item < ActiveRecord::Base
   end
 
   def rating_constraints
-    return unless [player, fee].all?(&:present?)
+    return unless player && fee
     if fee.max_rating.present? && player.too_strong?(fee.max_rating)
       errors.add(:base, I18n.t("item.error.rating.high", member: player.name, limit: fee.max_rating))
     end
@@ -110,7 +119,20 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def default_notes
-    self.notes ||= [] # needed because text columns can't have defaults in MySQL
+  def check_user_inputs
+    return unless new_record? && fee
+    logger.error "mismatched number of user inputs (#{fee.user_inputs.map(&:id).join('|')}) and notes #{notes.join('|')}" unless fee.user_inputs.size == notes.size
+    self.notes = notes[0..(fee.user_inputs.size-1)] if fee.user_inputs.size < notes.size
+    fee.user_inputs.each_with_index { |input, i| input.check(self, i) }
+    self.notes.compact!
+  end
+
+  def set_cost_from_user_input
+    return unless new_record? && cost.blank? && fee
+    index = fee.user_inputs.index { |ui| ui.subtype == "amount" }
+    if index
+      amount = BigDecimal.new(notes[index].to_s.gsub(/[^0-9\.]/, "")).round(2)
+      self.cost = amount if amount > 0
+    end
   end
 end

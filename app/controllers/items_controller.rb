@@ -15,7 +15,7 @@ class ItemsController < ApplicationController
     cart = current_cart(:create)
 
     if !cart.duplicates?(@item, add_error: true) && @item.save
-      cart.items << @item
+      @item.update_column(:cart_id, cart.id)
       redirect_to cart_path
     else
       flash_first_base_error(@item)

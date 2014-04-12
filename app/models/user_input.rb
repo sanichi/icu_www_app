@@ -4,7 +4,7 @@ class UserInput < ActiveRecord::Base
 
   belongs_to :fee
 
-  TYPES = %w[UserInput::Option UserInput::Text]
+  TYPES = %w[Option Amount Text].map{ |t| "UserInput::#{t}" }
 
   validates :type, inclusion: { in: TYPES }
   validates :label, presence: true

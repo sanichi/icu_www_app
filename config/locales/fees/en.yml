@@ -2,11 +2,13 @@ en:
   fee:
     amount: Amount
     clone: Clone
+    days: Duration (days)
     discounted_amount: Discounted amount
     discount_deadline: Discount deadline
     end: End date
     fees: Fees
     name: Name
+    player_required: Player required
     rollover: Rollover
     sale_start: Sale start
     sale_end: Sale end

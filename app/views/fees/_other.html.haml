@@ -1,0 +1,6 @@
+- if fee.start_date.present?
+  = render "fees/detail", term: "Start date", desc: fee.start_date.to_s
+- if fee.end_date.present?
+  = render "fees/detail", term: "End date", desc: fee.end_date.to_s
+- if fee.player_required
+  = render "fees/detail", term: "Name & ID", desc: "", id: "player_name"

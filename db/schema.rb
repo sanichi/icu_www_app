@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(version: 20140409095810) do
     t.string   "status",         limit: 20,                           default: "unpaid"
     t.string   "source",         limit: 8,                            default: "www2"
     t.string   "payment_method", limit: 20
-    t.string   "notes",          limit: 1000
+    t.string   "notes",          limit: 1000,                         default: "--- []\n"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

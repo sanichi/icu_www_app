@@ -4,15 +4,16 @@ class Fee < ActiveRecord::Base
   ATTRS = column_names.reject{ |n| n.match(/\A(id|type|created_at|updated_at)\z/) }
   journalize ATTRS, "/admin/fees/%d"
 
-  TYPES = %w[Fee::Subscription Fee::Entry Fee::Other]
+  TYPES = %w[Subscription Entry Other].map{ |t| "Fee::#{t}" }
 
-  has_many :items
-  has_many :user_inputs
+  has_many :items, dependent: :nullify
+  has_many :user_inputs, dependent: :destroy
 
   before_validation :normalize_attributes
 
   validates :type, inclusion: { in: TYPES }
-  validates :name, :amount, presence: true
+  validates :name, presence: true
+  validates :amount, presence: true, unless: Proc.new { |f| f.user_inputs.any?{ |ui| ui.subtype == "amount" } }
   validates :days, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validate :valid_days, :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
 

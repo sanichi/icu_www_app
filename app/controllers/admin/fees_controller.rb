@@ -83,12 +83,15 @@ class Admin::FeesController < ApplicationController
 
   def fee_params(new_record=false)
     attrs = case params[:fee][:type]
-    when "Fee::Subscription" then %i[name amount years min_age max_age]
-    when "Fee::Entry"        then Fee::ATTRS.reject{ |n| n.match(/\A(year|years)\z/) }.map(&:to_s)
-    else []
+      when "Fee::Subscription" then %i[years]
+      when "Fee::Entry"        then %i[start_date end_date sale_start sale_end discounted_amount discount_deadline min_rating max_rating age_ref_date url]
+      when "Fee::Other"        then %i[start_date end_date sale_start sale_end discounted_amount discount_deadline min_rating max_rating age_ref_date url days player_required]
+      else []
     end
-    attrs.push(:active)
-    attrs.push(:type) if new_record
+    if attrs.any?
+      attrs += %i[name amount min_age max_age active]
+      attrs.push(:type) if new_record
+    end
     params[:fee].permit(attrs)
   end
 

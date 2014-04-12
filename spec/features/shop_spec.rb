@@ -90,6 +90,7 @@ describe "Shop" do
       expect(subscription.cart).to eq cart
       expect(subscription.fee).to eq standard_sub
       expect(subscription.player).to eq player
+      expect(subscription.notes).to be_empty
 
       visit shop_path
       expect(page).to have_link(cart_link)
@@ -131,6 +132,7 @@ describe "Shop" do
       expect(subscription.fee).to eq standard_sub
       expect(subscription.player).to be_nil
       expect(subscription.new_player == newbie).to eq true
+      expect(subscription.notes).to be_empty
 
       click_link continue
       click_link standard_sub.description
@@ -411,6 +413,7 @@ describe "Shop" do
       expect(entry.cart).to eq cart
       expect(entry.fee).to eq entry_fee
       expect(entry.player).to eq player
+      expect(entry.notes).to be_empty
 
       visit shop_path
       expect(page).to have_link(cart_link)
@@ -614,7 +617,9 @@ describe "Shop" do
     let!(:player1)        { create(:player) }
     let!(:player2)        { create(:player) }
     let!(:entry_fee)      { create(:entry_fee) }
-    let!(:half_point_bye) { create(:half_point_bye, fee: entry_fee) }
+    let!(:half_point_bye) { create(:half_point_bye_option, fee: entry_fee) }
+    let!(:amount)         { create(:donation_amount) }
+    let!(:donation_fee)   { create(:donation, user_inputs: [amount]) }
 
     it "option" do
       visit shop_path
@@ -648,6 +653,28 @@ describe "Shop" do
 
       expect(entry.player).to eq player2
       expect(entry.notes).to be_empty
+    end
+
+    it "amount" do
+      expect(donation_fee.amount).to be_nil
+
+      visit shop_path
+      click_link donation_fee.description
+
+      fill_in amount.label, with: "12.345"
+      click_button add_to_cart
+
+      expect(Cart.count).to eq 1
+      expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+
+      cart = Cart.last
+      expect(cart.items.size).to eq 1
+      expect(cart.total_cost).to eq 12.35
+      donation = cart.items.first
+
+      expect(donation.cost).to eq 12.35
+      expect(donation.description).to eq "Donation Fee"
+      expect(donation.notes).to be_empty
     end
   end
 end

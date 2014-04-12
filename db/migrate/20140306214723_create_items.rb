@@ -9,7 +9,7 @@ class CreateItems < ActiveRecord::Migration
       t.string   :status, limit: 20, default: "unpaid"
       t.string   :source, limit: 8, default: "www2"
       t.string   :payment_method, limit: 20
-      t.string   :notes, limit: 1000
+      t.string   :notes, limit: 1000, default: [].to_yaml
 
       t.timestamps
     end

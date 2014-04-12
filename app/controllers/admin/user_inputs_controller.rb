@@ -22,6 +22,7 @@ class Admin::UserInputsController < ApplicationController
 
     if @user_input.save
       @user_input.journal(:create, current_user, request.ip)
+      @user_input.fee.update_column(:amount, nil) if @user_input.subtype == "amount"
       redirect_to admin_user_input_path(@user_input), notice: "User input was successfully created"
     else
       flash_first_base_error(@user_input, now: true)
