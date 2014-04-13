@@ -14,7 +14,7 @@ class Item < ActiveRecord::Base
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
   validates :cost, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, unless: Proc.new { |i| i.cost.blank? }
-  validates :cost, presence: true, unless: Proc.new { |i| i.fee.present? && i.fee.user_amount? }
+  validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? || i.fee.user_amount? }
   validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints, :check_user_inputs

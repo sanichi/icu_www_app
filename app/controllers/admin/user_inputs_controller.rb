@@ -25,7 +25,7 @@ class Admin::UserInputsController < ApplicationController
       @user_input.fee.update_column(:amount, nil) if @user_input.subtype == "amount"
       redirect_to admin_user_input_path(@user_input), notice: "User input was successfully created"
     else
-      flash_first_base_error(@user_input, now: true)
+      flash_first_error(@user_input, now: true)
       @fee = Fee.where(id: params[:user_input][:fee_id]).first
       superclasses
       render "new"
@@ -41,7 +41,7 @@ class Admin::UserInputsController < ApplicationController
       @user_input.journal(:update, current_user, request.ip)
       redirect_to admin_user_input_path(@user_input), notice: "User input was successfully updated"
     else
-      flash_first_base_error(@user_input, now: true)
+      flash_first_error(@user_input, now: true)
       superclasses
       render "edit"
     end

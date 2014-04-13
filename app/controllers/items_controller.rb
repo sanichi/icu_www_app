@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
       @item.update_column(:cart_id, cart.id)
       redirect_to cart_path
     else
-      flash_first_base_error(@item)
+      flash_first_error(@item)
       redirect_to new_item_path(fee_id: @fee.id)
     end
   end
