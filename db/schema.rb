@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20140409095810) do
 
   create_table "carts", force: true do |t|
     t.string   "status",             limit: 20,                          default: "unpaid"
-    t.decimal  "total",                          precision: 8, scale: 2
-    t.decimal  "original_total",                 precision: 8, scale: 2
+    t.decimal  "total",                          precision: 9, scale: 2
+    t.decimal  "original_total",                 precision: 9, scale: 2
     t.string   "payment_method",     limit: 20
     t.string   "payment_ref",        limit: 50
     t.string   "confirmation_email", limit: 50
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(version: 20140409095810) do
   create_table "fees", force: true do |t|
     t.string   "type",              limit: 40
     t.string   "name",              limit: 100
-    t.decimal  "amount",                        precision: 6, scale: 2
-    t.decimal  "discounted_amount",             precision: 6, scale: 2
+    t.decimal  "amount",                        precision: 9, scale: 2
+    t.decimal  "discounted_amount",             precision: 9, scale: 2
     t.string   "years",             limit: 7
     t.integer  "year",              limit: 2
     t.integer  "days",              limit: 2
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 20140409095810) do
     t.string   "player_data"
     t.date     "start_date"
     t.date     "end_date"
-    t.decimal  "cost",                        precision: 6, scale: 2
+    t.decimal  "cost",                        precision: 9, scale: 2
     t.string   "status",         limit: 20,                           default: "unpaid"
     t.string   "source",         limit: 8,                            default: "www2"
     t.string   "payment_method", limit: 20
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 20140409095810) do
     t.integer  "cart_id"
     t.integer  "user_id"
     t.string   "error"
-    t.decimal  "amount",     precision: 6, scale: 2
+    t.decimal  "amount",     precision: 9, scale: 2
     t.datetime "created_at"
   end
 

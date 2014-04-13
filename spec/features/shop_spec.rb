@@ -661,7 +661,7 @@ describe "Shop" do
       visit shop_path
       click_link donation_fee.description
 
-      fill_in amount.label, with: "12.345"
+      fill_in amount.label, with: "1234567.895"
       click_button add_to_cart
 
       expect(Cart.count).to eq 1
@@ -669,10 +669,10 @@ describe "Shop" do
 
       cart = Cart.last
       expect(cart.items.size).to eq 1
-      expect(cart.total_cost).to eq 12.35
+      expect(cart.total_cost).to eq 1234567.90
       donation = cart.items.first
 
-      expect(donation.cost).to eq 12.35
+      expect(donation.cost).to eq 1234567.90
       expect(donation.description).to eq "Donation Fee"
       expect(donation.notes).to be_empty
     end

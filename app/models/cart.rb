@@ -2,10 +2,15 @@ class Cart < ActiveRecord::Base
   include Payable
   extend Util::Pagination
 
+  MAX_AMOUNT = 10000000.00
+  MIN_AMOUNT = 0.0
+
   has_many :items, dependent: :destroy
   has_many :payment_errors, dependent: :destroy
   has_many :refunds, dependent: :destroy
   belongs_to :user
+
+  validates :total, :original_total, numericality: { greater_than: MIN_AMOUNT, less_than: MAX_AMOUNT }, allow_nil: true
 
   scope :include_items, -> { includes(items: [:fee, :player]) }
   scope :include_errors, -> { includes(:payment_errors) }

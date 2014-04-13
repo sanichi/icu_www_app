@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
-  validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? }
+  validates :cost, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, unless: Proc.new { |i| i.fee.blank? }
   validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints, :check_user_inputs
