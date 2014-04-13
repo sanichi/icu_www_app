@@ -8,12 +8,13 @@ class Item < ActiveRecord::Base
   belongs_to :fee
   belongs_to :cart
 
-  before_validation :copy_fee, :normalise, :compensate_for_unchecked_options, :set_cost_from_user_input
+  before_validation :copy_fee, :normalise, :compensate_for_unchecked_options
 
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true
   validates :fee, presence: true, unless: Proc.new { |i| i.source == "www1" }
-  validates :cost, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, unless: Proc.new { |i| i.fee.blank? }
+  validates :cost, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, unless: Proc.new { |i| i.cost.blank? }
+  validates :cost, presence: true, unless: Proc.new { |i| i.fee.present? && i.fee.user_amount? }
   validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
   validates :source, inclusion: { in: %w[www1 www2] }
   validate :age_constraints, :rating_constraints, :check_user_inputs
@@ -125,14 +126,5 @@ class Item < ActiveRecord::Base
     self.notes = notes[0..(fee.user_inputs.size-1)] if fee.user_inputs.size < notes.size
     fee.user_inputs.each_with_index { |input, i| input.check(self, i) }
     self.notes.compact!
-  end
-
-  def set_cost_from_user_input
-    return unless new_record? && cost.blank? && fee
-    index = fee.user_inputs.index { |ui| ui.subtype == "amount" }
-    if index
-      amount = BigDecimal.new(notes[index].to_s.gsub(/[^0-9\.]/, "")).round(2)
-      self.cost = amount if amount > 0
-    end
   end
 end
