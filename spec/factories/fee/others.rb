@@ -6,8 +6,14 @@ FactoryGirl.define do
     player_required false
 
     factory :donation do
-      name            "Donation"
-      amount          nil
+      name   "Donation"
+      amount nil
+    end
+
+    factory :foreign_rating_fee do
+      name            "Foreign Rating"
+      amount          10
+      player_required true
     end
   end
 end

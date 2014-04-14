@@ -8,7 +8,8 @@ class Item < ActiveRecord::Base
   belongs_to :fee
   belongs_to :cart
 
-  before_validation :copy_fee, :normalise, :compensate_for_unchecked_options
+  after_initialize :compensate_for_unchecked_options
+  before_validation :copy_fee, :normalise
 
   validates :status, exclusion: { in: %w[part_refunded] } # unlike carts, items are not part-refundable (see models/concerns/Payable.rb)
   validates :description, presence: true

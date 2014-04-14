@@ -707,6 +707,61 @@ describe "Shop" do
       end
     end
 
+    context "date" do
+      context "rating fee" do
+        let!(:player)           { create(:player) }
+        let!(:rating_fee)       { create(:foreign_rating_fee) }
+        let!(:tournament_name)  { create(:tournament_text, fee: rating_fee) }
+        let!(:tournament_start) { create(:tournament_date, fee: rating_fee) }
+
+        let(:missing)           { I18n.t("item.error.user_input.mdate.missing", label: tournament_start.label) }
+        let(:invalid)           { I18n.t("item.error.user_input.mdate.invalid", label: tournament_start.label) }
+
+        let(:date)              { Date.today.months_since(1).to_s }
+        let(:name)              { "Golders Green Weekender" }
+
+        before(:each) do
+          visit shop_path
+          click_link rating_fee.description
+          click_button select_member
+          fill_in last_name, with: player.last_name + force_submit
+          fill_in first_name, with: player.first_name + force_submit
+          click_link player.id
+          fill_in tournament_name.label, with: name
+        end
+
+        it "valid date" do
+          fill_in tournament_start.label, with: date
+          click_button add_to_cart
+
+          expect(Cart.count).to eq 1
+          expect(Item::Other.inactive.where(fee: rating_fee).count).to eq 1
+
+          cart = Cart.last
+          expect(cart.items.size).to eq 1
+          expect(cart.total_cost).to eq rating_fee.amount
+          item = cart.items.first
+
+          expect(item.cost).to eq rating_fee.amount
+          expect(item.description).to eq rating_fee.description(:full)
+          expect(item.notes.size).to eq 2
+          expect(item.notes.include?(name)).to be_true
+          expect(item.notes.include?(date)).to be_true
+        end
+
+        it "missing" do
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: missing)
+        end
+
+        it "invalid" do
+          fill_in tournament_start.label, with: "soon"
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: invalid)
+        end
+      end
+    end
+
     context "text" do
       context "donation" do
         let(:amount)       { create(:donation_amount) }
@@ -714,7 +769,7 @@ describe "Shop" do
         let(:message)      { " To   support  ICU   administration  costs  " }
 
         context "optional comment" do
-          let!(:comment) { create(:comment, fee: donation_fee) }
+          let!(:comment) { create(:comment_text, fee: donation_fee) }
 
           before(:each) do
             visit shop_path
@@ -744,7 +799,7 @@ describe "Shop" do
         end
 
         context "required comment" do
-          let!(:comment) { create(:comment, fee: donation_fee, required: true) }
+          let!(:comment) { create(:comment_text, fee: donation_fee, required: true) }
 
           before(:each) do
             visit shop_path
@@ -770,7 +825,7 @@ describe "Shop" do
         end
 
         context "short comment" do
-          let!(:comment) { create(:comment, fee: donation_fee, max_length: 10) }
+          let!(:comment) { create(:comment_text, fee: donation_fee, max_length: 10) }
 
           before(:each) do
             visit shop_path

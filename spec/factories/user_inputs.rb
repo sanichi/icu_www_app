@@ -7,9 +7,20 @@ FactoryGirl.define do
     label "Amount to donate"
   end
 
-  factory :comment, class: UserInput::Text do
+  factory :comment_text, class: UserInput::Text do
     label      "Comment"
     required   false
     max_length 140
+  end
+
+  factory :tournament_text, class: UserInput::Text do
+    label      "Tournament name"
+    required   true
+    max_length 40
+  end
+
+  factory :tournament_date, class: UserInput::Mdate do
+    label      "Tournament start date"
+    required   true
   end
 end
