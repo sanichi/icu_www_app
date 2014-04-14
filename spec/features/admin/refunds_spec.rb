@@ -118,7 +118,7 @@ describe "Refunds" do
       confirm_dialog
 
       expect(page).to have_css(success, refund_ok)
-      #expect(page).to_not have_link(refund_button)
+      expect(page).to_not have_link(refund_button)
 
       cart.reload
       subscription.reload
