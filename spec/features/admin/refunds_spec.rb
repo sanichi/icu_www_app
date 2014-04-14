@@ -124,8 +124,6 @@ describe "Refunds" do
       subscription.reload
       entry.reload
 
-      puts "XXX #{cart.total}|#{cart.status}|#{subscription.status}|#{entry.status}|#{cart.refunds.size}"
-
       expect(cart).to be_refunded
       expect(cart.total).to eq 0.0
       expect(subscription).to be_refunded

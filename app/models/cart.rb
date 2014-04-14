@@ -10,7 +10,7 @@ class Cart < ActiveRecord::Base
   has_many :refunds, dependent: :destroy
   belongs_to :user
 
-  validates :total, :original_total, numericality: { greater_than: MIN_AMOUNT, less_than: MAX_AMOUNT }, allow_nil: true
+  validates :total, :original_total, numericality: { less_than: MAX_AMOUNT }, allow_nil: true
 
   scope :include_items, -> { includes(items: [:fee, :player]) }
   scope :include_errors, -> { includes(:payment_errors) }
@@ -69,10 +69,6 @@ class Cart < ActiveRecord::Base
     charge = Stripe::Charge.retrieve(payment_ref)
     refund.amount = refund_amount(item_ids, charge)
     charge.refund(amount: cents(refund.amount))
-  rescue => e
-    refund.error = e.message
-    refund
-  else
     items.each do |item|
       if item_ids.include?(item.id)
         item.update_column(:status, "refunded")
@@ -80,7 +76,10 @@ class Cart < ActiveRecord::Base
     end
     self.status = self.total == refund.amount ? "refunded" : "part_refunded"
     self.total -= refund.amount
-    save
+    save!
+    refund
+  rescue => e
+    refund.error = e.message
     refund
   ensure
     refund.save
