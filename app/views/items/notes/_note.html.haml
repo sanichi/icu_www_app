@@ -1,0 +1,5 @@
+%p
+  %em
+    = succeed(":") do
+      = label_tag id, input.label, style: "font-weight: normal"
+  = render "items/notes/#{input.subtype}", input: input, id: id, name: "item[notes][]", note: note

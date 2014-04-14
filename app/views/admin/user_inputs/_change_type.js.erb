@@ -1,0 +1,26 @@
+var user_input_extras = {};
+<%- all_extras = [] %>
+<%- UserInput::TYPES.each do |type| %>
+<%- extras = type.constantize.extras %>
+<%- all_extras += extras %>
+user_input_extras['<%= type %>'] = [<%= extras.map{ |x| "'#{x.to_s}'" }.join(", ").html_safe %>];
+<%- end %>
+var all_extras = [<%= all_extras.uniq.map{ |x| "'#{x.to_s}'" }.join(", ").html_safe %>];
+
+function change_user_input_type() {
+  var type = $('#user_input_type').val();
+  var extras = user_input_extras[type] || [];
+  for (var i=0; i<all_extras.length; i++) {
+    $('#extra_' + all_extras[i]).hide();
+  }
+  for (var j=0; j<extras.length; j++) {
+    $('#extra_' + extras[j]).show();
+  }
+}
+
+$(function() {
+  $('#user_input_type').change(function() {
+    change_user_input_type();
+  });
+  change_user_input_type();
+});

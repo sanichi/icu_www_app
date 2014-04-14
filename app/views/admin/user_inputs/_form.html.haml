@@ -1,3 +1,6 @@
+- content_for :javascript do
+  = render "change_type.js"
+
 .row
   .col-sm-2
   .col-sm-8
@@ -10,6 +13,10 @@
           = f.hidden_field :fee_id
         = render "utils/select_for", locals.merge(param: :type, text: "Type", width: 3, menu: user_input_type_menu(@user_input.type, new_record))
         = render "utils/text_field_for", locals.merge(param: :label, text: "Label", width: 6)
+        #extra_max_length
+          = render "utils/text_field_for", locals.merge(param: :max_length, text: "Max length", width: 2)
+        #extra_required
+          = render "utils/check_box_for", locals.merge(param: :required, text: "Required", width: 1)
         %hr
         = f.submit "Save", class: "btn btn-primary"
         = link_to "Cancel", new_record ? [:admin, @fee] : [:admin, @user_input], class: "btn btn-default"

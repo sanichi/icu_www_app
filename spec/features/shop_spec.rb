@@ -616,65 +616,180 @@ describe "Shop" do
   context "user inputs", js: true do
     let!(:player1)        { create(:player) }
     let!(:player2)        { create(:player) }
-    let!(:entry_fee)      { create(:entry_fee) }
-    let!(:half_point_bye) { create(:half_point_bye_option, fee: entry_fee) }
-    let!(:amount)         { create(:donation_amount) }
-    let!(:donation_fee)   { create(:donation, user_inputs: [amount]) }
 
-    it "option" do
-      visit shop_path
-      click_link entry_fee.description
+    context "option" do
+      it "half-point bye" do
+        entry_fee = create(:entry_fee)
+        half_point_bye = create(:half_point_bye_option, fee: entry_fee)
 
-      click_button select_member
-      fill_in last_name, with: player1.last_name + force_submit
-      fill_in first_name, with: player1.first_name + force_submit
-      click_link player1.id
-      check half_point_bye.label
-      click_button add_to_cart
+        visit shop_path
+        click_link entry_fee.description
 
-      expect(Item::Entry.inactive.where(fee: entry_fee, player: player1).count).to eq 1
-      entry = Item::Entry.last
+        click_button select_member
+        fill_in last_name, with: player1.last_name + force_submit
+        fill_in first_name, with: player1.first_name + force_submit
+        click_link player1.id
+        check half_point_bye.label
+        click_button add_to_cart
 
-      expect(entry.player).to eq player1
-      expect(entry.notes.size).to eq 1
-      expect(entry.notes.first).to eq half_point_bye.label
+        expect(Item::Entry.inactive.where(fee: entry_fee, player: player1).count).to eq 1
+        entry = Item::Entry.last
 
-      click_link continue
-      click_link entry_fee.description
+        expect(entry.player).to eq player1
+        expect(entry.notes.size).to eq 1
+        expect(entry.notes.first).to eq half_point_bye.label
 
-      click_button select_member
-      fill_in last_name, with: player2.last_name + force_submit
-      fill_in first_name, with: player2.first_name + force_submit
-      click_link player2.id
-      click_button add_to_cart
+        click_link continue
+        click_link entry_fee.description
 
-      expect(Item::Entry.inactive.where(fee: entry_fee, player: player2).count).to eq 1
-      entry = Item::Entry.last
+        click_button select_member
+        fill_in last_name, with: player2.last_name + force_submit
+        fill_in first_name, with: player2.first_name + force_submit
+        click_link player2.id
+        click_button add_to_cart
 
-      expect(entry.player).to eq player2
-      expect(entry.notes).to be_empty
+        expect(Item::Entry.inactive.where(fee: entry_fee, player: player2).count).to eq 1
+        entry = Item::Entry.last
+
+        expect(entry.player).to eq player2
+        expect(entry.notes).to be_empty
+      end
     end
 
-    it "amount" do
-      expect(donation_fee.amount).to be_nil
+    context "amount" do
+      context "donation" do
+        let(:amount)        { create(:donation_amount) }
+        let!(:donation_fee) { create(:donation, user_inputs: [amount]) }
 
-      visit shop_path
-      click_link donation_fee.description
+        let(:missing)       { I18n.t("item.error.user_input.amount.missing", label: amount.label) }
+        let(:invalid)       { I18n.t("item.error.user_input.amount.invalid", label: amount.label) }
+        let(:too_small)     { I18n.t("item.error.user_input.amount.too_small", label: amount.label, min: Cart::MIN_AMOUNT) }
+        let(:too_large)     { I18n.t("item.error.user_input.amount.too_large", label: amount.label, max: Cart::MAX_AMOUNT) }
 
-      fill_in amount.label, with: "1234567.895"
-      click_button add_to_cart
+        before(:each) do
+          visit shop_path
+          click_link donation_fee.description
+        end
 
-      expect(Cart.count).to eq 1
-      expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+        it "valid amount" do
+          fill_in amount.label, with: "1234567.895"
+          click_button add_to_cart
 
-      cart = Cart.last
-      expect(cart.items.size).to eq 1
-      expect(cart.total_cost).to eq 1234567.90
-      donation = cart.items.first
+          expect(Cart.count).to eq 1
+          expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
 
-      expect(donation.cost).to eq 1234567.90
-      expect(donation.description).to eq "Donation Fee"
-      expect(donation.notes).to be_empty
+          cart = Cart.last
+          expect(cart.items.size).to eq 1
+          expect(cart.total_cost).to eq 1234567.90
+          donation = cart.items.first
+
+          expect(donation.cost).to eq 1234567.90
+          expect(donation.description).to eq "Donation Fee"
+          expect(donation.notes).to be_empty
+        end
+
+        it "missing, invalid, too low, too high" do
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: missing)
+
+          fill_in amount.label, with: "loads"
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: invalid)
+
+          fill_in amount.label, with: "0.0"
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: too_small)
+
+          fill_in amount.label, with: "10000000"
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: too_large)
+        end
+      end
+    end
+
+    context "text" do
+      context "donation" do
+        let(:amount)       { create(:donation_amount) }
+        let(:donation_fee) { create(:donation, user_inputs: [amount]) }
+        let(:message)      { " To   support  ICU   administration  costs  " }
+
+        context "optional comment" do
+          let!(:comment) { create(:comment, fee: donation_fee) }
+
+          before(:each) do
+            visit shop_path
+            click_link donation_fee.description
+            fill_in amount.label, with: "100"
+          end
+
+          it "skip" do
+            click_button add_to_cart
+
+            expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+            donation = Item::Other.last
+
+            expect(donation.notes).to be_empty
+          end
+
+          it "fill in" do
+            fill_in comment.label, with: message
+            click_button add_to_cart
+
+            expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+            donation = Item::Other.last
+
+            expect(donation.notes.size).to eq 1
+            expect(donation.notes.first).to eq message.trim
+          end
+        end
+
+        context "required comment" do
+          let!(:comment) { create(:comment, fee: donation_fee, required: true) }
+
+          before(:each) do
+            visit shop_path
+            click_link donation_fee.description
+            fill_in amount.label, with: "100"
+          end
+
+          it "error if missing" do
+            click_button add_to_cart
+
+            expect(page).to have_css(failure, text: I18n.t("item.error.user_input.text.missing", label: comment.label))
+
+            fill_in comment.label, with: message
+            click_button add_to_cart
+
+            expect(page).to_not have_css(failure)
+            expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+            donation = Item::Other.last
+
+            expect(donation.notes.size).to eq 1
+            expect(donation.notes.first).to eq message.trim
+          end
+        end
+
+        context "short comment" do
+          let!(:comment) { create(:comment, fee: donation_fee, max_length: 10) }
+
+          before(:each) do
+            visit shop_path
+            click_link donation_fee.description
+            fill_in amount.label, with: "100"
+          end
+
+          it "fill in" do
+            fill_in comment.label, with: "12345678901234567890"
+            click_button add_to_cart
+
+            expect(Item::Other.inactive.where(fee: donation_fee).count).to eq 1
+            donation = Item::Other.last
+
+            expect(donation.notes.size).to eq 1
+            expect(donation.notes.first).to eq "1234567890"
+          end
+        end
+      end
     end
   end
 end

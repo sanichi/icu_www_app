@@ -1,2 +1,2 @@
 - fee.user_inputs.each_with_index do |input, index|
-  = render "items/notes/#{input.subtype}", fee: fee, input: input, name: "item[notes][]", id: "user_input_#{index}"
+  = render "items/notes/note", input: input, id: "user_input_#{index}", note: notes[index]

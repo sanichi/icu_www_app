@@ -1,11 +1,13 @@
 class ItemsController < ApplicationController
   def new
-    @fee = Fee.on_sale.where(id: params[:fee_id]).first
-    if @fee
-      @item = Item.new(fee: @fee, type: @fee.subtype(:item)).becomes(Item)
-      @new_player = NewPlayer.new if @fee.new_player_allowed?
-    else
-      redirect_to shop_path
+    unless @fee
+      @fee = Fee.on_sale.where(id: params[:fee_id]).first
+      if @fee
+        @item = Item.new(fee: @fee, type: @fee.subtype(:item)).becomes(Item)
+        @new_player = NewPlayer.new if @fee.new_player_allowed?
+      else
+        redirect_to shop_path
+      end
     end
   end
 
@@ -13,13 +15,17 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
     @fee = @item.fee
     cart = current_cart(:create)
+    original_notes = @item.notes.dup
 
     if !cart.duplicates?(@item, add_error: true) && @item.save
       @item.update_column(:cart_id, cart.id)
       redirect_to cart_path
     else
-      flash_first_error(@item)
-      redirect_to new_item_path(fee_id: @fee.id)
+      flash_first_error(@item, now: true)
+      @new_player = NewPlayer.new if @fee.new_player_allowed?
+      @item = @item.becomes(Item)
+      @item.notes = original_notes
+      render "new"
     end
   end
 

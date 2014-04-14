@@ -1,24 +1,27 @@
 class UserInput::Amount < UserInput
   def check(item, index)
-    # Check the amount.
-    error = nil
-    if item.notes[index].blank?
-      error = "item.error.user_input.amount"
+    note = item.notes[index].to_s
+    user_input = item.fee.user_inputs[index]
+
+    if note.blank?
+      error = I18n.t("item.error.user_input.amount.missing", label: user_input.label)
     else
-      amount = BigDecimal.new(item.notes[index].to_s.gsub(/[^0-9\.]/, "")).round(2)
-      if amount <= Cart::MIN_AMOUNT
-        error = "item.error.user_input.amount"
-      elsif amount >= Cart::MAX_AMOUNT
-        error = "item.error.user_input.amount"
+      note = note.gsub(/[^0-9\.]/, "")
+      if note.blank?
+        error = I18n.t("item.error.user_input.amount.invalid", label: user_input.label)
       else
-        item.cost = amount
+        amount = BigDecimal.new(note).round(2)
+        if amount <= Cart::MIN_AMOUNT
+          error = I18n.t("item.error.user_input.amount.too_small", label: user_input.label, min: Cart::MIN_AMOUNT)
+        elsif amount >= Cart::MAX_AMOUNT
+          error = I18n.t("item.error.user_input.amount.too_large", label: user_input.label, max: Cart::MAX_AMOUNT)
+        else
+          item.cost = amount
+          item.notes[index] = nil
+        end
       end
     end
 
-    # Add to base errors if we got one.
-    item.errors.add(:base, I18n.t(error)) if error
-
-    # In this case of an amount which sets another item attribute (cost) the note is no longer needed.
-    item.notes[index] = nil
+    item.errors.add(:base, error) if error
   end
 end

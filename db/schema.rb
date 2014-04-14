@@ -184,8 +184,10 @@ ActiveRecord::Schema.define(version: 20140409095810) do
 
   create_table "user_inputs", force: true do |t|
     t.integer "fee_id"
-    t.string  "type",   limit: 40
-    t.string  "label",  limit: 100
+    t.string  "type",       limit: 40
+    t.string  "label",      limit: 100
+    t.boolean "required",               default: true
+    t.integer "max_length", limit: 2
   end
 
   create_table "users", force: true do |t|

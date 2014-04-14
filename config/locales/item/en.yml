@@ -13,8 +13,8 @@ en:
         already_entered: "%{member} has already entered this event"
         already_in_cart: "A entry for %{member} in the same event is already in your cart"
       other:
-        already_exists: "A duplicate item has already been paid for"
-        already_in_cart: "A duplicate item is already in your cart"
+        already_exists: A duplicate item has already been paid for
+        already_in_cart: A duplicate item is already in your cart
       rating:
         low: "%{member}'s rating is under the limit (%{limit})"
         high: "%{member}'s rating is over the limit (%{limit})"
@@ -26,7 +26,13 @@ en:
           db: "Not a new player: matches %{matches}"
           cart: "The same new player (%{name}, %{dob}) is already in your cart"
       user_input:
-        amount: "Invalid amount"
+        amount:
+          missing: "Input required for '%{label}'"
+          invalid: "Invalid value for '%{label}'"
+          too_small: "Value for '%{label}' should be above %{min}"
+          too_large: "Value for '%{label}' should be below %{max}"
+        text:
+          missing: "Please enter something for '%{label}'"
     member:
       new: New Member
       select: Select Member

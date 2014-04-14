@@ -64,7 +64,10 @@ class Admin::UserInputsController < ApplicationController
   def user_input_params(new_record=false)
     attrs = %i[label type]
     attrs.push(:fee_id) if new_record
-    params[:user_input].permit(attrs)
+    if UserInput::TYPES.include?(params[:user_input][:type])
+      attrs += params[:user_input][:type].constantize.extras
+    end
+    params.required(:user_input).permit(*attrs)
   end
 
   def superclasses

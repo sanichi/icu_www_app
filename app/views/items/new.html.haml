@@ -17,7 +17,7 @@
             .pull-right= euros(@fee.amount)
         .panel-body
           = render "fees/#{@fee.subtype}", fee: @fee
-          = render "notes", fee: @fee
+          = render "notes", fee: @fee, notes: @item.notes
         .panel-footer
           - if @fee.player_required
             = render "player_ids_button"
