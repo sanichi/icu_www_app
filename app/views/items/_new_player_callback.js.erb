@@ -3,9 +3,8 @@ function new_player_callback(json, name) {
   $('#item_player_id').val("");
   $('#player_name').text(name);
   $('#new_player_modal').modal('hide');
-  $('input[type="submit"]').show();
   $('.alert').hide();
-  $('.select-player-button').removeClass('btn-info').addClass('btn-default');
+  ready_to_submit_new_item(true);
 }
 
 $(function() {

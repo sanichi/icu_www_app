@@ -3,9 +3,8 @@ function player_ids_callback(icu_id, name) {
   $('#item_player_data').val("");
   $('#player_name').text(name + ' (' + icu_id + ')');
   $('#player_ids_modal').modal('hide');
-  $('input[type="submit"]').show();
   $('.alert').hide();
-  $('.select-player-button').removeClass('btn-info').addClass('btn-default');
+  ready_to_submit_new_item(true);
 }
 
 <%- unless current_user.guest? %>

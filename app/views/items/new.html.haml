@@ -1,4 +1,6 @@
 - content_for :title, t("fee.type.#{@fee.subtype}")
+- content_for :javascript do
+  = render "utils.js"
 
 = form_for @item do |form|
   = form.hidden_field :type
@@ -16,7 +18,7 @@
             = @fee.description(:full)
             .pull-right= euros(@fee.amount)
         .panel-body
-          = render "fees/#{@fee.subtype}", fee: @fee
+          = render "fees/#{@fee.subtype}", fee: @fee, player_name: @player_name
           = render "notes", fee: @fee, notes: @item.notes
         .panel-footer
           - if @fee.player_required
@@ -26,7 +28,7 @@
             - if @fee.new_player_allowed?
               = render "new_player_button"
           = link_to t("cancel"), shop_path, class: "btn btn-default btn-sm"
-          = form.submit t("item.add"), class: "btn btn-info btn-sm pull-right", style: @fee.player_required ? "display: none" : nil
+          = form.submit t("item.add"), class: "btn btn-info btn-sm pull-right"
 
 - if @fee.player_required
   = render "player_ids/modal", title: t("item.member.select")
