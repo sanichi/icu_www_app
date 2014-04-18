@@ -20,6 +20,7 @@
         .panel-body
           = render "fees/#{@fee.subtype}", fee: @fee, player_name: @player_name
           = render "notes", fee: @fee, notes: @item.notes
+          = render "fees/more_info", fee: @fee
         .panel-footer
           - if @fee.player_required
             = render "player_ids_button"

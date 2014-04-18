@@ -1,5 +1,5 @@
 class Fee::Subscription < Fee
-  before_validation :set_dates
+  before_validation :set_dates, :set_more_info
 
   validates :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, presence: true
   validates :name, uniqueness: { scope: :years, message: "duplicate subscription name and season" }
@@ -48,5 +48,9 @@ class Fee::Subscription < Fee
       self.age_ref_date = season.start
       self.years = season.to_s
     end
+  end
+
+  def set_more_info
+    self.url = "http://www.icu.ie/articles/display.php?id=283"
   end
 end

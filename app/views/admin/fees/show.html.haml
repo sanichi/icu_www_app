@@ -8,6 +8,7 @@
       %tr
         %td.text-center{colspan: 4}
           %span{class: "badge alert-#{@fee.active ? 'success' : 'danger'}"}= @fee.active ? t("active") : t("inactive")
+          %span{class: "badge alert-#{@fee.within_sale_dates? ? 'success' : 'danger'}"}= "#{@fee.within_sale_dates? ? 'Within' : 'Outwith'} sale dates"
       %tr
         %td= t("fee.name")
         %th= @fee.name
