@@ -658,12 +658,12 @@ describe "Shop" do
 
     context "amount" do
       context "donation" do
-        let(:amount)        { create(:donation_amount) }
+        let(:amount)        { create(:donation_amount, min_amount: 10.0) }
         let!(:donation_fee) { create(:donation, user_inputs: [amount]) }
 
         let(:missing)       { I18n.t("item.error.user_input.amount.missing", label: amount.label) }
         let(:invalid)       { I18n.t("item.error.user_input.amount.invalid", label: amount.label) }
-        let(:too_small)     { I18n.t("item.error.user_input.amount.too_small", label: amount.label, min: Cart::MIN_AMOUNT) }
+        let(:too_small)     { I18n.t("item.error.user_input.amount.too_small", label: amount.label, min: amount.min_amount) }
         let(:too_large)     { I18n.t("item.error.user_input.amount.too_large", label: amount.label, max: Cart::MAX_AMOUNT) }
 
         before(:each) do
@@ -672,7 +672,7 @@ describe "Shop" do
         end
 
         it "valid amount" do
-          fill_in amount.label, with: "1234567.895"
+          fill_in amount.label, with: "1234.567"
           click_button add_to_cart
 
           expect(Cart.count).to eq 1
@@ -680,10 +680,10 @@ describe "Shop" do
 
           cart = Cart.last
           expect(cart.items.size).to eq 1
-          expect(cart.total_cost).to eq 1234567.90
+          expect(cart.total_cost).to eq 1234.57
           donation = cart.items.first
 
-          expect(donation.cost).to eq 1234567.90
+          expect(donation.cost).to eq 1234.57
           expect(donation.description).to eq "Donation Fee"
           expect(donation.notes).to be_empty
         end
@@ -696,11 +696,11 @@ describe "Shop" do
           click_button add_to_cart
           expect(page).to have_css(failure, text: invalid)
 
-          fill_in amount.label, with: "0.0"
+          fill_in amount.label, with: (amount.min_amount - 1.0).to_s
           click_button add_to_cart
           expect(page).to have_css(failure, text: too_small)
 
-          fill_in amount.label, with: "10000000"
+          fill_in amount.label, with: (Cart::MAX_AMOUNT + 1.0).to_s
           click_button add_to_cart
           expect(page).to have_css(failure, text: too_large)
         end

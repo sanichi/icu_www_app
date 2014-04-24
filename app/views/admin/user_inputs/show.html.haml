@@ -15,8 +15,12 @@
         %td= @user_input.label
       - if @user_input.class.extras.include?(:max_length)
         %tr
-          %th Max length
+          %th Maximum length
           %td= @user_input.max_length
+      - if @user_input.class.extras.include?(:min_amount)
+        %tr
+          %th Minimim amount
+          %td= @user_input.min_amount
       - if @user_input.class.extras.include?(:required)
         %tr
           %th Required

@@ -4,7 +4,8 @@ FactoryGirl.define do
   end
 
   factory :donation_amount, class: Userinput::Amount do
-    label "Amount to donate"
+    label      "Amount to donate"
+    min_amount 1.0
   end
 
   factory :comment_text, class: Userinput::Text do

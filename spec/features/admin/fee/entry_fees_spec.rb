@@ -195,7 +195,7 @@ describe Fee::Entry do
 
       user_input = fee.user_inputs.first
       expect(user_input.label).to eq half_point_bye
-      expect(user_input.type).to eq "UserInput::Option"
+      expect(user_input.type).to eq "Userinput::Option"
     end
 
     it "bad age" do

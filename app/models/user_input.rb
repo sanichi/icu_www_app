@@ -8,7 +8,8 @@ class UserInput < ActiveRecord::Base
 
   validates :type, inclusion: { in: TYPES }
   validates :label, presence: true
-  validates :max_length, numericality: { integer_only: true, greater_than: 0, less_than_or_equal: 140 }, allow_nil: true
+  validates :max_length, numericality: { integer_only: true, greater_than: 0, less_than_or_equal_to: 140 }, allow_nil: true
+  validates :min_amount, numericality: { greater_than_or_equal_to: 1.0, less_than_or_equal_to: 9999.99 }, allow_nil: true
 
   def subtype
     Fee.subtype(type.presence || self.class.to_s)
