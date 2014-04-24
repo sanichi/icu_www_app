@@ -8,7 +8,7 @@
     = form_for [:admin, @user_input], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
         %legend= "#{new_record ? "New" : "Edit"} User Input"
-        - locals = { form: f, object: @user_input, col: "sm", pad: 2, width: 4 }
+        - locals = { form: f, object: @user_input, col: "sm", pad: 3, width: 4 }
         - if new_record
           = f.hidden_field :fee_id
         = render "utils/select_for", locals.merge(param: :type, text: "Type", width: 3, menu: user_input_type_menu(@user_input.type, new_record))
@@ -17,6 +17,8 @@
           = render "utils/text_field_for", locals.merge(param: :max_length, text: "Max length", width: 2)
         #extra_min_amount
           = render "utils/text_field_for", locals.merge(param: :min_amount, text: "Min amount", width: 2)
+        #extra_date_constraint
+          = render "utils/select_for", locals.merge(param: :date_constraint, text: "Date constraint", width: 3, menu: user_input_date_constraint_menu(@user_input.date_constraint))
         #extra_required
           = render "utils/check_box_for", locals.merge(param: :required, text: "Required", width: 1)
         %hr

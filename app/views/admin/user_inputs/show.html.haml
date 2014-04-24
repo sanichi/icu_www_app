@@ -21,6 +21,10 @@
         %tr
           %th Minimim amount
           %td= @user_input.min_amount
+      - if @user_input.class.extras.include?(:date_constraint)
+        %tr
+          %th Date constraint
+          %td= @user_input.date_constraint.humanize
       - if @user_input.class.extras.include?(:required)
         %tr
           %th Required

@@ -7,6 +7,7 @@ class CreateUserInputs < ActiveRecord::Migration
       t.boolean  :required, default: true
       t.integer  :max_length, limit: 2
       t.decimal  :min_amount, precision: 6, scale: 2, default: 1.0
+      t.string   :date_constraint, limit: 30, default: "none"
     end
   end
 end

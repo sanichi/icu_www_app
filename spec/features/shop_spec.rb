@@ -712,12 +712,14 @@ describe "Shop" do
         let!(:player)           { create(:player) }
         let!(:rating_fee)       { create(:foreign_rating_fee) }
         let!(:tournament_name)  { create(:tournament_text, fee: rating_fee) }
-        let!(:tournament_start) { create(:tournament_date, fee: rating_fee) }
+        let!(:tournament_start) { create(:tournament_date, fee: rating_fee, date_constraint: "today_or_in_the_future") }
 
-        let(:missing)           { I18n.t("item.error.user_input.mdate.missing", label: tournament_start.label) }
-        let(:invalid)           { I18n.t("item.error.user_input.mdate.invalid", label: tournament_start.label) }
+        let(:missing)           { I18n.t("item.error.user_input.date.missing", label: tournament_start.label) }
+        let(:invalid)           { I18n.t("item.error.user_input.date.invalid", label: tournament_start.label) }
+        let(:in_the_past)       { I18n.t("item.error.user_input.date.today_or_in_the_future", label: tournament_start.label) }
 
         let(:date)              { Date.today.months_since(1).to_s }
+        let(:past_date)         { Date.today.days_ago(1).to_s }
         let(:name)              { "Golders Green Weekender" }
 
         before(:each) do
@@ -758,6 +760,12 @@ describe "Shop" do
           fill_in tournament_start.label, with: "soon"
           click_button add_to_cart
           expect(page).to have_css(failure, text: invalid)
+        end
+
+        it "in the past" do
+          fill_in tournament_start.label, with: past_date
+          click_button add_to_cart
+          expect(page).to have_css(failure, text: in_the_past)
         end
       end
     end

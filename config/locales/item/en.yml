@@ -31,9 +31,13 @@ en:
           missing: "Input required for '%{label}'"
           too_large: "Value for '%{label}' should be below %{max}"
           too_small: "Value for '%{label}' should be above %{min}"
-        mdate:
+        date:
           invalid: "Invalid date for '%{label}'"
           missing: "Date required for '%{label}'"
+          in_the_future: "Date for '%{label}' should be in the future"
+          in_the_past: "Date for '%{label}' should in the past"
+          today_or_in_the_future: "Date for '%{label}' should be today or in the future"
+          today_or_in_the_past: "Date for '%{label}' should be today or in the past"
         text:
           missing: "Please enter something for '%{label}'"
     member:

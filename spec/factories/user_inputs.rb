@@ -21,7 +21,7 @@ FactoryGirl.define do
   end
 
   factory :tournament_date, class: Userinput::Date do
-    label      "Tournament start date"
-    required   true
+    label    "Tournament start date"
+    required true
   end
 end

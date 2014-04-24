@@ -6,4 +6,11 @@ module UserInputsHelper
     types.unshift ["Please choose", ""] if new_record
     options_for_select(types, selected)
   end
+
+  def user_input_date_constraint_menu(selected)
+    constraints = UserInput::DATE_CONSTRAINTS.map do |constraint|
+      [constraint.humanize, constraint]
+    end
+    options_for_select(constraints, selected)
+  end
 end
