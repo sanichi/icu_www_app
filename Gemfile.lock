@@ -1,34 +1,44 @@
+GIT
+  remote: git://github.com/razum2um/validates_timeliness.git
+  revision: b195081f6aeead619430ad38b0f0dfe4d4981252
+  ref: b195081f6aeead619430ad38b0f0dfe4d4981252
+  specs:
+    validates_timeliness (3.0.14)
+      timeliness (~> 0.3.7)
+
 GEM
   remote: https://rubygems.org/
   remote: https://code.stripe.com/
   specs:
-    actionmailer (4.0.2)
-      actionpack (= 4.0.2)
+    actionmailer (4.1.0)
+      actionpack (= 4.1.0)
+      actionview (= 4.1.0)
       mail (~> 2.5.4)
-    actionpack (4.0.2)
-      activesupport (= 4.0.2)
-      builder (~> 3.1.0)
-      erubis (~> 2.7.0)
+    actionpack (4.1.0)
+      actionview (= 4.1.0)
+      activesupport (= 4.1.0)
       rack (~> 1.5.2)
       rack-test (~> 0.6.2)
-    activemodel (4.0.2)
-      activesupport (= 4.0.2)
-      builder (~> 3.1.0)
-    activerecord (4.0.2)
-      activemodel (= 4.0.2)
-      activerecord-deprecated_finders (~> 1.0.2)
-      activesupport (= 4.0.2)
-      arel (~> 4.0.0)
-    activerecord-deprecated_finders (1.0.3)
-    activesupport (4.0.2)
-      i18n (~> 0.6, >= 0.6.4)
-      minitest (~> 4.2)
-      multi_json (~> 1.3)
+    actionview (4.1.0)
+      activesupport (= 4.1.0)
+      builder (~> 3.1)
+      erubis (~> 2.7.0)
+    activemodel (4.1.0)
+      activesupport (= 4.1.0)
+      builder (~> 3.1)
+    activerecord (4.1.0)
+      activemodel (= 4.1.0)
+      activesupport (= 4.1.0)
+      arel (~> 5.0.0)
+    activesupport (4.1.0)
+      i18n (~> 0.6, >= 0.6.9)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
       thread_safe (~> 0.1)
-      tzinfo (~> 0.3.37)
+      tzinfo (~> 1.1)
     addressable (2.3.6)
-    arel (4.0.2)
-    builder (3.1.4)
+    arel (5.0.1.20140414130214)
+    builder (3.2.2)
     cancan (1.6.10)
     capistrano (3.2.1)
       i18n
@@ -86,7 +96,7 @@ GEM
       rest-client (~> 1.6)
     mime-types (1.25.1)
     mini_portile (0.5.3)
-    minitest (4.7.5)
+    minitest (5.3.3)
     multi_json (1.9.2)
     mysql2 (0.3.15)
     net-scp (1.2.0)
@@ -98,17 +108,19 @@ GEM
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (4.0.2)
-      actionmailer (= 4.0.2)
-      actionpack (= 4.0.2)
-      activerecord (= 4.0.2)
-      activesupport (= 4.0.2)
+    rails (4.1.0)
+      actionmailer (= 4.1.0)
+      actionpack (= 4.1.0)
+      actionview (= 4.1.0)
+      activemodel (= 4.1.0)
+      activerecord (= 4.1.0)
+      activesupport (= 4.1.0)
       bundler (>= 1.3.0, < 2.0)
-      railties (= 4.0.2)
-      sprockets-rails (~> 2.0.0)
-    railties (4.0.2)
-      actionpack (= 4.0.2)
-      activesupport (= 4.0.2)
+      railties (= 4.1.0)
+      sprockets-rails (~> 2.0)
+    railties (4.1.0)
+      actionpack (= 4.1.0)
+      activesupport (= 4.1.0)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.3.1)
@@ -146,7 +158,7 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.0.1)
+    sprockets-rails (2.1.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (~> 2.8)
@@ -160,7 +172,7 @@ GEM
       rest-client (~> 1.4)
     term-ansicolor (1.3.0)
       tins (~> 1.0)
-    therubyracer (0.12.0)
+    therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref
     thor (0.19.1)
@@ -171,12 +183,11 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.39)
+    tzinfo (1.1.0)
+      thread_safe (~> 0.1)
     uglifier (2.5.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    validates_timeliness (3.0.14)
-      timeliness (~> 0.3.6)
     websocket (1.0.7)
     wirble (0.1.3)
     xpath (2.0.0)
@@ -201,14 +212,14 @@ DEPENDENCIES
   launchy
   mailgun-ruby
   mysql2
-  rails (= 4.0.2)
+  rails (= 4.1.0)
   redcarpet
   redis
   rspec-rails
-  sass-rails (~> 4.0.0)
+  sass-rails (~> 4.0.3)
   selenium-webdriver
   stripe
-  therubyracer (= 0.12.0)
+  therubyracer
   uglifier (>= 1.3.0)
-  validates_timeliness (~> 3.0)
+  validates_timeliness!
   wirble

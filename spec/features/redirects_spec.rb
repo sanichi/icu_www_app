@@ -27,7 +27,7 @@ feature "Switch locales" do
     click_link "Home"
   end
 
-  scenario "default user with preference for English" do
+  scenario "user with no preference" do
     login user
     click_link "Home"
     click_link "Irish"
@@ -77,6 +77,6 @@ feature "Switch locales" do
     click_link "Home"
     %w[Baile Logins Translations Roghanna].each { |text| expect(page).to have_link(text) }
     click_link "Cláraigh amach"
-    %w[Baile Béarla Gaeilge].each { |text| expect(page).to have_link(text) }
+    %w[Home English Irish].each { |text| expect(page).to have_link(text) }
   end
 end

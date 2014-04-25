@@ -7,10 +7,10 @@ module ApplicationHelper
 
   def flash_style(name)
     bootstrap_name =
-      case name
-      when :warning then "warning"
-      when :info    then "info"
-      when :alert   then "danger"
+      case name.to_s
+      when "warning" then "warning"
+      when "info"    then "info"
+      when "alert"   then "danger"
       else "success"
       end
     "alert alert-#{bootstrap_name}"

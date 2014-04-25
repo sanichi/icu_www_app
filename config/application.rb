@@ -11,7 +11,7 @@ require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(:default, Rails.env)
+Bundler.require(*Rails.groups)
 
 # General configuration.
 module IcuWwwApp
@@ -22,8 +22,9 @@ module IcuWwwApp
     # Autoload these directories.
     config.autoload_paths += %W(#{Rails.root}/lib)
 
-    # Avoid deprecation message: http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning
-    I18n.config.enforce_available_locales = false
+    # The following is recomended since 4.1. See also http://stackoverflow.com/questions/20361428/rails-i18n-validation-deprecation-warning.
+    I18n.config.available_locales = [:en, :ga]
+    I18n.config.enforce_available_locales = true
 
     # Autoload nested locales for the simple backend.
     config.i18n.load_path += Dir[Rails.root.join("config", "locales", "**", "*.yml")]
