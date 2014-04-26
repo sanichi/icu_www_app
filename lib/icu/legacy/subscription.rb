@@ -77,7 +77,7 @@ module ICU
         # Work out the description.
         if new_item[:description].nil?
           new_item[:description] = "Lifetime ICU Subscription"
-          new_item[:cost] = 0.0
+          new_item[:cost] = nil
         elsif new_item[:description].match(/\A(New U18|Over 65|Overseas|Standard|Under 12|Under 18|Unemployed)\z/)
           new_item[:description] += " ICU Subscription"
         else

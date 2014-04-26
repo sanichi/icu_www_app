@@ -41,6 +41,6 @@ IcuWwwApp::Application.configure do
 
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
-  # Raises helpful error messages.
-  config.assets.raise_runtime_errors = true
+  # Raises helpful error messages. (Causes more trouble than it's worth - MO).
+  # config.assets.raise_runtime_errors = true
 end

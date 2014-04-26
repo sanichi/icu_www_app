@@ -57,8 +57,7 @@ IcuWwwApp::Application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
 
-  # Precompile additional assets.
-  # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
+  # Precompile additional assets. application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
   config.assets.precompile += User::THEMES.reject{ |theme| theme == "Bootstrap" }.map{ |theme| "#{theme.downcase}.min.css"}
   config.assets.precompile += %w/spin.js payment.js/
 
