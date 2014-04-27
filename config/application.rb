@@ -1,7 +1,4 @@
 require File.expand_path('../boot', __FILE__)
-require "yaml"
-
-APP_CONFIG = YAML.load(File.read(File.expand_path("../app_config.yml", __FILE__))).freeze
 
 # Pick the frameworks you want:
 require "active_record/railtie"

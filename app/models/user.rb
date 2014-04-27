@@ -154,7 +154,7 @@ class User < ActiveRecord::Base
   end
 
   def self.encrypt_password(password, salt)
-    eval(APP_CONFIG["password_encryptor"])
+    eval(Rails.application.secrets.password_encryptor)
   end
 
   def self.random_salt

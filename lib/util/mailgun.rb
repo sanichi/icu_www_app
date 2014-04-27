@@ -6,7 +6,7 @@ module Util
     end
 
     def self.client(key="private")
-      ::Mailgun::Client.new APP_CONFIG["mailgun"][key]
+      ::Mailgun::Client.new Rails.application.secrets.mailgun[key]
     end
 
     private_class_method :client

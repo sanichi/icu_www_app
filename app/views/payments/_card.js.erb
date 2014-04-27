@@ -1,4 +1,4 @@
-Stripe.setPublishableKey('<%= APP_CONFIG["stripe"][Rails.env]["public"] %>');
+Stripe.setPublishableKey('<%= Rails.application.secrets.stripe["public"] %>');
 var icuPaymentError = {
   gateway: '<%= escape_single_quoted(t("shop.payment.error.gateway")) %>',
   number:  '<%= escape_single_quoted(t("shop.payment.error.number")) %>',
