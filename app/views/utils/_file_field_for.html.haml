@@ -1,0 +1,10 @@
+- defined?(mark)     || mark     = "none"
+- defined?(btn_text) || btn_text = object.new_record? ? "Browse" : "Change"
+
+.form-group{class: object.errors[param].any? ? "has-error" : ""}
+  = form.label param, text + mark(mark), class: "control-label col-#{col}-#{pad}"
+  %div{class: "col-#{col}-#{width}"}
+    %span.btn.btn-default.btn-file
+      %span{id: "#{param}_change_filename"}= btn_text
+      = form.file_field param
+  %div{class: "col-#{col}-#{12-pad-width} help-block"}= object.errors[param].first

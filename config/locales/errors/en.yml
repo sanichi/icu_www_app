@@ -19,6 +19,7 @@ en:
       is_at: must be at %{restriction}
       less_than: must be less than %{count}
       less_than_or_equal_to: must be ≤ to %{count}
+      no_file_chosen: No file chosen
       not_a_number: not a number
       not_an_integer: not an integer
       odd: must be odd

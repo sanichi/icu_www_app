@@ -1,0 +1,20 @@
+- content_for :javascript do
+  = render "utils/file_field.js", param: "data"
+
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @image], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@image.new_record? ? 'New' : 'Edit'} Image"
+        - locals = { form: f, object: @image, col: "sm", pad: 2, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :caption, text: t("image.caption"), width: 6)
+        = render "utils/text_field_for", locals.merge(param: :year, text: t("image.year"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :credit, text: t("image.credit"), width: 4)
+        = render "utils/file_field_for", locals.merge(param: :data, text: t("image.file"), width: 2)
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:images)
+        = link_to "Cancel", @image.new_record? ? last_path || images_path : @image, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

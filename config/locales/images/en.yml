@@ -1,0 +1,16 @@
+en:
+  image:
+    caption: Caption
+    credit: Credit
+    data_updated_at: File last updated
+    dimensions: Dimensions
+    file: File
+    file_name: File name
+    image: Image
+    images: Images
+    original: Original
+    size: Original size
+    thumbnail: Thumbnail
+    type: Content type
+    year: Year
+    

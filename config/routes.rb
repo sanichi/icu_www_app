@@ -16,6 +16,7 @@ IcuWwwApp::Application.routes.draw do
   end
 
   resources :clubs,       only: [:index, :show]
+  resources :images,      only: [:index, :show]
   resources :items,       only: [:new, :create, :destroy]
   resources :new_players, only: [:create]
   resources :player_ids,  only: [:index]
@@ -33,6 +34,7 @@ IcuWwwApp::Application.routes.draw do
     end
     resources :cash_payments,   only: [:new, :create]
     resources :clubs,           only: [:new, :create, :edit, :update]
+    resources :images,          only: [:new, :create, :edit, :update, :destroy]
     resources :fees do
       get :rollover, :clone, on: :member
     end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140409095810) do
+ActiveRecord::Schema.define(version: 20140430183240) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -76,6 +76,21 @@ ActiveRecord::Schema.define(version: 20140409095810) do
     t.string   "url"
     t.boolean  "active",                                                default: false
     t.boolean  "player_required",                                       default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "images", force: true do |t|
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
+    t.string   "caption"
+    t.string   "dimensions"
+    t.string   "credit",            limit: 100
+    t.string   "source",            limit: 8,   default: "www2"
+    t.integer  "year",              limit: 2
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

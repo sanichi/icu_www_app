@@ -58,6 +58,10 @@ GEM
       xpath (~> 2.0)
     childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.4)
+      climate_control (>= 0.0.3, < 1.0)
     database_cleaner (1.2.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
@@ -104,6 +108,11 @@ GEM
     net-ssh (2.8.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    paperclip (4.1.1)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     polyglot (0.3.4)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -212,6 +221,7 @@ DEPENDENCIES
   launchy
   mailgun-ruby
   mysql2
+  paperclip (~> 4.1)
   rails (= 4.1.0)
   redcarpet
   redis

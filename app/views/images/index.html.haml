@@ -1,0 +1,29 @@
+- content_for :title, t("image.images")
+
+= render "utils/search_panel", form: "search_form", title: t("image.images"), col: "sm", pad: 1
+
+.row
+  .col-sm-10.col-sm-offset-1
+    - if @images.count > 0
+      %table{class: "table table-striped", id: "results"}
+        %thead
+          %tr
+            %th.text-center= t("id")
+            %th= t("image.caption")
+            %th= t("image.year")
+            %th= t("image.credit")
+            %th.text-center= t("image.thumbnail")
+        %tbody
+          - @images.matches.each do |image|
+            %tr
+              %td.vcenter.text-center= link_to image.id, image
+              %td.vcenter= image.caption
+              %td.vcenter= image.year
+              %td.vcenter= image.credit
+              %td.vcenter.text-center{width: Image::THUMB_SIZE}
+                = link_to image do
+                  = image_tag image.data.url(:thumbnail)
+          = render "utils/pagination_links", pager: @images, columns: 5
+    - if can?(:manage, Image)
+      = link_to "New", new_admin_image_path, class: "btn btn-info"
+      

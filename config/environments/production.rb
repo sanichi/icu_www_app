@@ -92,3 +92,6 @@ IcuWwwApp::Application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+
+# For Paperclip.
+Paperclip.options[:command_path] = "/usr/bin/"

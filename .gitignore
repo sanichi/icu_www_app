@@ -8,6 +8,7 @@
 /log/*.log
 /tmp
 /public/assets/
+/public/system/
 /config/database.yml
 /config/app_config.yml
 /config/secrets.yml

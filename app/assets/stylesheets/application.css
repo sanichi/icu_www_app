@@ -29,3 +29,26 @@
 .voffset1 { margin-top: 10px; }
 .voffset2 { margin-top: 15px; }
 .voffset3 { margin-top: 20px; }
+
+.vcenter { vertical-align: middle !important; }
+
+/* from http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/ */
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 999px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}

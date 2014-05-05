@@ -17,6 +17,7 @@ gem "validates_timeliness", github: "razum2um/validates_timeliness", ref: "b1950
 gem "redcarpet"
 gem "stripe"
 gem "mailgun-ruby", require: "mailgun"
+gem "paperclip", "~> 4.1"
 
 group :development do
   gem "capistrano"

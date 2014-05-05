@@ -11,6 +11,7 @@ class Ability
 
     if user.editor?
       can :manage, Club
+      can :manage, Image
     end
 
     if user.membership?

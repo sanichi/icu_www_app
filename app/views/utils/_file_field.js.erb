@@ -1,0 +1,8 @@
+// Adapted from http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/
+$(function() {
+  $('.btn-file :file').change(function() {
+    var text = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+    if (!text) text = '<%= escape_single_quoted(t("errors.messages.no_file_chosen")) %>';
+    $('#<%= param %>_change_filename').text(text);
+  });
+});
