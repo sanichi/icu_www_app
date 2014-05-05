@@ -47,8 +47,10 @@ describe Image do
   end
 
   context "authorization" do
-    let(:ok_roles)        { %w[admin editor] }
-    let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+    let(:user)            { create(:user, roles: "editor") }
+    let(:level1)          { ["admin", user] }
+    let(:level2)          { ["editor"] }
+    let(:level3)          { User::ROLES.reject { |r| r == "admin" || r == "editor" } }
 
     let(:caption_text)    { "Fractal" }
     let(:year_text)       { "2014" }
@@ -57,7 +59,7 @@ describe Image do
     let(:image_path)      { image_dir + image_file }
 
     before(:each) do
-      login "admin"
+      login user
       visit new_admin_image_path
       fill_in caption, with: caption_text
       fill_in year, with: year_text
@@ -74,8 +76,8 @@ describe Image do
       "//th[.='#{label}']/following-sibling::td"
     end
 
-    it "some roles can manage images as well as view" do
-      ok_roles.each do |role|
+    it "admin and owner can update as well as create" do
+      level1.each do |role|
         login role
         expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_image_path
@@ -89,8 +91,23 @@ describe Image do
       end
     end
 
+    it "other editors can only create" do
+      level2.each do |role|
+        user2 = login role
+        expect(page).to have_css(success, text: signed_in_as)
+        visit new_admin_image_path
+        expect(page).to_not have_css(failure)
+        visit edit_admin_image_path(@image)
+        expect(page).to have_css(failure)
+        visit images_path
+        click_link @image.id.to_s
+        expect(page).to have_xpath(cell(caption), text: caption_text)
+        expect(page).to_not have_link(button)
+      end
+    end
+
     it "other roles and guests can only view" do
-      not_ok_roles.push("guest").each do |role|
+      level3.push("guest").each do |role|
         if role == "guest"
           logout
         else

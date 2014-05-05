@@ -1,6 +1,6 @@
 class Admin::FeesController < ApplicationController
-  authorize_resource
   before_action :set_fee, only: [:show, :edit, :update, :destroy, :clone, :rollover]
+  authorize_resource
 
   def index
     @fees = Fee.search(params, admin_fees_path)

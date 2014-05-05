@@ -1,6 +1,6 @@
 class Admin::ImagesController < ApplicationController
-  authorize_resource
   before_action :set_image, only: [:edit, :update, :destroy]
+  authorize_resource
 
   def new
     @image = Image.new
@@ -32,7 +32,7 @@ class Admin::ImagesController < ApplicationController
   def destroy
     @image.journal(:destroy, current_user, request.ip)
     @image.destroy
-    redirect_to admin_fees_path, notice: "Image successfully deleted"
+    redirect_to admin_fees_path, notice: "Image was successfully deleted"
   end
 
   private

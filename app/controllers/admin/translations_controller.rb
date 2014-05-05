@@ -1,6 +1,6 @@
 class Admin::TranslationsController < ApplicationController
-  authorize_resource
   before_action :set_translation, only: [:show, :edit, :update, :destroy]
+  authorize_resource
 
   def index
     @translations = Translation.search(params, admin_translations_path)

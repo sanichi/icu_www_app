@@ -1,6 +1,6 @@
 class Admin::UserInputsController < ApplicationController
-  authorize_resource
   before_action :set_user_input, only: [:show, :edit, :update, :destroy]
+  authorize_resource
 
   def show
     @entries = @user_input.journal_entries if current_user.roles.present?

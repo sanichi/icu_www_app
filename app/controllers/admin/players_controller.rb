@@ -1,6 +1,6 @@
 class Admin::PlayersController < ApplicationController
-  authorize_resource
   before_action :set_player, only: [:edit, :update]
+  authorize_resource
 
   def show
     @player = Player.includes(:users).find(params[:id])

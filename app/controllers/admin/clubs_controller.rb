@@ -1,6 +1,6 @@
 class Admin::ClubsController < ApplicationController
-  authorize_resource
   before_action :set_club, only: [:edit, :update]
+  authorize_resource
 
   def new
     @club = Club.new
