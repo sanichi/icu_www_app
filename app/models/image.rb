@@ -18,19 +18,20 @@ class Image < ActiveRecord::Base
 
   before_validation :normalize_attributes, :check_dimensions
 
-  validates_attachment_content_type :data,
-    content_type: /\Aimage\/(#{TYPES})\z/i,
-    file_name: /\.(#{TYPES})\z/i
+  validates_attachment_content_type :data, content_type: /\Aimage\/(#{TYPES})\z/i, file_name: /\.(#{TYPES})\z/i
   validates :caption, presence: true
-  validates :credit, presence: true, unless: Proc.new { |i| i.source == "www1" }
+  validates :credit, presence: true, allow_nil: true
   validates :source, inclusion: { in: %w[www1 www2] }
   validates :year,  numericality: { integer_only: true, greater_than: 1880 }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
 
   validate :year_is_not_in_future
 
+  scope :include_players, -> { includes(user: :player) }
+  scope :last_updated_first, -> { order(updated_at: :desc) }
+
   def self.search(params, path)
-    matches = all
+    matches = include_players.last_updated_first
     matches = matches.where("caption LIKE ?", "%#{params[:caption]}%") if params[:caption].present?
     matches = matches.where("credit LIKE ?", "%#{params[:credit]}%") if params[:credit].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
@@ -64,6 +65,10 @@ class Image < ActiveRecord::Base
       s.push "Error (not a Hash)"
     end
     s.join(", ")
+  end
+
+  def short_type
+    data_content_type.split("/").last.upcase
   end
 
   private

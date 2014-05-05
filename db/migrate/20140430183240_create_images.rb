@@ -7,8 +7,13 @@ class CreateImages < ActiveRecord::Migration
       t.string     :source, limit: 8, default: "www2"
       t.integer    :year, limit: 2
       t.integer    :user_id
-      
+
       t.timestamps
     end
+
+    add_index :images, :caption
+    add_index :images, :year
+    add_index :images, :credit
+    add_index :images, :user_id
   end
 end

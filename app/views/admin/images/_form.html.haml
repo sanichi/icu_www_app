@@ -8,10 +8,10 @@
       %fieldset
         %legend= "#{@image.new_record? ? 'New' : 'Edit'} Image"
         - locals = { form: f, object: @image, col: "sm", pad: 2, mark: "required" }
+        = render "utils/file_field_for", locals.merge(param: :data, text: t("image.file"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :caption, text: t("image.caption"), width: 6)
         = render "utils/text_field_for", locals.merge(param: :year, text: t("image.year"), width: 2)
-        = render "utils/text_field_for", locals.merge(param: :credit, text: t("image.credit"), width: 4)
-        = render "utils/file_field_for", locals.merge(param: :data, text: t("image.file"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :credit, text: t("image.credit"), width: 4, mark: "none")
         %hr
         = f.submit "Save", class: "btn btn-primary"
         - last_path = last_search(:images)

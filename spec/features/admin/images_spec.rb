@@ -5,6 +5,7 @@ describe Image do
   let(:caption)         { I18n.t("image.caption") }
   let(:credit)          { I18n.t("image.credit") }
   let(:edit)            { I18n.t("edit") }
+  let(:delete)          { I18n.t("delete") }
   let(:file)            { I18n.t("image.file") }
   let(:save)            { I18n.t("save") }
   let(:signed_in_as)    { I18n.t("session.signed_in_as") }
@@ -54,7 +55,6 @@ describe Image do
 
     let(:caption_text)    { "Fractal" }
     let(:year_text)       { "2014" }
-    let(:credit_text)     { "Mark Orr" }
     let(:image_file)      { "fractal.jpg" }
     let(:image_path)      { image_dir + image_file }
 
@@ -63,7 +63,6 @@ describe Image do
       visit new_admin_image_path
       fill_in caption, with: caption_text
       fill_in year, with: year_text
-      fill_in credit, with: credit_text
       attach_file file, image_path
       click_button save
       logout
@@ -153,7 +152,6 @@ describe Image do
     it "gif" do
       fill_in caption, with: "Suzanne"
       fill_in year, with: "2004"
-      fill_in credit, with: "Mark Orr"
       attach_file file, image_dir + "suzanne.gif"
       click_button save
 
@@ -163,7 +161,6 @@ describe Image do
 
       expect(image.caption).to eq "Suzanne"
       expect(image.year).to eq 2004
-      expect(image.credit).to eq "Mark Orr"
       expect(image.user_id).to eq @user.id
       expect_data_suzanne(image)
     end
@@ -193,7 +190,7 @@ describe Image do
       visit new_admin_image_path
       fill_in caption, with: "April"
       fill_in year, with: "1986"
-      fill_in credit, with: "Mark Orr"
+      fill_in credit, with: ""
       attach_file file, image_dir + "april.jpeg"
       click_button save
       expect(Image.count).to eq 1
@@ -209,7 +206,7 @@ describe Image do
 
       expect(@image.caption).to eq "April"
       expect(@image.year).to eq 1986
-      expect(@image.credit).to eq "Mark Orr"
+      expect(@image.credit).to be_nil
       expect_data_gearoidin(@image)
     end
 
@@ -232,7 +229,6 @@ describe Image do
       click_link edit
       fill_in caption, with: "Suzanne"
       fill_in year, with: "2002"
-      fill_in credit, with: "Carey Wilman"
       attach_file file, image_dir + "suzanne.gif"
       click_button save
 
@@ -240,8 +236,33 @@ describe Image do
 
       expect(@image.caption).to eq "Suzanne"
       expect(@image.year).to eq 2002
-      expect(@image.credit).to eq "Carey Wilman"
+      expect(@image.credit).to be_nil
       expect_data_suzanne(@image)
+    end
+  end
+
+  context "delete" do
+    before(:each) do
+      login("editor")
+      visit new_admin_image_path
+      fill_in caption, with: "April"
+      fill_in year, with: "1986"
+      attach_file file, image_dir + "april.jpeg"
+      click_button save
+      expect(Image.count).to eq 1
+      @image = Image.first
+    end
+
+    it "by owner" do
+      expect(Image.count).to be 1
+      click_link delete
+      expect(Image.count).to be 0
+    end
+
+    it "by non-owner" do
+      login "editor"
+      visit image_path(@image)
+      expect(page).to_not have_link(delete)
     end
   end
 end

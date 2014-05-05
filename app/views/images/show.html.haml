@@ -35,6 +35,8 @@
       = render "utils/timestamps", object: @image, ability: :manage
     - if can?(:update, @image)
       = link_to t("edit"), edit_admin_image_path(@image), class: "btn btn-primary"
+    - if can?(:destroy, @image)
+      = link_to t("delete"), admin_image_path(@image), data: { confirm: "Sure you want to delete this image?" }, method: :delete, class: "btn btn-danger"
     - if path = last_search(:images)
       = link_to t("last_search"), path, class: "btn btn-default"
     - else

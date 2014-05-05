@@ -95,6 +95,11 @@ ActiveRecord::Schema.define(version: 20140430183240) do
     t.datetime "updated_at"
   end
 
+  add_index "images", ["caption"], name: "index_images_on_caption", using: :btree
+  add_index "images", ["credit"], name: "index_images_on_credit", using: :btree
+  add_index "images", ["user_id"], name: "index_images_on_user_id", using: :btree
+  add_index "images", ["year"], name: "index_images_on_year", using: :btree
+
   create_table "items", force: true do |t|
     t.string   "type",           limit: 40
     t.integer  "player_id"
