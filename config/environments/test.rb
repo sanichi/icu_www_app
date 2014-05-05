@@ -52,6 +52,3 @@ module I18n
   end
 end
 I18n.exception_handler = I18n::JustRaiseExceptionHandler.new
-
-# For Paperclip.
-Paperclip.options[:command_path] = "/usr/local/bin/"

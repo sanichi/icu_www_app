@@ -47,9 +47,10 @@ describe "Pay", js: true do
   let(:stripe)                { "stripe" }
 
   let(:card_declined)         { "Your card was declined." }
-  let(:error)                 { "div.alert-danger" }
-  let(:expired_card)          { "Your card's expiration date is incorrect." }
+  let(:expired_card)          { "Your card has expired." }
   let(:incorrect_cvc)         { "Your card's security code is incorrect." }
+
+  let(:error)                 { "div.alert-danger" }
   let(:item)                  { "li" }
   let(:success)               { "div.alert-success" }
   let(:title)                 { "h3" }

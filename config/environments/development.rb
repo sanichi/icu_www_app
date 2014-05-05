@@ -44,6 +44,3 @@ IcuWwwApp::Application.configure do
   # Raises helpful error messages. (Causes more trouble than it's worth - MO).
   # config.assets.raise_runtime_errors = true
 end
-
-# For Paperclip.
-Paperclip.options[:command_path] = "/usr/local/bin/"
