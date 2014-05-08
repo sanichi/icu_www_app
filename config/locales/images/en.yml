@@ -13,3 +13,8 @@ en:
     thumbnail: Thumbnail
     type: Type
     year: Year
+    order:
+      order: Order
+      id: Order by ID
+      year: Order by year
+      updated_at: Order by last updated

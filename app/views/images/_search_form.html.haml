@@ -2,4 +2,5 @@
   = render "utils/inline_text_field", param: :caption, text: t("image.caption"), size: 20
   = render "utils/inline_text_field", param: :year, text: t("image.year"), size: 4
   = render "utils/inline_text_field", param: :credit, text: t("image.credit")
+  = render "utils/inline_select", param: :order, text: t("image.order.order"), menu: image_order_menu(params[:order])
   = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

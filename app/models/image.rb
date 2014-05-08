@@ -9,6 +9,7 @@ class Image < ActiveRecord::Base
   TYPES = "jpe?g|gif|png"
   MAX_PIXELS = 600
   MIN_PIXELS = 30
+  MIN_YEAR = 1850
   THUMB_SIZE = 100
   STYLES = { :thumbnail => "#{THUMB_SIZE}x#{THUMB_SIZE}>" }
 
@@ -22,16 +23,24 @@ class Image < ActiveRecord::Base
   validates :caption, presence: true
   validates :credit, presence: true, allow_nil: true
   validates :source, inclusion: { in: %w[www1 www2] }
-  validates :year,  numericality: { integer_only: true, greater_than: 1880 }
+  validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: MIN_YEAR }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
 
   validate :year_is_not_in_future
 
   scope :include_players, -> { includes(user: :player) }
-  scope :last_updated_first, -> { order(updated_at: :desc) }
+  scope :last_updated_first, -> {  }
 
   def self.search(params, path)
-    matches = include_players.last_updated_first
+    matches = include_players
+    matches = case params[:order]
+    when "updated_at"
+      matches.order(updated_at: :desc)
+    when "year"
+      matches.order(year: :desc, id: :desc)
+    else
+      matches.order(id: :asc)
+    end
     matches = matches.where("caption LIKE ?", "%#{params[:caption]}%") if params[:caption].present?
     matches = matches.where("credit LIKE ?", "%#{params[:credit]}%") if params[:credit].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
@@ -88,7 +97,7 @@ class Image < ActiveRecord::Base
         width = geometry.width.to_i
         height = geometry.height.to_i
         dimensions[style] = [width, height]
-        if style == :original
+        if style == :original && source != "www1"
           if width > MAX_PIXELS || height > MAX_PIXELS
             errors.add(:base, "Width and height should not exceed #{MAX_PIXELS}")
           end

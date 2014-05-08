@@ -1,5 +1,7 @@
 - content_for :title, t("player.player")
 
+= render "utils/prev_next", prev: @prev, id: @player.id, nixt: @next, namespace: :admin
+
 .row
   .col-md-8.col-md-offset-2
     %h1.text-center

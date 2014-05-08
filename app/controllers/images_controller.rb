@@ -7,6 +7,8 @@ class ImagesController < ApplicationController
 
   def show
     @image = Image.find(params[:id])
+    @prev = Image.where("id < ?", params[:id]).order(id: :desc).limit(1).first
+    @next = Image.where("id > ?", params[:id]).order(id:  :asc).limit(1).first
     @entries = @image.journal_entries if current_user.roles.present?
   end
 end
