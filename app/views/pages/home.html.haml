@@ -12,13 +12,13 @@
       %li= render partial: "todo", locals: { topic: "English/Irish", items: { database: true, admin: true, switching: true, caching: true, translations: true, documentation: false } }
       %li= render partial: "todo", locals: { topic: "Clubs", items: { database: true, admin: true, legacy_sync: true, maps: false, ducumentation: false } }
       %li= render partial: "todo", locals: { topic: "Players", items: { database: true, admin: true, legacy_sync: true, ratings_sync: false, documentation: false } }
-      %li= render partial: "todo", locals: { topic: "Shop", items: { database: false, admin: false, user: false, payments: false, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Help", items: nil }
-      %li= render partial: "todo", locals: { topic: "Images", items: nil }
+      %li= render partial: "todo", locals: { topic: "Shop", items: { database: true, admin: true, user: true, payments: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Images", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
       %li= render partial: "todo", locals: { topic: "Calendar", items: nil }
-      %li= render partial: "todo", locals: { topic: "Games", items: nil }
       %li= render partial: "todo", locals: { topic: "Tournaments", items: nil }
+      %li= render partial: "todo", locals: { topic: "Games", items: nil }
       %li= render partial: "todo", locals: { topic: "News", items: nil }
       %li= render partial: "todo", locals: { topic: "Articles", items: nil }
       %li= render partial: "todo", locals: { topic: "Juniors", items: nil }
       %li= render partial: "todo", locals: { topic: "Voting", items: nil }
+      %li= render partial: "todo", locals: { topic: "Help", items: nil }

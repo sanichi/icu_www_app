@@ -11,8 +11,10 @@
  *= require_self
  */
 
+/* Text styling. */
 .text-done { text-decoration: line-through; }
 
+/* Indicator for maintenance mode. */
 #maintenance {
   position: fixed;
   top: 0;
@@ -26,13 +28,13 @@
   border-top: 0;
 }
 
+/* Vertical offsets and centering. */
 .voffset1 { margin-top: 10px; }
 .voffset2 { margin-top: 15px; }
 .voffset3 { margin-top: 20px; }
-
 .vcenter { vertical-align: middle !important; }
 
-/* from http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/ */
+/* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -51,4 +53,13 @@
     background: white;
     cursor: inherit;
     display: block;
+}
+
+/* For beta-quality indicator image. */
+#beta-badge {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  border: none;
 }
