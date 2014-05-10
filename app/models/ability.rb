@@ -15,6 +15,11 @@ class Ability
       can [:update, :destroy], Image, user_id: user.id
     end
 
+    if user.calendar? || user.editor?
+      can :create, Event
+      can [:update, :destroy], Event, user_id: user.id
+    end
+
     if user.membership?
       can :manage, Player
       can :create, CashPayment

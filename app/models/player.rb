@@ -2,7 +2,7 @@ class Player < ActiveRecord::Base
   extend Util::Pagination
   extend Util::Params
   extend ICU::Util::AlternativeNames
-
+  include Remarkable
   include Journalable
   journalize %w[
     first_name last_name dob gender fed email address home_phone mobile_phone work_phone
@@ -118,10 +118,7 @@ class Player < ActiveRecord::Base
   end
 
   def note_html
-    return unless note.present?
-    renderer = Redcarpet::Render::HTML.new(filter_html: true)
-    markdown = Redcarpet::Markdown.new(renderer, no_intra_emphasis: true, autolink: true, strikethrough: true, underline: true)
-    markdown.render(note).html_safe
+    to_html(note)
   end
 
   def self.search(params, path, opt={})

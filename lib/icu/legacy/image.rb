@@ -15,6 +15,7 @@ module ICU
       }
 
       def synchronize
+        remove_journal_items
         puts "total image records (before): #{::Image.count}"
         old_count, new_count, upd_count, problems = 0, 0, 0, 0
         @path = tmp_directory
@@ -95,6 +96,10 @@ module ICU
         `wget http://www.icu.ie/images/db/#{file} --quiet -O #{path}`
         raise "#{path} doesn't exist" unless File.exist?(path)
         File.new(path)
+      end
+
+      def remove_journal_items
+        puts "old image journal entries deleted: #{JournalEntry.images.delete_all}"
       end
 
       def report_error(msg)

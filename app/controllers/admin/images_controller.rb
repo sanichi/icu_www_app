@@ -32,7 +32,7 @@ class Admin::ImagesController < ApplicationController
   def destroy
     @image.journal(:destroy, current_user, request.ip)
     @image.destroy
-    redirect_to admin_fees_path, notice: "Image was successfully deleted"
+    redirect_to admin_images_path, notice: "Image was successfully deleted"
   end
 
   private

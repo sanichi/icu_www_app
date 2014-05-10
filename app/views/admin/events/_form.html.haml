@@ -1,0 +1,32 @@
+- content_for :javascript do
+  = render "utils/file_field.js", param: "flyer"
+
+.row
+  .col-md-1
+  .col-md-10
+    = form_for [:admin, @event], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@event.new_record? ? 'New' : 'Edit'} Event"
+        - locals = { form: f, object: @event, col: "md", pad: 3, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :name, text: t("event.name"), width: 5)
+        = render "utils/text_field_for", locals.merge(param: :location, text: t("event.location"), width: 6)
+        = render "utils/text_field_for", locals.merge(param: :start_date, text: t("event.start"), width: 3, placeholder: t("date_format"))
+        = render "utils/text_field_for", locals.merge(param: :end_date, text: t("event.end"), width: 3, placeholder: t("date_format"))
+        = render "utils/select_for",     locals.merge(param: :category, text: t("event.category.category"), width: 3, menu: event_category_menu(params[:category]))
+        = render "utils/file_field_for", locals.merge(param: :flyer, text: t("event.flyer"), width: 2, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :contact, text: t("event.contact"), width: 5, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :email, text: t("event.email"), width: 5, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :phone, text: t("event.phone"), width: 4, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :url, text: t("event.url"), width: 6, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :prize_fund, text: t("event.prize_fund"), width: 2, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :lat, text: t("event.lat"), width: 3, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :long, text: t("event.long"), width: 3, mark: "none")
+        = render "utils/check_box_for",  locals.merge(param: :active, text: t("active"), width: 1)
+        = render "utils/text_area_for",  locals.merge(param: :note, text: t("notes"), width: 9, rows: 10)
+
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:events)
+        = link_to "Cancel", @event.new_record? ? last_path || events_path : @event, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

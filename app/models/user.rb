@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
 
   OK = "OK"
-  ROLES = %w[admin editor membership translator treasurer]
+  ROLES = %w[admin calendar editor membership translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
   THEMES = %w[Amelia Bootstrap Cerulean Cosmo Cyborg Darkly Flatly Journal Lumen Superhero Readable Simplex Slate Spacelab United Yeti]
   DEFAULT_THEME = "Flatly"

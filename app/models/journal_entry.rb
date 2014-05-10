@@ -4,7 +4,7 @@ class JournalEntry < ActiveRecord::Base
   belongs_to :journalable, polymorphic: true
 
   default_scope { order(created_at: :desc) }
-  %w[Club Fee Image Player Translation User UserInput].each do |klass|
+  %w[Club Event Fee Image Player Translation User UserInput].each do |klass|
     scope klass.tableize.to_sym, -> { where(journalable_type: klass) }
   end
 
@@ -14,7 +14,7 @@ class JournalEntry < ActiveRecord::Base
   validates :journalable_type, :journalable_id, :by, presence: true
   validates :column, presence: true, if: Proc.new { |e| e.action == "update" }
   validates :ip, presence: true, unless: Proc.new { |e| e.source == "www1" }
-  validates :source, inclusion: { in: %w[www1 www2] }
+  validates :source, inclusion: { in: ICU::SOURCES }
 
   def journalable_type_id
     "#{journalable_type} #{journalable_id}"

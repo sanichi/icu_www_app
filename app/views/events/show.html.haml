@@ -1,0 +1,66 @@
+- content_for :title, t("event.event")
+
+= render "utils/prev_next", prev: @prev, id: @event.id, nixt: @next
+
+.row.voffset3
+  .col-md-8.col-md-offset-2
+    %table.table.table-bordered
+      %tr
+        %th= t("event.name")
+        %td= @event.name
+      %tr
+        %th= t("event.location")
+        %td= @event.location
+      %tr
+        %th= t("event.start")
+        %td= @event.start_date
+      %tr
+        %th= t("event.end")
+        %td= @event.end_date
+      - if @event.contact.present?
+        %tr
+          %th= t("event.contact")
+          %td= @event.end_date
+      - if @event.email.present?
+        %tr
+          %th= t("event.email")
+          %td= mail_to @event.email, @event.email
+      - if @event.phone.present?
+        %tr
+          %th= t("event.phone")
+          %td= @event.phone
+      - if @event.url.present?
+        %tr
+          %th= t("event.url")
+          %td= link_to simple_url(@event.url), @event.url, target: "event"
+      - if @event.flyer.present?
+        %tr
+          %th= t("event.flyer")
+          %td= @event.flyer_file_name
+        - if can?(:create, Image)
+          %tr
+            %th= "Content type"
+            %td= @event.flyer_content_type
+          %tr
+            %th= "File size"
+            %td= @event.flyer_file_size
+          - unless @event.updated_at == @event.flyer_updated_at
+            %tr
+              %th= "File last updated"
+              %td= @event.flyer_updated_at.to_s(:nosec)
+      - if @event.note.present?
+        %tr
+          %th{colspan: 2, class: "text-center"}= t("notes")
+        %tr
+          %td{colspan: 2}= @event.note_html
+
+      = render "utils/timestamps", object: @event, ability: :create
+    - if can?(:update, @event)
+      = link_to t("edit"), edit_admin_event_path(@event), class: "btn btn-primary"
+    - if can?(:destroy, @event)
+      = link_to t("delete"), admin_event_path(@event), data: { confirm: "Sure you want to delete this event?" }, method: :delete, class: "btn btn-danger"
+    - if path = last_search(:events)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    = link_to t("event.calendar"), events_path, class: "btn btn-default"
+
+= render "admin/journal_entries/changes", entries: @entries

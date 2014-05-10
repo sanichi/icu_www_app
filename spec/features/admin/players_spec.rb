@@ -70,7 +70,7 @@ feature "Create players" do
   given(:title)      { I18n.t("player.title.player") }
   given(:status)     { I18n.t("player.status.status") }
   given(:inactive)   { I18n.t("player.status.inactive") }
-  given(:notes)      { I18n.t("player.note") }
+  given(:notes)      { I18n.t("notes") }
   given(:save)       { I18n.t("save") }
 
   scenario "sucessful creation with set join date" do

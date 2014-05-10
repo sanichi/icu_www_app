@@ -26,6 +26,7 @@ en:
   new: new
   no_matches: No matches
   none: None
+  notes: Notes
   order: Order
   please_select: Please select
   save: Save
@@ -37,8 +38,23 @@ en:
   updated_at: Last updated
   unknown: Unknown
   waiting: Waiting
+  year: Year
   "no": "No"
   "yes": "Yes"
+  month:
+    month: Month
+    m01: January
+    m02: February
+    m03: March
+    m04: April
+    m05: May
+    m06: June
+    m07: July
+    m08: August
+    m09: September
+    m10: October
+    m11: November
+    m12: December
   pagination:
     frst: first
     next: next

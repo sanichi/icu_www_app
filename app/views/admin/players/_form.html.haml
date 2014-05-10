@@ -25,7 +25,7 @@
           = hidden_field :player, :player_id
         - else
           = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.master_id"), width: 2)
-        = render "utils/text_area_for", locals.merge(param: :note, text: t("player.note"), width: 10, rows: 10)
+        = render "utils/text_area_for", locals.merge(param: :note, text: t("notes"), width: 10, rows: 10)
         = hidden_field :player, :source
         %hr
         = f.submit "Save", class: "btn btn-primary"

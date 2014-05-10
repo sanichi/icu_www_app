@@ -107,7 +107,7 @@ feature "Showing a club" do
   it "all fields" do
     params = {
       name:      "Bangor",
-      web:       "http://chess.bangor.net",
+      web:       "http://chess.bangor.net/",
       meet:      "7pm Tuesdays and Thursdays",
       address:   "McKee Clock",
       district:  "Marina",
@@ -128,7 +128,7 @@ feature "Showing a club" do
       when :name
         expect(page).to have_css("h1", text: bangor.name)
       when :web
-        expect(page).to have_xpath(xpath(label), text: bangor.web_simple)
+        expect(page).to have_xpath(xpath(label), text: "chess.bangor.net")
       when :county
         expect(page).to have_xpath(xpath(label), text: I18n.t("ireland.co.#{value}"))
       when :active

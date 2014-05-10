@@ -6,7 +6,7 @@
     %table.table.table-bordered
       %tr
         %th= t("club.web")
-        %td= link_to @club.web_simple, @club.web, target: "club" if @club.web.present?
+        %td= link_to simple_url(@club.web), @club.web, target: "club" if @club.web.present?
       %tr
         %th= t("club.meet")
         %td= @club.meet

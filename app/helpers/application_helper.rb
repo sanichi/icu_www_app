@@ -51,4 +51,12 @@ module ApplicationHelper
     else ""
     end
   end
+
+  def simple_url(url)
+    return unless url
+    simple = url.dup
+    simple.sub!(/\Ahttps?:\/\//, "")
+    simple.sub!(/\/\z/, "")
+    simple
+  end
 end

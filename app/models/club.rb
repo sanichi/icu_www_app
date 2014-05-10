@@ -34,14 +34,6 @@ class Club < ActiveRecord::Base
     phone.present? || email.present? || web.present?
   end
 
-  def web_simple
-    return unless web
-    simple = web.dup
-    simple.sub!(/\Ahttps?:\/\//, "")
-    simple.sub!(/\/\z/, "")
-    simple
-  end
-
   def self.search(params, path)
     matches = all
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?

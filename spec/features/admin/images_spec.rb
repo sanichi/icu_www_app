@@ -51,7 +51,7 @@ describe Image do
     let(:user)            { create(:user, roles: "editor") }
     let(:level1)          { ["admin", user] }
     let(:level2)          { ["editor"] }
-    let(:level3)          { User::ROLES.reject { |r| r == "admin" || r == "editor" } }
+    let(:level3)          { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
 
     let(:caption_text)    { "Fractal" }
     let(:year_text)       { "2014" }
@@ -92,7 +92,7 @@ describe Image do
 
     it "other editors can only create" do
       level2.each do |role|
-        user2 = login role
+        login role
         expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_image_path
         expect(page).to_not have_css(failure)
@@ -106,7 +106,7 @@ describe Image do
     end
 
     it "other roles and guests can only view" do
-      level3.push("guest").each do |role|
+      level3.each do |role|
         if role == "guest"
           logout
         else

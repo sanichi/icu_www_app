@@ -1,0 +1,31 @@
+- content_for :title, t("event.calendar")
+
+= render "utils/search_panel", form: "search_form", title: t("event.events"), col: "md", pad: 1
+
+- extra = can?(:create, Event)
+
+.row
+  .col-md-10.col-md-offset-1
+    - if @events.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th= t("event.name")
+            %th= t("event.location")
+            %th.text-center= t("event.start")
+            %th.text-center= t("event.end")
+            - if extra
+              %th.text-center= t("active")
+        %tbody
+          - @events.matches.each do |event|
+            %tr
+              %td= link_to event.name, event
+              %td= event.location
+              %td.text-center= event.start_date
+              %td.text-center= event.end_date
+              - if extra
+                %td.text-center= event.active ? "✔" : "✘"
+          = render "utils/pagination_links", pager: @events, columns: 4 + (extra ? 1 : 0)
+    - if can?(:create, Event)
+      = link_to "New", new_admin_event_path, class: "btn btn-info"
+

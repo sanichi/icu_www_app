@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140430183240) do
+ActiveRecord::Schema.define(version: 20140509113642) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -54,6 +54,38 @@ ActiveRecord::Schema.define(version: 20140430183240) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "events", force: true do |t|
+    t.boolean  "active"
+    t.string   "category",           limit: 25
+    t.string   "contact",            limit: 50
+    t.string   "email",              limit: 50
+    t.string   "flyer_file_name"
+    t.string   "flyer_content_type"
+    t.integer  "flyer_file_size"
+    t.datetime "flyer_updated_at"
+    t.decimal  "lat",                            precision: 10, scale: 7
+    t.string   "location",           limit: 100
+    t.decimal  "long",                           precision: 10, scale: 7
+    t.string   "name",               limit: 75
+    t.string   "note",               limit: 512
+    t.string   "phone",              limit: 25
+    t.decimal  "prize_fund",                     precision: 8,  scale: 2
+    t.string   "source",             limit: 8,                            default: "www2"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.string   "url",                limit: 75
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "events", ["active"], name: "index_events_on_active", using: :btree
+  add_index "events", ["end_date"], name: "index_events_on_end_date", using: :btree
+  add_index "events", ["location"], name: "index_events_on_location", using: :btree
+  add_index "events", ["name"], name: "index_events_on_name", using: :btree
+  add_index "events", ["start_date"], name: "index_events_on_start_date", using: :btree
+  add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
 
   create_table "fees", force: true do |t|
     t.string   "type",              limit: 40

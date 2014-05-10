@@ -20,16 +20,16 @@ class Image < ActiveRecord::Base
   before_validation :normalize_attributes, :check_dimensions
 
   validates_attachment_content_type :data, content_type: /\Aimage\/(#{TYPES})\z/i, file_name: /\.(#{TYPES})\z/i
+  validates :data, presence: true
   validates :caption, presence: true
   validates :credit, presence: true, allow_nil: true
-  validates :source, inclusion: { in: %w[www1 www2] }
+  validates :source, inclusion: { in: ICU::SOURCES }
   validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: MIN_YEAR }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
 
   validate :year_is_not_in_future
 
   scope :include_players, -> { includes(user: :player) }
-  scope :last_updated_first, -> {  }
 
   def self.search(params, path)
     matches = include_players

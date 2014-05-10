@@ -22,17 +22,17 @@
         %td= @image.dimensions_description
       - if can?(:create, Image)
         %tr
-          %th= t("image.file_name")
+          %th= "File name"
           %td= @image.data_file_name
         %tr
-          %th= t("image.type")
+          %th= "Content type"
           %td= @image.data_content_type
         %tr
-          %th= t("image.size")
+          %th= "Image size"
           %td= @image.data_file_size
         - unless @image.updated_at == @image.data_updated_at
           %tr
-            %th= t("image.data_updated_at")
+            %th= "Image last updated"
             %td= @image.data_updated_at.to_s(:nosec)
       = render "utils/timestamps", object: @image, ability: :manage
     - if can?(:update, @image)

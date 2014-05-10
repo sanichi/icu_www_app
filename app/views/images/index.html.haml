@@ -14,7 +14,7 @@
           %tr
             %th.text-center= t("image.year")
             %th.text-center= t("image.dimensions")
-            %th.text-center= t("image.type")
+            %th.text-center= t("type")
             %th.text-center= t("user.role.editor")
             %th.text-center= t("image.credit")
         %tbody
@@ -32,6 +32,6 @@
               %td.vcenter.text-center= image.user.player.name
               %td.vcenter.text-center= image.credit
           = render "utils/pagination_links", pager: @images, columns: 6
-    - if can?(:manage, Image)
+    - if can?(:create, Image)
       = link_to "New", new_admin_image_path, class: "btn btn-info"
 

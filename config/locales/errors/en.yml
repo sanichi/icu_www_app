@@ -11,7 +11,7 @@ en:
       exclusion: is reserved
       greater_than: must be more than %{count}
       greater_than_or_equal_to: must be ≥ to %{count}
-      inclusion: invalid
+      inclusion: not one of the allowed values
       invalid: invalid
       invalid_date: invalid date
       invalid_datetime: invalid datetime
@@ -26,4 +26,3 @@ en:
       on_or_after: must be on or after %{restriction}
       on_or_before: must be on or before %{restriction}
       present: must be blank
-

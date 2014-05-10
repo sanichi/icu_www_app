@@ -1,0 +1,23 @@
+en:
+  event:
+    contact: Contact name
+    calendar: Calendar
+    flyer: Flyer
+    email: Contact email
+    end: End date
+    event: Event
+    events: Forthcoming Events
+    lat: Latitude
+    location: Location
+    long: Longitude
+    name: Event name
+    start: Start date
+    phone: Contact phone
+    prize_fund: Prize fund
+    url: Event website
+    category:
+      category: Type
+      irish: Irish
+      junior: Juniors only
+      women: Women only
+      foreign: Foreign
