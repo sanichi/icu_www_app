@@ -1,22 +1,24 @@
 require 'spec_helper'
 
 describe Image do
-  let(:button)          { I18n.t("edit") }
-  let(:caption)         { I18n.t("image.caption") }
-  let(:credit)          { I18n.t("image.credit") }
-  let(:edit)            { I18n.t("edit") }
-  let(:delete)          { I18n.t("delete") }
-  let(:file)            { I18n.t("image.file") }
-  let(:save)            { I18n.t("save") }
-  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
-  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  let(:year)            { I18n.t("image.year") }
+  let(:button)       { I18n.t("edit") }
+  let(:caption)      { I18n.t("image.caption") }
+  let(:credit)       { I18n.t("image.credit") }
+  let(:edit)         { I18n.t("edit") }
+  let(:delete)       { I18n.t("delete") }
+  let(:file)         { I18n.t("image.file") }
+  let(:save)         { I18n.t("save") }
+  let(:signed_in_as) { I18n.t("session.signed_in_as") }
+  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:year)         { I18n.t("image.year") }
 
-  let(:failure)         { "div.alert-danger" }
-  let(:success)         { "div.alert-success" }
-  let(:success_text)    { "successfully created" }
+  let(:failure)      { "div.alert-danger" }
+  let(:field_error)  { "div.help-block" }
+  let(:success)      { "div.alert-success" }
+  let(:success_text) { "successfully created" }
 
-  let(:image_dir)       { Rails.root + "spec/files/images/" }
+  let(:image_dir)    { Rails.root + "spec/files/images/" }
+  let(:event_dir)    { Rails.root + "spec/files/events/" }
 
   def expect_data(image, file, size, type, width, height)
     expect(image.data_file_name).to eq file
@@ -131,7 +133,7 @@ describe Image do
       visit new_admin_image_path
     end
 
-    it "jpeg" do
+    it "JPG" do
       fill_in caption, with: "April"
       fill_in year, with: "1986"
       fill_in credit, with: "Mark Orr"
@@ -149,7 +151,7 @@ describe Image do
       expect_data_april(image)
     end
 
-    it "gif" do
+    it "GIF" do
       fill_in caption, with: "Suzanne"
       fill_in year, with: "2004"
       attach_file file, image_dir + "suzanne.gif"
@@ -165,7 +167,7 @@ describe Image do
       expect_data_suzanne(image)
     end
 
-    it "png" do
+    it "PNG" do
       fill_in caption, with: "Gearóidín"
       fill_in year, with: "2006"
       fill_in credit, with: "Mark Orr"
@@ -181,6 +183,18 @@ describe Image do
       expect(image.credit).to eq "Mark Orr"
       expect(image.user_id).to eq @user.id
       expect_data_gearoidin(image)
+    end
+
+    it "invalid type" do
+      fill_in caption, with: "Test"
+      fill_in year, with: "2006"
+      fill_in credit, with: "Mark Orr"
+      attach_file file, event_dir + "ennis_2014.pdf"
+      click_button save
+
+      expect(page).to_not have_css(success)
+      expect(page).to have_css(field_error, text: "invalid")
+      expect(Image.count).to eq 0
     end
   end
 

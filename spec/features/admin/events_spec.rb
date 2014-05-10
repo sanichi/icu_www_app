@@ -23,6 +23,7 @@ describe Event do
   let(:url)           { I18n.t("event.url") }
 
   let(:failure)       { "div.alert-danger" }
+  let(:field_error)   { "div.help-block" }
   let(:success)       { "div.alert-success" }
   let(:success_text)  { "successfully created" }
 
@@ -32,6 +33,7 @@ describe Event do
   let(:rtf)           { "galway_2005.rtf" }
 
   let(:event_dir)     { Rails.root + "spec/files/events/" }
+  let(:image_dir)     { Rails.root + "spec/files/images/" }
 
   context "authorization" do
     let(:user)   { create(:user, roles: "calendar") }
@@ -230,6 +232,33 @@ describe Event do
       expect(event.flyer_file_name).to eq rtf
       expect(event.flyer_file_size).to eq 6846
       expect(event.flyer_content_type).to match /\A(application|text)\/rtf\z/
+    end
+
+    it "invalid file type" do
+      attach_file flyer, image_dir + "april.jpeg"
+      click_button save
+
+      expect(page).to_not have_css(success)
+      expect(page).to have_css(field_error, text: "invalid")
+      expect(Event.count).to eq 0
+    end
+
+    it "file too big" do
+      attach_file flyer, event_dir + "too_large.pdf"
+      click_button save
+
+      expect(page).to_not have_css(success)
+      expect(page).to have_css(field_error, text: "between")
+      expect(Event.count).to eq 0
+    end
+
+    it "file too small" do
+      attach_file flyer, event_dir + "too_small.rtf"
+      click_button save
+
+      expect(page).to_not have_css(success)
+      expect(page).to have_css(field_error, text: "between")
+      expect(Event.count).to eq 0
     end
   end
 end

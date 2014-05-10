@@ -7,6 +7,7 @@ class Event < ActiveRecord::Base
 
   EXTS = /\.(pdf|doc|docx|rtf)\z/i
   TYPES = /\A(application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document|rtf)|text\/rtf)\z/
+  MIN_SIZE = 1.kilobyte
   MAX_SIZE = 3.megabytes
   CATEGORIES = %w[irish junior women foreign]
 
@@ -16,7 +17,7 @@ class Event < ActiveRecord::Base
 
   before_validation :normalize_attributes
 
-  validates_attachment_content_type :flyer, file_name: EXTS, content_type: TYPES
+  validates_attachment :flyer, content_type: { file_name: EXTS, content_type: TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :name, :location, presence: true
   validates :source, inclusion: { in: ICU::SOURCES }
   validates :category, inclusion: { in: CATEGORIES }

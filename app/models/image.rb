@@ -19,7 +19,7 @@ class Image < ActiveRecord::Base
 
   before_validation :normalize_attributes, :check_dimensions
 
-  validates_attachment_content_type :data, content_type: /\Aimage\/(#{TYPES})\z/i, file_name: /\.(#{TYPES})\z/i
+  validates_attachment :data, content_type: { content_type: /\Aimage\/(#{TYPES})\z/, file_name: /\.(#{TYPES})\z/i }
   validates :data, presence: true
   validates :caption, presence: true
   validates :credit, presence: true, allow_nil: true
