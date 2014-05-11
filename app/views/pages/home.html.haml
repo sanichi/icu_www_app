@@ -14,7 +14,7 @@
       %li= render partial: "todo", locals: { topic: "Players", items: { database: true, admin: true, legacy_sync: true, ratings_sync: false, documentation: false } }
       %li= render partial: "todo", locals: { topic: "Shop", items: { database: true, admin: true, user: true, payments: true, documentation: false} }
       %li= render partial: "todo", locals: { topic: "Images", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Calendar", items: nil }
+      %li= render partial: "todo", locals: { topic: "Calendar", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
       %li= render partial: "todo", locals: { topic: "Tournaments", items: nil }
       %li= render partial: "todo", locals: { topic: "Games", items: nil }
       %li= render partial: "todo", locals: { topic: "News", items: nil }
