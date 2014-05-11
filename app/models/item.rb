@@ -17,7 +17,7 @@ class Item < ActiveRecord::Base
   validates :cost, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, allow_nil: true
   validates :cost, presence: true, unless: Proc.new { |i| i.fee.blank? || i.fee.user_amount? }
   validates :player_data, absence: true, unless: Proc.new { |i| i.fee.try(:new_player_allowed?) }
-  validates :source, inclusion: { in: ICU::SOURCES }
+  validates :source, inclusion: { in: Global::SOURCES }
   validate :age_constraints, :rating_constraints, :check_user_inputs
 
   def self.search(params, path)
