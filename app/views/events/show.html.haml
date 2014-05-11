@@ -2,6 +2,8 @@
 
 = render "utils/prev_next", prev: @prev, id: @event.id, nixt: @next
 
+- admin = can?(:create, Image)
+
 .row.voffset3
   .col-md-8.col-md-offset-2
     %table.table.table-bordered
@@ -17,6 +19,9 @@
       %tr
         %th= t("event.end")
         %td= @event.end_date
+      %tr
+        %th= t("event.category.category")
+        %td= t("event.category.#{@event.category}")
       - if @event.contact.present?
         %tr
           %th= t("event.contact")
@@ -36,25 +41,24 @@
       - if @event.flyer.present?
         %tr
           %th= t("event.flyer")
-          %td= @event.flyer_file_name
-        - if can?(:create, Image)
+          %td
+            = link_to @event.flyer_file_name, @event.flyer.url
+            - if admin
+              = "(#{@event.flyer_content_type}, #{@event.flyer_file_size} bytes)"
+        - if admin && @event.flyer_updated_at != @event.updated_at
           %tr
-            %th= "Content type"
-            %td= @event.flyer_content_type
-          %tr
-            %th= "File size"
-            %td= @event.flyer_file_size
-          - unless @event.updated_at == @event.flyer_updated_at
-            %tr
-              %th= "File last updated"
-              %td= @event.flyer_updated_at.to_s(:nosec)
+            %th= "File last updated"
+            %td= @event.flyer_updated_at.to_s(:nosec)
+      = render "utils/timestamps", object: @event, ability: :create
+      - if admin && @event.user.present?
+        %tr
+          %th= t("user.role.editor")
+          %td= @event.user.player.name
       - if @event.note.present?
         %tr
           %th{colspan: 2, class: "text-center"}= t("notes")
         %tr
           %td{colspan: 2}= @event.note_html
-
-      = render "utils/timestamps", object: @event, ability: :create
     - if can?(:update, @event)
       = link_to t("edit"), edit_admin_event_path(@event), class: "btn btn-primary"
     - if can?(:destroy, @event)

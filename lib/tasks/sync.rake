@@ -40,6 +40,11 @@ namespace :sync do
     ICU::Legacy::Subscription.new.synchronize(args[:force])
   end
 
+  desc "Convert icuadmi_main/events to www_production/events"
+  task :events, [:force] => :environment do |task, args|
+    ICU::Legacy::Event.new.synchronize(args[:force])
+  end
+
   desc "Convert icuadmi_main/images to www_production/images"
   task :images => :environment do |task|
     ICU::Legacy::Image.new.synchronize
@@ -51,5 +56,5 @@ namespace :sync do
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => [:clubs, :players, :changes, :status, :archive, :members, :subscriptions, :images, :check]
+  task :all, [:force] => [:clubs, :players, :changes, :status, :archive, :members, :subscriptions, :events, :images, :check]
 end
