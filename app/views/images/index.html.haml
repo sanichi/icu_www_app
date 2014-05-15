@@ -5,33 +5,31 @@
 .row
   .col-sm-12
     - if @images.count > 0
-      %table{class: "table table-bordered", id: "results"}
+      %table{class: "table table-bordered table-striped", id: "results"}
         %thead
           %tr
-            %th.text-center.vcenter{rowspan: 2}= t("id")
             %th.text-center{colspan: 5}= t("image.caption")
             %th.text-center.vcenter{rowspan: 2}= t("image.thumbnail")
           %tr
-            %th.text-center= t("image.year")
-            %th.text-center= t("image.dimensions")
-            %th.text-center= t("type")
-            %th.text-center= t("user.role.editor")
-            %th.text-center= t("image.credit")
+            %th.text-center.small= t("year")
+            %th.text-center.small= t("image.dimensions")
+            %th.text-center.small= t("type")
+            %th.text-center.small= t("user.role.editor")
+            %th.text-center.small= t("image.credit")
         %tbody
           - @images.matches.each do |image|
             %tr
-              %td.vcenter.text-center{rowspan: 2}= link_to image.id, image
               %td.vcenter{colspan: 5}= image.caption
               %td.vcenter.text-center{width: Image::THUMB_SIZE, rowspan: 2}
                 = link_to image do
                   = image_tag image.data.url(:thumbnail), width: image.width(:thumbnail), height: image.height(:thumbnail)
             %tr
-              %td.vcenter.text-center= image.year
-              %td.vcenter.text-center= "#{image.width}×#{image.height}"
-              %td.vcenter.text-center= image.short_type
-              %td.vcenter.text-center= image.user.player.name
-              %td.vcenter.text-center= image.credit
-          = render "utils/pagination_links", pager: @images, columns: 6
+              %td.vcenter.small.text-center= image.year
+              %td.vcenter.small.text-center= "#{image.width}×#{image.height}"
+              %td.vcenter.small.text-center= image.short_type
+              %td.vcenter.small.text-center= image.user.player.name
+              %td.vcenter.small.text-center= image.credit
+          = render "utils/pagination_links", pager: @images, columns: 5
     - if can?(:create, Image)
       = link_to "New", new_admin_image_path, class: "btn btn-info"
 

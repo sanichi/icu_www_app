@@ -22,6 +22,9 @@
       %tr
         %th= t("event.category.category")
         %td= t("event.category.#{@event.category}")
+      %tr
+        %th= t("user.role.editor")
+        %td= @event.user.player.name
       - if @event.contact.present?
         %tr
           %th= t("event.contact")

@@ -1,0 +1,9 @@
+= form_tag uploads_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :description, text: t("description"), size: 20
+  = render "utils/inline_text_field", param: :year, text: t("year")
+  - if current_user.guest?
+    = hidden_field_tag :access, "all"
+  - else
+    - menu = upload_access_menu(params[:access], Upload.accessibilities_for(current_user), "access.any")
+    = render "utils/inline_select", param: :access, text: t("access.access"), menu: menu
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

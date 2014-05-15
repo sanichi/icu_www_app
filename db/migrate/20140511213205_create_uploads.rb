@@ -1,0 +1,19 @@
+class CreateUploads < ActiveRecord::Migration
+  def change
+    create_table :uploads do |t|
+      t.string     :access, limit: 20
+      t.attachment :data
+      t.string     :description, limit: 150
+      t.string     :source, limit: 8, default: "www2"
+      t.integer    :user_id
+      t.integer    :year, limit: 2
+
+      t.timestamps
+    end
+
+    add_index :uploads, :description
+    add_index :uploads, :user_id
+    add_index :uploads, :year
+    add_index :uploads, :access
+  end
+end

@@ -90,35 +90,17 @@ class User < ActiveRecord::Base
     end.join(" ")
   end
 
-  def guest?
-    false
-  end
+  def guest?; false end
+  def member?; true end
 
   class Guest
-    def id
-      "guest"
-    end
-
-    def name
-      "Guest"
-    end
-
-    def guest?
-      true
-    end
-
-    def player
-      nil
-    end
-
-    def roles
-      nil
-    end
-
-    def preferred_theme
-      DEFAULT_THEME
-    end
-
+    def id; 0 end
+    def name; "Guest" end
+    def guest?; true end
+    def member?; false end
+    def player; nil end
+    def roles; nil end
+    def preferred_theme; DEFAULT_THEME end
     User::ROLES.each do |role|
       define_method "#{role}?" do
         false

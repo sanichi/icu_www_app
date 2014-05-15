@@ -11,6 +11,7 @@
       %li{class: active("images")}= link_to t("image.images"), images_path
       %li{class: active("events")}= link_to t("event.calendar"), events_path
       %li{class: active("players")}= link_to t("player.players"), players_path
+      %li{class: active("uploads")}= link_to t("upload.uploads"), uploads_path
       %li{class: active("pages", "shop")}= link_to t("shop.shop"), shop_path
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"

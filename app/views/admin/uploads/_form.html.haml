@@ -1,0 +1,23 @@
+- content_for :javascript do
+  = render "utils/file_field.js", param: "data"
+
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @upload], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@upload.new_record? ? 'New' : 'Edit'} Upload"
+        - locals = { form: f, object: @upload, col: "sm", pad: 2, mark: "required" }
+        = render "utils/file_field_for", locals.merge(param: :data, text: t("file"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :description, text: t("description"), width: 6)
+        = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
+        - menu = upload_access_menu(@upload.access, Upload.accessibilities_for(current_user), "please_select")
+        = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:uploads)
+        = link_to "Cancel", @upload.new_record? ? last_path || uploads_path : [:admin, @upload], class: "btn btn-default"
+        - unless @upload.new_record?
+          - if last_path
+            = link_to t("last_search"), last_path, class: "btn btn-default"
+          - else
+            = link_to t("upload.uploads"), uploads_path, class: "btn btn-default"

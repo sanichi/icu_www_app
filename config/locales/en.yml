@@ -16,6 +16,7 @@ en:
   edit: Edit
   either: Either
   email: Email
+  file: File
   home: Home
   icu: Irish Chess Union
   icu_logo: ICU Logo
@@ -39,6 +40,7 @@ en:
   unknown: Unknown
   waiting: Waiting
   year: Year
+  years: Years
   "no": "No"
   "yes": "Yes"
   month:

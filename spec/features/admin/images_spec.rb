@@ -1,16 +1,14 @@
 require 'spec_helper'
 
 describe Image do
-  let(:button)       { I18n.t("edit") }
   let(:caption)      { I18n.t("image.caption") }
   let(:credit)       { I18n.t("image.credit") }
   let(:edit)         { I18n.t("edit") }
   let(:delete)       { I18n.t("delete") }
-  let(:file)         { I18n.t("image.file") }
+  let(:file)         { I18n.t("file") }
   let(:save)         { I18n.t("save") }
-  let(:signed_in_as) { I18n.t("session.signed_in_as") }
   let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
-  let(:year)         { I18n.t("image.year") }
+  let(:year)         { I18n.t("year") }
 
   let(:failure)      { "div.alert-danger" }
   let(:field_error)  { "div.help-block" }
@@ -50,60 +48,45 @@ describe Image do
   end
 
   context "authorization" do
-    let(:user)            { create(:user, roles: "editor") }
-    let(:level1)          { ["admin", user] }
-    let(:level2)          { ["editor"] }
-    let(:level3)          { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
-
-    let(:caption_text)    { "Fractal" }
-    let(:year_text)       { "2014" }
-    let(:image_file)      { "fractal.jpg" }
-    let(:image_path)      { image_dir + image_file }
-
-    before(:each) do
-      login user
-      visit new_admin_image_path
-      fill_in caption, with: caption_text
-      fill_in year, with: year_text
-      attach_file file, image_path
-      click_button save
-      logout
-
-      expect(Image.count).to be 1
-      @image = Image.first
-    end
+    let(:level1) { ["admin", user] }
+    let(:level2) { ["editor"] }
+    let(:level3) { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
+    let(:user)   { create(:user, roles: "editor") }
+    let!(:image) { create(:image, user: user) }
 
     def cell(label)
       "//th[.='#{label}']/following-sibling::td"
     end
 
+    def href(image)
+      "a[href='/images/#{image.id}']"
+    end
+
     it "admin and owner can update as well as create" do
       level1.each do |role|
         login role
-        expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_image_path
         expect(page).to_not have_css(failure)
-        visit edit_admin_image_path(@image)
+        visit edit_admin_image_path(image)
         expect(page).to_not have_css(failure)
         visit images_path
-        click_link @image.id.to_s
-        expect(page).to have_xpath(cell(caption), text: caption_text)
-        expect(page).to have_link(button)
+        find(href(image)).click
+        expect(page).to have_xpath(cell(caption), text: image.caption)
+        expect(page).to have_link(edit)
       end
     end
 
     it "other editors can only create" do
       level2.each do |role|
         login role
-        expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_image_path
         expect(page).to_not have_css(failure)
-        visit edit_admin_image_path(@image)
+        visit edit_admin_image_path(image)
         expect(page).to have_css(failure)
         visit images_path
-        click_link @image.id.to_s
-        expect(page).to have_xpath(cell(caption), text: caption_text)
-        expect(page).to_not have_link(button)
+        find(href(image)).click
+        expect(page).to have_xpath(cell(caption), text: image.caption)
+        expect(page).to_not have_link(edit)
       end
     end
 
@@ -113,16 +96,15 @@ describe Image do
           logout
         else
           login role
-          expect(page).to have_css(success, text: signed_in_as)
         end
         visit new_admin_image_path
         expect(page).to have_css(failure, text: unauthorized)
-        visit edit_admin_image_path(@image)
+        visit edit_admin_image_path(image)
         expect(page).to have_css(failure, text: unauthorized)
         visit images_path
-        click_link @image.id.to_s
-        expect(page).to have_xpath(cell(caption), text: caption_text)
-        expect(page).to_not have_link(button)
+        find(href(image)).click
+        expect(page).to have_xpath(cell(caption), text: image.caption)
+        expect(page).to_not have_link(edit)
       end
     end
   end
@@ -199,83 +181,79 @@ describe Image do
   end
 
   context "edit" do
+    let(:user)      { create(:user, roles: "editor" ) }
+    let(:april)     { attributes_for(:image_april) }
+    let(:suzanne)   { attributes_for(:image_suzanne) }
+    let(:gearoidin) { attributes_for(:image_gearoidin) }
+    let!(:image)    { create(:image_april, user: user) }
+
     before(:each) do
-      login("editor")
-      visit new_admin_image_path
-      fill_in caption, with: "April"
-      fill_in year, with: "1986"
-      fill_in credit, with: ""
-      attach_file file, image_dir + "april.jpeg"
-      click_button save
-      expect(Image.count).to eq 1
-      @image = Image.first
+      login user
+      visit image_path(image)
     end
 
-    it "image data" do
+    it "image data only" do
       click_link edit
       attach_file file, image_dir + "gearoidin.png"
       click_button save
 
-      @image.reload
+      image.reload
 
-      expect(@image.caption).to eq "April"
-      expect(@image.year).to eq 1986
-      expect(@image.credit).to be_nil
-      expect_data_gearoidin(@image)
+      expect(image.caption).to eq april[:caption]
+      expect(image.year).to eq april[:year]
+      expect(image.credit).to eq april[:credit]
+
+      expect_data_gearoidin(image)
     end
 
-    it "meta data" do
+    it "meta data only" do
       click_link edit
-      fill_in caption, with: "Suzanne"
-      fill_in year, with: "2004"
-      fill_in credit, with: "Gearóidín Uí Laighléis"
+      fill_in caption, with: suzanne[:caption]
+      fill_in year, with: suzanne[:year].to_s
+      fill_in credit, with: suzanne[:credit].to_s
       click_button save
 
-      @image.reload
+      image.reload
 
-      expect(@image.caption).to eq "Suzanne"
-      expect(@image.year).to eq 2004
-      expect(@image.credit).to eq "Gearóidín Uí Laighléis"
-      expect_data_april(@image)
+      expect(image.caption).to eq suzanne[:caption]
+      expect(image.year).to eq suzanne[:year]
+      expect(image.credit).to eq suzanne[:credit]
+
+      expect_data_april(image)
     end
 
-    it "all data" do
+    it "both" do
       click_link edit
-      fill_in caption, with: "Suzanne"
-      fill_in year, with: "2002"
-      attach_file file, image_dir + "suzanne.gif"
+      fill_in caption, with: gearoidin[:caption]
+      fill_in year, with: gearoidin[:year].to_s
+      fill_in credit, with: gearoidin[:credit].to_s
+      attach_file file, image_dir + "gearoidin.png"
       click_button save
 
-      @image.reload
+      image.reload
 
-      expect(@image.caption).to eq "Suzanne"
-      expect(@image.year).to eq 2002
-      expect(@image.credit).to be_nil
-      expect_data_suzanne(@image)
+      expect(image.caption).to eq gearoidin[:caption]
+      expect(image.year).to eq gearoidin[:year]
+      expect(image.credit).to eq gearoidin[:credit]
+
+      expect_data_gearoidin(image)
     end
   end
 
   context "delete" do
-    before(:each) do
-      login("editor")
-      visit new_admin_image_path
-      fill_in caption, with: "April"
-      fill_in year, with: "1986"
-      attach_file file, image_dir + "april.jpeg"
-      click_button save
-      expect(Image.count).to eq 1
-      @image = Image.first
-    end
+    let(:user)   { create(:user, roles: "editor") }
+    let!(:image) { create(:image, user: user) }
 
     it "by owner" do
-      expect(Image.count).to be 1
+      login user
+      visit image_path(image)
       click_link delete
       expect(Image.count).to be 0
     end
 
     it "by non-owner" do
       login "editor"
-      visit image_path(@image)
+      visit image_path(image)
       expect(page).to_not have_link(delete)
     end
   end

@@ -1,0 +1,8 @@
+en:
+  access:
+    access: Access
+    all: Everyone
+    any: Any access
+    members: Members only
+    editors: Editors only
+    admins: Administrators only

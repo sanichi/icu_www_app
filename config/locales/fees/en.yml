@@ -14,8 +14,6 @@ en:
     sale_end: Sale end
     start: Start date
     url: Web page
-    year: Year
-    years: Years
     age:
       min: Minimum age
       max: Maximum age

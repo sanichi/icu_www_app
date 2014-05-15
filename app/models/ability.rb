@@ -13,6 +13,8 @@ class Ability
       can :manage, Club
       can :create, Image
       can [:update, :destroy], Image, user_id: user.id
+      can [:create, :show], Upload
+      can [:update, :destroy], Upload, user_id: user.id
     end
 
     if user.calendar? || user.editor?

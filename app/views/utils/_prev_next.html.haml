@@ -1,9 +1,12 @@
 - defined?(namespace) || namespace = nil
 
-.text-center
-  .btn-group
-    - if prev
-      = link_to "☜&nbsp;&nbsp;#{prev.id}".html_safe, namespace ? [namespace, prev] : prev, class: "btn btn-primary"
-    %span.btn.btn-info= id
-    - if nixt
-      = link_to "#{nixt.id}&nbsp;&nbsp;☞".html_safe, namespace ? [namespace, nixt] : nixt, class: "btn btn-primary"
+- if prev || nixt
+  .text-center
+    .btn-group
+      - if prev
+        = link_to "☜&nbsp;&nbsp;#{prev.id}".html_safe, namespace ? [namespace, prev] : prev, class: "btn btn-primary"
+      %span.btn.btn-info= id
+      - if nixt
+        = link_to "#{nixt.id}&nbsp;&nbsp;☞".html_safe, namespace ? [namespace, nixt] : nixt, class: "btn btn-primary"
+
+.voffset3

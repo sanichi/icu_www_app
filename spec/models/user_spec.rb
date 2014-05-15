@@ -141,10 +141,15 @@ describe User do
     end
   end
 
-  context "#guest?" do
-    it "should be false" do
-      user = create(:user)
+  context "predicates" do
+    let(:user) { create(:user) }
+
+    it "#guest?" do
       expect(user.guest?).to be_false
+    end
+
+    it "#member?" do
+      expect(user.member?).to be_true
     end
   end
 
@@ -169,21 +174,19 @@ describe User do
 end
 
 describe User::Guest do
-  before(:each) do
-    @user = User::Guest.new
+  let(:user) { User::Guest.new }
+
+  it "#guest?" do
+    expect(user.guest?).to be_true
   end
 
-  context "roles" do
-    it "should not respond to any roles" do
-      User::ROLES.each do |role|
-        expect(@user.send("#{role}?")).to be_false
-      end
-    end
+  it "#member?" do
+    expect(user.member?).to be_false
   end
 
-  context "#guest?" do
-    it "should be true" do
-      expect(@user.guest?).to be_true
+  it "roles" do
+    User::ROLES.each do |role|
+      expect(user.send("#{role}?")).to be_false
     end
   end
 end

@@ -12,7 +12,7 @@
         %th= t("image.caption")
         %td= @image.caption
       %tr
-        %th= t("image.year")
+        %th= t("year")
         %td= @image.year
       %tr
         %th= t("image.credit")
@@ -34,7 +34,7 @@
           %tr
             %th= "Image last updated"
             %td= @image.data_updated_at.to_s(:nosec)
-      = render "utils/timestamps", object: @image, ability: :manage
+      = render "utils/timestamps", object: @image, ability: :create
     - if can?(:update, @image)
       = link_to t("edit"), edit_admin_image_path(@image), class: "btn btn-primary"
     - if can?(:destroy, @image)

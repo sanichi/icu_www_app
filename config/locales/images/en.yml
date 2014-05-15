@@ -3,12 +3,10 @@ en:
     caption: Caption
     credit: Credit
     dimensions: Dimensions
-    file: File
     image: Image
     images: Images
     original: Original
     thumbnail: Thumbnail
-    year: Year
     order:
       order: Order
       id: Order by ID

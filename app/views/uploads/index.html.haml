@@ -1,0 +1,29 @@
+- content_for :title, t("upload.uploads")
+
+= render "utils/search_panel", form: "search_form", title: t("upload.uploads"), col: "sm"
+
+- extra = current_user.member?
+- admin = can?(:create, Upload)
+
+.row
+  .col-sm-12
+    - if @uploads.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th= t("file")
+            %th= t("description")
+            %th.text-center= t("year")
+            - if extra
+              %th= t("access.access")
+        %tbody
+          - @uploads.matches.each do |upload|
+            %tr
+              %td= link_to upload.data_file_name, upload.data.url, target: "upload"
+              %td= link_to_if admin, upload.description, [:admin, upload]
+              %td.text-center= upload.year
+              - if extra
+                %td= t("access.#{upload.access}")
+          = render "utils/pagination_links", pager: @uploads, columns: 3 + (extra ? 1 : 0)
+    - if admin
+      = link_to "New", new_admin_upload_path, class: "btn btn-info"

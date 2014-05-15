@@ -77,14 +77,18 @@ class Image < ActiveRecord::Base
   end
 
   def short_type
-    data_content_type.split("/").last.upcase
+    data_content_type.to_s.split("/").last.to_s.upcase
   end
 
   private
 
   def normalize_attributes
-    %w[credit].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
+    %w[caption credit].each do |atr|
+      if self.send(atr).present?
+        self.send(atr).markoff!.trim!
+      else
+        self.send("#{atr}=", nil)
+      end
     end
   end
 
