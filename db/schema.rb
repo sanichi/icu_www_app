@@ -241,7 +241,7 @@ ActiveRecord::Schema.define(version: 20140511213205) do
     t.integer  "data_file_size"
     t.datetime "data_updated_at"
     t.string   "description",       limit: 150
-    t.string   "source",            limit: 8,   default: "www2"
+    t.string   "www1_path",         limit: 128
     t.integer  "user_id"
     t.integer  "year",              limit: 2
     t.datetime "created_at"
@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(version: 20140511213205) do
   add_index "uploads", ["access"], name: "index_uploads_on_access", using: :btree
   add_index "uploads", ["description"], name: "index_uploads_on_description", using: :btree
   add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
+  add_index "uploads", ["www1_path"], name: "index_uploads_on_www1_path", using: :btree
   add_index "uploads", ["year"], name: "index_uploads_on_year", using: :btree
 
   create_table "user_inputs", force: true do |t|

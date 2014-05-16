@@ -20,20 +20,20 @@
       %tr
         %th= t("user.role.editor")
         %td= @upload.user.player.name
-      - if can?(:create, Upload)
+      %tr
+        %th= "Content type"
+        %td= @upload.data_content_type
+      %tr
+        %th= "Size"
+        %td= @upload.data_file_size
+      - if @upload.www1_path.present?
         %tr
-          %th= "Source"
-          %td= @upload.source
+          %th= "Old www1 path"
+          %td= @upload.www1_path
+      - unless @upload.updated_at == @upload.data_updated_at
         %tr
-          %th= "Content type"
-          %td= @upload.data_content_type
-        %tr
-          %th= "Size"
-          %td= @upload.data_file_size
-        - unless @upload.updated_at == @upload.data_updated_at
-          %tr
-            %th= "File last updated"
-            %td= @upload.data_updated_at.to_s(:nosec)
+          %th= "File last updated"
+          %td= @upload.data_updated_at.to_s(:nosec)
       = render "utils/timestamps", object: @upload, ability: :create
     - if can?(:update, @upload)
       = link_to t("edit"), edit_admin_upload_path(@upload), class: "btn btn-primary"

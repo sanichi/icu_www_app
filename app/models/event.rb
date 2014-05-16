@@ -5,11 +5,17 @@ class Event < ActiveRecord::Base
   include Journalable
   journalize %w[flyer_file_name flyer_content_type flyer_file_size name location latitude longitude start_date end_date active category contact email phone url prize_fund note], "/events/%d"
 
-  EXTS = /\.(pdf|doc|docx|rtf)\z/i
-  TYPES = /\A(application\/(pdf|msword|vnd\.openxmlformats-officedocument\.wordprocessingml\.document|rtf)|text\/rtf)\z/
   MIN_SIZE = 1.kilobyte
   MAX_SIZE = 3.megabytes
   CATEGORIES = %w[irish junior women foreign]
+  TYPES = {
+    pdf:  "application/pdf",
+    doc:  "application/msword",
+    docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    rtf:  ["application/rtf", "text/rtf"],
+  }
+  EXTENSIONS = /\.(#{TYPES.values.join("|")})\z/i
+  CONTENT_TYPES = TYPES.values.flatten
 
   has_attached_file :flyer, keep_old_files: true
 
@@ -17,7 +23,7 @@ class Event < ActiveRecord::Base
 
   before_validation :normalize_attributes
 
-  validates_attachment :flyer, content_type: { file_name: EXTS, content_type: TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
+  validates_attachment :flyer, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :name, :location, presence: true
   validates :source, inclusion: { in: ::Global::SOURCES }
   validates :category, inclusion: { in: CATEGORIES }

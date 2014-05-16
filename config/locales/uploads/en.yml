@@ -1,4 +1,6 @@
 en:
   upload:
+    any_type: Any file type
+    type: File type
     upload: Upload
     uploads: Uploads
