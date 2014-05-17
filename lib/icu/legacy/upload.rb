@@ -77,7 +77,7 @@ module ICU
       end
 
       def guess(name)
-        description, year, access = nil, nil, "all", nil
+        description, year, access = nil, nil, "all"
         case name
         when /\Aagm\/20(\d\d)\/minutes.doc\z/
           description = "Minutes of the 20#{$1} AGM"
@@ -100,6 +100,7 @@ module ICU
         when "agm/2005/reports/treasurer.xls"
           description = "Financial report, AGM 2005"
           year = 2005
+          access = "members"
         when "agm/2009/treasurer.doc"
           description = "Report of the Treasurer, AGM 2009"
           year = 2009
@@ -121,27 +122,33 @@ module ICU
         when "agm/2011/treasurer.xlsx"
           description = "Financial accounts, AGM 2011"
           year = 2011
+          access = "members"
         when "agm/2011/vice_chairperson.pdf"
           description = "Report of the Vice Chairperson, AGM 2011"
           year = 2011
         when "agm/2012/accounts_2011-12.pdf"
           description = "Financial accounts, AGM 2012"
           year = 2012
+          access = "members"
         when "agm/2012/john_alfred_flier.pdf"
           description = "John Alfred flyer, running for chairman, AGM 2012"
           year = 2012
         when /\Aagm\/2013\/accounts_part_([1-5])_of_5\.pdf\z/
           description = "Financial accounts, part #{$1} of 5, AGM 2013"
           year = 2013
+          access = "members"
         when "agm/2013/code_of_conduct.pdf"
           description = "Code of conduct, AGM 2013"
           year = 2013
+          access = "members"
         when "agm/2013/disciplinary_rules.pdf"
           description = "Disciplinary rules, AGM 2013"
           year = 2013
+          access = "members"
         when "agm/2013/proposed_amendments.pdf"
           description = "Proposed amendments to the constitution, AGM 2013"
           year = 2013
+          access = "members"
         when "audio/charles.wav"
           description = "Eamon Keogh sound bite \"Oh Charles\""
           year = 2006
