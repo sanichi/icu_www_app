@@ -60,6 +60,7 @@ module ICU
         when force
           puts "old upload records deleted: #{::Upload.delete_all}"
           puts "old upload journal entries deleted: #{JournalEntry.uploads.delete_all}"
+          ActiveRecord::Base.connection.execute("ALTER TABLE uploads AUTO_INCREMENT = 1")
           false
         else
           true

@@ -24,7 +24,7 @@ class Upload < ActiveRecord::Base
 
   belongs_to :user
 
-  has_attached_file :data, keep_old_files: true
+  has_attached_file :data, url: "/system/:class/:id_partition/:hash.:extension", hash_secret: Rails.application.secrets.paperclip
 
   validates_attachment :data, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :data, :description, presence: true
