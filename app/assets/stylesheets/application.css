@@ -34,6 +34,9 @@
 .voffset3 { margin-top: 20px; }
 .vcenter { vertical-align: middle !important; }
 
+/* To stop text wrapping */
+.no-wrap { white-space: nowrap; }
+
 /* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */
 .btn-file {
     position: relative;

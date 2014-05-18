@@ -21,8 +21,8 @@
             %tr
               %td= link_to event.name, event
               %td= event.location
-              %td.text-center= event.start_date
-              %td.text-center= event.end_date
+              %td.text-center.no-wrap= event.start_date
+              %td.text-center.no-wrap= event.end_date
               - if extra
                 %td.text-center= event.active ? "✔" : "✘"
           = render "utils/pagination_links", pager: @events, columns: 4 + (extra ? 1 : 0)
