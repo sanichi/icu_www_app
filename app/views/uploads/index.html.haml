@@ -19,7 +19,7 @@
         %tbody
           - @uploads.matches.each do |upload|
             %tr
-              %td= link_to upload.data_file_name, upload.data.url, target: "upload"
+              %td= link_to upload.data_file_name, upload.url, target: "upload"
               %td= link_to_if admin, upload.description, [:admin, upload]
               %td.text-center= upload.year
               - if extra

@@ -7,7 +7,7 @@
     %table.table.table-bordered
       %tr
         %th= t("file")
-        %td= link_to @upload.data_file_name, @upload.data.url, target: "upload"
+        %td= link_to @upload.data_file_name, @upload.url, target: "upload"
       %tr
         %th= t("description")
         %td= @upload.description

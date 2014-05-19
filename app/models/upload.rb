@@ -1,6 +1,6 @@
 class Upload < ActiveRecord::Base
+  attr_accessor :dir_to_remove
   extend Util::Pagination
-
   include Journalable
   journalize %w[data_file_name data_content_type data_file_size description year access], "/uploads/%d"
 
@@ -24,7 +24,14 @@ class Upload < ActiveRecord::Base
 
   belongs_to :user
 
+  before_save :correct_plain_text
+  before_destroy :remember_directory
+
+  # Note: Paperclip registers various callbacks.
   has_attached_file :data, url: "/system/:class/:id_partition/:hash.:extension", hash_secret: Rails.application.secrets.paperclip
+
+  after_save :manage_unobfuscated_version
+  after_destroy :clean_up_directory
 
   validates_attachment :data, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :data, :description, presence: true
@@ -34,8 +41,6 @@ class Upload < ActiveRecord::Base
   validates :www1_path, length: { maximum: 128 }, allow_nil: true
 
   validate :year_is_not_in_future, :year_in_description
-
-  before_save :correct_plain_text
 
   scope :include_players, -> { includes(user: :player) }
   scope :ordered, -> { order(year: :desc, description: :asc) }
@@ -68,7 +73,49 @@ class Upload < ActiveRecord::Base
     ACCESSIBILITIES[0..max]
   end
 
+  def url
+    if access == "all"
+      unobfuscate(data.url)
+    else
+      data.url
+    end
+  end
+
   private
+
+  def unobfuscate(path_or_url)
+    path_or_url.sub(Pathname.new(data.path).basename.to_s, data_file_name)
+  end
+
+  def manage_unobfuscated_version
+    obfuscated = data.path.to_s
+    unobscured = unobfuscate(obfuscated)
+    if access == "all"
+      FileUtils.cp(obfuscated, unobscured, preserve: true)
+    else
+      FileUtils.rm(unobscured, force: true)
+    end
+  rescue => e
+    logger.error("problem managing unobfuscated file for upload #{id} (#{access}): " + e.message)
+  end
+
+  def remember_directory
+    self.dir_to_remove = Pathname.new(data.path).dirname.to_s
+  end
+
+  def clean_up_directory
+    # We're going to remove a directory recursively so be careful here.
+    # The check is based on the fact that we're using Paperclip's ID partition.
+    raise "no directory to cleanup" if dir_to_remove.blank?
+    if dir_to_remove.match(/uploads\/\d{3}\/\d{3}\/\d{3}\z/)
+      FileUtils.remove_dir(dir_to_remove, force: true)
+    else
+      raise "#{dir_to_remove} doesn't match the expected pattern"
+    end
+    raise "#{dir_to_remove} still exists" if File.exist?(dir_to_remove)
+  rescue => e
+    logger.error("problem cleaning up old directory for upload #{id}: " + e.message)
+  end
 
   def correct_plain_text
     if data_content_type == "text/plain" && data_file_name.present?
@@ -87,13 +134,13 @@ class Upload < ActiveRecord::Base
   end
 
   def year_in_description
-    # No point check if there's no year or description or if the description doesn't contain a year.
-    return unless year.present? && description.present? && description.match(/(?<!#)\b(?:18|19|20)\d\d\b/)
+    # No point checking if there's no year or description or if the description doesn't contain a year.
+    return unless year.present? && description.present? && description.match(/(?<!#)\b(?:18i|19|20)\d\d\b/)
 
-    # Scan for patterns like "2013", "2013-14" and "2013/2014"
+    # Scan for patterns like "2013", "2013-14" and "2013/2014" (but not if preceeded by '#' to indicate a non-year).
     years_or_seasons = description.scan(/(?<!#)\b(?:(?:18|19|20)\d\d)(?:\s*[-\/]\s*(?:(?:18|19|20)?\d\d))?\b/)
 
-    # Turn these to years.
+    # Turn these to (numerical) years.
     years = []
     years_or_seasons.each do |yos|
       case yos

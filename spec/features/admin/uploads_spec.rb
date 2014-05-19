@@ -46,6 +46,22 @@ describe Upload do
     expect_data(upload, "minutes_2004.doc", 67584, "application/msword")
   end
 
+  def expect_unobfuscated(upload)
+    dir = Pathname.new(upload.data.path).dirname
+    expect(File.directory?(dir)).to be_true
+    expect(File.file?(dir + upload.data_file_name)).to be_true
+    expect(upload.url.include?(upload.data_file_name)).to be_true
+    expect(upload.data.url.include?(upload.data_file_name)).to be_false
+  end
+
+  def expect_obfuscated(upload)
+    dir = Pathname.new(upload.data.path).dirname
+    expect(File.directory?(dir)).to be_true
+    expect(File.file?(dir + upload.data_file_name)).to be_false
+    expect(upload.url.include?(upload.data_file_name)).to be_false
+    expect(upload.data.url.include?(upload.data_file_name)).to be_false
+  end
+
   context "authorization" do
     let(:user)    { create(:user, roles: "editor") }
     let(:level1)  { ["admin", user] }
@@ -120,10 +136,10 @@ describe Upload do
       visit new_admin_upload_path
     end
 
-    it "PDF" do
+    it "PDF (all)" do
       fill_in description, with: pdf_desc_text
       fill_in year, with: pdf_year_text
-      select editors_text, from: access
+      select everyone_text, from: access
       attach_file file, upload_dir + pdf_upload_file
       click_button save
 
@@ -133,12 +149,14 @@ describe Upload do
 
       expect(upload.description).to eq pdf_desc_text
       expect(upload.year).to eq pdf_year_text.to_i
-      expect(upload.access).to eq editors
+      expect(upload.access).to eq everyone
       expect(upload.user_id).to eq @user.id
       expect_pdf(upload)
+
+      expect_unobfuscated(upload)
     end
 
-    it "PGN" do
+    it "PGN (members only)" do
       fill_in description, with: pgn_desc_text
       fill_in year, with: pgn_year_text
       select members_text, from: access
@@ -154,6 +172,8 @@ describe Upload do
       expect(upload.access).to eq members
       expect(upload.user_id).to eq @user.id
       expect_pgn(upload)
+
+      expect_obfuscated(upload)
     end
 
     it "invalid type" do
@@ -171,7 +191,7 @@ describe Upload do
 
   context "edit" do
     let(:user)     { create(:user, roles: "editor") }
-    let!(:upload)  { create(:upload, user: user) }
+    let(:upload)   { create(:upload, user: user) }
     let(:alt_desc) { "ICU AGM Minutes" }
     let(:alt_file) { "minutes_2004.doc" }
     let(:alt_year) { "2004" }
@@ -181,43 +201,74 @@ describe Upload do
     let(:old_desc) { upload.description }
     let(:old_year) { upload.year }
     let(:old_acsy) { upload.access }
+    let(:option)   { "select option" }
 
     before(:each) do
       login user
-      expect(user.id).to eq upload.user.id
       visit admin_upload_path(upload)
+      click_link edit
     end
 
     it "file data" do
-      click_link edit
       attach_file file, upload_dir + new_file
       click_button save
 
       upload.reload
-
       expect(upload.description).to eq old_desc
       expect(upload.year).to eq old_year
       expect(upload.access).to eq old_acsy
       expect_pgn(upload)
+
+      expect_unobfuscated(upload)
     end
 
     it "meta data" do
-      click_link edit
       fill_in description, with: new_desc
       fill_in year, with: new_year
       select editors_text, from: access
       click_button save
 
       upload.reload
-
       expect(upload.description).to eq new_desc
       expect(upload.year).to eq new_year.to_i
       expect(upload.access).to eq editors
       expect_pdf(upload)
+
+      expect_obfuscated(upload)
+    end
+
+    it "just access" do
+      expect(page).to have_css(option, text: editors_text)
+      expect(page).to_not have_css(option, text: admins_text)
+
+      login "admin"
+      visit admin_upload_path(upload)
+      click_link edit
+      select admins_text, from: access
+      click_button save
+
+      upload.reload
+      expect(upload.access).to eq admins
+      expect_obfuscated(upload)
+
+      click_link edit
+      select members_text, from: access
+      click_button save
+
+      upload.reload
+      expect(upload.access).to eq members
+      expect_obfuscated(upload)
+
+      click_link edit
+      select everyone_text, from: access
+      click_button save
+
+      upload.reload
+      expect(upload.access).to eq everyone
+      expect_unobfuscated(upload)
     end
 
     it "all data" do
-      click_link edit
       fill_in description, with: alt_desc
       fill_in year, with: alt_year
       select members_text, from: access
@@ -225,23 +276,27 @@ describe Upload do
       click_button save
 
       upload.reload
-
       expect(upload.description).to eq alt_desc
       expect(upload.year).to eq alt_year.to_i
       expect(upload.access).to eq members
       expect_doc(upload)
+
+      expect_obfuscated(upload)
     end
   end
 
   context "delete" do
-    let(:user)    { create(:user, roles: "editor") }
-    let!(:upload) { create(:upload, user: user) }
+    let(:user)      { create(:user, roles: "editor") }
+    let(:upload)    { create(:upload, user: user) }
+    let(:directory) { Pathname.new(upload.data.path).dirname.to_s }
 
     it "by owner" do
+      expect(File.directory?(directory)).to be_true
       login user
       visit admin_upload_path(upload)
       click_link delete
       expect(Upload.count).to be 0
+      expect(File.exist?(directory)).to be_false
     end
 
     it "by non-owner" do
@@ -257,10 +312,10 @@ describe Upload do
     let!(:upload_edt) { create(:upload, access: editors) }
     let!(:upload_adm) { create(:upload, access: admins) }
 
-    let(:url_all)     { "a[href='#{upload_all.data.url}']" }
-    let(:url_mem)     { "a[href='#{upload_mem.data.url}']" }
-    let(:url_edt)     { "a[href='#{upload_edt.data.url}']" }
-    let(:url_adm)     { "a[href='#{upload_adm.data.url}']" }
+    let(:url_all)     { "a[href='#{upload_all.url}']" }
+    let(:url_mem)     { "a[href='#{upload_mem.url}']" }
+    let(:url_edt)     { "a[href='#{upload_edt.url}']" }
+    let(:url_adm)     { "a[href='#{upload_adm.url}']" }
 
     let(:desc_cell)   { "//tr/td/following-sibling::td[.='#{upload_all.description}']" }
     let(:access_menu) { "//select[@name='access']" }

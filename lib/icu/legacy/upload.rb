@@ -61,10 +61,16 @@ module ICU
           puts "old upload records deleted: #{::Upload.delete_all}"
           puts "old upload journal entries deleted: #{JournalEntry.uploads.delete_all}"
           ActiveRecord::Base.connection.execute("ALTER TABLE uploads AUTO_INCREMENT = 1")
+          remove_old_files
           false
         else
           true
         end
+      end
+
+      def remove_old_files
+        path = Rails.root + "public" + "system" + "uploads"
+        FileUtils.remove_dir(path) if File.directory?(path)
       end
 
       def chdir
