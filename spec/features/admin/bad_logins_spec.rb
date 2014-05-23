@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-feature "Authorization for bad logins" do
-  given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for bad logins" do
+  let(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "admin users can view the list" do
+  it "admin users can view the list" do
     logout
     login "admin"
     expect(page).to have_css(success, text: signed_in_as)
@@ -15,7 +15,7 @@ feature "Authorization for bad logins" do
     expect(page).to_not have_css(failure)
   end
 
-  scenario "non-admin users cannot view the list" do
+  it "non-admin users cannot view the list" do
     non_admin_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -24,14 +24,14 @@ feature "Authorization for bad logins" do
     end
   end
 
-  scenario "guests cannot view the logins list" do
+  it "guests cannot view the logins list" do
     logout
     visit admin_bad_logins_path
     expect(page).to have_css(failure, text: unauthorized)
   end
 end
 
-feature "Listing bad logins" do
+describe "Listing bad logins" do
   before(:each) do
     visit "/sign_in"
     fill_in I18n.t("email"), with: email
@@ -41,9 +41,9 @@ feature "Listing bad logins" do
     visit admin_bad_logins_path
   end
 
-  given(:email)    { "baddy@hacker.net" }
-  given(:password) { "password" }
-  given(:ip)       { "127.0.0.1" }
+  let(:email)    { "baddy@hacker.net" }
+  let(:password) { "password" }
+  let(:ip)       { "127.0.0.1" }
 
   def xpath(text)
     %Q{//table[@id="results"]/tbody/tr/td[.="#{text}"]}

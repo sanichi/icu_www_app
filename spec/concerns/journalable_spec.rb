@@ -8,9 +8,12 @@ describe Journalable do
 
   [
     [Club, "/clubs/%d"],
+    [Event, "/events/%d"],
     [Fee, "/admin/fees/%d"],
+    [Image, "/images/%d"],
     [Player, "/admin/players/%d"],
     [Translation, "/admin/translations/%d"],
+    [Upload, "/admin/uploads/%d"],
     [User, "/admin/users/%d"],
     [UserInput, "/admin/user_inputs/%d"],
   ].each do |klass, path|

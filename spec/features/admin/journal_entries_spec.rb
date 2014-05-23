@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature JournalEntry do
+describe JournalEntry do
   def create_club
     click_link "New Club"
     fill_in "Name", with: "Wandering Dragons"
@@ -50,11 +50,11 @@ feature JournalEntry do
     @user, @user_change = edit_user
   end
 
-  given(:success)      { "div.alert-success" }
-  given(:failure)      { "div.alert-danger" }
-  given(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:success)      { "div.alert-success" }
+  let(:failure)      { "div.alert-danger" }
+  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
 
-  scenario "admin view" do
+  it "admin view" do
     login "admin"
 
     visit club_path(@club)
@@ -79,7 +79,7 @@ feature JournalEntry do
     expect(page).to have_xpath(xpath("results", "User", @user.id, "update", "status", "banned", @name, @ip), count: 1)
   end
 
-  scenario "editor view" do
+  it "editor view" do
     login "editor"
 
     visit club_path(@club)
@@ -102,7 +102,7 @@ feature JournalEntry do
     expect(page).to have_css(failure, text: unauthorized)
   end
 
-  scenario "translator view" do
+  it "translator view" do
     login "translator"
 
     visit club_path(@club)
@@ -126,7 +126,7 @@ feature JournalEntry do
     expect(page).to have_css(failure, text: unauthorized)
   end
 
-  scenario "treasurer view" do
+  it "treasurer view" do
     login "treasurer"
 
     visit club_path(@club)
@@ -149,7 +149,7 @@ feature JournalEntry do
     expect(page).to have_css(failure, text: unauthorized)
   end
 
-  scenario "delete parent object" do
+  it "delete parent object" do
     expect(JournalEntry.where(journalable_type: "Translation").count).to eq 1
 
     @translation.active = false

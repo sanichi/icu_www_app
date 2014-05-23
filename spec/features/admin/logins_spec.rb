@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-feature "Authorization for logins" do
-  given(:ok_roles)        { %w[admin] }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:record)          { create(:login) }
-  given(:paths)           { [admin_logins_path, admin_login_path(record)] }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for logins" do
+  let(:ok_roles)        { %w[admin] }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:record)          { create(:login) }
+  let(:paths)           { [admin_logins_path, admin_login_path(record)] }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "some roles can view the logins list" do
+  it "some roles can view the logins list" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -21,7 +21,7 @@ feature "Authorization for logins" do
     end
   end
 
-  scenario "other roles and guests cannot" do
+  it "other roles and guests cannot" do
     not_ok_roles.push("guests").each do |role|
       if role == "guest"
         logout
@@ -37,7 +37,7 @@ feature "Authorization for logins" do
   end
 end
 
-feature "Listing logins" do
+describe "Listing logins" do
   before(:each) do
     @user = {}
     @user[:normal]     = login "user"
@@ -53,7 +53,7 @@ feature "Listing logins" do
     @xpath = "//table[@id='results']/tbody/tr"
   end
 
-  scenario "specific email" do
+  it "specific email" do
     select "Success", from: "Result"
     fill_in "Email", with: @user[:normal].email
     click_button "Search"
@@ -61,7 +61,7 @@ feature "Listing logins" do
     click_link @user[:normal].email
   end
 
-  scenario "specific IP" do
+  it "specific IP" do
     select "Success", from: "Result"
     fill_in "IP", with: @login.ip
     click_button "Search"
@@ -69,7 +69,7 @@ feature "Listing logins" do
     expect(page).to have_content(@user[:ip].email)
   end
 
-  scenario "specific results" do
+  it "specific results" do
     select "Failure", from: "Result"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 4)

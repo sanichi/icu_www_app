@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-feature "Authorization for pages" do
-  given(:non_admin_roles) { User::ROLES.reject { |role| role == "admin" } }
-  given(:paths)           { [admin_system_info_path, admin_test_email_path] }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+describe "Authorization for pages" do
+  let(:non_admin_roles) { User::ROLES.reject { |role| role == "admin" } }
+  let(:paths)           { [admin_system_info_path, admin_test_email_path] }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
 
-  scenario "admin role" do
+  it "admin role" do
     login "admin"
     paths.each do |path|
       visit path
@@ -15,7 +15,7 @@ feature "Authorization for pages" do
     end
   end
 
-  scenario "other roles and guests" do
+  it "other roles and guests" do
     non_admin_roles.push("guest").each do |role|
       if role == "guest"
         logout

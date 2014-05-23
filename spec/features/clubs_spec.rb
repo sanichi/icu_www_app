@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Searching clubs" do
+describe "Searching clubs" do
   before(:each) do
     create(:club, name: "Bangor", city: "Groomsport", contact: "Mark", county: "down")
     create(:club, name: "Bray/Greystones", city: "Dublin", contact: "Mervyn", county: "dublin")
@@ -99,7 +99,7 @@ feature "Searching clubs" do
   end
 end
 
-feature "Showing a club" do
+describe "Showing a club" do
   def xpath(label)
     %Q{//table//th[.="#{label}"]/following-sibling::td}
   end

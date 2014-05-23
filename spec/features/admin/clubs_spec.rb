@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-feature "Authorization for clubs" do
-  given(:ok_roles)        { %w[admin editor] }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:club)            { create(:club) }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:header)          { "//h1[.='#{club.name}']" }
-  given(:button)          { I18n.t("edit") }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for clubs" do
+  let(:ok_roles)        { %w[admin editor] }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:club)            { create(:club) }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:header)          { "//h1[.='#{club.name}']" }
+  let(:button)          { I18n.t("edit") }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "some roles can manage clubs as well as view" do
+  it "some roles can manage clubs as well as view" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -25,7 +25,7 @@ feature "Authorization for clubs" do
     end
   end
 
-  scenario "other roles and guests can only view" do
+  it "other roles and guests can only view" do
     not_ok_roles.push("guest").each do |role|
       if role == "guest"
         logout
@@ -44,14 +44,14 @@ feature "Authorization for clubs" do
   end
 end
 
-feature "New clubs" do
+describe "New clubs" do
   before(:each) do
     login("editor")
   end
 
-  given(:success) { "div.alert-success" }
+  let(:success) { "div.alert-success" }
 
-  scenario "sucessful creation with all attributes" do
+  it "sucessful creation with all attributes" do
     click_link "New Club"
     fill_in "Name", with: "Bangor"
     fill_in "Website", with: "www.ulsterchess.org/membership/Clubs/bangor"
@@ -85,7 +85,7 @@ feature "New clubs" do
     expect(club.active).to eq true
   end
 
-  scenario "sucessful creation with minimal attributes" do
+  it "sucessful creation with minimal attributes" do
     click_link "New Club"
     fill_in "Name", with: "Millisle"
     fill_in "City", with: "Millisle"
@@ -111,36 +111,36 @@ feature "New clubs" do
   end
 end
 
-feature "Editing clubs" do
+describe "Editing clubs" do
   before(:each) do
     @bangor = create(:club)
     login("editor")
     visit edit_admin_club_path(@bangor)
   end
 
-  given(:success)      { "div.alert-success" }
-  given(:base_failure) { "div.alert-danger" }
-  given(:attr_failure) { "div.help-block" }
+  let(:success)      { "div.alert-success" }
+  let(:base_failure) { "div.alert-danger" }
+  let(:attr_failure) { "div.help-block" }
 
-  scenario "name is mandatory" do
+  it "name is mandatory" do
     fill_in "Name", with: ""
     click_button "Save"
     expect(page).to have_css(attr_failure, text: "blank")
   end
 
-  scenario "city is mandatory" do
+  it "city is mandatory" do
     fill_in "City", with: ""
     click_button "Save"
     expect(page).to have_css(attr_failure, text: "blank")
   end
 
-  scenario "county is mandatory" do
+  it "county is mandatory" do
     select "Please select", from: "County"
     click_button "Save"
     expect(page).to have_css(attr_failure, text: "invalid")
   end
 
-  scenario "at least one contact method is mandadory for an active club" do
+  it "at least one contact method is mandadory for an active club" do
     fill_in "Website", with: ""
     fill_in "Email", with: ""
     fill_in "Phone", with: ""

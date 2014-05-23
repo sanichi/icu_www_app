@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Switch locales" do
+describe "Switch locales" do
   after(:each) do
     Translation.cache.flushdb
   end
@@ -18,7 +18,7 @@ feature "Switch locales" do
   let(:una)  { create(:user, roles: "translator", locale: "ga") }
   let(:mark) { create(:user, roles: "admin") }
 
-  scenario "quest user" do
+  it "quest user" do
     visit root_path
     click_link "Home"
     click_link "Irish"
@@ -27,7 +27,7 @@ feature "Switch locales" do
     click_link "Home"
   end
 
-  scenario "user with no preference" do
+  it "user with no preference" do
     login user
     click_link "Home"
     click_link "Irish"
@@ -38,7 +38,7 @@ feature "Switch locales" do
     click_link "Cláraigh amach"
   end
 
-  scenario "user with preference for Irish" do
+  it "user with preference for Irish" do
     login una
     click_link "Baile"
     click_link "Béarla"
@@ -49,7 +49,7 @@ feature "Switch locales" do
     click_link "Sign out"
   end
 
-  scenario "original language persists" do
+  it "original language persists" do
     visit home_path
     click_link "Irish"
     %w[Baile Béarla Gaeilge].each { |text| expect(page).to have_link(text) }
@@ -65,7 +65,7 @@ feature "Switch locales" do
     %w[Home English Irish].each { |text| expect(page).to have_link(text) }
   end
 
-  scenario "admin pages and links are in English" do
+  it "admin pages and links are in English" do
     login mark
     %w[Home Logins Translations Preferences].each { |text| expect(page).to have_link(text) }
     click_link "Irish"

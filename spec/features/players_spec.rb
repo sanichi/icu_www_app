@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Search players" do
+describe "Search players" do
   before(:each) do
     @p = []
     @p << create(:player, first_name: "Mark", last_name: "Orr", dob: "1955-11-09", player_title: "IM", trainer_title: "FST")
@@ -22,17 +22,17 @@ feature "Search players" do
     visit players_path
   end
 
-  given(:search)    { I18n.t("search") }
-  given(:result)    { "//table[@id='results']/tbody/tr" }
-  given(:link)      { "//table[@id='results']/tbody/tr/td/a[starts-with(@href,'/admin/players/')]" }
-  given(:male)      { I18n.t("player.gender.M") }
-  given(:female)    { I18n.t("player.gender.F") }
-  given(:deceased)  { I18n.t("player.status.deceased") }
-  given(:foreign)   { I18n.t("player.status.foreign") }
-  given(:inactive)  { I18n.t("player.status.inactive") }
-  given(:duplicate) { I18n.t("player.duplicate") }
+  let(:search)    { I18n.t("search") }
+  let(:result)    { "//table[@id='results']/tbody/tr" }
+  let(:link)      { "//table[@id='results']/tbody/tr/td/a[starts-with(@href,'/admin/players/')]" }
+  let(:male)      { I18n.t("player.gender.M") }
+  let(:female)    { I18n.t("player.gender.F") }
+  let(:deceased)  { I18n.t("player.status.deceased") }
+  let(:foreign)   { I18n.t("player.status.foreign") }
+  let(:inactive)  { I18n.t("player.status.inactive") }
+  let(:duplicate) { I18n.t("player.duplicate") }
 
-  scenario "default" do
+  it "default" do
     click_button search
     expect(page).to have_xpath(result, count: 6)
     login("membership")
@@ -40,7 +40,7 @@ feature "Search players" do
     expect(page).to have_xpath(link, count: 7) # one extra for the membership officer's player
   end
 
-  scenario "id" do
+  it "id" do
     fill_in "id", with: @p[0].id
     click_button search
     expect(page).to have_xpath(result, count: 1)
@@ -49,13 +49,13 @@ feature "Search players" do
     expect(page).to_not have_xpath(result)
   end
 
-  scenario "last name" do
+  it "last name" do
     fill_in "last_name", with: "QUINN"
     click_button search
     expect(page).to have_xpath(result, count: 3)
   end
 
-  scenario "first name" do
+  it "first name" do
     fill_in "first_name", with: "mark"
     click_button search
     expect(page).to have_xpath(result, count: 2)
@@ -64,7 +64,7 @@ feature "Search players" do
     expect(page).to have_xpath(result, count: 2) # matches Pat and Patrick via icu_name
   end
 
-  scenario "gender" do
+  it "gender" do
     select male, from: "gender"
     click_button search
     expect(page).to have_xpath(result, count: 5)
@@ -73,7 +73,7 @@ feature "Search players" do
     expect(page).to have_xpath(result, count: 1)
   end
 
-  scenario "yob" do
+  it "yob" do
     fill_in "yob", with: "1955"
     click_button search
     expect(page).to have_xpath(result, count: 2)
@@ -88,13 +88,13 @@ feature "Search players" do
     expect(page).to have_xpath(result, count: 4)
   end
 
-  scenario "federation" do
+  it "federation" do
     select "Ireland", from: "fed"
     click_button search
     expect(page).to have_xpath(result, count: 5)
   end
 
-  scenario "titles" do
+  it "titles" do
     select "IM", from: "title"
     click_button search
     expect(page).to have_xpath(result, count: 2)
@@ -114,8 +114,8 @@ feature "Search players" do
     click_button search
     expect(page).to have_xpath(result, count: 1)
   end
-  
-  scenario "status" do
+
+  it "status" do
     expect(page).to_not have_select("status")
     login("membership")
     visit players_path

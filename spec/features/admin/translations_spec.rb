@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-feature "Authorization for translations" do
-  given(:ok_roles)        { %w[admin translator] }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:translation)     { create(:translation) }
-  given(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for translations" do
+  let(:ok_roles)        { %w[admin translator] }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:translation)     { create(:translation) }
+  let(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "some roles can manage translations" do
+  it "some roles can manage translations" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -21,7 +21,7 @@ feature "Authorization for translations" do
     end
   end
 
-  scenario "other roles and guests have no access" do
+  it "other roles and guests have no access" do
     not_ok_roles.push("guest").each do |role|
       if role == "guest"
         logout
@@ -37,7 +37,7 @@ feature "Authorization for translations" do
   end
 end
 
-feature "Performing translations" do
+describe "Performing translations" do
   before(:each) do
     Translation.update_db
     @count = Translation.count
@@ -47,12 +47,12 @@ feature "Performing translations" do
     Translation.cache.flushdb
   end
 
-  given(:success)   { "div.alert-success" }
-  given(:failure)   { "div.alert-danger" }
-  given(:creatable) { "a.btn.btn-success" }
-  given(:updatable) { "a.btn.btn-primary" }
+  let(:success)   { "div.alert-success" }
+  let(:failure)   { "div.alert-danger" }
+  let(:creatable) { "a.btn.btn-success" }
+  let(:updatable) { "a.btn.btn-primary" }
 
-  scenario "find and translate an untranslated english phrase" do
+  it "find and translate an untranslated english phrase" do
     key = "user.role.translator"
     translation = Translation.find_by(key: key)
     irish = "Aistritheoir"
@@ -79,7 +79,7 @@ feature "Performing translations" do
     expect(page).to have_css(creatable, text: @count - 1)
   end
 
-  scenario "find and retranslate an updated english phrase" do
+  it "find and retranslate an updated english phrase" do
     key = "user.role.admin"
     translation = Translation.find_by(key: key)
     old_english = "God"
@@ -123,7 +123,7 @@ feature "Performing translations" do
     expect(page).to have_xpath("//td[.='#{english}']/following-sibling::td[.='#{irish}']")
   end
 
-  scenario "translate a phrase with interpolated variables" do
+  it "translate a phrase with interpolated variables" do
     key = "errors.attributes.password.length"
     translation = Translation.find_by(key: key)
 
@@ -146,7 +146,7 @@ feature "Performing translations" do
     expect(page).to have_css(success, text: "Translation #{translation.locale_key} was updated")
   end
 
-  scenario "find and delete an inactive translation" do
+  it "find and delete an inactive translation" do
     key = "user.role.wago"
     create(:translation, key: key, english: "WogoWago", active: false)
 
@@ -162,7 +162,7 @@ feature "Performing translations" do
     expect(page).to have_css("div.alert.alert-warning", text: "No matches")
   end
 
-  scenario "translation errors" do
+  it "translation errors" do
     key = "user.role.admin"
     admin = Translation.find_by(key: key)
 

@@ -1,30 +1,30 @@
 require 'spec_helper'
 
-feature "Sessions" do
-  background(:each) do
+describe "Sessions" do
+  before(:each) do
     visit "/sign_in"
   end
 
-  given(:user)            { create(:user) }
-  given(:password)        { "password" }
-  given(:bad_password)    { "drowssap" }
-  given(:ip)              { "127.0.0.1" }
-  given(:admin_role)      { "admin" }
-  given(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" }.sample(2).sort.join(" ") }
-  given(:sign_in_button)  { I18n.t("session.sign_in") }
-  given(:sign_in_title)   { I18n.t("session.sign_in") }
-  given(:email_text)      { I18n.t("email") }
-  given(:password_text)   { I18n.t("user.password") }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
+  let(:user)            { create(:user) }
+  let(:password)        { "password" }
+  let(:bad_password)    { "drowssap" }
+  let(:ip)              { "127.0.0.1" }
+  let(:admin_role)      { "admin" }
+  let(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" }.sample(2).sort.join(" ") }
+  let(:sign_in_button)  { I18n.t("session.sign_in") }
+  let(:sign_in_title)   { I18n.t("session.sign_in") }
+  let(:email_text)      { I18n.t("email") }
+  let(:password_text)   { I18n.t("user.password") }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
 
-  scenario "arriving at the sign in page" do
+  it "arriving at the sign in page" do
     expect(page).to have_title(sign_in_title)
     expect(page).to have_xpath("//form//input[@name='email']")
     expect(page).to have_xpath("//form//input[@name='password']")
   end
 
-  scenario "signing in and signing out" do
+  it "signing in and signing out" do
     fill_in email_text, with: user.email
     fill_in password_text, with: password
     click_button sign_in_button
@@ -37,7 +37,7 @@ feature "Sessions" do
     expect(page).to have_xpath("//form//input[@name='email']")
   end
 
-  scenario "entering an invalid email" do
+  it "entering an invalid email" do
     bad_email = "bad." + user.email
     fill_in email_text, with: bad_email
     fill_in password_text, with: "password"
@@ -47,7 +47,7 @@ feature "Sessions" do
     expect(Login.count).to eq 0
   end
 
-  scenario "entering an invalid password" do
+  it "entering an invalid password" do
     fill_in email_text, with: user.email
     fill_in password_text, with: bad_password
     click_button sign_in_button
@@ -57,7 +57,7 @@ feature "Sessions" do
     expect(user.logins.where(user_id: user.id, ip: ip, roles: nil, error: "invalid_password").count).to eq(1)
   end
 
-  scenario "the user's subscription has expired" do
+  it "the user's subscription has expired" do
     user = create(:user, expires_on: 1.year.ago.at_end_of_year)
     fill_in email_text, with: user.email
     fill_in password_text, with: "password"

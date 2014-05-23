@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-feature "Authorization for players" do
-  given(:ok_roles)        { %w[admin membership] }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:player)          { create(:player) }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:header)          { "h1" }
-  given(:button)          { I18n.t("edit") }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for players" do
+  let(:ok_roles)        { %w[admin membership] }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:player)          { create(:player) }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:header)          { "h1" }
+  let(:button)          { I18n.t("edit") }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "some roles can manage players" do
+  it "some roles can manage players" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -27,7 +27,7 @@ feature "Authorization for players" do
     end
   end
 
-  scenario "other roles and guests can only index players" do
+  it "other roles and guests can only index players" do
     not_ok_roles.push("guest").each do |role|
       if role == "guest"
         logout
@@ -47,33 +47,33 @@ feature "Authorization for players" do
   end
 end
 
-feature "Create players" do
+describe "Create players" do
   before(:each) do
     login("membership")
   end
 
-  given(:success)    { "div.alert-success" }
-  given(:help)       { "div.help-block" }
-  given(:first_name) { I18n.t("player.first_name") }
-  given(:last_name)  { I18n.t("player.last_name") }
-  given(:dob)        { I18n.t("player.dob") }
-  given(:joined)     { I18n.t("player.joined") }
-  given(:gender)     { I18n.t("player.gender.gender") }
-  given(:male)       { I18n.t("player.gender.M") }
-  given(:female)     { I18n.t("player.gender.F") }
-  given(:federation) { I18n.t("player.federation") }
-  given(:email)      { I18n.t("email") }
-  given(:address)    { I18n.t("address") }
-  given(:home)       { I18n.t("player.phone.home") }
-  given(:mobile)     { I18n.t("player.phone.mobile") }
-  given(:work)       { I18n.t("player.phone.work") }
-  given(:title)      { I18n.t("player.title.player") }
-  given(:status)     { I18n.t("player.status.status") }
-  given(:inactive)   { I18n.t("player.status.inactive") }
-  given(:notes)      { I18n.t("notes") }
-  given(:save)       { I18n.t("save") }
+  let(:success)    { "div.alert-success" }
+  let(:help)       { "div.help-block" }
+  let(:first_name) { I18n.t("player.first_name") }
+  let(:last_name)  { I18n.t("player.last_name") }
+  let(:dob)        { I18n.t("player.dob") }
+  let(:joined)     { I18n.t("player.joined") }
+  let(:gender)     { I18n.t("player.gender.gender") }
+  let(:male)       { I18n.t("player.gender.M") }
+  let(:female)     { I18n.t("player.gender.F") }
+  let(:federation) { I18n.t("player.federation") }
+  let(:email)      { I18n.t("email") }
+  let(:address)    { I18n.t("address") }
+  let(:home)       { I18n.t("player.phone.home") }
+  let(:mobile)     { I18n.t("player.phone.mobile") }
+  let(:work)       { I18n.t("player.phone.work") }
+  let(:title)      { I18n.t("player.title.player") }
+  let(:status)     { I18n.t("player.status.status") }
+  let(:inactive)   { I18n.t("player.status.inactive") }
+  let(:notes)      { I18n.t("notes") }
+  let(:save)       { I18n.t("save") }
 
-  scenario "sucessful creation with set join date" do
+  it "sucessful creation with set join date" do
     click_link "New Player"
     fill_in first_name, with: "mark j l"
     fill_in last_name, with: "orr"
@@ -111,7 +111,7 @@ feature "Create players" do
     expect(player.player_id).to be_nil
   end
 
-  scenario "sucessful creation with default join date" do
+  it "sucessful creation with default join date" do
     click_link "New Player"
     fill_in first_name, with: "Gearóidín"
     fill_in last_name, with: "Uí Laighléis"
@@ -130,7 +130,7 @@ feature "Create players" do
     expect(player.player_id).to be_nil
   end
 
-  scenario "join date and dob should be consistent" do
+  it "join date and dob should be consistent" do
     click_link "New Player"
     fill_in first_name, with: "Penny"
     fill_in last_name, with: "Orr"
@@ -141,7 +141,7 @@ feature "Create players" do
     expect(page).to have_css(help, text: "after")
   end
 
-  scenario "join date should not be in the future" do
+  it "join date should not be in the future" do
     click_link "New Player"
     fill_in first_name, with: "Penny"
     fill_in last_name, with: "Orr"
@@ -152,7 +152,7 @@ feature "Create players" do
     expect(page).to have_css(help, text: "before")
   end
 
-  scenario "create a guest user" do
+  it "create a guest user" do
     click_link "New Player"
     fill_in first_name, with: "Guest"
     fill_in last_name, with: "User"
@@ -171,34 +171,34 @@ feature "Create players" do
   end
 end
 
-feature "Edit players" do
+describe "Edit players" do
   before(:each) do
     login("membership")
   end
 
-  given(:success)    { "div.alert-success" }
-  given(:help)       { "div.help-block" }
-  given(:player)     { create(:player) }
-  given(:master)     { create(:player) }
-  given(:duplicate)  { create(:player, player_id: master.id) }
-  given(:first_name) { I18n.t("player.first_name") }
-  given(:last_name)  { I18n.t("player.last_name") }
-  given(:dob)        { I18n.t("player.dob") }
-  given(:joined)     { I18n.t("player.joined") }
-  given(:gender)     { I18n.t("player.gender.gender") }
-  given(:male)       { I18n.t("player.gender.M") }
-  given(:female)     { I18n.t("player.gender.F") }
-  given(:club)       { I18n.t("club.club")}
-  given(:none)       { I18n.t("player.no_club")}
-  given(:master_id)  { I18n.t("player.master_id") }
-  given(:status)     { I18n.t("player.status.status") }
-  given(:inactive)   { I18n.t("player.status.inactive") }
-  given(:deceased)   { I18n.t("player.status.deceased") }
-  given(:save)       { I18n.t("save") }
-  given(:edit)       { I18n.t("edit") }
-  given(:please)     { I18n.t("please_select") }
+  let(:success)    { "div.alert-success" }
+  let(:help)       { "div.help-block" }
+  let(:player)     { create(:player) }
+  let(:master)     { create(:player) }
+  let(:duplicate)  { create(:player, player_id: master.id) }
+  let(:first_name) { I18n.t("player.first_name") }
+  let(:last_name)  { I18n.t("player.last_name") }
+  let(:dob)        { I18n.t("player.dob") }
+  let(:joined)     { I18n.t("player.joined") }
+  let(:gender)     { I18n.t("player.gender.gender") }
+  let(:male)       { I18n.t("player.gender.M") }
+  let(:female)     { I18n.t("player.gender.F") }
+  let(:club)       { I18n.t("club.club")}
+  let(:none)       { I18n.t("player.no_club")}
+  let(:master_id)  { I18n.t("player.master_id") }
+  let(:status)     { I18n.t("player.status.status") }
+  let(:inactive)   { I18n.t("player.status.inactive") }
+  let(:deceased)   { I18n.t("player.status.deceased") }
+  let(:save)       { I18n.t("save") }
+  let(:edit)       { I18n.t("edit") }
+  let(:please)     { I18n.t("please_select") }
 
-  scenario "marking a player as deceased" do
+  it "marking a player as deceased" do
     expect(player.status).to eq "active"
     visit admin_player_path(player)
     click_link edit
@@ -211,7 +211,7 @@ feature "Edit players" do
     expect(player.status).to eq "deceased"
   end
 
-  scenario "changing club" do
+  it "changing club" do
     expect(player.club_id).to be_nil
     create(:club, name: "Bangor")
     create(:club, name: "Hollywood")
@@ -233,7 +233,7 @@ feature "Edit players" do
     expect(player.club_id).to be_nil
   end
 
-  scenario "marking a player as a duplicate" do
+  it "marking a player as a duplicate" do
     expect(player.duplicate?).to be_false
     expect(player.status).to eq "active"
     visit edit_admin_player_path(player)
@@ -250,7 +250,7 @@ feature "Edit players" do
     expect(page).to have_css("h1", text: master.name)
   end
 
-  scenario "can't be a duplicate of self, another duplicate or a non-existant record" do
+  it "can't be a duplicate of self, another duplicate or a non-existant record" do
     visit edit_admin_player_path(player)
     fill_in master_id, with: player.id
     click_button save
@@ -263,7 +263,7 @@ feature "Edit players" do
     expect(page).to have_css(help, text: "non-existent")
   end
 
-  scenario "dob, joined and gender not required for inactive" do
+  it "dob, joined and gender not required for inactive" do
     expect(player.status).to eq "active"
     visit edit_admin_player_path(player)
     fill_in dob, with: ""

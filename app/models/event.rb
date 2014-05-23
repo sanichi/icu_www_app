@@ -3,7 +3,7 @@ class Event < ActiveRecord::Base
   include Remarkable
 
   include Journalable
-  journalize %w[flyer_file_name flyer_content_type flyer_file_size name location latitude longitude start_date end_date active category contact email phone url prize_fund note], "/events/%d"
+  journalize %w[flyer_file_name flyer_content_type flyer_file_size name location lat long start_date end_date active category contact email phone url prize_fund note], "/events/%d"
 
   MIN_SIZE = 1.kilobyte
   MAX_SIZE = 3.megabytes

@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-feature "Authorization for users" do
-  given(:ok_roles)        { %w[admin] }
-  given(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
-  given(:user)            { create(:user) }
-  given(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
-  given(:success)         { "div.alert-success" }
-  given(:failure)         { "div.alert-danger" }
-  given(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  given(:signed_in_as)    { I18n.t("session.signed_in_as") }
+describe "Authorization for users" do
+  let(:ok_roles)        { %w[admin] }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:user)            { create(:user) }
+  let(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
+  let(:success)         { "div.alert-success" }
+  let(:failure)         { "div.alert-danger" }
+  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
-  scenario "some roles can manage users" do
+  it "some roles can manage users" do
     ok_roles.each do |role|
       login role
       expect(page).to have_css(success, text: signed_in_as)
@@ -21,7 +21,7 @@ feature "Authorization for users" do
     end
   end
 
-  scenario "non-admin roles cannot access users" do
+  it "non-admin roles cannot access users" do
     not_ok_roles.push("guest").each do |role|
       if role == "guest"
         logout
@@ -37,21 +37,21 @@ feature "Authorization for users" do
   end
 end
 
-feature "Creating users" do
-  given(:player)       { create(:player) }
-  given(:user)         { create(:user) }
-  given(:player_path)  { admin_player_path(player) }
-  given(:new_user)     { "New user" }
-  given(:email)        { "joe@example.com" }
-  given(:password)     { "new passw0rd" }
-  given(:expires_on)   { Date.today.years_since(1).end_of_year }
-  given(:role)         { "translator" }
-  given(:success)      { "div.alert-success" }
-  given(:failure)      { "div.help-block" }
-  given(:created)      { "User was successfully created" }
-  given(:signed_in_as) { I18n.t("session.signed_in_as") }
+describe "Creating users" do
+  let(:player)       { create(:player) }
+  let(:user)         { create(:user) }
+  let(:player_path)  { admin_player_path(player) }
+  let(:new_user)     { "New user" }
+  let(:email)        { "joe@example.com" }
+  let(:password)     { "new passw0rd" }
+  let(:expires_on)   { Date.today.years_since(1).end_of_year }
+  let(:role)         { "translator" }
+  let(:success)      { "div.alert-success" }
+  let(:failure)      { "div.help-block" }
+  let(:created)      { "User was successfully created" }
+  let(:signed_in_as) { I18n.t("session.signed_in_as") }
 
-  scenario "add a user to a player" do
+  it "add a user to a player" do
     login "admin"
     visit player_path
 
@@ -82,17 +82,17 @@ feature "Creating users" do
   end
 end
 
-feature "Editing users" do
-  given!(:user)        { create(:user) }
-  given(:edit_path)    { edit_admin_user_path(user) }
-  given(:success)      { "div.alert-success" }
-  given(:failure)      { "div.help-block" }
-  given(:signed_in_as) { I18n.t("session.signed_in_as") }
-  given(:updated)      { "User was successfully updated" }
-  given(:min_length)   { I18n.t("errors.attributes.password.length", minimum: User::MINIMUM_PASSWORD_LENGTH) }
-  given(:no_digits)    { I18n.t("errors.attributes.password.digits") }
+describe "Editing users" do
+  let!(:user)        { create(:user) }
+  let(:edit_path)    { edit_admin_user_path(user) }
+  let(:success)      { "div.alert-success" }
+  let(:failure)      { "div.help-block" }
+  let(:signed_in_as) { I18n.t("session.signed_in_as") }
+  let(:updated)      { "User was successfully updated" }
+  let(:min_length)   { I18n.t("errors.attributes.password.length", minimum: User::MINIMUM_PASSWORD_LENGTH) }
+  let(:no_digits)    { I18n.t("errors.attributes.password.digits") }
 
-  scenario "change a user's password" do
+  it "change a user's password" do
     old_encrypted_password = user.encrypted_password
     login "admin"
     visit edit_path
@@ -122,7 +122,7 @@ feature "Editing users" do
     expect(page).to have_css(success, text: "#{signed_in_as} #{user.email}")
   end
 
-  scenario "change a user's roles" do
+  it "change a user's roles" do
     expect(user.roles).to be_nil
 
     login "admin"
@@ -152,7 +152,7 @@ feature "Editing users" do
     expect(user.roles).to be_nil
   end
 
-  scenario "the last admin role" do
+  it "the last admin role" do
     admin = login "admin"
     visit edit_admin_user_path(admin)
 
@@ -161,7 +161,7 @@ feature "Editing users" do
     expect(page).to have_css(failure)
   end
 
-  scenario "change a user's status" do
+  it "change a user's status" do
     login"admin"
     visit edit_path
 
@@ -180,7 +180,7 @@ feature "Editing users" do
     expect(user.status).to eq(new_status)
   end
 
-  scenario "verifying a user" do
+  it "verifying a user" do
     expect(user.verified_at.to_i).to_not be_within(1).of(Time.now.to_i)
 
     login "admin"
@@ -203,7 +203,7 @@ feature "Editing users" do
     expect(page).to have_no_field("Verify")
   end
 
-  scenario "changing the expiry date" do
+  it "changing the expiry date" do
     expiry = user.expires_on
 
     login "admin"
@@ -219,7 +219,7 @@ feature "Editing users" do
   end
 end
 
-feature "Search users" do
+describe "Search users" do
   before(:each) do
     create(:user)
     create(:user, roles: "editor")
@@ -237,17 +237,17 @@ feature "Search users" do
     visit admin_users_path
   end
 
-  scenario "all users" do
+  it "all users" do
     expect(page).to have_xpath(@xpath, count: @total)
   end
 
-  scenario "email" do
+  it "email" do
     fill_in "Email", with: @admin.email
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
-  scenario "expired" do
+  it "expired" do
     select "Active", from: "Expiry"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 2)
@@ -259,7 +259,7 @@ feature "Search users" do
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
-  scenario "status" do
+  it "status" do
     select "OK", from: "Status"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 2)
@@ -268,7 +268,7 @@ feature "Search users" do
     expect(page).to have_xpath(@xpath, 2)
   end
 
-  scenario "verified" do
+  it "verified" do
     select "Verified", from: "Verified"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 1)
@@ -277,7 +277,7 @@ feature "Search users" do
     expect(page).to have_xpath(@xpath, count: 1)
   end
 
-  scenario "roles" do
+  it "roles" do
     select "Some Role", from: "Role"
     click_button "Search"
     expect(page).to have_xpath(@xpath, count: @total - 7)
@@ -293,7 +293,7 @@ feature "Search users" do
   end
 end
 
-feature "View users" do
+describe "View users" do
   before(:each) do
     create(:user)
     @admin = login "admin"
@@ -301,7 +301,7 @@ feature "View users" do
     visit admin_users_path
   end
 
-  scenario "clicking the 'Last' button" do
+  it "clicking the 'Last' button" do
     expect(page).to have_xpath(@xpath, count: 2)
     select "Admin", from: "Role"
     click_button "Search"
@@ -312,15 +312,15 @@ feature "View users" do
   end
 end
 
-feature "Delete users" do
-  given(:success) { "div.alert-success" }
-  given(:failure) { "div.alert-danger" }
-  given(:deleted) { "successfully deleted" }
-  given(:logins)  { "login" }
-  given(:roles)   { "role" }
+describe "Delete users" do
+  let(:success) { "div.alert-success" }
+  let(:failure) { "div.alert-danger" }
+  let(:deleted) { "successfully deleted" }
+  let(:logins)  { "login" }
+  let(:roles)   { "role" }
 
   [true, false].each do |js|
-    scenario "can if they have no logins or roles (with#{js ? '' : 'out'} js)", js: js do
+    it "can if they have no logins or roles (with#{js ? '' : 'out'} js)", js: js do
       user = create(:user)
       expect(Login.where(user_id: user.id).count).to eq 0
       login "admin"
@@ -332,7 +332,7 @@ feature "Delete users" do
     end
   end
 
-  scenario "can't if they have a login history" do
+  it "can't if they have a login history" do
     user = create(:user)
     number = 5
     number.times { create(:login, user: user) }
@@ -345,7 +345,7 @@ feature "Delete users" do
     expect(Login.where(user_id: user.id).count).to eq number
   end
 
-  scenario "can't if they have any roles" do
+  it "can't if they have any roles" do
     user = create(:user, roles: "translator")
     login "admin"
     visit admin_user_path(user)
@@ -355,12 +355,12 @@ feature "Delete users" do
   end
 end
 
-feature "Login as another user" do
-  given(:success) { "div.alert-success" }
-  given(:message) { I18n.t("session.signed_in_as") }
-  given!(:user)   { create(:user) }
+describe "Login as another user" do
+  let(:success) { "div.alert-success" }
+  let(:message) { I18n.t("session.signed_in_as") }
+  let!(:user)   { create(:user) }
 
-  scenario "click the login button" do
+  it "click the login button" do
     login "admin"
     original_count = Login.count
     visit admin_user_path(user)

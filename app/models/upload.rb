@@ -2,7 +2,7 @@ class Upload < ActiveRecord::Base
   attr_accessor :dir_to_remove
   extend Util::Pagination
   include Journalable
-  journalize %w[data_file_name data_content_type data_file_size description year access], "/uploads/%d"
+  journalize %w[data_file_name data_content_type data_file_size description year access], "/admin/uploads/%d"
 
   ACCESSIBILITIES = %w[all members editors admins]
   MIN_SIZE = 500
