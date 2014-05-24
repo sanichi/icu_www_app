@@ -123,7 +123,7 @@ describe "Showing a club" do
     bangor = create(:club, params)
     visit club_path(bangor)
     params.each do |param, value|
-      label = %i(address email active).include?(param) ? I18n.t(param) : I18n.t("club.#{param}")
+      label = %i(active address city email name).include?(param) ? I18n.t(param) : I18n.t("club.#{param}")
       case param
       when :name
         expect(page).to have_css("h1", text: bangor.name)
