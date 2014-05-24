@@ -1,6 +1,6 @@
 = form_tag clubs_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :name, text: t("club.name")
-  = render "utils/inline_text_field", param: :city, text: t("club.city")
+  = render "utils/inline_text_field", param: :name, text: t("name")
+  = render "utils/inline_text_field", param: :city, text: t("city")
   = render "utils/inline_select", param: :county, text: t("club.county"), menu: club_county_menu(params[:county])
   = render "utils/inline_select", param: :province, text: t("club.province"), menu: club_province_menu(params[:province])
   = render "utils/inline_select", param: :active, text: t("active"), menu: club_active_menu(params[:active])

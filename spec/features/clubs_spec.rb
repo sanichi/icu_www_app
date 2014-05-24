@@ -16,7 +16,7 @@ describe "Searching clubs" do
   end
 
   it "find records by name" do
-    label = I18n.t("club.name")
+    label = I18n.t("name")
     fill_in label, with: "Lingus"
     click_button @search
     expect(page).to have_xpath(@row, count: 1)
@@ -33,7 +33,7 @@ describe "Searching clubs" do
   end
 
   it "find records by city" do
-    label = I18n.t("club.city")
+    label = I18n.t("city")
     fill_in label, with: "Dub"
     click_button @search
     expect(page).to have_xpath(@row, count: 2)
@@ -83,14 +83,14 @@ describe "Searching clubs" do
 
   it "return no results when appropriate" do
     select I18n.t("ireland.prov.ulster"), from: I18n.t("club.province")
-    fill_in I18n.t("club.name"), with: "Aer"
+    fill_in I18n.t("name"), with: "Aer"
     click_button @search
     expect(page).to_not have_xpath(@row)
     expect(page).to have_css("div.alert-warning", text: "No matches")
   end
 
   it "remember last search" do
-    fill_in I18n.t("club.name"), with: "Aer"
+    fill_in I18n.t("name"), with: "Aer"
     click_button @search
     expect(page).to have_xpath(@row, count: 1)
     click_link "Aer Lingus"

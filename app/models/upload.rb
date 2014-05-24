@@ -6,7 +6,6 @@ class Upload < ActiveRecord::Base
 
   ACCESSIBILITIES = %w[all members editors admins]
   MIN_SIZE = 500
-  MIN_YEAR = 1850
   MAX_SIZE = 4.megabytes
   TYPES = {
     csv:  "text/csv",
@@ -36,7 +35,7 @@ class Upload < ActiveRecord::Base
   validates_attachment :data, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :data, :description, presence: true
   validates :access, inclusion: { in: ACCESSIBILITIES }
-  validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: MIN_YEAR }
+  validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
   validates :www1_path, length: { maximum: 128 }, allow_nil: true
 

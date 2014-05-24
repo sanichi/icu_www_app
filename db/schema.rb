@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140511213205) do
+ActiveRecord::Schema.define(version: 20140523134358) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -221,6 +221,25 @@ ActiveRecord::Schema.define(version: 20140511213205) do
     t.decimal  "amount",     precision: 9, scale: 2
     t.datetime "created_at"
   end
+
+  create_table "tournaments", force: true do |t|
+    t.boolean  "active"
+    t.string   "category",   limit: 20
+    t.string   "city",       limit: 50
+    t.text     "details"
+    t.string   "format",     limit: 20
+    t.string   "name",       limit: 80
+    t.integer  "year",       limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tournaments", ["active"], name: "index_tournaments_on_active", using: :btree
+  add_index "tournaments", ["category"], name: "index_tournaments_on_category", using: :btree
+  add_index "tournaments", ["city"], name: "index_tournaments_on_city", using: :btree
+  add_index "tournaments", ["format"], name: "index_tournaments_on_format", using: :btree
+  add_index "tournaments", ["name"], name: "index_tournaments_on_name", using: :btree
+  add_index "tournaments", ["year"], name: "index_tournaments_on_year", using: :btree
 
   create_table "translations", force: true do |t|
     t.string   "locale",      limit: 2

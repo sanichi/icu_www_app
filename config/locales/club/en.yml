@@ -1,6 +1,5 @@
 en:
   club:
-    city: City
     club: Club
     clubs: Clubs
     contact: Contact
@@ -11,7 +10,6 @@ en:
     location: Location
     long: Longitude
     meet: Meetings
-    name: Name
     phone: Phone
     province: Province
     web: Website

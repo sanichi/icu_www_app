@@ -1,0 +1,9 @@
+= form_tag tournaments_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :name, text: t("name")
+  = render "utils/inline_text_field", param: :city, text: t("city")
+  = render "utils/inline_text_field", param: :year, text: t("year")
+  = render "utils/inline_select", param: :county, text: t("tournament.category"), menu: tournament_category_menu(params[:category])
+  = render "utils/inline_select", param: :province, text: t("tournament.format"), menu: tournament_format_menu(params[:format])
+  - if can?(:manage, Tournament)
+    = render "utils/inline_select", param: :active, text: t("active"), menu: tournament_active_menu(params[:active])
+  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"

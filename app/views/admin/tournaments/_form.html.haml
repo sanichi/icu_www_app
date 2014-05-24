@@ -1,0 +1,21 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @tournament], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %h2= @tournament.new_record? ? "New Tournament" : "Edit #{@tournament.name}"
+        %hr
+        - locals = { form: f, object: @tournament, col: "sm", pad: 2, width: 4 }
+        = render "utils/text_field_for", locals.merge(param: :name, text: t("name"), width: 5)
+        = render "utils/text_field_for", locals.merge(param: :city, text: t("city"))
+        = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
+        = render "utils/select_for", locals.merge(param: :category, text: t("tournament.category.category"), width: 3, menu: tournament_category_menu(@tournament.category, "please_select"))
+        = render "utils/select_for", locals.merge(param: :format, text: t("tournament.format.format"), width: 3, menu: tournament_format_menu(@tournament.format, "please_select"))
+        = render "utils/check_box_for",  locals.merge(param: :active, text: t("active"), width: 1)
+        = render "utils/text_area_for",  locals.merge(param: :details, text: t("details"), width: 10, rows: 30)
+        %hr
+        = f.submit "Save", class: "btn btn-primary"
+        - last_path = last_search(:tournaments)
+        = link_to "Cancel", @tournament.new_record? ? last_path || tournaments_path : @tournament, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

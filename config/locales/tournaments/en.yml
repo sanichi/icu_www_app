@@ -1,0 +1,22 @@
+en:
+  tournament:
+    tournament: Tournament
+    tournaments: Tournaments
+    category:
+      any: Any category
+      category: Category
+      championship: Championship
+      blind: Blind
+      international: International
+      junior: Junior
+      open: Open
+      section: Section
+    format:
+      any: Any format
+      format: Format
+      match: Match
+      rr: Round robin
+      rr_teams: Team round robin
+      teams: Teams
+      swiss: Swiss
+      swiss_teams: Swiss teams

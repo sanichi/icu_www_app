@@ -1,5 +1,7 @@
+- defined?(rows) || rows = 10
+
 .form-group{class: object.errors[param].any? ? "has-error" : ""}
   = form.label param, text, class: "control-label col-#{col}-#{pad}"
-  %div{class: "col-#{col}-#{width}"}= form.text_area param, class: "form-control", rows: 10
+  %div{class: "col-#{col}-#{width}"}= form.text_area param, class: "form-control", rows: rows
   - if pad + width < 12
     %div{class: "col-#{col}-#{12-pad-width} help-block"}= object.errors[param].first

@@ -7,12 +7,14 @@ en:
   by: by
   beta: Beta quality software
   cancel: Cancel
+  city: City
   confirm: Confirm
   created_at: Created
   date: Date
   date_format: YYYY-MM-DD
   delete: Delete
   description: Description
+  details: Details
   edit: Edit
   either: Either
   email: Email
@@ -24,6 +26,7 @@ en:
   inactive: Inactive
   last_search: Last Search
   member: Member
+  name: Name
   new: new
   no_matches: No matches
   none: None

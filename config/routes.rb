@@ -23,6 +23,7 @@ IcuWwwApp::Application.routes.draw do
   resources :player_ids,  only: [:index]
   resources :players,     only: [:index]
   resources :sessions,    only: [:create]
+  resources :tournaments, only: [:index, :show]
   resources :uploads,     only: [:index]
 
   namespace :admin do
@@ -47,6 +48,7 @@ IcuWwwApp::Application.routes.draw do
     resources :payment_errors,  only: [:index]
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
+    resources :tournaments,     only: [:new, :create, :edit, :update, :destroy]
     resources :translations,    only: [:index, :show, :edit, :update, :destroy]
     resources :uploads,         only: [:show, :new, :create, :edit, :update, :destroy]
     resources :user_inputs,     only: [:show, :new, :create, :edit, :update, :destroy]

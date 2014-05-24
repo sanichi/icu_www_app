@@ -1,0 +1,27 @@
+- content_for :title, t("tournament.tournaments")
+
+- extra = can?(:create, Tournament)
+
+= render "utils/search_panel", form: "search_form", title: t("tournament.tournaments"), col: "md"
+.row
+  .col-md-8.col-md-offset-2
+    - if @tournaments.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th.text-center= t("name")
+            %th.text-center= t("city")
+            %th.text-center= t("year")
+            - if extra
+              %th.text-center= t("active")
+        %tbody
+          - @tournaments.matches.each do |tournament|
+            %tr
+              %td= link_to tournament.name, tournament
+              %td.text-center= tournament.city
+              %td.text-center= tournament.year
+              - if extra
+                %td.text-center= tournament.active ? "✔" : "✘"
+          = render "utils/pagination_links", pager: @tournaments, columns: 3 + (extra ? 1 : 0)
+    - if extra
+      = link_to "New", new_admin_tournament_path, class: "btn btn-info"
