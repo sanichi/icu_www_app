@@ -59,4 +59,9 @@ module ApplicationHelper
     simple.sub!(/\/\z/, "")
     simple
   end
+
+  # Used to preserve leading white space in <pre>s which HAML would otherwise suppress.
+  def preserve_leading_space(str)
+    str.sub(/\A /, "\u00A0")
+  end
 end

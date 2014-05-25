@@ -45,7 +45,7 @@ RSpec.configure do |config|
 end
 
 # Create and login a user with a given role or roles.
-def login(user_or_roles, options={})
+def login(user_or_roles=nil, options={})
   user, roles = user_or_roles.instance_of?(User) ? [user_or_roles, nil] : [nil, user_or_roles]
   user ||= create(:user, roles: roles)
   visit sign_out_path

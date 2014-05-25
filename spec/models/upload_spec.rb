@@ -52,4 +52,43 @@ describe Upload do
       expect(upload).to_not be_valid
     end
   end
+
+  context "#accessible_to?" do
+    let(:admin)  { create(:user, roles: "admin") }
+    let(:editor) { create(:user, roles: "editor") }
+    let(:guest)  { User::Guest.new }
+    let(:member) { create(:user) }
+
+    it "everyone" do
+      upload = create(:upload, access: "all")
+      expect(upload.accessible_to?(admin)).to be_true
+      expect(upload.accessible_to?(editor)).to be_true
+      expect(upload.accessible_to?(member)).to be_true
+      expect(upload.accessible_to?(guest)).to be_true
+    end
+
+    it "members only" do
+      upload = create(:upload, access: "members")
+      expect(upload.accessible_to?(admin)).to be_true
+      expect(upload.accessible_to?(editor)).to be_true
+      expect(upload.accessible_to?(member)).to be_true
+      expect(upload.accessible_to?(guest)).to be_false
+    end
+
+    it "editors only" do
+      upload = create(:upload, access: "editors")
+      expect(upload.accessible_to?(admin)).to be_true
+      expect(upload.accessible_to?(editor)).to be_true
+      expect(upload.accessible_to?(member)).to be_false
+      expect(upload.accessible_to?(guest)).to be_false
+    end
+
+    it "admins only" do
+      upload = create(:upload, access: "admins")
+      expect(upload.accessible_to?(admin)).to be_true
+      expect(upload.accessible_to?(editor)).to be_false
+      expect(upload.accessible_to?(member)).to be_false
+      expect(upload.accessible_to?(guest)).to be_false
+    end
+  end
 end

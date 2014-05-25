@@ -7,6 +7,8 @@ class TournamentsController < ApplicationController
 
   def show
     @tournament = Tournament.find(params[:id])
+    @prev = Tournament.where("id < ?", params[:id]).order(id: :desc).limit(1).first
+    @next = Tournament.where("id > ?", params[:id]).order(id:  :asc).limit(1).first
     @entries = @tournament.journal_entries if current_user.roles.present?
   end
 end

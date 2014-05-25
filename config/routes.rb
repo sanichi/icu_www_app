@@ -24,7 +24,7 @@ IcuWwwApp::Application.routes.draw do
   resources :players,     only: [:index]
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
-  resources :uploads,     only: [:index]
+  resources :uploads,     only: [:index, :show]
 
   namespace :admin do
     %w[system_info test_email].each do |page|

@@ -72,6 +72,11 @@ class Upload < ActiveRecord::Base
     ACCESSIBILITIES[0..max]
   end
 
+  def accessible_to?(user)
+    accessibilities = Upload.accessibilities_for(user)
+    accessibilities.include?(access)
+  end
+
   def url
     if access == "all"
       unobfuscate(data.url)

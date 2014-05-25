@@ -7,16 +7,21 @@ en:
       category: Category
       championship: Championship
       blind: Blind
+      grand_prix: Grand Prix
       international: International
       junior: Junior
       open: Open
       section: Section
+      veteran: Veteran
     format:
       any: Any format
       format: Format
+      grand_prix: Grand Prix
+      knockout: Knockout
       match: Match
       rr: Round robin
       rr_teams: Team round robin
-      teams: Teams
+      schev: Scheveningen
+      simul: Simultaneous
       swiss: Swiss
       swiss_teams: Swiss teams

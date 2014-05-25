@@ -2,8 +2,10 @@
 
 - admin = can?(:manage, @tournament)
 
+= render "utils/prev_next", prev: @prev, id: @tournament.id, nixt: @next
+
 .row
-  .col-md-12
+  .col-md-8.col-md-offset-2
     %h1.text-center
       = @tournament.name
       - unless @tournament.active
@@ -23,7 +25,7 @@
 
 .row
   .col-md-12
-    %pre= @tournament.details
+    %pre= preserve_leading_space(@tournament.details.icu_markup).html_safe
 
 .row.voffset1
   .col-md-12

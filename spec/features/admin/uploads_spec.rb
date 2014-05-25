@@ -123,6 +123,57 @@ describe Upload do
     end
   end
 
+  context "accessibility" do
+    let(:all)          { create(:upload, access: "all") }
+    let(:members_only) { create(:upload, access: "members") }
+    let(:editors_only) { create(:upload, access: "editors") }
+    let(:admins_only)  { create(:upload, access: "admins") }
+
+    it "guest" do
+      logout
+      [all].each do |upload|
+        visit upload_path(upload)
+        expect(page).to_not have_css(failure)
+      end
+      [members_only, editors_only, admins_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to have_css(failure, text: unauthorized)
+      end
+    end
+
+    it "member" do
+      login
+      [all, members_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to_not have_css(failure)
+      end
+      [editors_only, admins_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to have_css(failure, text: unauthorized)
+      end
+    end
+
+    it "editor" do
+      login "editor"
+      [all, members_only, editors_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to_not have_css(failure)
+      end
+      [admins_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to have_css(failure, text: unauthorized)
+      end
+    end
+
+    it "admin" do
+      login "admin"
+      [all, members_only, editors_only, admins_only].each do |upload|
+        visit upload_path(upload)
+        expect(page).to_not have_css(failure)
+      end
+    end
+  end
+
   context "create" do
     let(:pdf_upload_file) { "CT-4000.pdf" }
     let(:pdf_desc_text)   { "Chess Today #4000" }

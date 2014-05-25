@@ -4,8 +4,8 @@ class Tournament < ActiveRecord::Base
   include Journalable
   journalize %w[active category city details format name year], "/tournaments/%d"
 
-  CATEGORIES = %w[championship open junior section international blind]
-  FORMATS = %w[swiss rr swiss_teams rr_teams match]
+  CATEGORIES = %w[championship open junior section international veteran blind grand_prix]
+  FORMATS = %w[swiss rr swiss_teams rr_teams knockout match schev simul grand_prix]
 
   scope :ordered, -> { order(year: :desc, name: :asc) }
 
@@ -17,6 +17,8 @@ class Tournament < ActiveRecord::Base
   validates :format, inclusion: { in: FORMATS }
   validates :name, presence: true, uniqueness: { scope: :year, message: "should happen once per year" }
   validates :year, numericality: { integer_only: true, greater_than_or_equal: Global::MIN_YEAR }
+
+  validate :no_markup_in_details
 
   def self.search(params, path)
     matches = ordered
@@ -35,6 +37,12 @@ class Tournament < ActiveRecord::Base
   def normalize_attributes
     [:city].each do |atr|
       self.send("#{atr}=", nil) if self.send(atr).blank?
+    end
+  end
+
+  def no_markup_in_details
+    if details.present? && details.match(/</)
+      errors.add(:base, "No makup allowed in details (use ICU markup)")
     end
   end
 end
