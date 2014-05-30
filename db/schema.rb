@@ -226,6 +226,10 @@ ActiveRecord::Schema.define(version: 20140529061922) do
     t.datetime "updated_at"
   end
 
+  add_index "pgns", ["comment"], name: "index_pgns_on_comment", using: :btree
+  add_index "pgns", ["file_name"], name: "index_pgns_on_file_name", using: :btree
+  add_index "pgns", ["user_id"], name: "index_pgns_on_user_id", using: :btree
+
   create_table "players", force: true do |t|
     t.string   "first_name",         limit: 50
     t.string   "last_name",          limit: 50
