@@ -14,5 +14,9 @@ class CreatePgns < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :pgns, :comment
+    add_index :pgns, :file_name
+    add_index :pgns, :user_id
   end
 end
