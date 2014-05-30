@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Authorization for fees" do
   let(:ok_roles)        { %w[admin treasurer] }
-  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
   let(:fee)             { create(:subscription_fee) }
   let(:success)         { "div.alert-success" }
   let(:failure)         { "div.alert-danger" }
@@ -23,13 +23,8 @@ describe "Authorization for fees" do
   end
 
   it "other roles and guests have no access" do
-    not_ok_roles.push("guest").each do |role|
-      if role == "guest"
-        logout
-      else
-        login role
-        expect(page).to have_css(success, text: signed_in_as)
-      end
+    not_ok_roles.each do |role|
+      login role
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)

@@ -2,18 +2,16 @@ require 'spec_helper'
 
 describe "Authorization for translations" do
   let(:ok_roles)        { %w[admin translator] }
-  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
   let(:translation)     { create(:translation) }
   let(:paths)           { [admin_translations_path, admin_translation_path(translation), edit_admin_translation_path(translation)] }
   let(:success)         { "div.alert-success" }
   let(:failure)         { "div.alert-danger" }
   let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   it "some roles can manage translations" do
     ok_roles.each do |role|
       login role
-      expect(page).to have_css(success, text: signed_in_as)
       paths.each do |path|
         visit path
         expect(page).to_not have_css(failure)
@@ -22,13 +20,8 @@ describe "Authorization for translations" do
   end
 
   it "other roles and guests have no access" do
-    not_ok_roles.push("guest").each do |role|
-      if role == "guest"
-        logout
-      else
-        login role
-        expect(page).to have_css(success, text: signed_in_as)
-      end
+    not_ok_roles.each do |role|
+      login role
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)

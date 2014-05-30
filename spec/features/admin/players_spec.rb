@@ -2,19 +2,17 @@ require 'spec_helper'
 
 describe "Authorization for players" do
   let(:ok_roles)        { %w[admin membership] }
-  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
   let(:player)          { create(:player) }
   let(:success)         { "div.alert-success" }
   let(:failure)         { "div.alert-danger" }
   let(:header)          { "h1" }
   let(:button)          { I18n.t("edit") }
   let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   it "some roles can manage players" do
     ok_roles.each do |role|
       login role
-      expect(page).to have_css(success, text: signed_in_as)
       visit new_admin_player_path
       expect(page).to_not have_css(failure)
       visit edit_admin_player_path(player)
@@ -28,13 +26,8 @@ describe "Authorization for players" do
   end
 
   it "other roles and guests can only index players" do
-    not_ok_roles.push("guest").each do |role|
-      if role == "guest"
-        logout
-      else
-        login role
-        expect(page).to have_css(success, text: signed_in_as)
-      end
+    not_ok_roles.each do |role|
+      login role
       visit new_admin_player_path
       expect(page).to have_css(failure, text: unauthorized)
       visit edit_admin_player_path(player)

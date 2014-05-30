@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Authorization for pages" do
-  let(:non_admin_roles) { User::ROLES.reject { |role| role == "admin" } }
+  let(:non_admin_roles) { User::ROLES.reject { |role| role == "admin" }.append("guest") }
   let(:paths)           { [admin_system_info_path, admin_test_email_path] }
   let(:success)         { "div.alert-success" }
   let(:failure)         { "div.alert-danger" }
@@ -16,12 +16,8 @@ describe "Authorization for pages" do
   end
 
   it "other roles and guests" do
-    non_admin_roles.push("guest").each do |role|
-      if role == "guest"
-        logout
-      else
-        login role
-      end
+    non_admin_roles.each do |role|
+      login role
       paths.each do |path|
         visit path
         expect(page).to have_css(failure, text: unauthorized)

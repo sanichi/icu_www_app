@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Authorization for users" do
   let(:ok_roles)        { %w[admin] }
-  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) } }
+  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
   let(:user)            { create(:user) }
   let(:paths)           { [admin_users_path, admin_user_path(user), edit_admin_user_path(user), new_admin_user_path(player_id: user.player.id), login_admin_user_path(user)] }
   let(:success)         { "div.alert-success" }
@@ -22,11 +22,9 @@ describe "Authorization for users" do
   end
 
   it "non-admin roles cannot access users" do
-    not_ok_roles.push("guest").each do |role|
-      if role == "guest"
-        logout
-      else
-        login role
+    not_ok_roles.each do |role|
+      login role
+      unless role == "guest"
         expect(page).to have_css(success, text: signed_in_as)
       end
       paths.each do |path|

@@ -105,11 +105,7 @@ describe Upload do
 
     it "other roles and guests can only index" do
       level3.each do |role|
-        if role == "guest"
-          logout
-        else
-          login role
-        end
+        login role
         visit new_admin_upload_path
         expect(page).to have_css(failure, text: unauthorized)
         visit edit_admin_upload_path(upload)

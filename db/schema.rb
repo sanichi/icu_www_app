@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140523134358) do
+ActiveRecord::Schema.define(version: 20140529061922) do
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"
@@ -112,6 +112,35 @@ ActiveRecord::Schema.define(version: 20140523134358) do
     t.datetime "updated_at"
   end
 
+  create_table "games", force: true do |t|
+    t.string   "annotator",  limit: 50
+    t.string   "black",      limit: 50
+    t.integer  "black_elo",  limit: 2
+    t.string   "date",       limit: 10
+    t.string   "eco",        limit: 3
+    t.string   "event",      limit: 50
+    t.string   "fen",        limit: 100
+    t.text     "moves"
+    t.integer  "pgn_id"
+    t.integer  "ply",        limit: 2
+    t.string   "result",     limit: 3
+    t.string   "round",      limit: 7
+    t.string   "signature",  limit: 32
+    t.string   "site",       limit: 50
+    t.string   "white",      limit: 50
+    t.integer  "white_elo",  limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "games", ["black"], name: "index_games_on_black", using: :btree
+  add_index "games", ["date"], name: "index_games_on_date", using: :btree
+  add_index "games", ["eco"], name: "index_games_on_eco", using: :btree
+  add_index "games", ["event"], name: "index_games_on_event", using: :btree
+  add_index "games", ["result"], name: "index_games_on_result", using: :btree
+  add_index "games", ["signature"], name: "index_games_on_signature", using: :btree
+  add_index "games", ["white"], name: "index_games_on_white", using: :btree
+
   create_table "images", force: true do |t|
     t.string   "data_file_name"
     t.string   "data_content_type"
@@ -180,6 +209,21 @@ ActiveRecord::Schema.define(version: 20140523134358) do
     t.string   "payment_name",       limit: 100
     t.string   "confirmation_email", limit: 50
     t.datetime "created_at"
+  end
+
+  create_table "pgns", force: true do |t|
+    t.string   "comment"
+    t.string   "content_type"
+    t.integer  "duplicates",   default: 0
+    t.string   "file_name"
+    t.integer  "file_size",    default: 0
+    t.integer  "game_count",   default: 0
+    t.integer  "imports",      default: 0
+    t.integer  "lines",        default: 0
+    t.string   "problem"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "players", force: true do |t|

@@ -92,11 +92,7 @@ describe Image do
 
     it "other roles and guests can only view" do
       level3.each do |role|
-        if role == "guest"
-          logout
-        else
-          login role
-        end
+        login role
         visit new_admin_image_path
         expect(page).to have_css(failure, text: unauthorized)
         visit edit_admin_image_path(image)

@@ -1,16 +1,13 @@
 require 'spec_helper'
 
 describe "Authorization for bad logins" do
-  let(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" } }
+  let(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" }.append("guest") }
   let(:success)         { "div.alert-success" }
   let(:failure)         { "div.alert-danger" }
   let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
-  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
 
   it "admin users can view the list" do
-    logout
     login "admin"
-    expect(page).to have_css(success, text: signed_in_as)
     visit admin_bad_logins_path
     expect(page).to_not have_css(failure)
   end
@@ -18,16 +15,9 @@ describe "Authorization for bad logins" do
   it "non-admin users cannot view the list" do
     non_admin_roles.each do |role|
       login role
-      expect(page).to have_css(success, text: signed_in_as)
       visit admin_bad_logins_path
       expect(page).to have_css(failure, text: unauthorized)
     end
-  end
-
-  it "guests cannot view the logins list" do
-    logout
-    visit admin_bad_logins_path
-    expect(page).to have_css(failure, text: unauthorized)
   end
 end
 

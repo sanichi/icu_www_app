@@ -58,8 +58,8 @@
   display: block;
 }
 
-/* For text areas */
-textarea {
+/* For text areas where white space is significant. */
+textarea.significant-space {
   font-family: monospace !important;
   white-space: pre;
 }

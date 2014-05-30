@@ -46,9 +46,10 @@ end
 
 # Create and login a user with a given role or roles.
 def login(user_or_roles=nil, options={})
+  visit sign_out_path
+  return if user_or_roles == "guest"
   user, roles = user_or_roles.instance_of?(User) ? [user_or_roles, nil] : [nil, user_or_roles]
   user ||= create(:user, roles: roles)
-  visit sign_out_path
   fill_in I18n.t("email"), with: options[:email] || user.email
   fill_in I18n.t("user.password"), with: options[:password] || "password"
   click_button I18n.t("session.sign_in")

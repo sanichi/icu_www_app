@@ -17,6 +17,7 @@ IcuWwwApp::Application.routes.draw do
 
   resources :clubs,       only: [:index, :show]
   resources :events,      only: [:index, :show]
+  resources :games,       only: [:index, :show]
   resources :images,      only: [:index, :show]
   resources :items,       only: [:new, :create, :destroy]
   resources :new_players, only: [:create]
@@ -46,6 +47,7 @@ IcuWwwApp::Application.routes.draw do
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
     resources :payment_errors,  only: [:index]
+    resources :pgns
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
     resources :tournaments,     only: [:new, :create, :edit, :update, :destroy]

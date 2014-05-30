@@ -42,11 +42,7 @@ describe Tournament do
 
     it "other roles and guests can only view" do
       not_ok_roles.each do |role|
-        if role == "guest"
-          logout
-        else
-          login role
-        end
+        login role
         visit new_admin_tournament_path
         expect(page).to have_css(failure, text: unauthorized)
         visit edit_admin_tournament_path(tournament)

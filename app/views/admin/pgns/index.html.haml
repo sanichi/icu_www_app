@@ -1,0 +1,22 @@
+- content_for :title, "PGN Uploads"
+
+/ = render "utils/search_panel", form: "search_form", title: "PGN Uploads", col: "sm"
+
+.row
+  .col-sm-12
+    - if @pgns.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th= "File name"
+            %th.text-center.col-sm-1= "Games"
+            %th.text-center.col-sm-1= "Imports"
+        %tbody
+          - @pgns.matches.each do |pgn|
+            %tr
+              %td= link_to pgn.file_name, [:admin, pgn]
+              %td.text-center= pgn.game_count
+              %td.text-center= pgn.imports
+          = render "utils/pagination_links", pager: @pgns, columns: 3
+    - if can?(:create, Pgn)
+      = link_to "New", new_admin_pgn_path, class: "btn btn-info"

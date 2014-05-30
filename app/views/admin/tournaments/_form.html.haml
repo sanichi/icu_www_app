@@ -16,8 +16,7 @@
           .row
             .col-sm-12.text-center= f.label :details, t("details"), class: "control-label"
           .row
-            .col-sm-12.voffset1= f.text_area :details, class: "form-control", rows: 30
-
+            .col-sm-12.voffset1= f.text_area :details, class: "form-control significant-space", rows: 30
         %hr
         = f.submit "Save", class: "btn btn-primary"
         - last_path = last_search(:tournaments)

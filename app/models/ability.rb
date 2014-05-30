@@ -12,7 +12,8 @@ class Ability
     if user.editor?
       can :create, Image
       can [:create, :show], Upload
-      can [:destroy, :update], [Image, Upload], user_id: user.id
+      can [:create, :index, :show], Pgn
+      can [:destroy, :update], [Image, Pgn, Upload], user_id: user.id
       can :manage, [Club, Tournament]
     end
 

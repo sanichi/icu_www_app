@@ -1,0 +1,56 @@
+- content_for :title, "PGN Upload"
+
+= render "utils/prev_next", prev: @prev, id: @pgn.id, nixt: @next, namespace: :admin
+
+.row
+  .col-sm-12
+    %table.table.table-bordered
+      %tr
+        %th= "File"
+        %td= @pgn.file_name
+        %th= "Editor"
+        %td= @pgn.user.player.name
+      %tr
+        %th= "Content type"
+        %td= @pgn.content_type
+        %th= "Size"
+        %td= @pgn.file_size
+      %tr
+        %th= "Lines in file"
+        %td= @pgn.lines
+        %th= "Duplicates"
+        %td= @pgn.duplicates
+      %tr
+        %th= "Games in file"
+        %td= @pgn.game_count
+        %th= "Imported from file"
+        %td
+          - if @pgn.imports == 0
+            = @pgn.imports
+          - else
+            - if @pgn.remaining == 0
+              = @pgn.imports
+              = "(none remaining)"
+            - elsif @pgn.remaining == @pgn.imports
+              = link_to @pgn.imports, games_path(pgn_id: @pgn.id)
+            - else
+              = suceed(",") do
+                = @pgn.imports
+              = link_to "#{@pgn.remaining} remaining", games_path(pgn_id: @pgn.id)
+      = render "utils/timestamps", object: @pgn, two_col: true
+      %tr
+        %th= "Problem"
+        %td{colspan: 3}= @pgn.problem
+      %tr
+        %th= "Comment"
+        %td{colspan: 3}= @pgn.comment
+    - if can?(:edit, @pgn)
+      = link_to t("edit"), edit_admin_pgn_path(@pgn), class: "btn btn-primary"
+    - if can?(:destroy, @pgn)
+      = link_to t("delete"), admin_pgn_path(@pgn), data: { confirm: "Sure you want to delete this PGN file#{@pgn.imports > 0 ? ' and associated games' : ''}?" }, method: :delete, class: "btn btn-danger"
+    - if path = last_search(:pgns)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    - else
+      = link_to "PGN Uploads", admin_pgns_path, class: "btn btn-default"
+
+= render "admin/journal_entries/changes", entries: @entries

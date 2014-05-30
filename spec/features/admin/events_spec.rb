@@ -17,7 +17,6 @@ describe Event do
   let(:phone)         { I18n.t("event.phone") }
   let(:prize_fund)    { I18n.t("event.prize_fund") }
   let(:save)          { I18n.t("save") }
-  let(:signed_in_as)  { I18n.t("session.signed_in_as") }
   let(:start_date)    { I18n.t("event.start") }
   let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
   let(:url)           { I18n.t("event.url") }
@@ -50,7 +49,6 @@ describe Event do
     it "admin and owner can update as well as create" do
       level1.each do |role|
         login role
-        expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_event_path
         expect(page).to_not have_css(failure)
         visit edit_admin_event_path(event)
@@ -65,7 +63,6 @@ describe Event do
     it "other editors can only create" do
       level2.each do |role|
         login role
-        expect(page).to have_css(success, text: signed_in_as)
         visit new_admin_event_path
         expect(page).to_not have_css(failure)
         visit edit_admin_event_path(event)
@@ -79,12 +76,7 @@ describe Event do
 
     it "other roles and guests can only view" do
       level3.each do |role|
-        if role == "guest"
-          logout
-        else
-          login role
-          expect(page).to have_css(success, text: signed_in_as)
-        end
+        login role
         visit new_admin_event_path
         expect(page).to have_css(failure, text: unauthorized)
         visit edit_admin_event_path(event)
