@@ -22,7 +22,7 @@ class Player < ActiveRecord::Base
   TRAINER_TITLES = %w[FST FT FI NI DI]
   RATING_TYPES = %w[full provisional]
 
-  default_scope { includes(:club) }
+  scope :include_clubs, -> { includes(:club) }
   scope :non_duplicates, -> { where("player_id IS NULL") }
 
   before_validation :normalize_attributes, :conditional_adjustment
@@ -124,7 +124,7 @@ class Player < ActiveRecord::Base
   def self.search(params, path, opt={})
     params[:status] = "active" unless params.has_key?(:status)
     params[:order] = "id" if params[:order].blank?
-    matches = all
+    matches = include_clubs
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
     matches = matches.where(first_name_like(params[:first_name], params[:last_name])) if params[:first_name].present?
     matches = matches.where(last_name_like(params[:last_name], params[:first_name])) if params[:last_name].present?

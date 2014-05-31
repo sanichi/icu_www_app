@@ -21,13 +21,13 @@ class Pgn < ActiveRecord::Base
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
 
   scope :ordered, -> { order(created_at: :desc) }
-  scope :include_players, -> { joins(:user).includes(user: :player) }
+  scope :include_players, -> { includes(user: :player) }
 
   def self.search(params, path)
-    matches = ordered
+    matches = ordered.include_players
     matches = matches.where("comment LIKE ?", "%#{params[:comment]}%") if params[:comment].present?
     matches = matches.where("file_name LIKE ?", "%#{params[:file_name]}%") if params[:file_name].present?
-    matches = matches.joins(user: :player).where("players.id = ?", params[:player_id]) if params[:player_id].to_s.match(/\A[1-9]\d*\z/)
+    matches = matches.where("players.id = ?", params[:player_id]) if params[:player_id].to_s.match(/\A[1-9]\d*\z/)
     paginate(matches, params, path)
   end
 
