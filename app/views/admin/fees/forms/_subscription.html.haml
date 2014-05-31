@@ -1,6 +1,6 @@
 = render "utils/text_field_for", locals.merge(param: :name, text: t("fee.name"), mark: "required", width: 4)
 = render "utils/text_field_for", locals.merge(param: :amount, text: t("fee.amount"), mark: "required")
-= render "utils/text_field_for", locals.merge(param: :years, text: t("season"), mark: "required", placeholder: "YYYY-YY")
+= render "utils/text_field_for", locals.merge(param: :years, text: t("season"), mark: "required", placeholder: t(:season_format))
 %hr
 = render "utils/text_field_for", locals.merge(param: :min_age, text: t("fee.age.min"))
 = render "utils/text_field_for", locals.merge(param: :max_age, text: t("fee.age.max"))

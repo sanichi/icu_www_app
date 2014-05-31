@@ -14,6 +14,7 @@
       %li{class: active("uploads")}= link_to t("upload.uploads"), uploads_path
       %li{class: active("pages", "shop")}= link_to t("shop.shop"), shop_path
       %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
+      %li{class: active("games")}= link_to t("game.games"), games_path
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"
       = render "layouts/admin_menu"

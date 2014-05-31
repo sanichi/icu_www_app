@@ -7,8 +7,8 @@
         - locals = { form: f, object: @player, col: "sm", pad: 2, width: 4 }
         = render "utils/text_field_for", locals.merge(param: :first_name, text: t("player.first_name"), width: 3)
         = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"), width: 3)
-        = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 3, placeholder: "YYYY-MM-DD")
-        = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: "YYYY-MM-DD")
+        = render "utils/text_field_for", locals.merge(param: :dob, text: t("player.dob"), width: 3, placeholder: t("date_format"))
+        = render "utils/text_field_for", locals.merge(param: :joined, text: t("player.joined"), width: 3, placeholder: t("date_format"))
         = render "utils/text_field_for", locals.merge(param: :email, text: t("email"))
         = render "utils/text_field_for", locals.merge(param: :address, text: t("address"), width: 7)
         = render "utils/text_field_for", locals.merge(param: :home_phone, text: t("player.phone.home"), width: 3)

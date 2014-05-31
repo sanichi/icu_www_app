@@ -1,0 +1,9 @@
+= form_tag games_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :name, text: t("game.white_or_black")
+  = render "utils/inline_text_field", param: :white, text: t("game.white")
+  = render "utils/inline_text_field", param: :black, text: t("game.black")
+  = render "utils/inline_select", param: :result, text: t("game.result"), menu: game_result_menu(params[:result])
+  = render "utils/inline_text_field", param: :eco, text: "ECO", size: 3
+  = render "utils/inline_text_field", param: :date, text: t("game.date_format"), size: 14
+  = render "utils/inline_text_field", param: :event, text: t("game.event"), size: 14
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

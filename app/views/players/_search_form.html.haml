@@ -12,4 +12,4 @@
   = render "utils/inline_select", param: :fed, text: t("player.federation"), menu: player_federation_menu(params[:fed])
   = render "utils/inline_select", param: :title, text: t("player.title.title"), menu: player_title_menu(params[:title])
   = render "utils/inline_select", param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true)
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

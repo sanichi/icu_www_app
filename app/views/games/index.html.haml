@@ -1,0 +1,28 @@
+- content_for :title, t("game.games")
+
+= render "utils/search_panel", form: "search_form", title: t("game.games"), col: "md"
+
+.row
+  .col-md-12
+    - if @games.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th= t("game.white")
+            %th= t("game.black")
+            %th.text-center= t("game.result")
+            %th.text-center= "ECO"
+            %th.text-center= t("game.date")
+            %th= t("game.event")
+        %tbody
+          - @games.matches.each do |game|
+            %tr
+              %td= game.white
+              %td= game.black
+              %td.text-center= link_to game.result, game
+              %td.text-center= game.eco
+              %td.text-center= game.date
+              %td= game.event
+          = render "utils/pagination_links", pager: @games, columns: 6
+    - if can?(:create, Pgn)
+      = link_to t("game.pgn.new"), new_admin_pgn_path, class: "btn btn-info"

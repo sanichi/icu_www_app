@@ -92,7 +92,7 @@
         %tr
           %td{colspan: 2}= @player.note_html
     - if can? :manage, @player
-      = link_to "Edit", edit_admin_player_path(@player), class: "btn btn-primary"
+      = link_to t("edit"), edit_admin_player_path(@player), class: "btn btn-primary"
     - if path = last_search(:players)
       = link_to t("last_search"), path, class: "btn btn-default"
     - else

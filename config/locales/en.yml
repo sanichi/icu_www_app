@@ -37,6 +37,7 @@ en:
   save: Save
   search: Search
   season: Season
+  season_format: YYYY-YY
   show: Show
   type: Type
   under_construction: Under Construction

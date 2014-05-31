@@ -5,4 +5,4 @@
   = render "utils/inline_text_field", param: :player_id, text: t("player.id"), size: 5
   = render "utils/inline_text_field", param: :last_name, text: t("player.last_name"), size: 8
   = render "utils/inline_text_field", param: :first_name, text: t("player.first_name"), size: 8
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

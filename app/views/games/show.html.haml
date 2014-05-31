@@ -1,0 +1,26 @@
+- content_for :title, t("game.game")
+
+= render "utils/prev_next", prev: @prev, id: @game.id, nixt: @next, numbers: false
+
+%h3.text-center
+  = @game.white_with_elo
+  = "—"
+  = @game.black_with_elo
+%p.text-center
+  = succeed(",") do
+    = @game.details
+  %strong= @game.result
+%pre= @game.moves
+
+%hr
+
+%p
+  - if can?(:manage, @game)
+    = link_to t("edit"), edit_admin_game_path(@game), class: "btn btn-primary"
+    = link_to t("delete"), admin_game_path(@game), data: { confirm: "Sure you want to delete this game?" }, method: :delete, class: "btn btn-danger"
+  - if path = last_search(:games)
+    = link_to t("last_search"), path, class: "btn btn-default"
+  - else
+    = link_to t("game.games"), admin_games_path, class: "btn btn-default"
+
+= render "admin/journal_entries/changes", entries: @entries

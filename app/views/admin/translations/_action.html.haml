@@ -1,9 +1,9 @@
 - size = "" unless defined?(size)
 - if translation.deletable?
-  = link_to "Delete", admin_translation_path(translation), data: { confirm: "Sure you want to delete this no-longer-used translation?" }, method: :delete, class: "btn btn-danger #{size}"
+  = link_to t("delete"), admin_translation_path(translation), data: { confirm: "Sure you want to delete this no-longer-used translation?" }, method: :delete, class: "btn btn-danger #{size}"
 - elsif translation.creatable?
   = link_to "Translate", edit_admin_translation_path(translation), class: "btn btn-success #{size}"
 - elsif translation.updatable?
   = link_to "Retranslate", edit_admin_translation_path(translation), class: "btn btn-primary #{size}"
 - else
-  = link_to "Edit", edit_admin_translation_path(translation), class: "btn btn-info #{size}"
+  = link_to t("edit"), edit_admin_translation_path(translation), class: "btn btn-info #{size}"

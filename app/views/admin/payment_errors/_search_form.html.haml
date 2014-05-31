@@ -3,5 +3,5 @@
   = render "utils/inline_text_field", param: :details, text: "Details", size: 12
   = render "utils/inline_text_field", param: :payment_name, text: "Name", size: 12
   = render "utils/inline_text_field", param: :confirmation_email, text: "Email", size: 12
-  = render "utils/inline_text_field", param: :created_at, text: "YYYY-MM-DD", size: 12
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
+  = render "utils/inline_text_field", param: :created_at, text: t("date_format"), size: 12
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

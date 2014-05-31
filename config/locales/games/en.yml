@@ -1,0 +1,14 @@
+en:
+  game:
+    any_result: Any result
+    black: Black
+    date_format: YYYY(-MM(-DD))
+    event: Event
+    game: Game
+    games: Games
+    result: Result
+    unfinished: Unfinished
+    white: White
+    white_or_black: White/Black
+    pgn:
+      new: New PGN Upload

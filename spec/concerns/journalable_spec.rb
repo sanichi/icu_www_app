@@ -10,6 +10,7 @@ describe Journalable do
     [Club, "/clubs/%d"],
     [Event, "/events/%d"],
     [Fee, "/admin/fees/%d"],
+    [Game, "/games/%d"],
     [Image, "/images/%d"],
     [Pgn, "/admin/pgns/%d"],
     [Player, "/admin/players/%d"],

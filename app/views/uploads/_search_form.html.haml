@@ -7,4 +7,4 @@
   - else
     - menu = upload_access_menu(params[:access], Upload.accessibilities_for(current_user), "access.any")
     = render "utils/inline_select", param: :access, text: t("access.access"), menu: menu
-  = button_tag "Search", type: "submit", class: "btn btn-default pull-right"
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

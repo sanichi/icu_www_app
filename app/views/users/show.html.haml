@@ -24,4 +24,4 @@
       %tr
         %th= t("user.locale")
         %td= t("user.lang.#{@user.locale}")
-    = link_to "Edit", edit_user_path(@user), class: "btn btn-primary"
+    = link_to t("edit"), edit_user_path(@user), class: "btn btn-primary"
