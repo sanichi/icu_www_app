@@ -18,6 +18,7 @@ gem "redcarpet"
 gem "stripe"
 gem "mailgun-ruby", require: "mailgun"
 gem "paperclip", "~> 4.1"
+gem "colored"
 
 group :development do
   gem "capistrano"

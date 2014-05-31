@@ -3,20 +3,24 @@
 = render "utils/search_panel", form: "search_form", title: "PGN Uploads", col: "sm"
 
 .row
-  .col-sm-12
+  .col-sm-8.col-sm-offset-2
     - if @pgns.count > 0
       %table{class: "table table-bordered", id: "results"}
         %thead
           %tr
-            %th= "File name"
-            %th.text-center.col-sm-1= "Games"
-            %th.text-center.col-sm-1= "Imports"
+            %th.col-sm-5= "File name"
+            %th.col-sm-1.text-center= "Games"
+            %th.col-sm-1.text-center= "Imports"
+            %th.col-sm-2.text-center= "Uploaded"
+            %th.col-sm-3= "Editor"
         %tbody
           - @pgns.matches.each do |pgn|
             %tr
               %td= link_to pgn.file_name, [:admin, pgn]
               %td.text-center= pgn.game_count
               %td.text-center= pgn.imports
-          = render "utils/pagination_links", pager: @pgns, columns: 3
+              %td.text-center= pgn.created_at.to_date.to_s
+              %td= pgn.user.name
+          = render "utils/pagination_links", pager: @pgns, columns: 5
     - if can?(:create, Pgn)
       = link_to "New", new_admin_pgn_path, class: "btn btn-info"

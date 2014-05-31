@@ -5,6 +5,7 @@ module ICU
         check_duplicate_players
         check_user_players
         check_club_players
+        check_games
       end
 
       private
@@ -57,16 +58,27 @@ module ICU
         report("Players with invalid club", invalid_clubs)
       end
 
+      def check_games
+        @pgn = ::Pgn.all.each_with_object({}) do |pgn, hash|
+          hash[pgn.id] = pgn
+        end
+
+        games_without_pgns = ::Game.all.each_with_object([]) do |game, missing|
+          missing << game.id unless @pgn[game.pgn_id]
+        end
+        report("Games without pgns", games_without_pgns)
+      end
+
       def report(topic, ids)
         if ids.any?
           message = "#{topic} (#{ids.size}): "
           if ids.size > 20
             ids = ids[0,10] << "..." << ids[-10,10]
           end
-          message << ids.join(",")
-          puts message
+          message << ids.join(",").red
+          puts message.red
         else
-          puts "#{topic}: none"
+          puts "#{topic}: " + "none".green
         end
       end
     end
