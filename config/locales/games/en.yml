@@ -1,14 +1,21 @@
 en:
   game:
+    annotator: Annotator
     any_result: Any result
     black: Black
-    date_format: YYYY(-MM(-DD))
+    black_elo: Black's rating
+    date_search_format: YYYY(-MM(-DD))
+    date_db_format: YYYY.MM.DD
     event: Event
     game: Game
     games: Games
+    moves: Moves
+    ply: Ply
     result: Result
-    unfinished: Unfinished
+    round: Round
+    site: Site
     white: White
+    white_elo: White's rating
     white_or_black: White/Black
     pgn:
       new: New PGN Upload

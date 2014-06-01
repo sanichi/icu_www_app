@@ -1,0 +1,26 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @game], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %h2= "Edit game"
+        %hr
+        - locals = { form: f, object: @game, col: "sm", pad: 2, width: 4 }
+        = render "utils/text_field_for", locals.merge(param: :white, text: t("game.white"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :black, text: t("game.black"), width: 3)
+        = render "utils/select_for", locals.merge(param: :result, text: t("game.result"), width: 2, menu: game_result_menu(@game.result))
+        = render "utils/text_field_for", locals.merge(param: :event, text: t("game.event"), width: 4)
+        = render "utils/text_field_for", locals.merge(param: :round, text: t("game.round"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :date, text: t("date"), width: 2, placeholder: t("game.date_db_format"))
+        = render "utils/text_field_for", locals.merge(param: :site, text: t("game.site"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :eco, text: "ECO", width: 2)
+        = render "utils/text_field_for", locals.merge(param: :ply, text: t("game.ply"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :fen, text: "FEN", width: 4)
+        = render "utils/text_field_for", locals.merge(param: :white_elo, text: t("game.white_elo"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :black_elo, text: t("game.black_elo"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :annotator, text: t("game.annotator"), width: 3)
+        = render "utils/text_area_for", locals.merge(param: :moves, text: t("game.moves"), width: 10, rows: 20, klass: "significant-space")
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), @game, class: "btn btn-default"
+        - if last_path = last_search(:games)
+          = link_to t("last_search"), last_path, class: "btn btn-default"

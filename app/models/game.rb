@@ -14,7 +14,6 @@ class Game < ActiveRecord::Base
   validates :black_elo, :white_elo, numericality: { integer_only: true, greater_than: 0, less_than: MAX_ELO }, allow_nil: true
   validates :date, format: { with: /\A\d{4}\.(0[1-9]|1[012]|\?\?)\.(0[1-9]|[12][0-9]|3[01]|\?\?)\z/ }
   validates :eco, format: { with: /\A[A-E]\d\d\z/ }, allow_nil: true
-  validates :event, presence: true
   validates :signature, length: { is: 32 }, uniqueness: true
   validates :moves, presence: true
   validates :pgn_id, numericality: { integer_only: true, greater_than: 0 }
@@ -101,7 +100,7 @@ class Game < ActiveRecord::Base
 
   def details
     details = []
-    details.push event
+    details.push event if event.present?
     details.push site if site.present?
     details.push date[0,4]
     details.join(", ")
@@ -110,7 +109,7 @@ class Game < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[annotator eco fen round site].each do |atr|
+    %w[annotator eco event fen round site].each do |atr|
       if send(atr).blank? || send(atr).trim.match(/\A\?+\z/)
         send("#{atr}=", nil)
       end
@@ -119,6 +118,14 @@ class Game < ActiveRecord::Base
       self.result = "½-½"
     elsif result == "*"
       self.result = "?-?"
+    end
+    if moves.present?
+      moves.gsub!(/\r\n/, "\n")
+    end
+    if date.present?
+      parts = date.scan(/\d+/).map{ |n| n.length == 1 ? "0#{n}" : n }
+      parts.append('??') while parts.size < 3
+      self.date = parts.join(".")
     end
   end
 

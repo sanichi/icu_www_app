@@ -14,6 +14,7 @@ class Ability
       can [:create, :show], Upload
       can [:create, :index, :show], Pgn
       can [:destroy, :update], [Image, Pgn, Upload], user_id: user.id
+      can [:destroy, :update], Game, pgn: { user_id: user.id }
       can :manage, [Club, Tournament]
     end
 

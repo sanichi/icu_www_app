@@ -24,6 +24,7 @@ describe Journalable do
       it "setup correctly" do
         expect(invalid(klass)).to eq ""
         expect(klass.journalable_path).to eq path
+        expect(JournalEntry).to respond_to(klass.to_s.tableize.to_sym)
       end
     end
   end
