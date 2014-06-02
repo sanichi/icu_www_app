@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Game do
-  context "#signature" do
-    let(:game) { create(:game) }
+  let(:game) { create(:game) }
 
+  context "#signature" do
     before(:each) do
       @signature = game.signature
     end
@@ -59,6 +59,39 @@ describe Game do
     it "variations are ignored" do
       game.moves.sub!(/17\.Kd5/, "17.Kd5 ( 17.Kc5 b6+ 18.Kd5 Nb4# )")
       expect(game.send(:sign)).to eq @signature
+    end
+  end
+
+  context "#normalize_name" do
+    def normalize(name)
+      game.send(:normalize_name, name)
+    end
+
+    it "never a space before a comma, always a space after" do
+      expect(normalize("Orr  ,M")).to eq "Orr, M"
+    end
+
+    it "no periods" do
+      expect(normalize("Orr, Mark J. L.")).to eq "Orr, Mark J L"
+    end
+
+    it "only one way to represent an apostrophe" do
+      expect(normalize("O ` Reilly, E")).to eq "O'Reilly, E"
+    end
+
+    it "single letter o followed by space" do
+      expect(normalize("O Boyle, Una")).to eq "O'Boyle, Una"
+    end
+
+    it "trimmed white space" do
+      expect(normalize("  Orr, Mark \t  J L \t")).to eq "Orr, Mark J L"
+    end
+
+    it "side effect of validation" do
+      g = Game.new(white: " O ′ Fischer , Robert  J . ", black: " O’ Tal  ,   Mikhail  N . ")
+      expect(g.valid?).to be false
+      expect(g.white).to eq "O'Fischer, Robert J"
+      expect(g.black).to eq "O'Tal, Mikhail N"
     end
   end
 end

@@ -64,14 +64,13 @@ describe Game do
     end
 
     it "black" do
-      black_ = "Tal,M"
-      fill_in black, with: black_
+      fill_in black, with: "Tal,M."
       click_button save
 
       expect(page).to have_css(success, text: updated_text)
       game.reload
 
-      expect(game.black).to eq black_
+      expect(game.black).to eq "Tal, M"
       expect(JournalEntry.games.where(action: "update", by: user.signature, journalable_id: game.id, column: "black").count).to eq 1
       expect(JournalEntry.games.count).to eq 1
     end
@@ -122,14 +121,13 @@ describe Game do
     end
 
     it "round" do
-      round_ = "1.2"
-      fill_in round, with: round_
+      fill_in round, with: " 1.2 "
       click_button save
 
       expect(page).to have_css(success, text: updated_text)
       game.reload
 
-      expect(game.round).to eq round_
+      expect(game.round).to eq "1.2"
       expect(JournalEntry.games.where(action: "update", by: user.signature, journalable_id: game.id, column: "round").count).to eq 1
       expect(JournalEntry.games.count).to eq 1
     end
@@ -159,14 +157,13 @@ describe Game do
     end
 
     it "white" do
-      white_ = "Kasparov,G"
-      fill_in white, with: white_
+      fill_in white, with: "Kasparov,G."
       click_button save
 
       expect(page).to have_css(success, text: updated_text)
       game.reload
 
-      expect(game.white).to eq white_
+      expect(game.white).to eq "Kasparov, G"
       expect(JournalEntry.games.where(action: "update", by: user.signature, journalable_id: game.id, column: "white").count).to eq 1
       expect(JournalEntry.games.count).to eq 1
     end

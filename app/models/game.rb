@@ -112,6 +112,8 @@ class Game < ActiveRecord::Base
     %w[annotator eco event fen round site].each do |atr|
       if send(atr).blank? || send(atr).trim.match(/\A\?+\z/)
         send("#{atr}=", nil)
+      else
+        send("#{atr}=", send(atr).trim)
       end
     end
     if result == "1/2-1/2"
@@ -127,6 +129,16 @@ class Game < ActiveRecord::Base
       parts.append('??') while parts.size < 3
       self.date = parts.join(".")
     end
+    normalize_name(white) if white.present?
+    normalize_name(black) if black.present?
+  end
+
+  def normalize_name(name)
+    name.gsub!(/\s*,\s*/, ", ")          # no space before comma, always space after
+    name.gsub!(/\./, "")                 # no periods, e.g. after an initial
+    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")  # apostrophe is a single quote and never surrounded by spaces
+    name.gsub!(/\bO\s+([A-Z])/, "O'\\1") # for example "O'Boyle", not "O Boyle"
+    name.trim!
   end
 
   def sign

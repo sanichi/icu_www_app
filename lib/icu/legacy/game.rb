@@ -62,6 +62,8 @@ module ICU
 
       def adjust(params)
         params[:date] = "#{$1}.??.??" if params[:date].match(/\A(\d{4})\.\?\?\.\d\d\z/)
+        params[:annotator] = nil if params[:annotator].match(/\A\s*(,|Robot)/)
+        params[:annotator] = "W.H.Cozens" if params[:id] == 26839
       end
 
       def existing_games?(force)
