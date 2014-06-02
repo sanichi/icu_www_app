@@ -9,15 +9,15 @@
       The following list indicates what's been done (crossed out) and what's still left to do.
     %ul
       %li= render partial: "todo", locals: { topic: "Users", items: { sessions: true, logins: true, admin: true, preferences: true, legacy_sync: true, ratings_sync: false, documentation: false } }
-      %li= render partial: "todo", locals: { topic: "English/Irish", items: { database: true, admin: true, switching: true, caching: true, translations: true, documentation: false } }
-      %li= render partial: "todo", locals: { topic: "Clubs", items: { database: true, admin: true, legacy_sync: true, maps: false, ducumentation: false } }
-      %li= render partial: "todo", locals: { topic: "Players", items: { database: true, admin: true, legacy_sync: true, ratings_sync: false, documentation: false } }
-      %li= render partial: "todo", locals: { topic: "Shop", items: { database: true, admin: true, user: true, payments: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Images", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Calendar", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Uploads", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Tournaments", items: { database: true, admin: true, user: true, legacy_sync: true, documentation: false} }
-      %li= render partial: "todo", locals: { topic: "Games", items: nil }
+      %li= render partial: "todo", locals: { topic: "English/Irish", items: { admin: true, switching: true, caching: true, translations: true, documentation: false } }
+      %li= render partial: "todo", locals: { topic: "Clubs", items: { admin: true, user: true, legacy_sync: true, maps: false, ducumentation: false } }
+      %li= render partial: "todo", locals: { topic: "Players", items: { admin: true, legacy_sync: true, ratings_sync: false, documentation: false } }
+      %li= render partial: "todo", locals: { topic: "Shop", items: { admin: true, user: true, payments: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Images", items: { admin: true, user: true, legacy_sync: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Calendar", items: { admin: true, user: true, legacy_sync: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Uploads", items: { admin: true, user: true, legacy_sync: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Tournaments", items: { admin: true, user: true, legacy_sync: true, documentation: false} }
+      %li= render partial: "todo", locals: { topic: "Games", items: { admin: true, user: true, legacy_sync: true, javascript_viewer: false, documentation: false } }
       %li= render partial: "todo", locals: { topic: "News", items: nil }
       %li= render partial: "todo", locals: { topic: "Articles", items: nil }
       %li= render partial: "todo", locals: { topic: "Juniors", items: nil }

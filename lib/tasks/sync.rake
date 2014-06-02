@@ -65,6 +65,11 @@ namespace :sync do
     ICU::Legacy::Pgn.new.synchronize(args[:force])
   end
 
+  desc "Convert icuadmi_main/pgn to www_production/games"
+  task :games, [:force] => :environment do |task, args|
+    ICU::Legacy::Game.new.synchronize(args[:force])
+  end
+
   desc "Check all synchronized data"
   task :check => :environment do |task|
     ICU::Legacy::Check.new.check

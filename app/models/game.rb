@@ -14,7 +14,7 @@ class Game < ActiveRecord::Base
   validates :black_elo, :white_elo, numericality: { integer_only: true, greater_than: 0, less_than: MAX_ELO }, allow_nil: true
   validates :date, format: { with: /\A\d{4}\.(0[1-9]|1[012]|\?\?)\.(0[1-9]|[12][0-9]|3[01]|\?\?)\z/ }
   validates :eco, format: { with: /\A[A-E]\d\d\z/ }, allow_nil: true
-  validates :signature, length: { is: 32 }, uniqueness: true
+  validates :signature, length: { is: 32 }, uniqueness: { message: "duplicate detected" }
   validates :moves, presence: true
   validates :pgn_id, numericality: { integer_only: true, greater_than: 0 }
   validates :ply, numericality: { integer_only: true, greater_than: 0 }, allow_nil: true

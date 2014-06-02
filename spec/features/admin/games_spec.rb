@@ -45,12 +45,13 @@ describe Game do
   end
 
   context "edit" do
-    let(:date)  { I18n.t("date") }
-    let(:black) { I18n.t("game.black") }
-    let(:event) { I18n.t("game.event") }
-    let(:moves) { I18n.t("game.moves") }
-    let(:round) { I18n.t("game.round") }
-    let(:white) { I18n.t("game.white") }
+    let(:date)   { I18n.t("date") }
+    let(:black)  { I18n.t("game.black") }
+    let(:event)  { I18n.t("game.event") }
+    let(:moves)  { I18n.t("game.moves") }
+    let(:result) { I18n.t("game.result") }
+    let(:round)  { I18n.t("game.round") }
+    let(:white)  { I18n.t("game.white") }
 
     let(:updated_text) { "successfully updated" }
 
@@ -105,6 +106,19 @@ describe Game do
 
       expect(JournalEntry.games.where(action: "update", by: user.signature, journalable_id: game.id, column: "date").count).to eq 3
       expect(JournalEntry.games.count).to eq 3
+    end
+
+    it "result" do
+      draw = "½-½"
+      select draw, from: result
+      click_button save
+
+      expect(page).to have_css(success, text: updated_text)
+      game.reload
+
+      expect(game.result).to eq draw
+      expect(JournalEntry.games.where(action: "update", by: user.signature, journalable_id: game.id, column: "result").count).to eq 1
+      expect(JournalEntry.games.count).to eq 1
     end
 
     it "round" do
