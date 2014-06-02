@@ -76,6 +76,12 @@ describe Game do
       expect(normalize("Rynd, J.A.P.")).to eq "Rynd, J A P"
     end
 
+    it "split up initials" do
+      expect(normalize("Harvey, EL")).to eq "Harvey, E L"
+      expect(normalize("Rynd, JA Porterfield")).to eq "Rynd, J A Porterfield"
+      expect(normalize("Rynd,JAPorterfield")).to eq "Rynd, J A Porterfield"
+    end
+
     it "only one way to represent an apostrophe" do
       expect(normalize("O ` Reilly, E")).to eq "O'Reilly, E"
     end
