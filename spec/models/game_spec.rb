@@ -9,13 +9,13 @@ describe Game do
     end
 
     it "components" do
-      expect(game.black).to eq "Orr,M"
+      expect(game.black).to eq "Orr, M"
       expect(game.date).to eq "1998.07.12"
       expect(game.moves).to match /9\.Qd3/
       expect(game.moves).to match /Qxc3\+/
       expect(game.moves).to match /17\.Kd5/
       expect(game.result).to match "0-1"
-      expect(game.white).to eq "Lee,C"
+      expect(game.white).to eq "Lee, C"
     end
 
     it "comments are ignored" do
@@ -81,6 +81,7 @@ describe Game do
 
     it "single letter o followed by space" do
       expect(normalize("O Boyle, Una")).to eq "O'Boyle, Una"
+      expect(normalize("O  Malley, O E M")).to eq "O'Malley, O E M"
     end
 
     it "trimmed white space" do

@@ -134,10 +134,10 @@ class Game < ActiveRecord::Base
   end
 
   def normalize_name(name)
-    name.gsub!(/\s*,\s*/, ", ")          # no space before comma, always space after
-    name.gsub!(/\./, "")                 # no periods, e.g. after an initial
-    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")  # apostrophe is a single quote and never surrounded by spaces
-    name.gsub!(/\bO\s+([A-Z])/, "O'\\1") # for example "O'Boyle", not "O Boyle"
+    name.gsub!(/\s*,\s*/, ", ")              # no space before comma, always one space after
+    name.gsub!(/\./, "")                     # no periods, e.g. after an initial
+    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")      # apostrophe is a single quote and never surrounded by spaces
+    name.gsub!(/\A\s*O\s+([A-Z])/i, "O'\\1") # for example "O'Boyle", not "O Boyle"
     name.trim!
   end
 
