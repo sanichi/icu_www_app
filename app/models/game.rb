@@ -107,17 +107,17 @@ class Game < ActiveRecord::Base
   end
 
   def self.normalize_name(name, search=false)
-    name.gsub!(/\s*,\s*/, ", ")                # no space before comma, always one space after
-    name.gsub!(/\./, " ")                      # no periods, e.g. after an initial
-    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")        # apostrophe is a single quote and never surrounded by spaces
+    name.gsub!(/\s*,\s*/, ", ")                   # no space before comma, always one space after
+    name.gsub!(/\./, " ")                         # no periods, e.g. after an initial
+    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")           # apostrophe is a single quote and never surrounded by spaces
+    name.gsub!(/\A\s*O\s+([A-Z][a-z])/i, "O'\\1") # for example "O'Boyle", not "O Boyle"
     name.sub!(/, ([A-Z]{2,})/) do
-      ", #{$1.split('').join(' ')}"            # split up runs of two or more initials
+      ", #{$1.split('').join(' ')}"               # split up runs of two or more initials
     end
     if search
-      name.gsub!(/\s+/, " ")                   # search strings don't have to be full names so don't trim white space at edges
+      name.gsub!(/\s+/, " ")                      # search strings don't have to be full names so don't trim white space at edges
     else
-      name.gsub!(/\A\s*O\s+([A-Z])/i, "O'\\1") # for example "O'Boyle", not "O Boyle"
-      name.trim!                               # trim white space (see initializers/string.rb)
+      name.trim!                                  # trim white space (see initializers/string.rb)
     end
     name
   end
