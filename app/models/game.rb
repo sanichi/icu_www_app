@@ -55,11 +55,11 @@ class Game < ActiveRecord::Base
       end
     end
     if params[:name].present?
-      name = "%#{params[:name]}%"
+      name = "%#{normalize_name(params[:name], true)}%"
       matches = matches.where("white LIKE ? OR black LIKE ?", name, name)
     else
-      matches = matches.where("white LIKE ?", "%#{params[:white]}%") if params[:white].present?
-      matches = matches.where("black LIKE ?", "%#{params[:black]}%") if params[:black].present?
+      matches = matches.where("white LIKE ?", "%#{normalize_name(params[:white], true)}%") if params[:white].present?
+      matches = matches.where("black LIKE ?", "%#{normalize_name(params[:black], true)}%") if params[:black].present?
     end
     matches = matches.where(result: params[:result]) if RESULTS.include?(params[:result])
     matches = matches.where("result LIKE ?", "%#{params[:result]}%") if params[:result].present?
@@ -106,6 +106,19 @@ class Game < ActiveRecord::Base
     details.join(", ")
   end
 
+  def self.normalize_name(name, search=false)
+    name.gsub!(/\s*,\s*/, ", ")                # no space before comma, always one space after
+    name.gsub!(/\./, "")                       # no periods, e.g. after an initial
+    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")        # apostrophe is a single quote and never surrounded by spaces
+    if search
+      name.gsub!(/\s+/, " ")                   # search strings don't have to be full names so don't trim white space at edges
+    else
+      name.gsub!(/\A\s*O\s+([A-Z])/i, "O'\\1") # for example "O'Boyle", not "O Boyle"
+      name.trim!                               # trim white space (see initializers/string.rb)
+    end
+    name
+  end
+
   private
 
   def normalize_attributes
@@ -129,16 +142,8 @@ class Game < ActiveRecord::Base
       parts.append('??') while parts.size < 3
       self.date = parts.join(".")
     end
-    normalize_name(white) if white.present?
-    normalize_name(black) if black.present?
-  end
-
-  def normalize_name(name)
-    name.gsub!(/\s*,\s*/, ", ")              # no space before comma, always one space after
-    name.gsub!(/\./, "")                     # no periods, e.g. after an initial
-    name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")      # apostrophe is a single quote and never surrounded by spaces
-    name.gsub!(/\A\s*O\s+([A-Z])/i, "O'\\1") # for example "O'Boyle", not "O Boyle"
-    name.trim!
+    Game.normalize_name(white) if white.present?
+    Game.normalize_name(black) if black.present?
   end
 
   def sign

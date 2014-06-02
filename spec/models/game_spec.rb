@@ -64,7 +64,7 @@ describe Game do
 
   context "#normalize_name" do
     def normalize(name)
-      game.send(:normalize_name, name)
+      Game.normalize_name(name)
     end
 
     it "never a space before a comma, always a space after" do
