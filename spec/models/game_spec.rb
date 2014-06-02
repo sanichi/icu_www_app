@@ -73,6 +73,7 @@ describe Game do
 
     it "no periods" do
       expect(normalize("Orr, Mark J. L.")).to eq "Orr, Mark J L"
+      expect(normalize("Rynd, J.A.P.")).to eq "Rynd, J A P"
     end
 
     it "only one way to represent an apostrophe" do

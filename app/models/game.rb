@@ -108,7 +108,7 @@ class Game < ActiveRecord::Base
 
   def self.normalize_name(name, search=false)
     name.gsub!(/\s*,\s*/, ", ")                # no space before comma, always one space after
-    name.gsub!(/\./, "")                       # no periods, e.g. after an initial
+    name.gsub!(/\./, " ")                      # no periods, e.g. after an initial
     name.gsub!(/\s*[`‘’‛'′´`]\s*/, "'")        # apostrophe is a single quote and never surrounded by spaces
     if search
       name.gsub!(/\s+/, " ")                   # search strings don't have to be full names so don't trim white space at edges
