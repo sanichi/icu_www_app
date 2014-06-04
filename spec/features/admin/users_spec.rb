@@ -1,27 +1,27 @@
 require 'spec_helper'
 
 describe User do
-  let(:administrator) { I18n.t("user.role.admin") }
-  let(:delete)        { I18n.t("delete") }
-  let(:edit)          { I18n.t("edit") }
-  let(:editor)        { I18n.t("user.role.editor") }
-  let(:email)         { I18n.t("email") }
-  let(:expires)       { I18n.t("user.expires") }
-  let(:password)      { I18n.t("user.password") }
-  let(:role)          { I18n.t("user.role.role") }
-  let(:roles)         { I18n.t("user.role.roles") }
-  let(:save)          { I18n.t("save") }
-  let(:search)        { I18n.t("search") }
-  let(:sign_in)       { I18n.t("session.sign_in") }
-  let(:sign_out)      { I18n.t("session.sign_out") }
-  let(:signed_in_as)  { I18n.t("session.signed_in_as") }
-  let(:status)        { I18n.t("user.status") }
-  let(:translator)    { I18n.t("user.role.translator") }
-  let(:treasurer)     { I18n.t("user.role.treasurer") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
-  let(:user_account)  { I18n.t("user.account") }
-  let(:verified)      { I18n.t("user.verified") }
-  let(:verify)        { I18n.t("user.verify") }
+  let(:administrator)  { I18n.t("user.role.admin") }
+  let(:delete)         { I18n.t("delete") }
+  let(:edit)           { I18n.t("edit") }
+  let(:editor)         { I18n.t("user.role.editor") }
+  let(:email_input)    { I18n.t("email") }
+  let(:expires)        { I18n.t("user.expires") }
+  let(:password_input) { I18n.t("user.password") }
+  let(:role)           { I18n.t("user.role.role") }
+  let(:roles)          { I18n.t("user.role.roles") }
+  let(:save)           { I18n.t("save") }
+  let(:search)         { I18n.t("search") }
+  let(:sign_in)        { I18n.t("session.sign_in") }
+  let(:sign_out)       { I18n.t("session.sign_out") }
+  let(:signed_in_as)   { I18n.t("session.signed_in_as") }
+  let(:status)         { I18n.t("user.status") }
+  let(:translator)     { I18n.t("user.role.translator") }
+  let(:treasurer)      { I18n.t("user.role.treasurer") }
+  let(:unauthorized)   { I18n.t("errors.alerts.unauthorized") }
+  let(:user_account)   { I18n.t("user.account") }
+  let(:verified)       { I18n.t("user.verified") }
+  let(:verify)         { I18n.t("user.verify") }
 
   let(:failure)     { "div.alert-danger" }
   let(:field_error) { "div.help-block" }
@@ -59,39 +59,38 @@ describe User do
     let(:user)         { create(:user) }
     let(:player_path)  { admin_player_path(player) }
     let(:new_user)     { "New user" }
-    let(:email_)       { "joe@example.com" }
-    let(:password_)    { "new passw0rd" }
+    let(:email)        { "joe@example.com" }
+    let(:password)     { "new passw0rd" }
     let(:expires_on)   { Date.today.years_since(1).end_of_year }
     let(:created)      { "User was successfully created" }
     let(:role)         { "translator" }
-    let(:role_)        { I18n.t("user.role.#{role}") }
 
     it "add a user to a player" do
       login "admin"
       visit player_path
 
       click_link new_user
-      fill_in email, with: user.email
-      fill_in password, with: password_
+      fill_in email_input, with: user.email
+      fill_in password_input, with: password
       fill_in expires, with: expires_on
-      select role_, from: roles
+      select I18n.t("user.role.#{role}"), from: roles
 
       click_button save
       expect(page).to have_css(field_error, text: "taken")
 
-      fill_in email, with: email_
+      fill_in email_input, with: email
       click_button save
       expect(page).to have_css(success, text: created)
 
-      new_user = User.find_by(email: email_)
+      new_user = User.find_by(email: email)
       expect(new_user.roles).to eq role
       expect(new_user.player_id).to eq player.id
       expect(new_user.status).to eq User::OK
       expect(new_user.verified?).to be_true
 
       click_link sign_out
-      fill_in email, with: email_
-      fill_in password, with: password_
+      fill_in email_input, with: email
+      fill_in password_input, with: password
       click_button sign_in
       expect(page).to have_css(success, text: signed_in_as)
     end
@@ -110,21 +109,21 @@ describe User do
       visit edit_path
 
       new_password = "blah"
-      fill_in password, with: new_password
+      fill_in password_input, with: new_password
       click_button save
       expect(page).to have_css(field_error, text: min_length)
       user.reload
       expect(user.encrypted_password).to eq(old_encrypted_password)
 
       new_password = "blahblah"
-      fill_in password, with: new_password
+      fill_in password_input, with: new_password
       click_button save
       expect(page).to have_css(field_error, text: no_digits)
       user.reload
       expect(user.encrypted_password).to eq(old_encrypted_password)
 
       new_password = "blah1234"
-      fill_in password, with: new_password
+      fill_in password_input, with: new_password
       click_button save
       expect(page).to have_css(success, text: updated)
       user.reload
@@ -253,7 +252,7 @@ describe User do
     end
 
     it "email" do
-      fill_in email, with: @admin.email
+      fill_in email_input, with: @admin.email
       click_button search
       expect(page).to have_xpath(@xpath, count: 1)
     end

@@ -1,26 +1,24 @@
 require 'spec_helper'
 
 describe Tournament do
-  let(:active)       { I18n.t("active") }
-  let(:category_)    { I18n.t("tournament.category.category") }
-  let(:city_)        { I18n.t("city") }
-  let(:delete)       { I18n.t("delete") }
-  let(:edit)         { I18n.t("edit") }
-  let(:details_)     { I18n.t("details") }
-  let(:format_)      { I18n.t("tournament.format.format") }
-  let(:name_)        { I18n.t("name") }
-  let(:save)         { I18n.t("save") }
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
-  let(:year_)        { I18n.t("year") }
+  let(:active)        { I18n.t("active") }
+  let(:category_menu) { I18n.t("tournament.category.category") }
+  let(:city_input)    { I18n.t("city") }
+  let(:delete)        { I18n.t("delete") }
+  let(:edit)          { I18n.t("edit") }
+  let(:details_text)  { I18n.t("details") }
+  let(:format_menu)   { I18n.t("tournament.format.format") }
+  let(:name_input)    { I18n.t("name") }
+  let(:save)          { I18n.t("save") }
+  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:year_input)    { I18n.t("year") }
 
-  let(:champs)       { "championship" }
-  let(:dup_error)    { "once per year" }
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:header)       { "h1" }
-  let(:success)      { "div.alert-success" }
-  let(:success_text) { "successfully created" }
-  let(:swiss)        { "swiss" }
+  let(:dup_error)     { "once per year" }
+  let(:failure)       { "div.alert-danger" }
+  let(:field_error)   { "div.help-block" }
+  let(:header)        { "h1" }
+  let(:success)       { "div.alert-success" }
+  let(:success_text)  { "successfully created" }
 
   context "authorization" do
     let(:level1)     { %w[admin editor] }
@@ -55,21 +53,21 @@ describe Tournament do
   end
 
   context "create" do
-    let(:champs_) { I18n.t("tournament.category.#{champs}") }
-    let(:city)    { "Armagh" }
-    let(:details) { "Champion: M.J.L.Orr\n\n9 round swiss, 20 players\n\nPlace Name       Score\n\n1     M.J.L.Orr  7\n\n2     B.Kelly    6" }
-    let(:name)    { "Irish Championships" }
-    let(:swiss_)  { I18n.t("tournament.format.#{swiss}") }
-    let(:year)    { 1994 }
+    let(:category) { "championship" }
+    let(:city)     { "Armagh" }
+    let(:details)  { "Champion: M.J.L.Orr\n\n9 round swiss, 20 players\n\nPlace Name       Score\n\n1     M.J.L.Orr  7\n\n2     B.Kelly    6" }
+    let(:name)     { "Irish Championships" }
+    let(:format)   { "swiss" }
+    let(:year)     { 1994 }
 
     before(:each) do
       @user = login("editor")
       visit new_admin_tournament_path
-      fill_in name_, with: name
-      fill_in year_, with: year
-      select champs_, from: category_
-      select swiss_, from: format_
-      fill_in details_, with: details
+      fill_in name_input, with: name
+      fill_in year_input, with: year
+      select I18n.t("tournament.category.#{category}"), from: category_menu
+      select I18n.t("tournament.format.#{format}"), from: format_menu
+      fill_in details_text, with: details
     end
 
     it "minimum data" do
@@ -80,9 +78,9 @@ describe Tournament do
       tournament = Tournament.first
 
       expect(tournament.active).to be_false
-      expect(tournament.category).to eq champs
+      expect(tournament.category).to eq category
       expect(tournament.city).to be_nil
-      expect(tournament.format).to eq swiss
+      expect(tournament.format).to eq format
       expect(tournament.name).to eq name
       expect(tournament.year).to eq year
 
@@ -90,7 +88,7 @@ describe Tournament do
     end
 
     it "maximum data" do
-      fill_in city_, with: city
+      fill_in city_input, with: city
       check active
       click_button save
 
@@ -112,7 +110,7 @@ describe Tournament do
       expect(page).to have_css(field_error, text: dup_error)
       expect(Tournament.count).to eq 1
 
-      fill_in year_, with: year + 1
+      fill_in year_input, with: year + 1
       click_button save
 
       expect(page).to have_css(success, text: success_text)
@@ -133,7 +131,7 @@ describe Tournament do
     end
 
     it "year" do
-      fill_in year_, with: year
+      fill_in year_input, with: year
       click_button save
 
       tournament.reload

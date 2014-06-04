@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe Pgn do
-  let(:comment)   { I18n.t("comment") }
-  let(:delete)    { I18n.t("delete") }
-  let(:edit)      { I18n.t("edit") }
-  let(:file)      { I18n.t("file") }
-  let(:save)      { I18n.t("save") }
+  let(:comment_input) { I18n.t("comment") }
+  let(:delete)        { I18n.t("delete") }
+  let(:edit)          { I18n.t("edit") }
+  let(:file)          { I18n.t("file") }
+  let(:save)          { I18n.t("save") }
 
-  let(:import)    { "Import?" }
+  let(:import) { "Import?" }
 
-  let(:failure)   { "div.alert-danger" }
-  let(:success)   { "div.alert-success" }
-  let(:warning)   { "div.alert-warning" }
+  let(:failure) { "div.alert-danger" }
+  let(:success) { "div.alert-success" }
+  let(:warning) { "div.alert-warning" }
 
-  let(:pgn_dir)   { Rails.root + "spec/files/pgns/" }
+  let(:pgn_dir) { Rails.root + "spec/files/pgns/" }
 
   context "authorization" do
     let(:cell)         { "//td[.='#{pgn.file_name}']" }
@@ -73,7 +73,7 @@ describe Pgn do
   end
 
   context "create" do
-    let(:comment_)  { "Mark Orr's Best Games" }
+    let(:comment)   { "Mark Orr's Best Games" }
     let(:file_name) { "mjo.pgn" }
     let(:imported)  { "games imported" }
     let(:parsed)    { "parsed successfully" }
@@ -85,14 +85,14 @@ describe Pgn do
 
     it "check" do
       attach_file file, pgn_dir + file_name
-      fill_in comment, with: comment_
+      fill_in comment, with: comment
       click_button save
       expect(page).to have_css(warning, text: parsed)
 
       expect(Pgn.count).to eq 1
       pgn = Pgn.first
 
-      expect(pgn.comment).to eq comment_
+      expect(pgn.comment).to eq comment
       expect(pgn.content_type).to eq "text/plain"
       expect(pgn.duplicates).to eq 0
       expect(pgn.file_name).to eq file_name
@@ -133,8 +133,8 @@ describe Pgn do
   end
 
   context "edit" do
-    let(:comment_) { "I like to comment" }
-    let(:updated)  { "successfully updated" }
+    let(:comment) { "I like to comment" }
+    let(:updated) { "successfully updated" }
 
     before(:each) do
       @user = login "editor"
@@ -150,13 +150,13 @@ describe Pgn do
       expect(pgn.comment).to be_nil
 
       click_link edit
-      fill_in comment, with: comment_
+      fill_in comment, with: comment
       click_button save
 
       expect(page).to have_css(success, text: updated)
 
       pgn.reload
-      expect(pgn.comment).to eq comment_
+      expect(pgn.comment).to eq comment
 
       expect(JournalEntry.pgns.where(action: "update", by: @user.signature, journalable_id: pgn.id, column: "comment").count).to eq 1
     end

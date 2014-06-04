@@ -50,8 +50,8 @@ describe Translation do
     end
 
     it "find and translate an untranslated english phrase" do
-      key_ = "user.role.translator"
-      translation = Translation.find_by(key: key_)
+      key = "user.role.translator"
+      translation = Translation.find_by(key: key)
       irish = "Aistritheoir"
 
       login "translator"
@@ -59,7 +59,7 @@ describe Translation do
       expect(page).to have_css(creatable, text: @count)
       expect(page).to have_link("Translate", count: Translation::PAGE_SIZE)
 
-      fill_in "Key", with: key_
+      fill_in "Key", with: key
       click_button search
       expect(page).to have_link("Translate", count: 1)
 
@@ -67,7 +67,7 @@ describe Translation do
       fill_in "translation_value", with: irish
 
       click_button save
-      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key_}']")
+      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key}']")
       expect(page).to have_xpath("//th[.='English']/following-sibling::td[.='#{translation.english}']")
       expect(page).to have_xpath("//th[.='Irish']/following-sibling::td[.='#{irish}']")
 
@@ -77,8 +77,8 @@ describe Translation do
     end
 
     it "find and retranslate an updated english phrase" do
-      key_ = "user.role.admin"
-      translation = Translation.find_by(key: key_)
+      key = "user.role.admin"
+      translation = Translation.find_by(key: key)
       old_english = "God"
       old_irish = "Dia"
       irish = "Riarthóir"
@@ -99,8 +99,8 @@ describe Translation do
       click_button search
       expect(page).to have_link("Retranslate", count: 1)
 
-      click_link key_
-      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key_}']")
+      click_link key
+      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key}']")
       expect(page).to have_xpath("//th[.='Previous English']/following-sibling::td[.='#{translation.old_english}']")
       expect(page).to have_xpath("//th[.='Previous Irish']/following-sibling::td[.='#{old_irish}']")
       expect(page).to have_xpath("//th[.='Current English']/following-sibling::td[.='#{english}']")
@@ -109,7 +109,7 @@ describe Translation do
       click_link "Retranslate"
       fill_in "translation_value", with: irish
       click_button save
-      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key_}']")
+      expect(page).to have_xpath("//th[.='Key']/following-sibling::td[.='#{key}']")
       expect(page).to have_xpath("//th[.='English']/following-sibling::td[.='#{translation.english}']")
       expect(page).to have_xpath("//th[.='Irish']/following-sibling::td[.='#{irish}']")
 
@@ -121,13 +121,13 @@ describe Translation do
     end
 
     it "translate a phrase with interpolated variables" do
-      key_ = "errors.attributes.password.length"
-      translation = Translation.find_by(key: key_)
+      key = "errors.attributes.password.length"
+      translation = Translation.find_by(key: key)
 
       login "translator"
       visit admin_translations_path
 
-      fill_in "Key", with: key_
+      fill_in "Key", with: key
       click_button search
       expect(page).to have_link("Translate", count: 1)
 
@@ -144,8 +144,8 @@ describe Translation do
     end
 
     it "find and delete an inactive translation" do
-      key_ = "user.role.wago"
-      create(:translation, key: key_, english: "WogoWago", active: false)
+      key = "user.role.wago"
+      create(:translation, key: key, english: "WogoWago", active: false)
 
       login "translator"
       visit admin_translations_path
@@ -160,12 +160,12 @@ describe Translation do
     end
 
     it "translation errors" do
-      key_ = "user.role.admin"
-      admin = Translation.find_by(key: key_)
+      key = "user.role.admin"
+      admin = Translation.find_by(key: key)
 
       login "translator"
       visit admin_translations_path
-      fill_in "Key", with: key_
+      fill_in "Key", with: key
       click_button search
       expect(page).to have_link("Translate", count: 1)
 
