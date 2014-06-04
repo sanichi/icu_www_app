@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Event do
   let(:active)        { I18n.t("active") }
-  let(:button)        { I18n.t("edit") }
+  let(:edit)          { I18n.t("edit") }
   let(:category)      { I18n.t("event.category.category") }
   let(:contact)       { I18n.t("event.contact") }
   let(:delete)        { I18n.t("delete") }
@@ -35,10 +35,10 @@ describe Event do
   let(:image_dir)     { Rails.root + "spec/files/images/" }
 
   context "authorization" do
-    let(:user)   { create(:user, roles: "calendar") }
     let(:level1) { ["admin", user] }
     let(:level2) { ["calendar", "editor"] }
     let(:level3) { User::ROLES.reject { |r| r.match(/\A(admin|editor|calendar)\z/) }.append("guest") }
+    let(:user)   { create(:user, roles: "calendar") }
 
     let(:event)  { create(:event, user: user) }
 
@@ -46,7 +46,7 @@ describe Event do
       "//th[.='#{label}']/following-sibling::td"
     end
 
-    it "admin and owner can update as well as create" do
+    it "level 1 can update as well as create" do
       level1.each do |role|
         login role
         visit new_admin_event_path
@@ -56,11 +56,11 @@ describe Event do
         visit events_path
         click_link event.name
         expect(page).to have_xpath(cell(name), text: event.name)
-        expect(page).to have_link(button)
+        expect(page).to have_link(edit)
       end
     end
 
-    it "other editors can only create" do
+    it "level 2 can only create" do
       level2.each do |role|
         login role
         visit new_admin_event_path
@@ -70,11 +70,11 @@ describe Event do
         visit events_path
         click_link event.name
         expect(page).to have_xpath(cell(name), text: event.name)
-        expect(page).to_not have_link(button)
+        expect(page).to_not have_link(edit)
       end
     end
 
-    it "other roles and guests can only view" do
+    it "level 3 can only view" do
       level3.each do |role|
         login role
         visit new_admin_event_path
@@ -84,7 +84,7 @@ describe Event do
         visit events_path
         click_link event.name
         expect(page).to have_xpath(cell(name), text: event.name)
-        expect(page).to_not have_link(button)
+        expect(page).to_not have_link(edit)
       end
     end
   end

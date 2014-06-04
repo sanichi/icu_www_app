@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe Upload do
-  let(:admins)        { "admins" }
-  let(:editors)       { "editors" }
-  let(:everyone)      { "all" }
-  let(:members)       { "members" }
-
   let(:access)        { I18n.t("access.access") }
   let(:admins_text)   { I18n.t("access.#{admins}") }
   let(:everyone_text) { I18n.t("access.#{everyone}") }
@@ -19,6 +14,11 @@ describe Upload do
   let(:search)        { I18n.t("search") }
   let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
   let(:year)          { I18n.t("year") }
+
+  let(:admins)        { "admins" }
+  let(:editors)       { "editors" }
+  let(:everyone)      { "all" }
+  let(:members)       { "members" }
 
   let(:failure)       { "div.alert-danger" }
   let(:field_error)   { "div.help-block" }
@@ -63,11 +63,11 @@ describe Upload do
   end
 
   context "authorization" do
-    let(:user)    { create(:user, roles: "editor") }
     let(:level1)  { ["admin", user] }
     let(:level2)  { ["editor"] }
     let(:level3)  { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
     let!(:upload) { create(:upload, user: user) }
+    let(:user)    { create(:user, roles: "editor") }
 
     def cell(label)
       "//th[.='#{label}']/following-sibling::td"

@@ -1,15 +1,6 @@
 require 'spec_helper'
 
 describe Tournament do
-  let(:champs)       { "championship" }
-  let(:dup_error)    { "once per year" }
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:header)       { "h1" }
-  let(:success)      { "div.alert-success" }
-  let(:success_text) { "successfully created" }
-  let(:swiss)        { "swiss" }
-
   let(:active)       { I18n.t("active") }
   let(:category_)    { I18n.t("tournament.category.category") }
   let(:city_)        { I18n.t("city") }
@@ -22,13 +13,22 @@ describe Tournament do
   let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
   let(:year_)        { I18n.t("year") }
 
-  context "authorization" do
-    let(:not_ok_roles) { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
-    let(:ok_roles)     { %w[admin editor] }
-    let(:tournament)   { create(:tournament) }
+  let(:champs)       { "championship" }
+  let(:dup_error)    { "once per year" }
+  let(:failure)      { "div.alert-danger" }
+  let(:field_error)  { "div.help-block" }
+  let(:header)       { "h1" }
+  let(:success)      { "div.alert-success" }
+  let(:success_text) { "successfully created" }
+  let(:swiss)        { "swiss" }
 
-    it "some roles can manage tournaments as well as view" do
-      ok_roles.each do |role|
+  context "authorization" do
+    let(:level1)     { %w[admin editor] }
+    let(:level2)     { User::ROLES.reject { |role| level1.include?(role) }.append("guest") }
+    let(:tournament) { create(:tournament) }
+
+    it "level1 can manage tournaments" do
+      level1.each do |role|
         login role
         visit new_admin_tournament_path
         expect(page).to_not have_css(failure)
@@ -40,8 +40,8 @@ describe Tournament do
       end
     end
 
-    it "other roles and guests can only view" do
-      not_ok_roles.each do |role|
+    it "level2 can only view" do
+      level2.each do |role|
         login role
         visit new_admin_tournament_path
         expect(page).to have_css(failure, text: unauthorized)

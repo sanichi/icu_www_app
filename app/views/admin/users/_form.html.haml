@@ -5,15 +5,15 @@
         %legend= @user.new_record? ? "New user for #{@player.name}" : @user.email
         - locals = { form: f, object: @user, col: "sm", pad: 3, width: 4 }
         - if @user.new_record?
-          = render "utils/text_field_for", locals.merge(param: :email, text: "Email")
+          = render "utils/text_field_for", locals.merge(param: :email, text: t("email"))
           = hidden_field :user, :player_id
         - else
-          = render "utils/text_field_for", locals.merge(param: :status, text: "Status")
-        = render "utils/text_field_for", locals.merge(param: :password, text: "Password")
-        = render "utils/text_field_for", locals.merge(param: :expires_on, text: "Expires on", placeholder: t("date_format"))
-        = render "utils/select_for", locals.merge(param: :roles, text: "Roles", menu: user_roles_menu(@user.roles), multiple: true, width: 4, size: User::ROLES.size)
+          = render "utils/text_field_for", locals.merge(param: :status, text: t("user.status"))
+        = render "utils/text_field_for", locals.merge(param: :password, text: t("user.password"))
+        = render "utils/text_field_for", locals.merge(param: :expires_on, text: t("user.expires"), placeholder: t("date_format"))
+        = render "utils/select_for", locals.merge(param: :roles, text: t("user.role.roles"), menu: user_roles_menu(@user.roles), multiple: true, width: 4, size: User::ROLES.size)
         - unless @user.new_record? || @user.verified?
-          = render "utils/check_box_for", locals.merge(param: :verify, text: "Verify", on: "yes", off: "no", width: 1)
+          = render "utils/check_box_for", locals.merge(param: :verify, text: t("user.verify"), on: "yes", off: "no", width: 1)
         %hr
-        = f.submit "Save", class: "btn btn-primary"
-        = link_to "Cancel", [:admin, @user], class: "btn btn-default"
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), [:admin, @user], class: "btn btn-default"

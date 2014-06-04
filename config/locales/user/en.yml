@@ -6,15 +6,19 @@ en:
     locale: Language
     password: Password
     preferences: Preferences
-    roles: Roles
+    status: Status
     theme: Theme
     ticket: Season ticket
     updated: Preferences successfully updated
     user: User
+    verified: Verified
+    verify: Verify
     lang:
       en: English
       ga: Irish
     role:
+      role: Role
+      roles: Roles
       admin: Administrator
       calendar: Calendar Editor
       editor: Editor

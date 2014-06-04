@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe JournalEntry do
+  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+
+  let(:success) { "div.alert-success" }
+  let(:failure) { "div.alert-danger" }
+
   def create_club
     click_link "New Club"
     fill_in "Name", with: "Wandering Dragons"
@@ -49,10 +54,6 @@ describe JournalEntry do
     @translation, @translation_change = edit_translation
     @user, @user_change = edit_user
   end
-
-  let(:success)      { "div.alert-success" }
-  let(:failure)      { "div.alert-danger" }
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
 
   it "admin view" do
     login "admin"

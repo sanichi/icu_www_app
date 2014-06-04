@@ -19,8 +19,8 @@
         = render "utils/text_field_for", locals.merge(param: :phone, text: t("club.phone"))
         = render "utils/select_for", locals.merge(param: :active, text: t("active"), width: 3, menu: club_active_menu(@club.active, nil))
         %hr
-        = f.submit "Save", class: "btn btn-primary"
+        = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:clubs)
-        = link_to "Cancel", @club.new_record? ? last_path || clubs_path : @club, class: "btn btn-default"
+        = link_to t("cancel"), @club.new_record? ? last_path || clubs_path : @club, class: "btn btn-default"
         - if last_path
           = link_to t("last_search"), last_path, class: "btn btn-default"

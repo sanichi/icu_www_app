@@ -62,7 +62,7 @@ describe Image do
       "a[href='/images/#{image.id}']"
     end
 
-    it "admin and owner can update as well as create" do
+    it "level 1 can update as well as create" do
       level1.each do |role|
         login role
         visit new_admin_image_path
@@ -76,7 +76,7 @@ describe Image do
       end
     end
 
-    it "other editors can only create" do
+    it "level 2 can only create" do
       level2.each do |role|
         login role
         visit new_admin_image_path
@@ -90,7 +90,7 @@ describe Image do
       end
     end
 
-    it "other roles and guests can only view" do
+    it "level 3 can only view" do
       level3.each do |role|
         login role
         visit new_admin_image_path

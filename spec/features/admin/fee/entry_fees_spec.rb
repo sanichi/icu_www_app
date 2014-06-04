@@ -34,7 +34,7 @@ describe Fee::Entry do
   let(:option)            { "Option" }
 
   let(:failure)           { "div.alert-danger" }
-  let(:help)              { "div.help-block" }
+  let(:field_error)       { "div.help-block" }
   let(:success)           { "div.alert-success" }
 
   let(:last_week)         { Date.today.days_ago(7) }
@@ -93,7 +93,7 @@ describe Fee::Entry do
       fill_in sale_end, with: fee.sale_end.to_s
       click_button save
 
-      expect(page).to have_css(help, text: "duplicate")
+      expect(page).to have_css(failure, text: "duplicate")
 
       fill_in start_date, with: fee.start_date.years_since(1).to_s
       fill_in end_date, with: fee.end_date.years_since(1).to_s
@@ -209,7 +209,7 @@ describe Fee::Entry do
       fill_in max_age, with: "15"
       click_button save
 
-      expect(page).to have_css(help, text: "reference date")
+      expect(page).to have_css(field_error, text: "reference date")
 
       fill_in min_age, with: "16"
       fill_in age_ref, with: next_year.to_s

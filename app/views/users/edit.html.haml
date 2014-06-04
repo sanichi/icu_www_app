@@ -9,5 +9,5 @@
         = render "utils/select_for", locals.merge(param: :theme, text: t("user.theme"), menu: user_theme_menu(@user.preferred_theme))
         = render "utils/select_for", locals.merge(param: :locale, text: t("user.locale"), menu: user_locale_menu(@user.locale))
         %hr
-        = f.submit "Save", class: "btn btn-primary"
-        = link_to "Cancel", @user, class: "btn btn-default"
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), @user, class: "btn btn-default"

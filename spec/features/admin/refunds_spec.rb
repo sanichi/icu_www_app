@@ -1,34 +1,34 @@
 require 'spec_helper'
 
-describe "Refunds" do
-  let(:player)                { create(:player) }
-
-  let(:select_member)         { I18n.t("item.member.select") }
-  let(:first_name)            { I18n.t("player.first_name") }
-  let(:last_name)             { I18n.t("player.last_name") }
+describe Refund do
   let(:add_to_cart)           { I18n.t("item.add") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
-  let(:continue)              { I18n.t("shop.cart.continue") }
-  let(:pay)                   { I18n.t("shop.payment.card.pay") }
   let(:completed)             { I18n.t("shop.payment.completed") }
+  let(:continue)              { I18n.t("shop.cart.continue") }
+  let(:first_name)            { I18n.t("player.first_name") }
+  let(:last_name)             { I18n.t("player.last_name") }
+  let(:pay)                   { I18n.t("shop.payment.card.pay") }
+  let(:select_member)         { I18n.t("item.member.select") }
 
-  let(:number_id)             { "number" }
-  let(:expiry_id)             { "expiry" }
-  let(:email_id)              { "confirmation_email" }
-  let(:name_id)               { "payment_name" }
   let(:cvc_id)                { "cvc" }
+  let(:email_id)              { "confirmation_email" }
+  let(:expiry_id)             { "expiry" }
+  let(:name_id)               { "payment_name" }
+  let(:number_id)             { "number" }
 
-  let(:number)                { "4242 4242 4242 4242" }
-  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:cvc)                   { "123" }
+  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
   let(:force_submit)          { "\n" }
+  let(:number)                { "4242 4242 4242 4242" }
 
-  let(:title)                 { "h3" }
-  let(:refund_link)           { "Refund..." }
   let(:refund_button)         { "Refund" }
-  let(:total)                 { "//th[.='All']/following-sibling::th" }
-  let(:success)               { "div.alert-success" }
+  let(:refund_link)           { "Refund..." }
   let(:refund_ok)             { "Refund was successful" }
+  let(:success)               { "div.alert-success" }
+  let(:title)                 { "h3" }
+  let(:total)                 { "//th[.='All']/following-sibling::th" }
+
+  let(:player)                { create(:player) }
 
   context "multiple items" do
     let!(:subscription_fee)  { create(:subscription_fee) }

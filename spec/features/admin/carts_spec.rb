@@ -1,30 +1,35 @@
 require 'spec_helper'
 
-describe "Authorization for carts" do
-  let(:ok_roles)        { %w[admin treasurer] }
-  let(:not_ok_roles)    { User::ROLES.reject { |role| ok_roles.include?(role) }.append("guest") }
-  let(:cart)            { create(:cart) }
-  let(:paths)           { [admin_carts_path, admin_cart_path(cart), edit_admin_cart_path(cart)] }
-  let(:success)         { "div.alert-success" }
-  let(:failure)         { "div.alert-danger" }
-  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+describe Cart do
+  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
 
-  it "some roles can view carts" do
-    ok_roles.each do |role|
-      login role
-      paths.each do |path|
-        visit path
-        expect(page).to_not have_css(failure)
+  let(:failure) { "div.alert-danger" }
+  let(:success) { "div.alert-success" }
+
+  context "authorization" do
+    let(:level1) { %w[admin treasurer] }
+    let(:level2) { User::ROLES.reject { |role| level1.include?(role) }.append("guest") }
+
+    let(:cart)   { create(:cart) }
+    let(:paths)  { [admin_carts_path, admin_cart_path(cart), edit_admin_cart_path(cart)] }
+
+    it "level1 can view carts" do
+      level1.each do |role|
+        login role
+        paths.each do |path|
+          visit path
+          expect(page).to_not have_css(failure)
+        end
       end
     end
-  end
 
-  it "other roles and guests cannot" do
-    not_ok_roles.each do |role|
-      login role
-      paths.each do |path|
-        visit path
-        expect(page).to have_css(failure, text: unauthorized)
+    it "level2 cannot" do
+      level2.each do |role|
+        login role
+        paths.each do |path|
+          visit path
+          expect(page).to have_css(failure, text: unauthorized)
+        end
       end
     end
   end

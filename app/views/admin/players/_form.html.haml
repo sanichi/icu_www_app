@@ -28,8 +28,8 @@
         = render "utils/text_area_for", locals.merge(param: :note, text: t("notes"), width: 10, rows: 10)
         = hidden_field :player, :source
         %hr
-        = f.submit "Save", class: "btn btn-primary"
+        = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:players)
-        = link_to "Cancel", @player.new_record? ? last_path || players_path : [:admin, @player], class: "btn btn-default"
+        = link_to t("cancel"), @player.new_record? ? last_path || players_path : [:admin, @player], class: "btn btn-default"
         - if last_path
           = link_to t("last_search"), last_path, class: "btn btn-default"

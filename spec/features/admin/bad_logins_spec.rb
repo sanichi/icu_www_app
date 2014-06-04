@@ -1,47 +1,58 @@
 require 'spec_helper'
 
-describe "Authorization for bad logins" do
-  let(:non_admin_roles) { User::ROLES.reject{ |role| role == "admin" }.append("guest") }
-  let(:success)         { "div.alert-success" }
-  let(:failure)         { "div.alert-danger" }
-  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+describe BadLogin do
+  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
 
-  it "admin users can view the list" do
-    login "admin"
-    visit admin_bad_logins_path
-    expect(page).to_not have_css(failure)
-  end
+  let(:failure) { "div.alert-danger" }
+  let(:success) { "div.alert-success" }
 
-  it "non-admin users cannot view the list" do
-    non_admin_roles.each do |role|
-      login role
-      visit admin_bad_logins_path
-      expect(page).to have_css(failure, text: unauthorized)
+  context "authorization" do
+    let(:level1) { %w[admin] }
+    let(:level2) { User::ROLES.reject{ |r| level1.include?(r) }.append("guest") }
+
+    it "level 1 can view the list" do
+      level1.each do |role|
+        login role
+        visit admin_bad_logins_path
+        expect(page).to_not have_css(failure)
+      end
+    end
+
+    it "level 2 cannot view the list" do
+      level2.each do |role|
+        login role
+        visit admin_bad_logins_path
+        expect(page).to have_css(failure, text: unauthorized)
+      end
     end
   end
-end
 
-describe "Listing bad logins" do
-  before(:each) do
-    visit "/sign_in"
-    fill_in I18n.t("email"), with: email
-    fill_in I18n.t("user.password"), with: password
-    click_button I18n.t("session.sign_in")
-    login("admin")
-    visit admin_bad_logins_path
-  end
+  context "index" do
+    let(:email)        { I18n.t("email") }
+    let(:password)     { I18n.t("user.password") }
+    let(:sign_in)      { I18n.t("session.sign_in") }
 
-  let(:email)    { "baddy@hacker.net" }
-  let(:password) { "password" }
-  let(:ip)       { "127.0.0.1" }
+    let(:bad_email)    { "baddy@hacker.net" }
+    let(:bad_password) { "password" }
+    let(:ip)           { "127.0.0.1" }
 
-  def xpath(text)
-    %Q{//table[@id="results"]/tbody/tr/td[.="#{text}"]}
-  end
+    before(:each) do
+      visit sign_in_path
+      fill_in email, with: bad_email
+      fill_in password, with: bad_password
+      click_button sign_in
+      login "admin"
+      visit admin_bad_logins_path
+    end
 
-  it "shows user, encryted password and IP" do
-    expect(page).to have_xpath(xpath(email), count: 1)
-    expect(page).to have_xpath(xpath(Digest::MD5.hexdigest(password)), count: 1)
-    expect(page).to have_xpath(xpath(ip), count: 1)
+    def xpath(text)
+      %Q{//table[@id="results"]/tbody/tr/td[.="#{text}"]}
+    end
+
+    it "shows user, encryted password and IP" do
+      expect(page).to have_xpath(xpath(bad_email), count: 1)
+      expect(page).to have_xpath(xpath(Digest::MD5.hexdigest(bad_password)), count: 1)
+      expect(page).to have_xpath(xpath(ip), count: 1)
+    end
   end
 end

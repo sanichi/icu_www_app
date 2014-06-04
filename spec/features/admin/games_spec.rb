@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe Game do
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:para)         { "p" }
-  let(:success)      { "div.alert-success" }
-
   let(:delete)       { I18n.t("delete") }
   let(:edit)         { I18n.t("edit") }
   let(:save)         { I18n.t("save") }
   let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+
+  let(:failure)      { "div.alert-danger" }
+  let(:field_error)  { "div.help-block" }
+  let(:para)         { "p" }
+  let(:success)      { "div.alert-success" }
 
   let(:game)         { create(:game_with_annotations, pgn: pgn) }
   let(:pgn)          { create(:pgn, user: user) }
@@ -19,7 +19,7 @@ describe Game do
     let(:level1) { ["admin", user] }
     let(:level2) { User::ROLES.reject { |r| r == "admin" }.append("guest") }
 
-    it "some roles can edit games as well as view" do
+    it "level 1 can edit games as well as view" do
       level1.each do |role|
         login role
         visit edit_admin_game_path(game)
@@ -31,7 +31,7 @@ describe Game do
       end
     end
 
-    it "other roles and guests can only view" do
+    it "level 2 can only view" do
       level2.each do |role|
         login role
         visit edit_admin_game_path(game)

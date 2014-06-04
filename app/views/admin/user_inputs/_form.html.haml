@@ -22,5 +22,5 @@
         #extra_required
           = render "utils/check_box_for", locals.merge(param: :required, text: "Required", width: 1)
         %hr
-        = f.submit "Save", class: "btn btn-primary"
-        = link_to "Cancel", new_record ? [:admin, @fee] : [:admin, @user_input], class: "btn btn-default"
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), new_record ? [:admin, @fee] : [:admin, @user_input], class: "btn btn-default"

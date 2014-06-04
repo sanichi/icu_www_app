@@ -15,7 +15,7 @@ describe Pgn do
 
   let(:pgn_dir)   { Rails.root + "spec/files/pgns/" }
 
-  context "authorisation" do
+  context "authorization" do
     let(:cell)         { "//td[.='#{pgn.file_name}']" }
     let(:level1)       { ["admin", user] }
     let(:level2)       { ["editor"] }

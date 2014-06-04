@@ -18,7 +18,7 @@ describe Fee::Subscription do
   let(:type)         { I18n.t("type") }
 
   let(:failure)      { "div.alert-danger" }
-  let(:help)         { "div.help-block" }
+  let(:field_error)  { "div.help-block" }
   let(:success)      { "div.alert-success" }
 
   describe "create" do
@@ -53,7 +53,7 @@ describe Fee::Subscription do
       fill_in season, with: fee.season.to_s
       click_button save
 
-      expect(page).to have_css(help, text: "duplicate")
+      expect(page).to have_css(field_error, text: "duplicate")
 
       fill_in season, with: fee.season.next.to_s
       click_button save

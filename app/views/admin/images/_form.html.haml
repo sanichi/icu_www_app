@@ -13,8 +13,8 @@
         = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :credit, text: t("image.credit"), width: 4, mark: "none")
         %hr
-        = f.submit "Save", class: "btn btn-primary"
+        = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:images)
-        = link_to "Cancel", @image.new_record? ? last_path || images_path : @image, class: "btn btn-default"
+        = link_to t("cancel"), @image.new_record? ? last_path || images_path : @image, class: "btn btn-default"
         - if last_path
           = link_to t("last_search"), last_path, class: "btn btn-default"
