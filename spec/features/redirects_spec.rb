@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe "Switch locales" do
+  let(:user) { create(:user) }
+  let(:una)  { create(:user, roles: "translator", locale: "ga") }
+  let(:mark) { create(:user, roles: "admin") }
+
   after(:each) do
     Translation.cache.flushdb
   end
@@ -13,10 +17,6 @@ describe "Switch locales" do
     create(:translation, locale: "ga", key: "session.sign_out", english: "Sign out", value: "Cláraigh amach")
     create(:translation, locale: "ga", key: "user.preferences", english: "Preferences", value: "Roghanna")
   end
-
-  let(:user) { create(:user) }
-  let(:una)  { create(:user, roles: "translator", locale: "ga") }
-  let(:mark) { create(:user, roles: "admin") }
 
   it "quest user" do
     visit root_path

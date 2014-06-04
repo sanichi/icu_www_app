@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe "Pay", js: true do
-  let(:player)                { create(:player) }
-  let(:user)                  { create(:user) }
-
   let(:add_to_cart)           { I18n.t("item.add") }
   let(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
   let(:bad_email)             { I18n.t("shop.payment.error.email") }
@@ -34,28 +31,30 @@ describe "Pay", js: true do
   let(:shop)                  { I18n.t("shop.shop") }
   let(:total)                 { I18n.t("shop.cart.total") }
 
-  let(:cvc_id)                { "cvc" }
-  let(:email_id)              { "confirmation_email" }
-  let(:expiry_id)             { "expiry" }
-  let(:name_id)               { "payment_name" }
-  let(:number_id)             { "number" }
+  let(:cvc_id)    { "cvc" }
+  let(:email_id)  { "confirmation_email" }
+  let(:expiry_id) { "expiry" }
+  let(:name_id)   { "payment_name" }
+  let(:number_id) { "number" }
 
-  let(:cvc)                   { "123" }
-  let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
-  let(:force_submit)          { "\n" }
-  let(:number)                { "4242 4242 4242 4242" }
-  let(:stripe)                { "stripe" }
+  let(:cvc)          { "123" }
+  let(:expiry)       { "01 / #{(Date.today.year + 2).to_s}" }
+  let(:force_submit) { "\n" }
+  let(:number)       { "4242 4242 4242 4242" }
+  let(:stripe)       { "stripe" }
 
-  let(:card_declined)         { "Your card was declined." }
-  let(:expired_card)          { "Your card has expired." }
-  let(:incorrect_cvc)         { "Your card's security code is incorrect." }
+  let(:card_declined) { "Your card was declined." }
+  let(:expired_card)  { "Your card has expired." }
+  let(:incorrect_cvc) { "Your card's security code is incorrect." }
 
-  let(:error)                 { "div.alert-danger" }
-  let(:item)                  { "li" }
-  let(:success)               { "div.alert-success" }
-  let(:title)                 { "h3" }
+  let(:error)   { "div.alert-danger" }
+  let(:item)    { "li" }
+  let(:success) { "div.alert-success" }
+  let(:title)   { "h3" }
 
-  let!(:subscription_fee)     { create(:subscription_fee) }
+  let(:player)            { create(:player) }
+  let!(:subscription_fee) { create(:subscription_fee) }
+  let(:user)              { create(:user) }
 
   def add_something_to_cart
     visit shop_path
