@@ -5,5 +5,5 @@
   = render "utils/inline_select", param: :category, text: t("tournament.category"), menu: tournament_category_menu(params[:category])
   = render "utils/inline_select", param: :format, text: t("tournament.format"), menu: tournament_format_menu(params[:format])
   - if can?(:manage, Tournament)
-    = render "utils/inline_select", param: :active, text: t("active"), menu: tournament_active_menu(params[:active])
+    = render "utils/inline_select", param: :active, text: t("active"), menu: active_menu(params[:active])
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

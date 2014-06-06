@@ -11,7 +11,7 @@
         = render "utils/file_field_for", locals.merge(param: :data, text: t("file"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :description, text: t("description"), width: 6)
         = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
-        - menu = upload_access_menu(@upload.access, Upload.accessibilities_for(current_user), "please_select")
+        - menu = access_menu(@upload.access, Upload.accessibilities_for(current_user), @upload.new_record? && "please_select")
         = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
         = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:uploads)

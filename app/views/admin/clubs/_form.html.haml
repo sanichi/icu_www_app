@@ -17,7 +17,7 @@
         = render "utils/text_field_for", locals.merge(param: :contact, text: t("club.contact"))
         = render "utils/text_field_for", locals.merge(param: :email, text: t("email"))
         = render "utils/text_field_for", locals.merge(param: :phone, text: t("club.phone"))
-        = render "utils/select_for", locals.merge(param: :active, text: t("active"), width: 3, menu: club_active_menu(@club.active, nil))
+        = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1)
         %hr
         = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:clubs)

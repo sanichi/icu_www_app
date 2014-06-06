@@ -16,13 +16,4 @@ module FeesHelper
     ]
     options_for_select(sales, selected)
   end
-
-  def fee_active_menu(selected)
-    active = [
-      ["Active", "true"],
-      ["Inactive", "false"],
-      ["All", ""],
-    ]
-    options_for_select(active, selected)
-  end
 end

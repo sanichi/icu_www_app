@@ -1,10 +1,4 @@
 module ClubsHelper
-  def club_active_menu(selected, default="either")
-    statuses = [[t("active"), "true"], [t("inactive"), "false"]]
-    statuses.push [t(default), ""] if default
-    options_for_select(statuses, selected)
-  end
-
   def club_county_menu(selected, default="ireland.co.any")
     counties = Ireland.counties.map { |c| [t("ireland.co.#{c}"), c] }
     counties.unshift [t(default), ""]

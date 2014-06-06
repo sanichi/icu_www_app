@@ -1,8 +1,4 @@
 module EventsHelper
-  def event_active_menu(selected)
-    options_for_select(%w[active inactive all].map { |c| [t(c), c] }, selected)
-  end
-
   def event_category_menu(selected)
     cats = Event::CATEGORIES.map { |cat| [t("event.category.#{cat}"), cat] }
     options_for_select(cats, selected)

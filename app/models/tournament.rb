@@ -22,7 +22,7 @@ class Tournament < ActiveRecord::Base
 
   def self.search(params, path)
     matches = ordered
-    matches = matches.where(active: true) if params[:active] == "true" || params[:active].blank?
+    matches = matches.where(active: true) if params[:active] == "true"
     matches = matches.where(active: false) if params[:active] == "false"
     matches = matches.where(category: params[:category]) if params[:category].present?
     matches = matches.where("city LIKE ?", "%#{params[:city]}%") if params[:city].present?

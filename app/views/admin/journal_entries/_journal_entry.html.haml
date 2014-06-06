@@ -4,11 +4,11 @@
   - if full
     %td= entry.journalable_type
     %td= entry.journalable_id
-  %td= entry.action
+  %td= link_to entry.action, [:admin, entry]
   %td= entry.column.try(:truncate, 15)
   %td= entry.from.try(:truncate, 15)
   %td= entry.to.try(:truncate, 15)
   %td= entry.by.truncate(15)
   - if full
     %td= entry.ip.try(:truncate, 15)
-  %td= link_to time_ago_in_words(entry.created_at, include_seconds: true), [:admin, entry]
+  %td= time_ago_in_words(entry.created_at, include_seconds: true)
