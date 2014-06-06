@@ -1,19 +1,13 @@
 require 'spec_helper'
 
-describe Game do
-  let(:delete)       { I18n.t("delete") }
-  let(:edit)         { I18n.t("edit") }
-  let(:save)         { I18n.t("save") }
-  let(:unauthorized) { I18n.t("unauthorized.default") }
+describe Game do;
+  include_context "features"
 
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:para)         { "p" }
-  let(:success)      { "div.alert-success" }
+  let(:para) { "p" }
 
-  let(:game)         { create(:game_with_annotations, pgn: pgn) }
-  let(:pgn)          { create(:pgn, user: user) }
-  let(:user)         { create(:user, roles: "editor") }
+  let(:game) { create(:game_with_annotations, pgn: pgn) }
+  let(:pgn)  { create(:pgn, user: user) }
+  let(:user) { create(:user, roles: "editor") }
 
   context "authorization" do
     let(:level1) { ["admin", user] }
@@ -53,8 +47,6 @@ describe Game do
     let(:round)  { I18n.t("game.round") }
     let(:white)  { I18n.t("game.white") }
 
-    let(:updated_text) { "successfully updated" }
-
     let(:plain) { attributes_for(:game) }
 
     before(:each) do
@@ -67,7 +59,7 @@ describe Game do
       fill_in black, with: "Tal,M."
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.black).to eq "Tal, M"
@@ -80,7 +72,7 @@ describe Game do
       fill_in date, with: today.to_s
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.date).to eq "#{today.year}.#{'%02d' % today.month}.#{'%02d' % today.day}"
@@ -89,7 +81,7 @@ describe Game do
       fill_in date, with: "1998"
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.date).to eq "1998.??.??"
@@ -98,7 +90,7 @@ describe Game do
       fill_in date, with: " 1998 / 7 "
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.date).to eq "1998.07.??"
@@ -112,7 +104,7 @@ describe Game do
       select draw, from: result
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.result).to eq draw
@@ -124,7 +116,7 @@ describe Game do
       fill_in round, with: " 1.2 "
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.round).to eq "1.2"
@@ -136,7 +128,7 @@ describe Game do
       fill_in event, with: " ? "
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.event).to be_nil
@@ -148,7 +140,7 @@ describe Game do
       fill_in moves, with: plain[:moves]
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.moves).to eq plain[:moves]
@@ -160,7 +152,7 @@ describe Game do
       fill_in white, with: "Kasparov,G."
       click_button save
 
-      expect(page).to have_css(success, text: updated_text)
+      expect(page).to have_css(success, text: updated)
       game.reload
 
       expect(game.white).to eq "Kasparov, G"
@@ -177,6 +169,8 @@ describe Game do
     it "delete" do
       visit game_path(game)
       click_link delete
+
+      expect(page).to have_css(success, text: deleted)
 
       expect(Game.count).to eq 0
       expect(JournalEntry.games.where(action: "destroy", by: user.signature, journalable_id: game.id).count).to eq 1

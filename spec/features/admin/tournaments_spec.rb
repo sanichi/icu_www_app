@@ -1,24 +1,12 @@
 require 'spec_helper'
 
-describe Tournament do
-  let(:active)        { I18n.t("active") }
-  let(:category_menu) { I18n.t("tournament.category.category") }
-  let(:city_input)    { I18n.t("city") }
-  let(:delete)        { I18n.t("delete") }
-  let(:edit)          { I18n.t("edit") }
-  let(:details_text)  { I18n.t("details") }
-  let(:format_menu)   { I18n.t("tournament.format.format") }
-  let(:name_input)    { I18n.t("name") }
-  let(:save)          { I18n.t("save") }
-  let(:unauthorized)  { I18n.t("unauthorized.default") }
-  let(:year_input)    { I18n.t("year") }
+describe Tournament do;
+  include_context "features"
 
+  let(:category_menu) { I18n.t("tournament.category.category") }
+  let(:format_menu)   { I18n.t("tournament.format.format") }
   let(:dup_error)     { "once per year" }
-  let(:failure)       { "div.alert-danger" }
-  let(:field_error)   { "div.help-block" }
   let(:header)        { "h1" }
-  let(:success)       { "div.alert-success" }
-  let(:success_text)  { "successfully created" }
 
   context "authorization" do
     let(:level1)     { %w[admin editor] }
@@ -53,76 +41,76 @@ describe Tournament do
   end
 
   context "create" do
-    let(:category) { "championship" }
-    let(:city)     { "Armagh" }
-    let(:details)  { "Champion: M.J.L.Orr\n\n9 round swiss, 20 players\n\nPlace Name       Score\n\n1     M.J.L.Orr  7\n\n2     B.Kelly    6" }
-    let(:name)     { "Irish Championships" }
-    let(:format)   { "swiss" }
-    let(:year)     { 1994 }
+    let(:my_category) { "championship" }
+    let(:my_city)     { "Armagh" }
+    let(:my_details)  { "Champion: M.J.L.Orr\n\n9 round swiss, 20 players\n\nPlace Name       Score\n\n1     M.J.L.Orr  7\n\n2     B.Kelly    6" }
+    let(:my_name)     { "Irish Championships" }
+    let(:my_format)   { "swiss" }
+    let(:my_year)     { 1994 }
 
     before(:each) do
       @user = login("editor")
       visit new_admin_tournament_path
-      fill_in name_input, with: name
-      fill_in year_input, with: year
-      select I18n.t("tournament.category.#{category}"), from: category_menu
-      select I18n.t("tournament.format.#{format}"), from: format_menu
-      fill_in details_text, with: details
+      fill_in name, with: my_name
+      fill_in year, with: my_year
+      select I18n.t("tournament.category.#{my_category}"), from: category_menu
+      select I18n.t("tournament.format.#{my_format}"), from: format_menu
+      fill_in details, with: my_details
     end
 
     it "minimum data" do
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Tournament.count).to eq 1
       tournament = Tournament.first
 
       expect(tournament.active).to be_false
-      expect(tournament.category).to eq category
+      expect(tournament.category).to eq my_category
       expect(tournament.city).to be_nil
-      expect(tournament.format).to eq format
-      expect(tournament.name).to eq name
-      expect(tournament.year).to eq year
+      expect(tournament.format).to eq my_format
+      expect(tournament.name).to eq my_name
+      expect(tournament.year).to eq my_year
 
       expect(JournalEntry.tournaments.where(action: "create", by: @user.signature, journalable_id: tournament.id).count).to eq 1
     end
 
     it "maximum data" do
-      fill_in city_input, with: city
+      fill_in city, with: my_city
       check active
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Tournament.count).to eq 1
       tournament = Tournament.first
 
       expect(tournament.active).to be_true
-      expect(tournament.city).to eq city
+      expect(tournament.city).to eq my_city
 
       expect(JournalEntry.tournaments.where(action: "create", by: @user.signature, journalable_id: tournament.id).count).to eq 1
     end
 
     it "duplicate" do
-      create(:tournament, name: name, year: year)
+      create(:tournament, name: my_name, year: my_year)
       click_button save
 
       expect(page).to_not have_css(success)
       expect(page).to have_css(field_error, text: dup_error)
       expect(Tournament.count).to eq 1
 
-      fill_in year_input, with: year + 1
+      fill_in year, with: my_year + 1
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Tournament.count).to eq 2
-      expect(Tournament.first.year).to eq year
-      expect(Tournament.last.year).to eq year + 1
+      expect(Tournament.first.year).to eq my_year
+      expect(Tournament.last.year).to eq my_year + 1
     end
   end
 
   context "edit" do
     let(:tournament) { create(:tournament) }
-    let(:year)       { tournament.year + 1 }
+    let(:my_year)    { tournament.year + 1 }
 
     before(:each) do
       @user = login("editor")
@@ -131,12 +119,13 @@ describe Tournament do
     end
 
     it "year" do
-      fill_in year_input, with: year
+      fill_in year, with: my_year
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       tournament.reload
 
-      expect(tournament.year).to eq year
+      expect(tournament.year).to eq my_year
       expect(JournalEntry.tournaments.where(action: "update", by: @user.signature, journalable_id: tournament.id, column: "year").count).to eq 1
     end
   end
@@ -153,6 +142,7 @@ describe Tournament do
       click_link tournament.name
       click_link delete
 
+      expect(page).to have_css(success, text: deleted)
       expect(Tournament.count).to eq 0
       expect(JournalEntry.tournaments.where(action: "destroy", by: @user.signature, journalable_id: tournament.id).count).to eq 1
     end

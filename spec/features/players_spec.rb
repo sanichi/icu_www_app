@@ -1,24 +1,25 @@
 require 'spec_helper'
 
 describe Player do
-  let(:deceased)   { I18n.t("player.status.deceased") }
-  let(:duplicate)  { I18n.t("player.duplicate") }
-  let(:fed)        { I18n.t("player.federation") }
-  let(:female)     { I18n.t("player.gender.F") }
-  let(:gender)     { I18n.t("player.gender.gender") }
-  let(:last_name)  { I18n.t("player.last_name") }
-  let(:first_name) { I18n.t("player.first_name") }
-  let(:foreign)    { I18n.t("player.status.foreign") }
-  let(:id)         { I18n.t("player.id") }
-  let(:inactive)   { I18n.t("player.status.inactive") }
-  let(:male)       { I18n.t("player.gender.M") }
-  let(:search)     { I18n.t("search") }
-  let(:status)     { I18n.t("player.status.status") }
-  let(:t_arbiter)  { I18n.t("player.title.arbiter") }
-  let(:t_trainer)  { I18n.t("player.title.trainer") }
-  let(:t_player)   { I18n.t("player.title.player") }
-  let(:title)      { I18n.t("player.title.title") }
-  let(:yob)        { I18n.t("player.abbrev.yob") }
+  include_context "features"
+
+  let(:deceased)        { I18n.t("player.status.deceased") }
+  let(:duplicate)       { I18n.t("player.duplicate") }
+  let(:fed)             { I18n.t("player.federation") }
+  let(:female)          { I18n.t("player.gender.F") }
+  let(:gender)          { I18n.t("player.gender.gender") }
+  let(:last_name)       { I18n.t("player.last_name") }
+  let(:first_name)      { I18n.t("player.first_name") }
+  let(:foreign)         { I18n.t("player.status.foreign") }
+  let(:id)              { I18n.t("player.id") }
+  let(:inactive_status) { I18n.t("player.status.inactive") }
+  let(:male)            { I18n.t("player.gender.M") }
+  let(:status)          { I18n.t("player.status.status") }
+  let(:t_arbiter)       { I18n.t("player.title.arbiter") }
+  let(:t_trainer)       { I18n.t("player.title.trainer") }
+  let(:t_player)        { I18n.t("player.title.player") }
+  let(:title)           { I18n.t("player.title.title") }
+  let(:yob)             { I18n.t("player.abbrev.yob") }
 
   context "search" do
     let(:result) { "//table[@id='results']/tbody/tr" }
@@ -135,7 +136,7 @@ describe Player do
       select duplicate, from: status
       click_button search
       expect(page).to have_xpath(result, count: 1)
-      select inactive, from: status
+      select inactive_status, from: status
       click_button search
       expect(page).to have_xpath(result, count: 2)
       select deceased, from: status

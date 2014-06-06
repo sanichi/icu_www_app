@@ -1,13 +1,7 @@
 require 'spec_helper'
 
-describe Translation do
-  let(:save)         { I18n.t("save") }
-  let(:search)       { I18n.t("search") }
-  let(:last_search)  { I18n.t("last_search") }
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
+describe Translation do;
+  include_context "features"
 
   context "authorization" do
     let(:level1)      { %w[admin translator] }

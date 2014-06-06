@@ -1,31 +1,24 @@
 require 'spec_helper'
 
-describe User do
+describe User do;
+  include_context "features"
+
   let(:administrator)  { I18n.t("user.role.admin") }
-  let(:delete)         { I18n.t("delete") }
-  let(:edit)           { I18n.t("edit") }
   let(:editor)         { I18n.t("user.role.editor") }
   let(:email_input)    { I18n.t("email") }
   let(:expires)        { I18n.t("user.expires") }
   let(:password_input) { I18n.t("user.password") }
   let(:role)           { I18n.t("user.role.role") }
   let(:roles)          { I18n.t("user.role.roles") }
-  let(:save)           { I18n.t("save") }
-  let(:search)         { I18n.t("search") }
   let(:sign_in)        { I18n.t("session.sign_in") }
   let(:sign_out)       { I18n.t("session.sign_out") }
   let(:signed_in_as)   { I18n.t("session.signed_in_as") }
   let(:status)         { I18n.t("user.status") }
   let(:translator)     { I18n.t("user.role.translator") }
   let(:treasurer)      { I18n.t("user.role.treasurer") }
-  let(:unauthorized)   { I18n.t("unauthorized.default") }
   let(:user_account)   { I18n.t("user.account") }
   let(:verified)       { I18n.t("user.verified") }
   let(:verify)         { I18n.t("user.verify") }
-
-  let(:failure)     { "div.alert-danger" }
-  let(:field_error) { "div.help-block" }
-  let(:success)     { "div.alert-success" }
 
   context "authorization" do
     let(:level1) { %w[admin] }
@@ -59,10 +52,9 @@ describe User do
     let(:user)         { create(:user) }
     let(:player_path)  { admin_player_path(player) }
     let(:new_user)     { "New user" }
-    let(:email)        { "joe@example.com" }
-    let(:password)     { "new passw0rd" }
+    let(:my_email)     { "joe@example.com" }
+    let(:my_password)  { "new passw0rd" }
     let(:expires_on)   { Date.today.years_since(1).end_of_year }
-    let(:created)      { "User was successfully created" }
     let(:role)         { "translator" }
 
     it "add a user to a player" do
@@ -71,26 +63,26 @@ describe User do
 
       click_link new_user
       fill_in email_input, with: user.email
-      fill_in password_input, with: password
+      fill_in password_input, with: my_password
       fill_in expires, with: expires_on
       select I18n.t("user.role.#{role}"), from: roles
 
       click_button save
       expect(page).to have_css(field_error, text: "taken")
 
-      fill_in email_input, with: email
+      fill_in email_input, with: my_email
       click_button save
       expect(page).to have_css(success, text: created)
 
-      new_user = User.find_by(email: email)
+      new_user = User.find_by(email: my_email)
       expect(new_user.roles).to eq role
       expect(new_user.player_id).to eq player.id
       expect(new_user.status).to eq User::OK
       expect(new_user.verified?).to be_true
 
       click_link sign_out
-      fill_in email_input, with: email
-      fill_in password_input, with: password
+      fill_in email_input, with: my_email
+      fill_in password_input, with: my_password
       click_button sign_in
       expect(page).to have_css(success, text: signed_in_as)
     end
@@ -99,7 +91,6 @@ describe User do
   context "edit" do
     let!(:user)        { create(:user) }
     let(:edit_path)    { edit_admin_user_path(user) }
-    let(:updated)      { "User was successfully updated" }
     let(:min_length)   { I18n.t("errors.attributes.password.length", minimum: User::MINIMUM_PASSWORD_LENGTH) }
     let(:no_digits)    { I18n.t("errors.attributes.password.digits") }
 
@@ -323,9 +314,8 @@ describe User do
   end
 
   context "delete" do
-    let(:deleted) { "successfully deleted" }
-    let(:logins)  { "login" }
-    let(:roles)   { "role" }
+    let(:logins) { "login" }
+    let(:roles)  { "role" }
 
     [true, false].each do |js|
       it "can if they have no logins or roles (with#{js ? '' : 'out'} js)", js: js do

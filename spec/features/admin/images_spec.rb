@@ -1,19 +1,10 @@
 require 'spec_helper'
 
-describe Image do
+describe Image do;
+  include_context "features"
+
   let(:caption)      { I18n.t("image.caption") }
   let(:credit)       { I18n.t("image.credit") }
-  let(:edit)         { I18n.t("edit") }
-  let(:delete)       { I18n.t("delete") }
-  let(:file)         { I18n.t("file") }
-  let(:save)         { I18n.t("save") }
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-  let(:year)         { I18n.t("year") }
-
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:success)      { "div.alert-success" }
-  let(:success_text) { "successfully created" }
 
   let(:image_dir)    { Rails.root + "spec/files/images/" }
   let(:event_dir)    { Rails.root + "spec/files/events/" }
@@ -73,6 +64,7 @@ describe Image do
         find(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to have_link(edit)
+        expect(page).to have_link(delete)
       end
     end
 
@@ -87,6 +79,7 @@ describe Image do
         find(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to_not have_link(edit)
+        expect(page).to_not have_link(delete)
       end
     end
 
@@ -101,6 +94,7 @@ describe Image do
         find(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to_not have_link(edit)
+        expect(page).to_not have_link(delete)
       end
     end
   end
@@ -118,7 +112,7 @@ describe Image do
       attach_file file, image_dir + "april.jpeg"
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Image.count).to eq 1
       image = Image.first
 
@@ -135,7 +129,7 @@ describe Image do
       attach_file file, image_dir + "suzanne.gif"
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Image.count).to eq 1
       image = Image.first
 
@@ -152,7 +146,7 @@ describe Image do
       attach_file file, image_dir + "gearoidin.png"
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Image.count).to eq 1
       image = Image.first
 
@@ -193,6 +187,7 @@ describe Image do
       attach_file file, image_dir + "gearoidin.png"
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       image.reload
 
       expect(image.caption).to eq april[:caption]
@@ -209,6 +204,7 @@ describe Image do
       fill_in credit, with: suzanne[:credit].to_s
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       image.reload
 
       expect(image.caption).to eq suzanne[:caption]
@@ -226,6 +222,7 @@ describe Image do
       attach_file file, image_dir + "gearoidin.png"
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       image.reload
 
       expect(image.caption).to eq gearoidin[:caption]
@@ -244,6 +241,8 @@ describe Image do
       login user
       visit image_path(image)
       click_link delete
+
+      expect(page).to have_css(success, text: deleted)
       expect(Image.count).to be 0
     end
 

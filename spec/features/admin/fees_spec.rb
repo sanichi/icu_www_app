@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe Fee do
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:success) { "div.alert-success" }
-  let(:failure) { "div.alert-danger" }
+describe Fee do;
+  include_context "features"
 
   context "authorization" do
     let(:fee)    { create(:subscription_fee) }

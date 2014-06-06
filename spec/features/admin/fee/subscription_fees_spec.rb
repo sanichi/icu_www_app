@@ -1,27 +1,19 @@
 require 'spec_helper'
 
 describe Fee::Subscription do
+  include_context "features"
+
+  let(:amount)       { I18n.t("fee.amount") }
+  let(:clone)        { I18n.t("fee.clone") }
+  let(:fee_name)     { I18n.t("fee.name") }
+  let(:rollover)     { I18n.t("fee.rollover") }
+  let(:subscription) { I18n.t("fee.type.subscription") }
+
   before(:each) do
     login("treasurer")
   end
 
-  let(:active)       { I18n.t("active") }
-  let(:amount)       { I18n.t("fee.amount") }
-  let(:clone)        { I18n.t("fee.clone") }
-  let(:delete)       { I18n.t("delete") }
-  let(:edit)         { I18n.t("edit") }
-  let(:name)         { I18n.t("fee.name") }
-  let(:rollover)     { I18n.t("fee.rollover") }
-  let(:save)         { I18n.t("save") }
-  let(:season)       { I18n.t("season") }
-  let(:subscription) { I18n.t("fee.type.subscription") }
-  let(:type)         { I18n.t("type") }
-
-  let(:failure)      { "div.alert-danger" }
-  let(:field_error)  { "div.help-block" }
-  let(:success)      { "div.alert-success" }
-
-  describe "create" do
+  context "create" do
     let(:fee) { create(:subscription_fee) }
 
     it "new" do
@@ -48,7 +40,7 @@ describe Fee::Subscription do
     it "duplicate" do
       visit new_admin_fee_path
       click_link subscription
-      fill_in name, with: fee.name
+      fill_in fee_name, with: fee.name
       fill_in amount, with: fee.amount
       fill_in season, with: fee.season.to_s
       click_button save
@@ -64,7 +56,7 @@ describe Fee::Subscription do
     it "clone" do
       visit admin_fee_path(fee)
       click_link clone
-      fill_in name, with: "Unemployed"
+      fill_in fee_name, with: "Unemployed"
       fill_in amount, with: "20.00"
       click_button save
 
@@ -94,7 +86,7 @@ describe Fee::Subscription do
     end
   end
 
-  describe "edit" do
+  context "edit" do
     let(:fee) { create(:subscription_fee) }
 
     it "amount" do
@@ -122,7 +114,7 @@ describe Fee::Subscription do
     end
   end
 
-  describe "delete" do
+  context "delete" do
     let(:fee) { create(:subscription_fee, name: "Special") }
     let(:item) { create(:subscription_item) }
 
@@ -130,7 +122,7 @@ describe Fee::Subscription do
       visit admin_fee_path(fee)
       click_link delete
 
-      expect(page).to have_css(success, text: /successfully deleted/)
+      expect(page).to have_css(success, text: "deleted")
 
       expect(Fee::Subscription.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
@@ -153,7 +145,7 @@ describe Fee::Subscription do
       visit admin_fee_path(item.fee)
       click_link delete
 
-      expect(page).to have_css(success, text: /successfully deleted/)
+      expect(page).to have_css(success, text: "deleted")
 
       expect(Fee::Subscription.count).to eq 0
       expect(Item::Subscription.count).to eq 0

@@ -1,36 +1,26 @@
 require 'spec_helper'
 
 describe Player do
-  let(:address)      { I18n.t("address") }
-  let(:button)       { I18n.t("edit") }
-  let(:club)         { I18n.t("club.club") }
-  let(:deceased)     { I18n.t("player.status.deceased") }
-  let(:dob)          { I18n.t("player.dob") }
-  let(:edit)         { I18n.t("edit") }
-  let(:email)        { I18n.t("email") }
-  let(:federation)   { I18n.t("player.federation") }
-  let(:female)       { I18n.t("player.gender.F") }
-  let(:first_name)   { I18n.t("player.first_name") }
-  let(:gender)       { I18n.t("player.gender.gender") }
-  let(:home)         { I18n.t("player.phone.home") }
-  let(:inactive)     { I18n.t("player.status.inactive") }
-  let(:joined)       { I18n.t("player.joined") }
-  let(:last_name)    { I18n.t("player.last_name") }
-  let(:male)         { I18n.t("player.gender.M") }
-  let(:master_id)    { I18n.t("player.master_id") }
-  let(:mobile)       { I18n.t("player.phone.mobile") }
-  let(:none)         { I18n.t("player.no_club") }
-  let(:notes)        { I18n.t("notes") }
-  let(:please)       { I18n.t("please_select") }
-  let(:save)         { I18n.t("save") }
-  let(:status)       { I18n.t("player.status.status") }
-  let(:title)        { I18n.t("player.title.player") }
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-  let(:work)         { I18n.t("player.phone.work") }
+  include_context "features"
 
-  let(:failure)     { "div.alert-danger" }
-  let(:success)     { "div.alert-success" }
-  let(:field_error) { "div.help-block" }
+  let(:club)            { I18n.t("club.club") }
+  let(:deceased)        { I18n.t("player.status.deceased") }
+  let(:dob)             { I18n.t("player.dob") }
+  let(:federation)      { I18n.t("player.federation") }
+  let(:female)          { I18n.t("player.gender.F") }
+  let(:first_name)      { I18n.t("player.first_name") }
+  let(:gender)          { I18n.t("player.gender.gender") }
+  let(:home)            { I18n.t("player.phone.home") }
+  let(:inactive_status) { I18n.t("player.status.inactive") }
+  let(:joined)          { I18n.t("player.joined") }
+  let(:last_name)       { I18n.t("player.last_name") }
+  let(:male)            { I18n.t("player.gender.M") }
+  let(:master_id)       { I18n.t("player.master_id") }
+  let(:mobile)          { I18n.t("player.phone.mobile") }
+  let(:none)            { I18n.t("player.no_club") }
+  let(:status)          { I18n.t("player.status.status") }
+  let(:title)           { I18n.t("player.title.player") }
+  let(:work)            { I18n.t("player.phone.work") }
 
   context "authorization" do
     let(:header) { "h1" }
@@ -49,7 +39,7 @@ describe Player do
         expect(page).to_not have_css(failure)
         visit admin_player_path(player)
         expect(page).to have_css(header, text: player.name)
-        expect(page).to have_link(button)
+        expect(page).to have_link(edit)
       end
     end
 
@@ -91,8 +81,10 @@ describe Player do
       select "IM", from: title
       fill_in notes, with: "ICU web developer and system manager."
       click_button save
-      expect(page).to have_css(success, text: "created")
+
+      expect(page).to have_css(success, text: created)
       player = Player.last
+
       expect(player.first_name).to eq "Mark J. L."
       expect(player.last_name).to eq "Orr"
       expect(player.dob.to_s).to eq "1955-11-09"
@@ -120,8 +112,10 @@ describe Player do
       fill_in dob, with: "1964-06-10"
       select female, from: gender
       click_button save
-      expect(page).to have_css(success, text: "created")
+
+      expect(page).to have_css(success, text: created)
       player = Player.last
+
       expect(player.first_name).to eq "Gearoidin"
       expect(player.last_name).to eq "Ui Laighleis"
       expect(player.dob.to_s).to eq "1964-06-10"
@@ -140,6 +134,7 @@ describe Player do
       fill_in joined, with: "1985-10-20"
       select female, from: gender
       click_button save
+
       expect(page).to have_css(field_error, text: "after")
     end
 
@@ -151,6 +146,7 @@ describe Player do
       fill_in joined, with: Date.today.days_since(1)
       select female, from: gender
       click_button save
+
       expect(page).to have_css(field_error, text: "before")
     end
 
@@ -158,10 +154,12 @@ describe Player do
       click_link new_player
       fill_in first_name, with: "Guest"
       fill_in last_name, with: "User"
-      select inactive, from: status
+      select inactive_status, from: status
       click_button save
-      expect(page).to have_css(success, text: "created")
+
+      expect(page).to have_css(success, text: created)
       player = Player.last
+
       expect(player.first_name).to eq "Guest"
       expect(player.last_name).to eq "User"
       expect(player.dob).to be_nil
@@ -188,9 +186,11 @@ describe Player do
       click_link edit
       select deceased, from: status
       click_button save
-      expect(page).to have_css(success, text: "updated")
+
+      expect(page).to have_css(success, text: updated)
       expect(page).to have_css("h1 span", text: I18n.t("player.status.deceased"))
       expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: I18n.t("player.status.deceased"))
+
       player.reload
       expect(player.status).to eq "deceased"
     end
@@ -205,7 +205,8 @@ describe Player do
       click_link edit
       select "Hollywood", from: club
       click_button save
-      expect(page).to have_css(success, text: "updated")
+
+      expect(page).to have_css(success, text: updated)
       expect(page).to have_xpath("//th[.='#{I18n.t("club.club")}']/following-sibling::td", text: "Hollywood")
       player.reload
       expect(player.club.name).to eq "Hollywood"
@@ -213,6 +214,7 @@ describe Player do
       click_link edit
       select none, from: club
       click_button save
+      expect(page).to have_css(success, text: updated)
       player.reload
       expect(player.club_id).to be_nil
     end
@@ -223,10 +225,12 @@ describe Player do
       visit edit_admin_player_path(player)
       fill_in master_id, with: master.id
       click_button save
-      expect(page).to have_css(success, text: "updated")
+
+      expect(page).to have_css(success, text: updated)
       expect(page).to have_css("h1 span", text: I18n.t("player.duplicate"))
-      expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: I18n.t("player.status.inactive"))
+      expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: inactive_status)
       player.reload
+
       expect(player.duplicate?).to be_true
       expect(player.player_id).to eq master.id
       expect(player.status).to eq "inactive"
@@ -255,10 +259,12 @@ describe Player do
       select please, from: gender
       click_button save
       expect(page).to have_css(field_error, text: "can't be blank when status is active", count: 3)
-      select inactive, from: status
+      select inactive_status, from: status
       click_button save
-      expect(page).to have_css(success, text: "updated")
+
+      expect(page).to have_css(success, text: updated)
       player.reload
+
       expect(player.dob).to be_nil
       expect(player.joined).to be_nil
       expect(player.gender).to be_nil

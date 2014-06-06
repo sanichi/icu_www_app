@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "Pay", js: true do
+  include_context "features"
+
   let(:add_to_cart)           { I18n.t("item.add") }
   let(:bad_cvc)               { I18n.t("shop.payment.error.cvc") }
   let(:bad_email)             { I18n.t("shop.payment.error.email") }
@@ -10,11 +12,9 @@ describe "Pay", js: true do
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:cheque)                { I18n.t("shop.payment.method.cheque") }
   let(:completed)             { I18n.t("shop.payment.completed") }
-  let(:confirm)               { I18n.t("confirm") }
   let(:confirmation_email_to) { I18n.t("shop.payment.confirmation_sent.success") }
   let(:current)               { I18n.t("shop.cart.current") }
   let(:dob)                   { I18n.t("player.abbrev.dob") }
-  let(:email)                 { I18n.t("email") }
   let(:fed)                   { I18n.t("player.federation") }
   let(:first_name)            { I18n.t("player.first_name") }
   let(:gateway)               { I18n.t("shop.payment.error.gateway") }
@@ -25,7 +25,6 @@ describe "Pay", js: true do
   let(:payment_received)      { I18n.t("shop.payment.received") }
   let(:payment_registered)    { I18n.t("shop.payment.registered") }
   let(:payment_time)          { I18n.t("shop.payment.time") }
-  let(:save)                  { I18n.t("save") }
   let(:season_ticket)         { I18n.t("user.ticket") }
   let(:select_member)         { I18n.t("item.member.select") }
   let(:shop)                  { I18n.t("shop.shop") }
@@ -47,9 +46,7 @@ describe "Pay", js: true do
   let(:expired_card)  { "Your card has expired." }
   let(:incorrect_cvc) { "Your card's security code is incorrect." }
 
-  let(:error)   { "div.alert-danger" }
   let(:item)    { "li" }
-  let(:success) { "div.alert-success" }
   let(:title)   { "h3" }
 
   let(:player)            { create(:player) }
@@ -148,7 +145,7 @@ describe "Pay", js: true do
 
     it "stripe errors" do
       fill_in_all_and_click_pay(number: "4000000000000002")
-      expect(page).to have_css(error, text: gateway_error(card_declined))
+      expect(page).to have_css(failure, text: gateway_error(card_declined))
       subscription = Item::Subscription.last
       expect(subscription).to be_unpaid
       cart = Cart.include_errors.last
@@ -163,7 +160,7 @@ describe "Pay", js: true do
       expect(ActionMailer::Base.deliveries).to be_empty
 
       fill_in_number_and_click_pay(number: "4000000000000069")
-      expect(page).to have_css(error, text: gateway_error(expired_card))
+      expect(page).to have_css(failure, text: gateway_error(expired_card))
       subscription.reload
       expect(subscription).to be_unpaid
       cart.reload
@@ -183,7 +180,7 @@ describe "Pay", js: true do
       click_link checkout
 
       fill_in_all_and_click_pay(number: "4000000000000127")
-      expect(page).to have_css(error, text: gateway_error(incorrect_cvc))
+      expect(page).to have_css(failure, text: gateway_error(incorrect_cvc))
       subscription.reload
       expect(subscription).to be_unpaid
       cart.reload
@@ -203,39 +200,39 @@ describe "Pay", js: true do
 
       # Card.
       click_button pay
-      expect(page).to have_css(error, text: bad_number)
+      expect(page).to have_css(failure, text: bad_number)
       fill_in number_id, with: "1234"
       click_button pay
-      expect(page).to have_css(error, text: bad_number)
+      expect(page).to have_css(failure, text: bad_number)
 
       # Expiry.
       fill_in number_id, with: number
       click_button pay
-      expect(page).to have_css(error, text: bad_expiry)
+      expect(page).to have_css(failure, text: bad_expiry)
       fill_in expiry_id, with: "99"
       click_button pay
-      expect(page).to have_css(error, text: bad_expiry)
+      expect(page).to have_css(failure, text: bad_expiry)
 
       # CVC.
       fill_in expiry_id, with: expiry
       click_button pay
-      expect(page).to have_css(error, text: bad_cvc)
+      expect(page).to have_css(failure, text: bad_cvc)
       fill_in cvc_id, with: "1"
       click_button pay
-      expect(page).to have_css(error, text: bad_cvc)
+      expect(page).to have_css(failure, text: bad_cvc)
 
       # Name.
       fill_in cvc_id, with: cvc
       click_button pay
-      expect(page).to have_css(error, text: bad_name)
+      expect(page).to have_css(failure, text: bad_name)
 
       # Email.
       fill_in name_id, with: player.name
       click_button pay
-      expect(page).to have_css(error, text: bad_email)
+      expect(page).to have_css(failure, text: bad_email)
       fill_in email_id, with: "rubbish"
       click_button pay
-      expect(page).to have_css(error, text: bad_email)
+      expect(page).to have_css(failure, text: bad_email)
 
       expect(PaymentError.count).to eq 0
       expect(ActionMailer::Base.deliveries).to be_empty
@@ -343,7 +340,7 @@ describe "Pay", js: true do
       select newbie_fed, from: fed
       fill_in email, with: newbie.email
       click_button save
-      expect(page).to_not have_css(error)
+      expect(page).to_not have_css(failure)
       click_button add_to_cart
       click_link checkout
     end

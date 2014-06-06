@@ -1,30 +1,21 @@
 require 'spec_helper'
 
-describe Event do
-  let(:active)        { I18n.t("active") }
-  let(:edit)          { I18n.t("edit") }
+describe Event do;
+  include_context "features"
+
   let(:category)      { I18n.t("event.category.category") }
   let(:contact)       { I18n.t("event.contact") }
-  let(:delete)        { I18n.t("delete") }
-  let(:email)         { I18n.t("event.email") }
+  let(:event_email)   { I18n.t("event.email") }
   let(:end_date)      { I18n.t("event.end") }
   let(:flyer)         { I18n.t("event.flyer") }
   let(:lat)           { I18n.t("event.lat") }
   let(:location)      { I18n.t("event.location") }
   let(:long)          { I18n.t("event.long") }
-  let(:name)          { I18n.t("event.name") }
-  let(:notes)         { I18n.t("notes") }
+  let(:event_name)    { I18n.t("event.name") }
   let(:phone)         { I18n.t("event.phone") }
   let(:prize_fund)    { I18n.t("event.prize_fund") }
-  let(:save)          { I18n.t("save") }
   let(:start_date)    { I18n.t("event.start") }
-  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:url)           { I18n.t("event.url") }
-
-  let(:failure)       { "div.alert-danger" }
-  let(:field_error)   { "div.help-block" }
-  let(:success)       { "div.alert-success" }
-  let(:success_text)  { "successfully created" }
 
   let(:doc)           { "kilkenny_2005.doc" }
   let(:docx)          { "bray_2014.docx" }
@@ -55,7 +46,7 @@ describe Event do
         expect(page).to_not have_css(failure)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(name), text: event.name)
+        expect(page).to have_xpath(cell(event_name), text: event.name)
         expect(page).to have_link(edit)
       end
     end
@@ -69,7 +60,7 @@ describe Event do
         expect(page).to have_css(failure)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(name), text: event.name)
+        expect(page).to have_xpath(cell(event_name), text: event.name)
         expect(page).to_not have_link(edit)
       end
     end
@@ -83,7 +74,7 @@ describe Event do
         expect(page).to have_css(failure, text: unauthorized)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(name), text: event.name)
+        expect(page).to have_xpath(cell(event_name), text: event.name)
         expect(page).to_not have_link(edit)
       end
     end
@@ -108,14 +99,14 @@ describe Event do
       visit new_admin_event_path
       fill_in end_date, with: finish.to_s
       fill_in location, with: location_text
-      fill_in name, with: name_text
+      fill_in event_name, with: name_text
       fill_in start_date, with: start.to_s
     end
 
     it "minimum data" do
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 
@@ -142,7 +133,7 @@ describe Event do
       check active
       select I18n.t("event.category.#{Event::CATEGORIES[1]}"), from: category
       fill_in contact, with: contact_text
-      fill_in email, with: email_text
+      fill_in event_email, with: email_text
       fill_in lat, with: lat_text
       fill_in long, with: long_text
       fill_in notes, with: note_text
@@ -151,7 +142,7 @@ describe Event do
       fill_in url, with: url_text
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 
@@ -178,7 +169,7 @@ describe Event do
       attach_file flyer, event_dir + pdf
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 
@@ -191,7 +182,7 @@ describe Event do
       attach_file flyer, event_dir + docx
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 
@@ -204,7 +195,7 @@ describe Event do
       attach_file flyer, event_dir + doc
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 
@@ -217,7 +208,7 @@ describe Event do
       attach_file flyer, event_dir + rtf
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Event.count).to eq 1
       event = Event.first
 

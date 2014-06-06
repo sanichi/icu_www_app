@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe JournalEntry do
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:success) { "div.alert-success" }
-  let(:failure) { "div.alert-danger" }
+describe JournalEntry do;
+  include_context "features"
 
   def create_club
     click_link "New Club"

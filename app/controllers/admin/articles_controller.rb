@@ -33,7 +33,7 @@ class Admin::ArticlesController < ApplicationController
   def destroy
     @article.journal(:destroy, current_user, request.ip)
     @article.destroy
-    redirect_to admin_articles_path, notice: "Article was successfully deleted"
+    redirect_to articles_path, notice: "Article was successfully deleted"
   end
 
   private

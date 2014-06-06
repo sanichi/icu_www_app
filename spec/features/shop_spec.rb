@@ -1,28 +1,25 @@
 require 'spec_helper'
 
 describe "Shop" do
+  include_context "features"
+
   let(:add_to_cart)     { I18n.t("item.add") }
   let(:cart_link)       { I18n.t("shop.cart.current") + ":" }
   let(:continue)        { I18n.t("shop.cart.continue") }
   let(:cost)            { I18n.t("item.cost") }
   let(:dob)             { I18n.t("player.abbrev.dob") }
-  let(:email)           { I18n.t("email") }
   let(:empty)           { I18n.t("shop.cart.empty") }
   let(:fed)             { I18n.t("player.federation") }
   let(:first_name)      { I18n.t("player.first_name") }
   let(:gender)          { I18n.t("player.gender.gender") }
   let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
-  let(:member)          { I18n.t("member") }
   let(:new_member)      { I18n.t("item.member.new") }
-  let(:save)            { I18n.t("save") }
   let(:select_member)   { I18n.t("item.member.select") }
   let(:total)           { I18n.t("shop.cart.total") }
 
-  let(:delete)          { "✘" }
-  let(:failure)         { "div.alert-danger" }
+  let(:delete_cross)    { "✘" }
   let(:force_submit)    { "\n" }
-  let(:warning)         { "div.alert-warning" }
 
   def xpath(type, text, *txts)
     txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|
@@ -310,7 +307,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Subscription.inactive.count).to eq 2
 
-      click_link delete, match: :first
+      click_link delete_cross, match: :first
       confirm_dialog
 
       expect(page).to have_xpath(xpath("th", total, unemployed_sub.amount))
@@ -318,7 +315,7 @@ describe "Shop" do
       expect(Cart.count).to eq 1
       expect(Item::Subscription.inactive.count).to eq 1
 
-      click_link delete, match: :first
+      click_link delete_cross, match: :first
       confirm_dialog
 
       expect(page).to have_css(warning, text: empty)
@@ -348,7 +345,7 @@ describe "Shop" do
       expect(cart.items.count).to eq 0
       expect(other_cart.items.count).to eq 1
 
-      click_link delete, match: :first
+      click_link delete_cross, match: :first
       confirm_dialog
 
       expect(page).to have_link(cart_link)
@@ -720,7 +717,7 @@ describe "Shop" do
 
         let(:date)              { Date.today.months_since(1).to_s }
         let(:past_date)         { Date.today.days_ago(1).to_s }
-        let(:name)              { "Golders Green Weekender" }
+        let(:my_name)           { "Golders Green Weekender" }
 
         before(:each) do
           visit shop_path
@@ -729,7 +726,7 @@ describe "Shop" do
           fill_in last_name, with: player.last_name + force_submit
           fill_in first_name, with: player.first_name + force_submit
           click_link player.id
-          fill_in tournament_name.label, with: name
+          fill_in tournament_name.label, with: my_name
         end
 
         it "valid date" do
@@ -747,7 +744,7 @@ describe "Shop" do
           expect(item.cost).to eq rating_fee.amount
           expect(item.description).to eq rating_fee.description(:full)
           expect(item.notes.size).to eq 2
-          expect(item.notes.include?(name)).to be_true
+          expect(item.notes.include?(my_name)).to be_true
           expect(item.notes.include?(date)).to be_true
         end
 

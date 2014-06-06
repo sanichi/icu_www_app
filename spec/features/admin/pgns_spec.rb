@@ -1,19 +1,11 @@
 require 'spec_helper'
 
-describe Pgn do
+describe Pgn do;
+  include_context "features"
+
   let(:comment_input) { I18n.t("comment") }
-  let(:delete)        { I18n.t("delete") }
-  let(:edit)          { I18n.t("edit") }
-  let(:file)          { I18n.t("file") }
-  let(:save)          { I18n.t("save") }
-
-  let(:import) { "Import?" }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
-  let(:warning) { "div.alert-warning" }
-
-  let(:pgn_dir) { Rails.root + "spec/files/pgns/" }
+  let(:import)        { "Import?" }
+  let(:pgn_dir)       { Rails.root + "spec/files/pgns/" }
 
   context "authorization" do
     let(:cell)         { "//td[.='#{pgn.file_name}']" }
@@ -22,7 +14,6 @@ describe Pgn do
     let(:level3)       { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
     let(:pgn)          { create(:pgn, user: user) }
     let(:user)         { create(:user, roles: "editor") }
-    let(:unauthorized) { I18n.t("unauthorized.default") }
 
     it "some roles can manage PGNs" do
       level1.each do |role|
@@ -134,7 +125,6 @@ describe Pgn do
 
   context "edit" do
     let(:comment) { "I like to comment" }
-    let(:updated) { "successfully updated" }
 
     before(:each) do
       @user = login "editor"
@@ -163,8 +153,6 @@ describe Pgn do
   end
 
   context "delete" do
-    let(:deleted) { "successfully deleted" }
-
     before(:each) do
       @user = login "editor"
       visit new_admin_pgn_path

@@ -1,21 +1,16 @@
 require 'spec_helper'
 
 describe User do
-  let(:edit)            { I18n.t("edit") }
-  let(:english)         { I18n.t("user.lang.en") }
-  let(:irish)           { I18n.t("user.lang.ga") }
-  let(:irish_ga)        { I18n.t("user.lang.ga", locale: "ga") }
-  let(:locale_menu)     { I18n.t("user.locale") }
-  let(:locale_menu_ga)  { I18n.t("user.locale", locale: "ga") }
-  let(:preferences)     { I18n.t("user.preferences") }
-  let(:save)            { I18n.t("save") }
-  let(:signed_in_as)    { I18n.t("session.signed_in_as") }
-  let(:theme_menu)      { I18n.t("user.theme") }
-  let(:unauthorized)    { I18n.t("unauthorized.default") }
-  let(:updated)         { I18n.t("user.updated") }
+  include_context "features"
 
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
+  let(:english)        { I18n.t("user.lang.en") }
+  let(:irish)          { I18n.t("user.lang.ga") }
+  let(:irish_ga)       { I18n.t("user.lang.ga", locale: "ga") }
+  let(:locale_menu)    { I18n.t("user.locale") }
+  let(:locale_menu_ga) { I18n.t("user.locale", locale: "ga") }
+  let(:preferences)    { I18n.t("user.preferences") }
+  let(:signed_in_as)   { I18n.t("session.signed_in_as") }
+  let(:theme_menu)     { I18n.t("user.theme") }
 
   context "authorization" do
     let!(:other_user) { create(:user) }

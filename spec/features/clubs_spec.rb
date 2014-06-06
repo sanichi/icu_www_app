@@ -1,14 +1,10 @@
 require 'spec_helper'
 
 describe Club do
-  let(:active)      { I18n.t("active") }
-  let(:either)      { I18n.t("either") }
-  let(:city)        { I18n.t("city") }
-  let(:country)     { I18n.t("club.county") }
-  let(:province)    { I18n.t("club.province") }
-  let(:inactive)    { I18n.t("inactive") }
-  let(:last_search) { I18n.t("last_search") }
-  let(:name)        { I18n.t("name") }
+  include_context "features"
+
+  let(:country)  { I18n.t("club.county") }
+  let(:province) { I18n.t("club.province") }
 
   context "search" do
     before(:each) do

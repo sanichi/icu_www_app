@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe Upload do
+  include_context "features"
+
   let(:access)     { I18n.t("access.access") }
   let(:adm_access) { I18n.t("access.admins") }
   let(:all_access) { I18n.t("access.all") }
   let(:edr_access) { I18n.t("access.editors") }
   let(:mem_access) { I18n.t("access.members") }
-  let(:search)     { I18n.t("search") }
 
   context "access" do
     let!(:upload_all) { create(:upload, access: "all") }

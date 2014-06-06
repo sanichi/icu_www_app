@@ -1,31 +1,24 @@
 require 'spec_helper'
 
 describe Fee::Entry do
-  before(:each) do
-    login("treasurer")
-  end
+  include_context "features"
 
-  let(:active)            { I18n.t("active") }
   let(:age_ref)           { I18n.t("fee.age.ref_date") }
   let(:amount)            { I18n.t("fee.amount") }
   let(:clone)             { I18n.t("fee.clone") }
-  let(:delete)            { I18n.t("delete") }
   let(:discount_deadline) { I18n.t("fee.discount_deadline") }
   let(:discounted_amount) { I18n.t("fee.discounted_amount") }
-  let(:edit)              { I18n.t("edit") }
   let(:end_date)          { I18n.t("fee.end") }
   let(:entry)             { I18n.t("fee.type.entry") }
   let(:max_age)           { I18n.t("fee.age.max") }
   let(:max_rating)        { I18n.t("fee.rating.max") }
   let(:min_age)           { I18n.t("fee.age.min") }
   let(:min_rating)        { I18n.t("fee.rating.min") }
-  let(:name)              { I18n.t("fee.name") }
+  let(:fee_name)          { I18n.t("fee.name") }
   let(:rollover)          { I18n.t("fee.rollover") }
   let(:sale_end)          { I18n.t("fee.sale_end") }
   let(:sale_start)        { I18n.t("fee.sale_start") }
-  let(:save)              { I18n.t("save") }
   let(:start_date)        { I18n.t("fee.start") }
-  let(:type)              { I18n.t("type") }
 
   let(:new_user_input)    { "Add User Input" }
   let(:user_input_type)   { "Type" }
@@ -33,22 +26,22 @@ describe Fee::Entry do
   let(:half_point_bye)    { "½-point bye in R1" }
   let(:option)            { "Option" }
 
-  let(:failure)           { "div.alert-danger" }
-  let(:field_error)       { "div.help-block" }
-  let(:success)           { "div.alert-success" }
-
   let(:last_week)         { Date.today.days_ago(7) }
   let(:late_next_year)    { Date.today.next_year.at_end_of_year.days_ago(1) }
   let(:next_year)         { Date.today.at_end_of_year.days_since(40) }
   let(:week_ago)          { Date.today.days_ago(7) }
 
-  describe "create" do
+  before(:each) do
+    login("treasurer")
+  end
+
+  context "create" do
     let(:fee) { create(:entry_fee) }
 
     it "new" do
       visit new_admin_fee_path
       click_link entry
-      fill_in name, with: "Bunratty Masters"
+      fill_in fee_name, with: "Bunratty Masters"
       fill_in amount, with: "50"
       fill_in start_date, with: next_year.to_s
       fill_in end_date, with: next_year.days_since(2).to_s
@@ -85,7 +78,7 @@ describe Fee::Entry do
 
       visit new_admin_fee_path
       click_link entry
-      fill_in name, with: fee.name
+      fill_in fee_name, with: fee.name
       fill_in amount, with: fee.amount.to_s
       fill_in start_date, with: fee.start_date.to_s
       fill_in end_date, with: fee.end_date.to_s
@@ -108,7 +101,7 @@ describe Fee::Entry do
       expect(fee).to be_cloneable
       visit admin_fee_path(fee)
       click_link clone
-      fill_in name, with: "Bunratty Challengers"
+      fill_in fee_name, with: "Bunratty Challengers"
       fill_in amount, with: "20.00"
       click_button save
 
@@ -138,7 +131,7 @@ describe Fee::Entry do
     it "discount, rating and age" do
       visit new_admin_fee_path
       click_link entry
-      fill_in name, with: "Bangor U12"
+      fill_in fee_name, with: "Bangor U12"
       fill_in amount, with: "35"
       fill_in discounted_amount, with: "30"
       fill_in discount_deadline, with: late_next_year.days_ago(10).to_s
@@ -201,7 +194,7 @@ describe Fee::Entry do
     it "bad age" do
       visit new_admin_fee_path
       click_link entry
-      fill_in name, with: "Leinster U15"
+      fill_in fee_name, with: "Leinster U15"
       fill_in amount, with: "30"
       fill_in start_date, with: next_year.to_s
       fill_in end_date, with: next_year.days_since(2).to_s
@@ -226,7 +219,7 @@ describe Fee::Entry do
     it "bad rating" do
       visit new_admin_fee_path
       click_link entry
-      fill_in name, with: "Bunratty Challengers"
+      fill_in fee_name, with: "Bunratty Challengers"
       fill_in amount, with: "30"
       fill_in start_date, with: next_year.to_s
       fill_in end_date, with: next_year.days_since(2).to_s
@@ -250,7 +243,7 @@ describe Fee::Entry do
     end
   end
 
-  describe "edit" do
+  context "edit" do
     let(:fee) { create(:entry_fee, name: "Bunratty Masters") }
 
     it "amount" do
@@ -278,7 +271,7 @@ describe Fee::Entry do
     end
   end
 
-  describe "delete" do
+  context "delete" do
     let(:fee) { create(:entry_fee, name: "Bunratty Special") }
     let(:item) { create(:entry_item) }
 
@@ -286,7 +279,7 @@ describe Fee::Entry do
       visit admin_fee_path(fee)
       click_link delete
 
-      expect(page).to have_css(success, text: /successfully deleted/)
+      expect(page).to have_css(success, text: "deleted")
 
       expect(Fee::Entry.count).to eq 0
       expect(JournalEntry.where(journalable_type: "Fee", action: "destroy").count).to eq 1
@@ -310,7 +303,7 @@ describe Fee::Entry do
       visit admin_fee_path(item.fee)
       click_link delete
 
-      expect(page).to have_css(success, text: /successfully deleted/)
+      expect(page).to have_css(success, text: "deleted")
 
       expect(Fee::Entry.count).to eq 0
       expect(Item::Entry.count).to eq 0

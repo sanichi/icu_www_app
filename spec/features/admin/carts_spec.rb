@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe Cart do
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
+describe Cart do;
+  include_context "features"
 
   context "authorization" do
     let(:level1) { %w[admin treasurer] }

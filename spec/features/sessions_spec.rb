@@ -1,18 +1,14 @@
 require 'spec_helper'
 
 describe "Sessions" do
-  let(:email)            { I18n.t("email") }
+  include_context "features"
+
   let(:expired)          { I18n.t("session.subscription_expired") }
-  let(:icu)              { I18n.t("icu") }
   let(:invalid_email)    { I18n.t("session.invalid_email") }
   let(:invalid_password) { I18n.t("session.invalid_password") }
-  let(:passwordinput)   { I18n.t("user.password") }
+  let(:passwordinput)    { I18n.t("user.password") }
   let(:sign_in_button)   { I18n.t("session.sign_in") }
   let(:sign_in_title)    { I18n.t("session.sign_in") }
-  let(:signed_in_as)     { I18n.t("session.signed_in_as") }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
 
   let(:password)     { "password" }
   let(:bad_password) { "drowssap" }

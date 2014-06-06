@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe Page do
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:success) { "div.alert-success" }
-  let(:failure) { "div.alert-danger" }
+describe Page do;
+  include_context "features"
 
   context "authorization" do
     let(:level1) { %w[admin] }

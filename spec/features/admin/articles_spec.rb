@@ -1,22 +1,13 @@
 require 'spec_helper'
 
-describe Article do
+describe Article do;
+  include_context "features"
+
   let(:access_menu)   { I18n.t("access.access") }
-  let(:active_button) { I18n.t("active") }
   let(:author_input)  { I18n.t("article.author") }
   let(:category_menu) { I18n.t("article.category.category") }
-  let(:delete)        { I18n.t("delete") }
-  let(:edit)          { I18n.t("edit") }
-  let(:save)          { I18n.t("save") }
-  let(:search)        { I18n.t("search") }
   let(:text_text)     { I18n.t("article.text") }
   let(:title_input)   { I18n.t("article.title") }
-  let(:unauthorized)  { I18n.t("unauthorized.default") }
-
-  let(:failure)       { "div.alert-danger" }
-  let(:field_error)   { "div.help-block" }
-  let(:success)       { "div.alert-success" }
-  let(:success_text)  { "successfully created" }
 
   context "authorization" do
     let!(:article) { create(:article, user: user) }
@@ -143,10 +134,10 @@ describe Article do
       fill_in text_text, with: text
       select I18n.t("article.category.#{category}"), from: category_menu
       select I18n.t("access.#{access}"), from: access_menu
-      check active_button
+      check active
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Article.count).to eq 1
       article = Article.first
 
@@ -184,6 +175,7 @@ describe Article do
       fill_in title_input, with: new_title
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       article.reload
       expect(article.title).to eq new_title
 
@@ -237,6 +229,8 @@ describe Article do
       login user
       visit article_path(article)
       click_link delete
+      expect(page).to have_css(success, text: deleted)
+
       expect(Article.count).to be 0
       expect(JournalEntry.articles.where(action: "destroy", by: user.signature, journalable_id: article.id).count).to eq 1
     end

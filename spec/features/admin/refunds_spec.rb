@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Refund do
+describe Refund do;
+  include_context "features"
+
   let(:add_to_cart)           { I18n.t("item.add") }
   let(:checkout)              { I18n.t("shop.cart.checkout") }
   let(:completed)             { I18n.t("shop.payment.completed") }
@@ -24,7 +26,6 @@ describe Refund do
   let(:refund_button)         { "Refund" }
   let(:refund_link)           { "Refund..." }
   let(:refund_ok)             { "Refund was successful" }
-  let(:success)               { "div.alert-success" }
   let(:title)                 { "h3" }
   let(:total)                 { "//th[.='All']/following-sibling::th" }
 

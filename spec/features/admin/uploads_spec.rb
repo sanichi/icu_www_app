@@ -1,29 +1,18 @@
 require 'spec_helper'
 
-describe Upload do
+describe Upload do;
+  include_context "features"
+
   let(:access)        { I18n.t("access.access") }
   let(:adm_access)    { I18n.t("access.#{admins}") }
   let(:all_access)    { I18n.t("access.#{everyone}") }
   let(:edr_access)    { I18n.t("access.#{editors}") }
-  let(:delete)        { I18n.t("delete") }
-  let(:description)   { I18n.t("description") }
-  let(:edit)          { I18n.t("edit") }
-  let(:file)          { I18n.t("file") }
   let(:mem_access)    { I18n.t("access.#{members}") }
-  let(:save)          { I18n.t("save") }
-  let(:search)        { I18n.t("search") }
-  let(:unauthorized)  { I18n.t("unauthorized.default") }
-  let(:year)          { I18n.t("year") }
 
   let(:admins)        { "admins" }
   let(:editors)       { "editors" }
   let(:everyone)      { "all" }
   let(:members)       { "members" }
-
-  let(:failure)       { "div.alert-danger" }
-  let(:field_error)   { "div.help-block" }
-  let(:success)       { "div.alert-success" }
-  let(:success_text)  { "successfully created" }
 
   let(:upload_dir)    { Rails.root + "spec/files/uploads/" }
   let(:image_dir)     { Rails.root + "spec/files/images/" }
@@ -190,7 +179,7 @@ describe Upload do
       attach_file file, upload_dir + pdf_upload_file
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Upload.count).to eq 1
       upload = Upload.first
 
@@ -210,7 +199,7 @@ describe Upload do
       attach_file file, upload_dir + pgn_upload_file
       click_button save
 
-      expect(page).to have_css(success, text: success_text)
+      expect(page).to have_css(success, text: created)
       expect(Upload.count).to eq 1
       upload = Upload.first
 
@@ -260,7 +249,9 @@ describe Upload do
       attach_file file, upload_dir + new_file
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       upload.reload
+
       expect(upload.description).to eq old_desc
       expect(upload.year).to eq old_year
       expect(upload.access).to eq old_acsy
@@ -275,7 +266,9 @@ describe Upload do
       select edr_access, from: access
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       upload.reload
+
       expect(upload.description).to eq new_desc
       expect(upload.year).to eq new_year.to_i
       expect(upload.access).to eq editors
@@ -322,7 +315,9 @@ describe Upload do
       attach_file file, upload_dir + alt_file
       click_button save
 
+      expect(page).to have_css(success, text: updated)
       upload.reload
+
       expect(upload.description).to eq alt_desc
       expect(upload.year).to eq alt_year.to_i
       expect(upload.access).to eq members
@@ -342,6 +337,8 @@ describe Upload do
       login user
       visit admin_upload_path(upload)
       click_link delete
+
+      expect(page).to have_css(success, text: deleted)
       expect(Upload.count).to be 0
       expect(File.exist?(directory)).to be_false
     end

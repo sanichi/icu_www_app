@@ -1,10 +1,7 @@
 require 'spec_helper'
 
-describe BadLogin do
-  let(:unauthorized) { I18n.t("unauthorized.default") }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
+describe BadLogin do;
+  include_context "features"
 
   context "authorization" do
     let(:level1) { %w[admin] }
@@ -28,7 +25,6 @@ describe BadLogin do
   end
 
   context "index" do
-    let(:email)        { I18n.t("email") }
     let(:password)     { I18n.t("user.password") }
     let(:sign_in)      { I18n.t("session.sign_in") }
 

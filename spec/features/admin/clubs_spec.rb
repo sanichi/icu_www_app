@@ -1,26 +1,17 @@
 require 'spec_helper'
 
-describe Club do
-  let(:active)        { I18n.t("active") }
-  let(:address)       { I18n.t("address") }
-  let(:city)          { I18n.t("city") }
+describe Club do;
+  include_context "features"
+
   let(:contact)       { I18n.t("club.contact") }
   let(:county)        { I18n.t("club.county") }
   let(:district)      { I18n.t("club.district") }
-  let(:edit)          { I18n.t("edit") }
-  let(:email)         { I18n.t("email") }
   let(:latitude)      { I18n.t("club.lat") }
   let(:longitude)     { I18n.t("club.long") }
   let(:meetings)      { I18n.t("club.meet") }
-  let(:name)          { I18n.t("name") }
   let(:phone)         { I18n.t("club.phone") }
   let(:please_select) { I18n.t("please_select") }
-  let(:save)          { I18n.t("save") }
-  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:website)       { I18n.t("club.web") }
-
-  let(:failure) { "div.alert-danger" }
-  let(:success) { "div.alert-success" }
 
   context "authorization" do
     let(:club)   { create(:club) }
@@ -76,8 +67,10 @@ describe Club do
       fill_in phone, with: "02891 1234 567"
       check active
       click_button save
-      expect(page).to have_css(success, text: "created")
+
+      expect(page).to have_css(success, text: created)
       club = Club.last
+
       expect(club.name).to eq "Bangor"
       expect(club.web).to eq "http://www.ulsterchess.org/membership/Clubs/bangor"
       expect(club.meet).to eq "Thursdays"
@@ -101,8 +94,10 @@ describe Club do
       select "Down", from: county
       uncheck active
       click_button save
-      expect(page).to have_css(success, text: "created")
+
+      expect(page).to have_css(success, text: created)
       club = Club.last
+
       expect(club.name).to eq "Millisle"
       expect(club.web).to be_nil
       expect(club.meet).to be_nil
@@ -121,8 +116,6 @@ describe Club do
   end
 
   context "edit" do
-    let(:field_error) { "div.help-block" }
-
     before(:each) do
       @bangor = create(:club)
       login "editor"
