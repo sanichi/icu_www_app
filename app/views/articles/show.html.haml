@@ -1,0 +1,28 @@
+- content_for :title, @article.title
+= render "utils/prev_next", prev: @prev, id: @article.id, nixt: @next
+
+%h1.text-center= @article.title
+- if @article.author
+  %p.text-center= @article.author
+%hr
+= @article.to_html(@article.text)
+%hr
+%p.small.text-center
+  = t("created_at")
+  %strong= @article.created_at.to_date
+  = "◦"
+  = t("updated_at")
+  %strong= @article.created_at.to_date
+  = "◦"
+  = t("user.role.editor")
+  %strong= @article.user.player.name
+%hr
+- if can?(:update, @article)
+  = link_to t("edit"), edit_admin_article_path(@article), class: "btn btn-primary"
+- if can?(:destroy, @article)
+  = link_to t("delete"), admin_article_path(@article), data: { confirm: "Sure you want to delete this article?" }, method: :delete, class: "btn btn-danger"
+- if path = last_search(:articles)
+  = link_to t("last_search"), path, class: "btn btn-default"
+- else
+  = link_to t("article.articles"), articles_path, class: "btn btn-default"
+= render "admin/journal_entries/changes", entries: @entries

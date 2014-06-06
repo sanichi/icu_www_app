@@ -18,7 +18,7 @@
               %th= t("access.access")
         %tbody
           - @uploads.matches.each do |upload|
-            %tr
+            %tr.result
               %td= link_to upload.data_file_name, upload.url, target: "upload"
               %td= link_to_if admin, upload.description, [:admin, upload]
               %td.text-center= upload.year

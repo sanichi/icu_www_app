@@ -1,0 +1,24 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @article], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@article.new_record? ? 'New' : 'Edit'} Article"
+        - locals = { form: f, object: @article, col: "sm", pad: 2, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :title, text: t("article.title"), width: 7)
+        = render "utils/select_for", locals.merge(param: :category, text: t("article.category.category"), menu: article_category_menu(@article.category, "please_select"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :author, text: t("article.author"), width: 6, mark: "none")
+        - menu = access_menu(@article.access, Article.accessibilities_for(current_user), @article.new_record? && "please_select")
+        = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
+        = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1, mark: "none")
+        .form-group{class: @article.errors[:text].any? ? "has-error" : ""}
+          .row
+            .col-sm-12.text-center= f.label :text, t("article.text"), class: "control-label"
+          .row
+            .col-sm-12.voffset1= f.text_area :text, class: "form-control significant-space", rows: 50
+        %hr
+        = f.submit t("save"), class: "btn btn-primary"
+        - last_path = last_search(:articles)
+        = link_to t("cancel"), @article.new_record? ? last_path || articles_path : @article, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

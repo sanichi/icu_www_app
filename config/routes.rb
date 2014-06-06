@@ -15,6 +15,7 @@ IcuWwwApp::Application.routes.draw do
     match "#{page}/:id" => "users##{page}", via: page.match(/^update/) ? :post : :get, as: page
   end
 
+  resources :articles,    only: [:index, :show]
   resources :clubs,       only: [:index, :show]
   resources :events,      only: [:index, :show]
   resources :games,       only: [:index, :show]
@@ -32,6 +33,7 @@ IcuWwwApp::Application.routes.draw do
       get page => "pages##{page}"
     end
 
+    resources :articles,        only: [:new, :create, :edit, :update, :destroy]
     resources :bad_logins,      only: [:index]
     resources :carts,           only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member

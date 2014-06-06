@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe Upload do
   let(:access)        { I18n.t("access.access") }
-  let(:admins_text)   { I18n.t("access.#{admins}") }
-  let(:everyone_text) { I18n.t("access.#{everyone}") }
-  let(:editors_text)  { I18n.t("access.#{editors}") }
+  let(:adm_access)    { I18n.t("access.#{admins}") }
+  let(:all_access)    { I18n.t("access.#{everyone}") }
+  let(:edr_access)    { I18n.t("access.#{editors}") }
   let(:delete)        { I18n.t("delete") }
   let(:description)   { I18n.t("description") }
   let(:edit)          { I18n.t("edit") }
   let(:file)          { I18n.t("file") }
-  let(:members_text)  { I18n.t("access.#{members}") }
+  let(:mem_access)    { I18n.t("access.#{members}") }
   let(:save)          { I18n.t("save") }
   let(:search)        { I18n.t("search") }
   let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
@@ -65,7 +65,7 @@ describe Upload do
   context "authorization" do
     let(:level1)  { ["admin", user] }
     let(:level2)  { ["editor"] }
-    let(:level3)  { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
+    let(:level3)  { User::ROLES.reject { |r| level1.include?(r) || level2.include?(r) }.append("guest") }
     let!(:upload) { create(:upload, user: user) }
     let(:user)    { create(:user, roles: "editor") }
 
@@ -73,7 +73,7 @@ describe Upload do
       "//th[.='#{label}']/following-sibling::td"
     end
 
-    it "admin and the owner can update and delete as well as create and show" do
+    it "level 1 can update and delete as well as create and show" do
       level1.each do |role|
         login role
         visit new_admin_upload_path
@@ -88,13 +88,13 @@ describe Upload do
       end
     end
 
-    it "editors can't update or delete other editor's uploads" do
+    it "level 2 can't update or delete" do
       level2.each do |role|
         login role
         visit new_admin_upload_path
         expect(page).to_not have_css(failure)
         visit edit_admin_upload_path(upload)
-        expect(page).to have_css(failure)
+        expect(page).to have_css(failure, text: unauthorized)
         visit uploads_path
         click_link upload.description
         expect(page).to have_xpath(cell(description), text: upload.description)
@@ -103,7 +103,7 @@ describe Upload do
       end
     end
 
-    it "other roles and guests can only index" do
+    it "level 3 can only index" do
       level3.each do |role|
         login role
         visit new_admin_upload_path
@@ -120,10 +120,10 @@ describe Upload do
   end
 
   context "accessibility" do
-    let(:all)          { create(:upload, access: "all") }
-    let(:members_only) { create(:upload, access: "members") }
-    let(:editors_only) { create(:upload, access: "editors") }
-    let(:admins_only)  { create(:upload, access: "admins") }
+    let(:all)          { create(:upload, access: everyone) }
+    let(:members_only) { create(:upload, access: members) }
+    let(:editors_only) { create(:upload, access: editors) }
+    let(:admins_only)  { create(:upload, access: admins) }
 
     it "guest" do
       logout
@@ -186,7 +186,7 @@ describe Upload do
     it "PDF (all)" do
       fill_in description, with: pdf_desc_text
       fill_in year, with: pdf_year_text
-      select everyone_text, from: access
+      select all_access, from: access
       attach_file file, upload_dir + pdf_upload_file
       click_button save
 
@@ -206,7 +206,7 @@ describe Upload do
     it "PGN (members only)" do
       fill_in description, with: pgn_desc_text
       fill_in year, with: pgn_year_text
-      select members_text, from: access
+      select mem_access, from: access
       attach_file file, upload_dir + pgn_upload_file
       click_button save
 
@@ -226,7 +226,7 @@ describe Upload do
     it "invalid type" do
       fill_in description, with: "April"
       fill_in year, with: "1986"
-      select everyone_text, from: access
+      select all_access, from: access
       attach_file file, image_dir + "april.jpeg"
       click_button save
 
@@ -272,7 +272,7 @@ describe Upload do
     it "meta data" do
       fill_in description, with: new_desc
       fill_in year, with: new_year
-      select editors_text, from: access
+      select edr_access, from: access
       click_button save
 
       upload.reload
@@ -285,13 +285,13 @@ describe Upload do
     end
 
     it "just access" do
-      expect(page).to have_css(option, text: editors_text)
-      expect(page).to_not have_css(option, text: admins_text)
+      expect(page).to have_css(option, text: edr_access)
+      expect(page).to_not have_css(option, text: adm_access)
 
       login "admin"
       visit admin_upload_path(upload)
       click_link edit
-      select admins_text, from: access
+      select adm_access, from: access
       click_button save
 
       upload.reload
@@ -299,7 +299,7 @@ describe Upload do
       expect_obfuscated(upload)
 
       click_link edit
-      select members_text, from: access
+      select mem_access, from: access
       click_button save
 
       upload.reload
@@ -307,7 +307,7 @@ describe Upload do
       expect_obfuscated(upload)
 
       click_link edit
-      select everyone_text, from: access
+      select all_access, from: access
       click_button save
 
       upload.reload
@@ -318,7 +318,7 @@ describe Upload do
     it "all data" do
       fill_in description, with: alt_desc
       fill_in year, with: alt_year
-      select members_text, from: access
+      select mem_access, from: access
       attach_file file, upload_dir + alt_file
       click_button save
 
@@ -350,129 +350,6 @@ describe Upload do
       login "editor"
       visit admin_upload_path(upload)
       expect(page).to_not have_link(delete)
-    end
-  end
-
-  context "access" do
-    let!(:upload_all) { create(:upload, access: everyone) }
-    let!(:upload_mem) { create(:upload, access: members) }
-    let!(:upload_edt) { create(:upload, access: editors) }
-    let!(:upload_adm) { create(:upload, access: admins) }
-
-    let(:url_all)     { "a[href='#{upload_all.url}']" }
-    let(:url_mem)     { "a[href='#{upload_mem.url}']" }
-    let(:url_edt)     { "a[href='#{upload_edt.url}']" }
-    let(:url_adm)     { "a[href='#{upload_adm.url}']" }
-
-    let(:desc_cell)   { "//tr/td/following-sibling::td[.='#{upload_all.description}']" }
-    let(:access_menu) { "//select[@name='access']" }
-
-    def access_opt(text)
-      "//select/option[.='#{text}']"
-    end
-
-    it "guests" do
-      visit uploads_path
-      expect(page).to have_css(url_all)
-      expect(page).to_not have_css(url_mem)
-      expect(page).to_not have_css(url_edt)
-      expect(page).to_not have_css(url_adm)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      expect(page).to_not have_xpath(access_menu)
-    end
-
-    it "members" do
-      login "member"
-      visit uploads_path
-      expect(page).to have_css(url_all)
-      expect(page).to have_css(url_mem)
-      expect(page).to_not have_css(url_edt)
-      expect(page).to_not have_css(url_adm)
-      expect(page).to have_xpath(desc_cell, count: 2)
-
-      expect(page).to have_xpath(access_menu)
-      expect(page).to have_xpath(access_opt(everyone_text))
-      expect(page).to have_xpath(access_opt(members_text))
-      expect(page).to_not have_xpath(access_opt(editors_text))
-      expect(page).to_not have_xpath(access_opt(admins_text))
-
-      select everyone_text, from: access
-      click_button search
-      expect(page).to have_css(url_all)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select members_text, from: access
-      click_button search
-      expect(page).to have_css(url_mem)
-      expect(page).to have_xpath(desc_cell, count: 1)
-    end
-
-    it "editors" do
-      login "editor"
-      visit uploads_path
-      expect(page).to have_css(url_all)
-      expect(page).to have_css(url_mem)
-      expect(page).to have_css(url_edt)
-      expect(page).to_not have_css(url_adm)
-      expect(page).to have_xpath(desc_cell, count: 3)
-
-      expect(page).to have_xpath(access_menu)
-      expect(page).to have_xpath(access_opt(everyone_text))
-      expect(page).to have_xpath(access_opt(members_text))
-      expect(page).to have_xpath(access_opt(editors_text))
-      expect(page).to_not have_xpath(access_opt(admins_text))
-
-      select everyone_text, from: access
-      click_button search
-      expect(page).to have_css(url_all)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select members_text, from: access
-      click_button search
-      expect(page).to have_css(url_mem)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select editors_text, from: access
-      click_button search
-      expect(page).to have_css(url_edt)
-      expect(page).to have_xpath(desc_cell, count: 1)
-    end
-
-    it "admins" do
-      login "admin"
-      visit uploads_path
-      expect(page).to have_css(url_all)
-      expect(page).to have_css(url_mem)
-      expect(page).to have_css(url_edt)
-      expect(page).to have_css(url_adm)
-      expect(page).to have_xpath(desc_cell, count: 4)
-
-      expect(page).to have_xpath(access_menu)
-      expect(page).to have_xpath(access_opt(everyone_text))
-      expect(page).to have_xpath(access_opt(members_text))
-      expect(page).to have_xpath(access_opt(editors_text))
-      expect(page).to have_xpath(access_opt(admins_text))
-
-      select everyone_text, from: access
-      click_button search
-      expect(page).to have_css(url_all)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select members_text, from: access
-      click_button search
-      expect(page).to have_css(url_mem)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select editors_text, from: access
-      click_button search
-      expect(page).to have_css(url_edt)
-      expect(page).to have_xpath(desc_cell, count: 1)
-
-      select admins_text, from: access
-      click_button search
-      expect(page).to have_css(url_adm)
-      expect(page).to have_xpath(desc_cell, count: 1)
     end
   end
 end

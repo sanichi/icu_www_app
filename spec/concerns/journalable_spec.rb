@@ -7,6 +7,7 @@ describe Journalable do
   end
 
   [
+    [Article, "/article/%d"],
     [Club, "/clubs/%d"],
     [Event, "/events/%d"],
     [Fee, "/admin/fees/%d"],

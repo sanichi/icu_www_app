@@ -11,7 +11,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529061922) do
+ActiveRecord::Schema.define(version: 20140604202255) do
+
+  create_table "articles", force: true do |t|
+    t.string   "access",     limit: 20
+    t.boolean  "active"
+    t.string   "author",     limit: 100
+    t.string   "category",   limit: 20
+    t.text     "text"
+    t.string   "title",      limit: 100
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "articles", ["access"], name: "index_articles_on_access", using: :btree
+  add_index "articles", ["active"], name: "index_articles_on_active", using: :btree
+  add_index "articles", ["author"], name: "index_articles_on_author", using: :btree
+  add_index "articles", ["category"], name: "index_articles_on_category", using: :btree
+  add_index "articles", ["title"], name: "index_articles_on_title", using: :btree
+  add_index "articles", ["user_id"], name: "index_articles_on_user_id", using: :btree
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"

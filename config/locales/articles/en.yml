@@ -1,0 +1,17 @@
+en:
+  article:
+    article: Article
+    articles: Articles
+    author: Author(s)
+    text: Text
+    title: Title
+    category:
+      any: Any category
+      biography: Biography
+      bulletin: ICU Bulletin
+      category: Category
+      coaching: Coaching
+      general: General
+      juniors: Juniors
+      obituary: Obituary
+      tournament: Tournament Report
