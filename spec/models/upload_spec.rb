@@ -91,4 +91,11 @@ describe Upload do
       expect(upload.accessible_to?(guest)).to be_false
     end
   end
+
+  context "validation" do
+    it "invalid" do
+      upload = build(:upload, access: "INVALID")
+      expect(upload).to_not be_valid
+    end
+  end
 end

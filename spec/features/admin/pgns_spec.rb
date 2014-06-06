@@ -85,7 +85,7 @@ describe Pgn do
 
     it "check" do
       attach_file file, pgn_dir + file_name
-      fill_in comment, with: comment
+      fill_in comment_input, with: comment
       click_button save
       expect(page).to have_css(warning, text: parsed)
 
@@ -150,7 +150,7 @@ describe Pgn do
       expect(pgn.comment).to be_nil
 
       click_link edit
-      fill_in comment, with: comment
+      fill_in comment_input, with: comment
       click_button save
 
       expect(page).to have_css(success, text: updated)

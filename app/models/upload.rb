@@ -1,10 +1,10 @@
 class Upload < ActiveRecord::Base
   attr_accessor :dir_to_remove
   extend Util::Pagination
+  include Accessible
   include Journalable
-  journalize %w[data_file_name data_content_type data_file_size description year access], "/admin/uploads/%d"
+  journalize %w[access data_file_name data_content_type data_file_size description year access], "/admin/uploads/%d"
 
-  ACCESSIBILITIES = %w[all members editors admins]
   MIN_SIZE = 500
   MAX_SIZE = 4.megabytes
   TYPES = {
@@ -26,7 +26,7 @@ class Upload < ActiveRecord::Base
   before_save :correct_plain_text
   before_destroy :remember_directory
 
-  # Note: Paperclip registers various callbacks.
+  # Note: need to add the callbacks Paperclip registers in the right order.
   has_attached_file :data, url: "/system/:class/:id_partition/:hash.:extension", hash_secret: Rails.application.secrets.paperclip
 
   after_save :manage_unobfuscated_version
@@ -34,7 +34,6 @@ class Upload < ActiveRecord::Base
 
   validates_attachment :data, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :data, :description, presence: true
-  validates :access, inclusion: { in: ACCESSIBILITIES }
   validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
   validates :www1_path, length: { maximum: 128 }, allow_nil: true
@@ -48,33 +47,9 @@ class Upload < ActiveRecord::Base
     matches = ordered.include_players
     matches = matches.where("description LIKE ?", "%#{params[:description]}%") if params[:description].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
-    options = accessibilities_for(user)
-    if params[:access].present?
-      if options.include?(params[:access])
-        matches = matches.where(access: params[:access])
-      else
-        matches = matches.none
-      end
-    else
-      matches = matches.where(access: options)
-    end
     matches = matches.where(data_content_type: TYPES[params[:type].to_sym]) if params[:type].present? && TYPES.include?(params[:type].to_sym)
+    matches = accessibility_matches(user, params[:access], matches)
     paginate(matches, params, path)
-  end
-
-  def self.accessibilities_for(user)
-    max = case
-      when user.admin?  then 3
-      when user.editor? then 2
-      when user.member? then 1
-      else 0
-    end
-    ACCESSIBILITIES[0..max]
-  end
-
-  def accessible_to?(user)
-    accessibilities = Upload.accessibilities_for(user)
-    accessibilities.include?(access)
   end
 
   def url

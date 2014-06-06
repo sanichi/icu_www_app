@@ -74,7 +74,7 @@ describe Club do
       fill_in contact, with: "Eddie Webb"
       fill_in email, with: "eddie.webb@heaven.com"
       fill_in phone, with: "02891 1234 567"
-      select "Active", from: active
+      check active
       click_button save
       expect(page).to have_css(success, text: "created")
       club = Club.last
@@ -99,7 +99,7 @@ describe Club do
       fill_in name, with: "Millisle"
       fill_in city, with: "Millisle"
       select "Down", from: county
-      select "Inactive", from: active
+      uncheck active
       click_button save
       expect(page).to have_css(success, text: "created")
       club = Club.last
@@ -153,7 +153,7 @@ describe Club do
       fill_in phone, with: ""
       click_button save
       expect(page).to have_css(failure, text: "contact")
-      select "Inactive", from: active
+      uncheck active
       click_button save
       expect(page).to have_css(success)
     end
