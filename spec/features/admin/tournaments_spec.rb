@@ -10,7 +10,7 @@ describe Tournament do
   let(:format_menu)   { I18n.t("tournament.format.format") }
   let(:name_input)    { I18n.t("name") }
   let(:save)          { I18n.t("save") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:year_input)    { I18n.t("year") }
 
   let(:dup_error)     { "once per year" }

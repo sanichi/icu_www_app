@@ -11,7 +11,7 @@ describe User do
   let(:save)            { I18n.t("save") }
   let(:signed_in_as)    { I18n.t("session.signed_in_as") }
   let(:theme_menu)      { I18n.t("user.theme") }
-  let(:unauthorized)    { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)    { I18n.t("unauthorized.default") }
   let(:updated)         { I18n.t("user.updated") }
 
   let(:failure) { "div.alert-danger" }

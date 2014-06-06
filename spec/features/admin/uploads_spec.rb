@@ -12,7 +12,7 @@ describe Upload do
   let(:mem_access)    { I18n.t("access.#{members}") }
   let(:save)          { I18n.t("save") }
   let(:search)        { I18n.t("search") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:year)          { I18n.t("year") }
 
   let(:admins)        { "admins" }

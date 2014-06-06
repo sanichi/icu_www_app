@@ -7,7 +7,7 @@ class UploadsController < ApplicationController
 
   def show
     @upload = Upload.find(params[:id])
-    raise CanCan::AccessDenied.new(t("errors.alerts.unauthorized"), :read, Upload) unless @upload.accessible_to?(current_user)
+    raise CanCan::AccessDenied.new(nil, :read, Upload) unless @upload.accessible_to?(current_user)
     redirect_to @upload.url
   end
 end

@@ -18,7 +18,7 @@ describe User do
   let(:status)         { I18n.t("user.status") }
   let(:translator)     { I18n.t("user.role.translator") }
   let(:treasurer)      { I18n.t("user.role.treasurer") }
-  let(:unauthorized)   { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)   { I18n.t("unauthorized.default") }
   let(:user_account)   { I18n.t("user.account") }
   let(:verified)       { I18n.t("user.verified") }
   let(:verify)         { I18n.t("user.verify") }

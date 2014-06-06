@@ -11,7 +11,7 @@ describe Article do
   let(:search)        { I18n.t("search") }
   let(:text_text)     { I18n.t("article.text") }
   let(:title_input)   { I18n.t("article.title") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)  { I18n.t("unauthorized.default") }
 
   let(:failure)       { "div.alert-danger" }
   let(:field_error)   { "div.help-block" }

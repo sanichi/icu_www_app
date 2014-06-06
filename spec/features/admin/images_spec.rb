@@ -7,7 +7,7 @@ describe Image do
   let(:delete)       { I18n.t("delete") }
   let(:file)         { I18n.t("file") }
   let(:save)         { I18n.t("save") }
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized) { I18n.t("unauthorized.default") }
   let(:year)         { I18n.t("year") }
 
   let(:failure)      { "div.alert-danger" }

@@ -25,7 +25,7 @@ describe Player do
   let(:save)         { I18n.t("save") }
   let(:status)       { I18n.t("player.status.status") }
   let(:title)        { I18n.t("player.title.player") }
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized) { I18n.t("unauthorized.default") }
   let(:work)         { I18n.t("player.phone.work") }
 
   let(:failure)     { "div.alert-danger" }

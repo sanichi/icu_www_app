@@ -4,7 +4,7 @@ describe Game do
   let(:delete)       { I18n.t("delete") }
   let(:edit)         { I18n.t("edit") }
   let(:save)         { I18n.t("save") }
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized) { I18n.t("unauthorized.default") }
 
   let(:failure)      { "div.alert-danger" }
   let(:field_error)  { "div.help-block" }

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe JournalEntry do
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized) { I18n.t("unauthorized.default") }
 
   let(:success) { "div.alert-success" }
   let(:failure) { "div.alert-danger" }

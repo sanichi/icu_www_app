@@ -8,7 +8,7 @@ class ArticlesController < ApplicationController
 
   def show
     @article = Article.find(params[:id])
-    raise CanCan::AccessDenied.new(t("errors.alerts.unauthorized"), :read, Article) unless @article.accessible_to?(current_user)
+    raise CanCan::AccessDenied.new(nil, :read, Article) unless @article.accessible_to?(current_user)
     @entries = @article.journal_entries if current_user.roles.present?
   end
 end

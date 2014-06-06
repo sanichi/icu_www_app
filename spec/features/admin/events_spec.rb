@@ -18,7 +18,7 @@ describe Event do
   let(:prize_fund)    { I18n.t("event.prize_fund") }
   let(:save)          { I18n.t("save") }
   let(:start_date)    { I18n.t("event.start") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:url)           { I18n.t("event.url") }
 
   let(:failure)       { "div.alert-danger" }

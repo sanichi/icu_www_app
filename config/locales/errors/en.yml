@@ -2,7 +2,6 @@ en:
   errors:
     alerts:
       application: System error — please send screenshot to webmaster@icu.ie
-      unauthorized: You are not authorized to view this page
     messages:
       accepted: must be accepted
       after: must be after %{restriction}

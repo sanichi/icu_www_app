@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Cart do
-  let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized) { I18n.t("unauthorized.default") }
 
   let(:failure) { "div.alert-danger" }
   let(:success) { "div.alert-success" }

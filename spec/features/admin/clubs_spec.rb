@@ -16,7 +16,7 @@ describe Club do
   let(:phone)         { I18n.t("club.phone") }
   let(:please_select) { I18n.t("please_select") }
   let(:save)          { I18n.t("save") }
-  let(:unauthorized)  { I18n.t("errors.alerts.unauthorized") }
+  let(:unauthorized)  { I18n.t("unauthorized.default") }
   let(:website)       { I18n.t("club.web") }
 
   let(:failure) { "div.alert-danger" }

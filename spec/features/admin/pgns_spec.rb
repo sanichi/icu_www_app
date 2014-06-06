@@ -22,7 +22,7 @@ describe Pgn do
     let(:level3)       { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
     let(:pgn)          { create(:pgn, user: user) }
     let(:user)         { create(:user, roles: "editor") }
-    let(:unauthorized) { I18n.t("errors.alerts.unauthorized") }
+    let(:unauthorized) { I18n.t("unauthorized.default") }
 
     it "some roles can manage PGNs" do
       level1.each do |role|
