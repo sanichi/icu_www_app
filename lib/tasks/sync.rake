@@ -70,11 +70,16 @@ namespace :sync do
     ICU::Legacy::Game.new.synchronize(args[:force])
   end
 
+  desc "Convert icuadmi_main/articles to www_production/articles"
+  task :articles, [:force] => :environment do |task, args|
+    ICU::Legacy::Article.new.synchronize(args[:force])
+  end
+
   desc "Check all synchronized data"
   task :check => :environment do |task|
     ICU::Legacy::Check.new.check
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images uploads tournaments check]
+  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images uploads tournaments articles check]
 end

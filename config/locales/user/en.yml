@@ -1,6 +1,7 @@
 en:
   user:
     any: Any user
+    any_editor: Any editor
     account: User account
     expires: Expires on
     locale: Language

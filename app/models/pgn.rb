@@ -27,7 +27,10 @@ class Pgn < ActiveRecord::Base
     matches = ordered.include_player
     matches = matches.where("comment LIKE ?", "%#{params[:comment]}%") if params[:comment].present?
     matches = matches.where("file_name LIKE ?", "%#{params[:file_name]}%") if params[:file_name].present?
-    matches = matches.where("players.id = ?", params[:player_id]) if params[:player_id].to_s.match(/\A[1-9]\d*\z/)
+    if params[:player_id].to_i > 0
+      matches = matches.joins(user: :player)
+      matches = matches.where("players.id = ?", params[:player_id].to_i)
+    end
     paginate(matches, params, path)
   end
 

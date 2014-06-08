@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   LOCALES = %w[en ga]
   SessionError = Class.new(RuntimeError)
 
+  has_many :articles, dependent: :nullify
   has_many :logins, dependent: :destroy
   has_many :refunds, dependent: :nullify
   has_many :carts, dependent: :nullify

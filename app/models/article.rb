@@ -26,6 +26,20 @@ class Article < ActiveRecord::Base
     matches = matches.where("author LIKE ?", "%#{params[:author]}%") if params[:author].present?
     matches = matches.where("title LIKE ?", "%#{params[:title]}%") if params[:title].present?
     matches = matches.where("text LIKE ?", "%#{params[:text]}%") if params[:text].present?
+    if params[:year].present?
+      if params[:year].match(/([12]\d{3})\D+([12]\d{3})/)
+        matches = matches.where("year >= ?", $1.to_i)
+        matches = matches.where("year <= ?", $2.to_i)
+      elsif params[:year].match(/([12]\d{3})/)
+        matches = matches.where(year: $1.to_i)
+      else
+        matches = matches.none
+      end
+    end
+    if params[:player_id].to_i > 0
+      matches = matches.joins(user: :player)
+      matches = matches.where("players.id = ?", params[:player_id].to_i)
+    end
     matches = accessibility_matches(user, params[:access], matches)
     matches = matches.where(active: true) if params[:active] == "true" || params[:active].blank?
     matches = matches.where(active: false) if params[:active] == "false"

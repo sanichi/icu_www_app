@@ -1,12 +1,15 @@
 = form_tag articles_path, method: :get, class: "form-inline", role: "form" do
   = render "utils/inline_text_field", param: :title, text: t("article.title"), size: 20
+  = render "utils/inline_text_field", param: :year, text: t("year"), size: 10
   = render "utils/inline_text_field", param: :author, text: t("article.author"), size: 10
   = render "utils/inline_select", param: :category, text: t("article.category.category"), menu: article_category_menu(params[:category])
   - if current_user.guest?
     = hidden_field_tag :access, "all"
   - else
+    .voffset2
     - menu = access_menu(params[:access], Article.accessibilities_for(current_user), "access.any")
     = render "utils/inline_select", param: :access, text: t("access.access"), menu: menu
-  - if can?(:create, Article)
-    = render "utils/inline_select", param: :active, text: t("active"), menu: active_menu(params[:active])
+    - if can?(:create, Article)
+      = render "utils/inline_select", param: :active, text: t("active"), menu: active_menu(params[:active])
+      = render "utils/inline_select", param: :player_id, text: t("user.role.editor"), menu: article_user_menu(params[:player_id])
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"
