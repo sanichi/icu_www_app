@@ -1,0 +1,8 @@
+- number = max + index
+- id = "num_#{number}"
+
+- if max == 0
+  = number
+  = hidden_field_tag "num[]", number, id: id
+- else
+  = select_tag "num[]", episode_number_menu(number), class: "form-control", id: id

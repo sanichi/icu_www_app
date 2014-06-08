@@ -1,0 +1,14 @@
+= form_tag admin_article_ids_path, method: :get, id: "article_ids_form", class: "form-horizontal", role: "form", remote: true do
+  - locals = { col: "sm", pad: 3, width: 4 }
+  .row
+    .col-sm-12
+      = render "utils/text_field_tag", locals.merge(param: :title, text: t("article.title"), width: 6)
+      = render "utils/text_field_tag", locals.merge(param: :author, text: t("article.author"), width: 5)
+      = render "utils/select_tag", locals.merge(param: :category, text: t("article.category.category"), menu: article_category_menu(params[:category]))
+      - menu = access_menu(params[:access], Article.accessibilities_for(current_user), "access.any")
+      = render "utils/select_tag", locals.merge(param: :access, text: t("access.access"), menu: menu)
+
+%hr
+
+%script
+  = render "admin/article_ids/onchange.js", form_id: "article_ids_form"

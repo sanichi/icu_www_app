@@ -1,0 +1,35 @@
+- content_for :title, @series.title
+
+%h1.text-center= @series.title
+%hr
+.row
+  .col-sm-10.col-sm-offset-1
+    %table{class: "table table-bordered table-striped"}
+      %thead
+        %tr
+          %th.text-center.col-sm-1= "#"
+          %th= t("article.title")
+      %tbody
+        - if @series.episodes.count > 0
+          - @series.episodes.each do |episode|
+            - article = episode.article
+            %tr.episode
+              %td.text-center= episode.number
+              %td
+                - if article.accessible_to?(current_user)
+                  = link_to article.title, article
+                - else
+                  = t("article.inaccessible")
+        - else
+          %tr
+            %td.text-center{colspan: 2}= t("article.series.empty")
+%hr
+- if can?(:update, @series)
+  = link_to t("edit"), edit_admin_series_path(@series), class: "btn btn-primary"
+- if can?(:destroy, @series)
+  = link_to t("delete"), admin_series_path(@series), data: { confirm: "Sure you want to delete this article series (just the series, not the articles)?" }, method: :delete, class: "btn btn-danger"
+- if path = last_search(:series)
+  = link_to t("last_search"), path, class: "btn btn-default"
+- else
+  = link_to t("article.series.series"), series_index_path, class: "btn btn-default"
+= render "admin/journal_entries/changes", entries: @entries

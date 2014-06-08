@@ -19,7 +19,6 @@ describe "Shop" do
   let(:total)           { I18n.t("shop.cart.total") }
 
   let(:delete_cross)    { "✘" }
-  let(:force_submit)    { "\n" }
 
   def xpath(type, text, *txts)
     txts.reduce('//tr/%s[contains(.,"%s")]' % [type, text]) do |acc, txt|

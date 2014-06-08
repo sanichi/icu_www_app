@@ -1,0 +1,39 @@
+.row
+  .col-sm-12
+    = form_for [:admin, @series], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@series.new_record? ? 'New' : 'Edit'} series"
+        - locals = { form: f, object: @series, col: "sm", pad: 2, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :title, text: t("article.series.title"), width: 7)
+        %table{class: "table table-bordered table-striped"}
+          %thead
+            %tr
+              %th.text-center.col-sm-1= "#"
+              %th= t("article.title")
+              %th.text-center.col-sm-1
+          %tbody
+            - @series.episodes.each do |episode|
+              - article = episode.article
+              - accessible = article.accessible_to?(current_user)
+              %tr
+                %td.text-center= episode.number
+                %td= accessible ? article.title : t("article.inaccessible")
+                %td.text-center= check_box_tag "keep[]", article.id, true, disabled: !accessible, id: "keep_#{episode.number}"
+            - max = @series.max_number
+            - (1..(9 - (max > 6 ? 6 : max))).each do |index|
+              = render "new_episode", max: max, index: index
+            %tr#add_new_episode_row
+              %td.text-center
+                %strong= link_to "＋", '#', class: "no-underline"
+              %td{colspan: 2}
+        = f.submit t("save"), class: "btn btn-primary"
+        - last_path = last_search(:series)
+        = link_to t("cancel"), @series.new_record? ? last_path || series_index_path : @series, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"
+
+= render "admin/article_ids/modal", title: t("article.series.add")
+%script
+  = render "article_ids_callback.js"
+
+

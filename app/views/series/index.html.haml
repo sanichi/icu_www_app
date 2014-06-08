@@ -1,0 +1,18 @@
+- content_for :title, t("article.series.series")
+
+= render "utils/search_panel", form: "search_form", title: t("article.series.series"), col: "sm", pad: 2
+
+.row
+  .col-sm-8.col-sm-offset-2
+    - if @series.count > 0
+      %table{class: "table table-bordered table-striped", id: "results"}
+        %thead
+          %tr
+            %th= t("article.series.title")
+        %tbody
+          - @series.matches.each do |series|
+            %tr.result
+              %td= link_to series.title, series
+          = render "utils/pagination_links", pager: @series, columns: 1
+    - if can?(:create, Series)
+      = link_to "New", new_admin_series_path, class: "btn btn-info"

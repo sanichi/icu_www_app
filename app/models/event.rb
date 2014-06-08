@@ -36,11 +36,11 @@ class Event < ActiveRecord::Base
 
   validate :valid_dates
 
-  scope :include_players, -> { includes(user: :player) }
+  scope :include_player, -> { includes(user: :player) }
   scope :ordered, -> { order(:start_date, :end_date, :name) }
 
   def self.search(params, path)
-    matches = ordered.include_players
+    matches = ordered.include_player
     case params[:active]
     when "active", nil
       matches = matches.where(active: true)

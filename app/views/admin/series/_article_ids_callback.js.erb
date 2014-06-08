@@ -1,0 +1,21 @@
+var modal_episode_id = '1';
+
+function article_ids_callback(article_id, title) {
+  $('#add_' + modal_episode_id).val(article_id);
+  $('#article_title_' + modal_episode_id).text(title);
+  $('#article_ids_modal').modal('hide');
+  $('#select_article_button_' + modal_episode_id).removeClass('btn-info').addClass('btn-default');
+}
+
+$(function() {
+  $('#article_ids_modal').on('show.bs.modal', function (e) {
+    res = e.relatedTarget.id.match(/\d+$/);
+    modal_episode_id = res[0];
+  });
+  $('#add_new_episode_row td a').on('click', function (e) {
+    e.preventDefault();
+    var still_hidden = $('tr.new-episode:hidden');
+    if (still_hidden.size() <= 1) $('#add_new_episode_row').hide();
+    still_hidden.first().show();
+  });
+});

@@ -20,7 +20,6 @@ describe Refund do;
 
   let(:cvc)                   { "123" }
   let(:expiry)                { "01 / #{(Date.today.year + 2).to_s}" }
-  let(:force_submit)          { "\n" }
   let(:number)                { "4242 4242 4242 4242" }
 
   let(:refund_button)         { "Refund" }

@@ -24,6 +24,7 @@ IcuWwwApp::Application.routes.draw do
   resources :new_players, only: [:create]
   resources :player_ids,  only: [:index]
   resources :players,     only: [:index]
+  resources :series,      only: [:index, :show]
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
   resources :uploads,     only: [:index, :show]
@@ -34,6 +35,7 @@ IcuWwwApp::Application.routes.draw do
     end
 
     resources :articles,        only: [:new, :create, :edit, :update, :destroy]
+    resources :article_ids,     only: [:index]
     resources :bad_logins,      only: [:index]
     resources :carts,           only: [:index, :show, :edit, :update] do
       get :show_charge, on: :member
@@ -53,6 +55,7 @@ IcuWwwApp::Application.routes.draw do
     resources :pgns
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
+    resources :series,          only: [:new, :create, :edit, :update, :destroy]
     resources :tournaments,     only: [:new, :create, :edit, :update, :destroy]
     resources :translations,    only: [:index, :show, :edit, :update, :destroy]
     resources :uploads,         only: [:show, :new, :create, :edit, :update, :destroy]

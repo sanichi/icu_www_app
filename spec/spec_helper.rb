@@ -67,3 +67,8 @@ def confirm_dialog(delay=0.2)
   page.driver.browser.switch_to.alert.accept
   sleep(delay)
 end
+
+# General purpose wait for a while.
+def wait_a_second(delay=0.3)
+  sleep(delay)
+end

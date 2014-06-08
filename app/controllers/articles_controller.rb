@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.find(params[:id])
+    @article = Article.include_player.include_series.find(params[:id])
     raise CanCan::AccessDenied.new(nil, :read, Article) unless @article.accessible_to?(current_user)
     @entries = @article.journal_entries if current_user.roles.present?
   end

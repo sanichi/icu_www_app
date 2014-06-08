@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140604202255) do
+ActiveRecord::Schema.define(version: 20140607050315) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -73,6 +73,17 @@ ActiveRecord::Schema.define(version: 20140604202255) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "episodes", force: true do |t|
+    t.integer  "article_id"
+    t.integer  "series_id"
+    t.integer  "number",     limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "episodes", ["article_id"], name: "index_episodes_on_article_id", using: :btree
+  add_index "episodes", ["series_id"], name: "index_episodes_on_series_id", using: :btree
 
   create_table "events", force: true do |t|
     t.boolean  "active"
@@ -288,6 +299,14 @@ ActiveRecord::Schema.define(version: 20140604202255) do
     t.decimal  "amount",     precision: 9, scale: 2
     t.datetime "created_at"
   end
+
+  create_table "series", force: true do |t|
+    t.string   "title",      limit: 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "series", ["title"], name: "index_series_on_title", using: :btree
 
   create_table "tournaments", force: true do |t|
     t.boolean  "active"

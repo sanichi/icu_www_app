@@ -1,0 +1,11 @@
+#article_ids_modal{class: "modal fade", tabindex: "-1", role: "dialog", "aria-labelledby" => "modal_label", "aria-hidden" => "true"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        %h4.modal-title#modal_label= title
+      .modal-body
+        = render "admin/article_ids/search_form"
+        #article_ids_results
+%script
+  = render "admin/article_ids/attach_callbacks.js"

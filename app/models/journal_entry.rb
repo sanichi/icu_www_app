@@ -4,7 +4,7 @@ class JournalEntry < ActiveRecord::Base
   belongs_to :journalable, polymorphic: true
 
   default_scope { order(created_at: :desc) }
-  %w[Article Club Event Fee Game Image Pgn Player Tournament Translation Upload User UserInput].each do |klass|
+  %w[Article Club Event Fee Game Image Pgn Player Series Tournament Translation Upload User UserInput].each do |klass|
     scope klass.tableize.to_sym, -> { where(journalable_type: klass) }
   end
 

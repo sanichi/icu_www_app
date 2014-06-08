@@ -28,10 +28,10 @@ class Image < ActiveRecord::Base
 
   validate :year_is_not_in_future
 
-  scope :include_players, -> { includes(user: :player) }
+  scope :include_player, -> { includes(user: :player) }
 
   def self.search(params, path)
-    matches = include_players
+    matches = include_player
     matches = case params[:order]
     when "updated_at"
       matches.order(updated_at: :desc)

@@ -64,6 +64,16 @@ textarea.significant-space {
   white-space: pre;
 }
 
+/* For text areas where white space is not significant. */
+textarea.insignificant-space {
+  font-family: monospace !important;
+}
+
+/* For links where we don't want the underline. */
+a.no-underline {
+  text-decoration: none !important;
+}
+
 /* For beta-quality indicator image. */
 #beta-badge {
   position: fixed;

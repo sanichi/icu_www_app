@@ -3,8 +3,9 @@ en:
     article: Article
     articles: Articles
     author: Author(s)
+    inaccessible: This article is inaccessible to the current user
     text: Text
-    title: Title
+    title: Article Title
     category:
       any: Any category
       biography: Biography
@@ -15,3 +16,10 @@ en:
       juniors: Juniors
       obituary: Obituary
       tournament: Tournament Report
+    series:
+      add: Add article
+      empty: No articles have been added to this series yet
+      part: "This article part of a series"
+      select: Select
+      series: Article Series
+      title: Series Title

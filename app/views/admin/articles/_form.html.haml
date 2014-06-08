@@ -15,7 +15,7 @@
           .row
             .col-sm-12.text-center= f.label :text, t("article.text"), class: "control-label"
           .row
-            .col-sm-12.voffset1= f.text_area :text, class: "form-control significant-space", rows: 50
+            .col-sm-12.voffset1= f.text_area :text, class: "form-control insignificant-space", rows: 50
         %hr
         = f.submit t("save"), class: "btn btn-primary"
         - last_path = last_search(:articles)

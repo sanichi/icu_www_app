@@ -1,0 +1,13 @@
+- episode = series.episodes.find { |e| e.article == article }
+- max = series.max_number
+
+- if episode && max > 1
+  %hr
+  %p.text-center
+    = succeed(":") do
+      = t("article.series.part")
+    = link_to series.title, series
+    = "-"
+    - series.episodes.each do |e|
+      = succeed(e.number < max ? ", " : "") do
+        = link_to_if e != episode, e.number, e.article

@@ -1,9 +1,10 @@
 - content_for :title, @article.title
-= render "utils/prev_next", prev: @prev, id: @article.id, nixt: @next
 
 %h1.text-center= @article.title
 - if @article.author
   %p.text-center= @article.author
+- @article.series.each do |series|
+  = render "series", series: series, article: @article
 %hr
 = @article.to_html(@article.text)
 %hr

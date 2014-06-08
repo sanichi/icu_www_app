@@ -15,6 +15,7 @@ describe Journalable do
     [Image, "/images/%d"],
     [Pgn, "/admin/pgns/%d"],
     [Player, "/admin/players/%d"],
+    [Series, "/series/%d"],
     [Tournament, "/tournaments/%d"],
     [Translation, "/admin/translations/%d"],
     [Upload, "/admin/uploads/%d"],

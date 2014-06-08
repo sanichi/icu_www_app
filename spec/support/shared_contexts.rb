@@ -33,4 +33,6 @@ shared_context "features" do
   let(:created) { "successfully created" }
   let(:deleted) { "successfully deleted" }
   let(:updated) { "successfully updated" }
+
+  let(:force_submit) { "\n" }
 end

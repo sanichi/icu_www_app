@@ -1,0 +1,8 @@
+- number = max + index
+
+%tr.new-episode{style: index > (max == 0 ? 2 : 1) ? "display: none" : "" }
+  %td.text-center= render "new_number", max: max, index: index
+  %td{id: "article_title_#{number}"}
+  %td.text-center
+    %button.btn.btn-info.btn-xs{"id" => "select_article_button_#{number}", "data-toggle" => "modal", "data-target" => "#article_ids_modal"}= t("article.series.select")
+    = hidden_field_tag "add[]", nil, id: "add_#{number}"

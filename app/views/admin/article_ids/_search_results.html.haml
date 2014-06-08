@@ -1,0 +1,12 @@
+- if @articles.count > 0
+  .row
+    .col-sm-12
+      %table{class: "table table-striped", id: "results"}
+        %thead
+          %tr
+            %th= t("article.title")
+        %tbody
+          - @articles.matches.each do |article|
+            %tr
+              %td= link_to article.title, "#", "data-id" => article.id, "data-title" => article.title, class: "article_ids_callback"
+          = render "utils/pagination_links", pager: @articles, columns: 3
