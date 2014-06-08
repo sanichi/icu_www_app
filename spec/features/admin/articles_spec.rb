@@ -8,6 +8,7 @@ describe Article do;
   let(:category_menu) { I18n.t("article.category.category") }
   let(:text_text)     { I18n.t("article.text") }
   let(:title_input)   { I18n.t("article.title") }
+  let(:year_input)    { I18n.t("year") }
 
   context "authorization" do
     let!(:article) { create(:article, user: user) }
@@ -125,11 +126,13 @@ describe Article do;
     it "everyone, active" do
       access = "all"
       author = "Anthony Penrose"
-      title = "The Lives of Lee Miller"
-      text = "Lee Miller, fashion model, photographer, war correspondent, writer.\n\nA paradox of irascibility and effusive warmth."
       category = "bulletin"
+      text = "Lee Miller, fashion model, photographer, war correspondent, writer.\n\nA paradox of irascibility and effusive warmth."
+      title = "The Lives of Lee Miller"
+      year = 2014
 
       fill_in title_input, with: title
+      fill_in year_input, with: year
       fill_in author_input, with: author
       fill_in text_text, with: text
       select I18n.t("article.category.#{category}"), from: category_menu
@@ -148,6 +151,7 @@ describe Article do;
       expect(article.text).to eq text
       expect(article.title).to eq title
       expect(article.user_id).to eq user.id
+      expect(article.year).to eq year
 
       expect(JournalEntry.articles.where(action: "create", by: user.signature, journalable_id: article.id).count).to eq 1
     end

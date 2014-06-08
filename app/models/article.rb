@@ -3,7 +3,7 @@ class Article < ActiveRecord::Base
   include Accessible
   include Remarkable
   include Journalable
-  journalize %w[access active author category text title], "/article/%d"
+  journalize %w[access active author category text title year], "/article/%d"
 
   CATEGORIES = %w[bulletin tournament biography obituary coaching juniors general]
 
@@ -15,10 +15,11 @@ class Article < ActiveRecord::Base
 
   validates :category, inclusion: { in: CATEGORIES }
   validates :text, :title, presence: true
+  validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
 
   scope :include_player, -> { includes(user: :player) }
   scope :include_series, -> { includes(episodes: :series) }
-  scope :ordered, -> { order(created_at: :desc) }
+  scope :ordered, -> { order(year: :desc, created_at: :desc) }
 
   def self.search(params, path, user, opt={})
     matches = ordered.include_player

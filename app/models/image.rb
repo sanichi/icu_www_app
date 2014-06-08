@@ -23,7 +23,7 @@ class Image < ActiveRecord::Base
   validates :caption, presence: true
   validates :credit, presence: true, allow_nil: true
   validates :source, inclusion: { in: Global::SOURCES }
-  validates :year,  numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
+  validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
 
   validate :year_is_not_in_future

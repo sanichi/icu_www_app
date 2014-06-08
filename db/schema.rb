@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20140607050315) do
     t.text     "text"
     t.string   "title",      limit: 100
     t.integer  "user_id"
+    t.integer  "year",       limit: 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -31,6 +32,7 @@ ActiveRecord::Schema.define(version: 20140607050315) do
   add_index "articles", ["category"], name: "index_articles_on_category", using: :btree
   add_index "articles", ["title"], name: "index_articles_on_title", using: :btree
   add_index "articles", ["user_id"], name: "index_articles_on_user_id", using: :btree
+  add_index "articles", ["year"], name: "index_articles_on_year", using: :btree
 
   create_table "bad_logins", force: true do |t|
     t.string   "email"

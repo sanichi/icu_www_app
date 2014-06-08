@@ -7,6 +7,7 @@
         - locals = { form: f, object: @article, col: "sm", pad: 2, mark: "required" }
         = render "utils/text_field_for", locals.merge(param: :title, text: t("article.title"), width: 7)
         = render "utils/select_for", locals.merge(param: :category, text: t("article.category.category"), menu: article_category_menu(@article.category, "please_select"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :author, text: t("article.author"), width: 6, mark: "none")
         - menu = access_menu(@article.access, Article.accessibilities_for(current_user), @article.new_record? && "please_select")
         = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)

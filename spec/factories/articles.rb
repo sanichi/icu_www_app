@@ -6,5 +6,6 @@ FactoryGirl.define do
     text     { Faker::Lorem.paragraphs.join("\n\n") }
     title    { Faker::Lorem.sentence }
     user
+    year     { Date.today.year }
   end
 end

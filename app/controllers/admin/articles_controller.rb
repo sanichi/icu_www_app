@@ -43,7 +43,7 @@ class Admin::ArticlesController < ApplicationController
   end
 
   def article_params
-    params[:article].permit(:access, :active, :author, :category, :text, :title)
+    params[:article].permit(:access, :active, :author, :category, :text, :title, :year)
   end
 
   def normalize_newlines

@@ -8,6 +8,7 @@ class CreateArticles < ActiveRecord::Migration
       t.text     :text
       t.string   :title, limit: 100
       t.integer  :user_id
+      t.integer  :year, limit: 2
 
       t.timestamps
     end
@@ -18,5 +19,6 @@ class CreateArticles < ActiveRecord::Migration
     add_index :articles, :category
     add_index :articles, :title
     add_index :articles, :user_id
+    add_index :articles, :year
   end
 end
