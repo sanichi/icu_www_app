@@ -83,7 +83,7 @@ module ICU
       end
 
       def create_new_series(season, ids)
-        title = "#{season} Bulletins"
+        title = "ICU Bulletins #{season}"
         articles = ::Article.order(:title).where(id: ids)
         series = Series.create!(title: title)
         articles.each do |article|
@@ -94,6 +94,7 @@ module ICU
 
       def adjust(params)
         params[:active] = params[:active] == "online"
+        params[:markdown] = false
         params[:category] = case params[:category]
           when 1 then "tournament"
           when 2 then "bulletin"
@@ -111,6 +112,7 @@ module ICU
           else "all"
         end
         params[:year] = params[:year].year
+        params[:title].sub!(/\AGarry Kasparov's visit to Ireland 2014 - /, "") if [427, 428, 429, 430].include?(params[:id])
       end
 
       def bulletins(params)
@@ -150,7 +152,7 @@ module ICU
         when "|35|36|"                   then "Austin Bourke"
         when "|3|193|"                   then "ICU Ratings"
         when "|407|408|434|440|439|441|" then "History of Kilkenny Chess Club"
-        when "|426|427|428|430|429|"     then "Kasparov's Visit to Ireland"
+        when "|426|427|428|430|429|"     then "Kasparov's Visit to Ireland 2014"
         when "|44|45|"                   then "Paddy Duignan"
         when "|50|51|"                   then "Paddy Kennedy"
         when "|54|55|"                   then "Hugh MacGrillen"

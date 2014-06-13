@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20140607050315) do
     t.string   "category",   limit: 20
     t.text     "text"
     t.string   "title",      limit: 100
+    t.boolean  "markdown",               default: true
     t.integer  "user_id"
     t.integer  "year",       limit: 2
     t.datetime "created_at"

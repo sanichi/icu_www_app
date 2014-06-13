@@ -6,7 +6,7 @@
 - @article.series.each do |series|
   = render "series", series: series, article: @article
 %hr
-= @article.to_html(@article.text)
+= @article.html
 %hr
 %p.small.text-center
   = t("created_at")

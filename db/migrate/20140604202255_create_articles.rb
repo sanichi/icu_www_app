@@ -7,6 +7,7 @@ class CreateArticles < ActiveRecord::Migration
       t.string   :category, limit: 20
       t.text     :text
       t.string   :title, limit: 100
+      t.boolean  :markdown, default: true
       t.integer  :user_id
       t.integer  :year, limit: 2
 

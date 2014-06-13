@@ -11,6 +11,7 @@
         = render "utils/text_field_for", locals.merge(param: :author, text: t("article.author"), width: 6, mark: "none")
         - menu = access_menu(@article.access, Article.accessibilities_for(current_user), @article.new_record? && "please_select")
         = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
+        = render "utils/check_box_for", locals.merge(param: :markdown, text: "Markdown", width: 1, mark: "none")
         = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1, mark: "none")
         .form-group{class: @article.errors[:text].any? ? "has-error" : ""}
           .row

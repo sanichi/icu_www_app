@@ -46,6 +46,14 @@ class Article < ActiveRecord::Base
     paginate(matches, params, path, opt)
   end
 
+  def html
+    if markdown
+      to_html(text, filter_html: false)
+    else
+      text.html_safe
+    end
+  end
+
   private
 
   def normalize_attributes
