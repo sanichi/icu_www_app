@@ -122,6 +122,10 @@ class Game < ActiveRecord::Base
     name
   end
 
+  def expand(opt)
+    %q{<a href="/games/%d">%s</a>} % [id, opt[:text] || "game"]
+  end
+
   private
 
   def normalize_attributes

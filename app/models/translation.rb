@@ -1,6 +1,5 @@
 class Translation < ActiveRecord::Base
   extend Util::Pagination
-
   include Journalable
   journalize :value, "/admin/translations/%d"
 

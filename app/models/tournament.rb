@@ -1,6 +1,6 @@
 class Tournament < ActiveRecord::Base
   extend Util::Pagination
-
+  include Expandable
   include Journalable
   journalize %w[active category city details format name year], "/tournaments/%d"
 
@@ -30,6 +30,14 @@ class Tournament < ActiveRecord::Base
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
     paginate(matches, params, path)
+  end
+
+  def html
+    expand_all(details)
+  end
+
+  def expand(opt)
+    %q{<a href="/tournaments/%d">%s</a>} % [id, opt[:name] || opt[:title] || name]
   end
 
   private

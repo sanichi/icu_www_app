@@ -15,43 +15,20 @@ class String
     replace(markoff)
   end
 
-  ICU_MARKUP = /\[
-    (ART|IML|PGN|TRN|UPL)
-    :([1-9]\d*)
-    :([^<>\[\]\n\r:]*)
-    (:[^<>\[\]\n\r:\s"]*)*
-  \]/x
+  def obscure
+    split(/\./).map do |part|
+      part.rot13!
+      part.gsub!(/([@.\/])/) { |c| '\\' + '%03o' % c.ord } # $str = preg_replace('/([@.\/])/e', "chr(92) . sprintf('%03o',ord('\\1'))", $str);
+      part.gsub!(/'/, "\\\\'")                             # $str = preg_replace("/[']/", "\'", $str);
+      "'#{part}'"
+    end.reverse.join(", ")
+  end
 
-  def icu_markup
-    gsub(ICU_MARKUP) do |str|
-      code = $1
-      id   = $2
-      text = $3
-      opts = $4.to_s.split(":").each_with_object({}) do |option, hash|
-        if option.match(/\A([^=]+)=([^=]+)\z/)
-          hash[$1] = $2
-        elsif option.present? && !option.match(/=/)
-          hash[option] = nil
-        end
-      end
-      atrs = {}
-      case code
-      when "ART"
-        atrs[:href] = "/articles/#{id}"
-      when "IML"
-        atrs[:href] = "/images/#{id}"
-      when "PGN"
-        atrs[:href] = "/games/#{id}"
-      when "TRN"
-        atrs[:href] = "/tournaments/#{id}"
-      when "UPL"
-        atrs[:href] = "/uploads/#{id}"
-      end
-      if atrs[:href]
-        format '<a %s>%s</a>', atrs.to_a.map{ |p| '%s="%s"' % p }.join(" "), text
-      else
-        str
-      end
-    end
+  def rot13
+    tr "A-Za-z", "N-ZA-Mn-za-m"
+  end
+
+  def rot13!
+    replace(rot13)
   end
 end

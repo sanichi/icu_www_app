@@ -60,6 +60,10 @@ class Event < ActiveRecord::Base
     to_html(note)
   end
 
+  def expand(opt)
+    %q{<a href="/events/%d">%s</a>} % [id, opt[:name] || opt[:title] || name]
+  end
+
   private
 
   def normalize_attributes

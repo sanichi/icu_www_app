@@ -9,5 +9,6 @@ FactoryGirl.define do
     phone      { Faker::PhoneNumber.phone_number }
     active     true
     category   "irish"
+    user
   end
 end

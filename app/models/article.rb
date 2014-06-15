@@ -1,6 +1,7 @@
 class Article < ActiveRecord::Base
   extend Util::Pagination
   include Accessible
+  include Expandable
   include Remarkable
   include Journalable
   journalize %w[access active author category text title year], "/article/%d"
@@ -47,11 +48,12 @@ class Article < ActiveRecord::Base
   end
 
   def html
-    if markdown
-      to_html(text, filter_html: false)
-    else
-      text.html_safe
-    end
+    expanded = expand_all(text)
+    markdown ? to_html(expanded, filter_html: false) : expanded.html_safe
+  end
+
+  def expand(opt)
+    %q{<a href="/articles/%d">%s</a>} % [id, opt[:title] || title]
   end
 
   private

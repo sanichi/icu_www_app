@@ -33,47 +33,19 @@ describe String do
     end
   end
 
-  context "ICU markup" do
-    it "articles" do
-      before = "[ART:123:Futher details]."
-      after = '<a href="/articles/123">Futher details</a>.'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
+  context "obscuring" do
+    it "#rot13" do
+      expect("".rot13).to eq ""
+      expect("Shpx gur fcnzzref".rot13).to eq "Fuck the spammers"
+      expect("Fuck the spammers".rot13).to eq "Shpx gur fcnzzref"
+      expect("!1@2£3$4%5^6&7*8(9)0_-+=").to eq "!1@2£3$4%5^6&7*8(9)0_-+="
+      expect("<span>42</span>".rot13).to eq "<fcna>42</fcna>"
     end
 
-    it "games" do
-      before = "[PGN:22669:Lee,C. 0-1 Orr,M.]"
-      after = '<a href="/games/22669">Lee,C. 0-1 Orr,M.</a>'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
-    end
+    it "#obscure" do
+      expect(%q{<a href="mailto:joe@bloggs.ie">joe@bloggs.ie</a>}.obscure).to eq %q{'vr<\057n>', 'vr">wbr\100oybttf', '<n uers="znvygb:wbr\100oybttf'}
+      expect(%q{<a href="mailto:m@markorr.com">M. O'Orr</a>}.obscure).to eq %q{' B\'Bee<\057n>', 'pbz">Z', '<n uers="znvygb:z\100znexbee'}
 
-    it "image links" do
-      before = "[IML:456:Picture]"
-      after = '<a href="/images/456">Picture</a>'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
-    end
-
-    it "tournaments" do
-      before = "Tournament [TRN:1:table]"
-      after = 'Tournament <a href="/tournaments/1">table</a>'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
-    end
-
-    it "uploads" do
-      before = "Click [UPL:7890:here] to download."
-      after = 'Click <a href="/uploads/7890">here</a> to download.'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
-    end
-
-    it "multiple" do
-      before = "[IML:234:picture] or [UPL:3456:PDF] or [PGN:21723:½-½]."
-      after = '<a href="/images/234">picture</a> or <a href="/uploads/3456">PDF</a> or <a href="/games/21723">½-½</a>.'
-      expect(before.icu_markup).to eq after
-      expect(before).to_not eq after
     end
   end
 end

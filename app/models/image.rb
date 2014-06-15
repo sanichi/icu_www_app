@@ -1,6 +1,5 @@
 class Image < ActiveRecord::Base
   extend Util::Pagination
-
   include Journalable
   journalize %w[data_file_name data_content_type data_file_size caption credit year], "/images/%d"
 
@@ -79,6 +78,33 @@ class Image < ActiveRecord::Base
     data_content_type.to_s.split("/").last.to_s.upcase
   end
 
+  def expand(opt)
+    if opt[:type] == "IML"
+      %q{<a href="/images/%d">%s</a>} % [id, opt[:text] || "image"]
+    elsif opt[:type] == "IMG"
+      width, height = resize(opt)
+      alt = (opt[:alt] || caption).gsub(/"/, '\"')
+      margin = opt[:margin] || "yes"
+      atrs = []
+      atrs.push %Q/src="#{data.url}"/
+      atrs.push %Q/width="#{width}"/
+      atrs.push %Q/height="#{height}"/
+      if opt[:align] == "left" || opt[:align].blank?
+        atrs.push 'align="left"'
+        atrs.push 'style="margin-right: 1em"' if margin == "yes"
+      end
+      if opt[:align] == "right"
+        atrs.push 'align="right"'
+        atrs.push 'style="margin-left: 1em"' if margin == "yes"
+      end
+      atrs.push %Q/alt="#{alt}"/
+      cl, cr = opt[:align] == "center" ? ["<center>", "</center>"] : ["", ""]
+      "#{cl}<img #{atrs.join(" ")}>#{cr}"
+    else
+      raise "invalid expandable type (#{opt[:type]}) for Image"
+    end
+  end
+
   private
 
   def normalize_attributes
@@ -121,5 +147,19 @@ class Image < ActiveRecord::Base
     if year.to_i > Date.today.year
       errors.add(:year, "cannot be in the future")
     end
+  end
+
+  def resize(opt)
+    width = opt[:width].to_i
+    height = opt[:height].to_i
+    if width <= 0 && height <= 0
+      width = self.width
+      height = self.height
+    elsif width <= 0
+      width = ((height.to_f / self.height) * self.width).ceil
+    elsif height <= 0
+      height = ((width.to_f / self.width) * self.height).ceil
+    end
+    [width, height]
   end
 end

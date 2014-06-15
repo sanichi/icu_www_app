@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
   extend Util::Pagination
-  attr_accessor :password
-
   include Journalable
   journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
+
+  attr_accessor :password
 
   OK = "OK"
   ROLES = %w[admin calendar editor membership translator treasurer]

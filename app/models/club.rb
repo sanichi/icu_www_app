@@ -1,6 +1,5 @@
 class Club < ActiveRecord::Base
   extend Util::Pagination
-
   include Journalable
   journalize %w[name web meet address district city county lat long contact email phone active], "/clubs/%d"
 

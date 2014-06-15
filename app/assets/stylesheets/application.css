@@ -37,6 +37,35 @@
 /* To stop text wrapping */
 .no-wrap { white-space: nowrap; }
 
+/* For articles */
+#article table {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+#article table.blank
+{
+  border-style: none !important;
+}
+#article table.left-aligned
+{
+  margin-left: 0;
+}
+#article table.blank > tbody > tr > td
+{
+  border-style: none !important;
+}
+#article th
+{
+  border: solid 1px #666;
+  padding: 0.4em;
+}
+#article td
+{
+  border: solid 1px #666;
+  padding: 0.4em;
+}
+
 /* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */
 .btn-file {
   position: relative;

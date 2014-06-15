@@ -60,6 +60,10 @@ class Upload < ActiveRecord::Base
     end
   end
 
+  def expand(opt)
+    %q{<a href="/uploads/%d">%s</a>} % [id, opt[:text] || "upload"]
+  end
+
   private
 
   def unobfuscate(path_or_url)
