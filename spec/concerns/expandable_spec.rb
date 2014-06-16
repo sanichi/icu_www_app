@@ -120,16 +120,18 @@ describe Expandable do
   context "images" do
     let(:image)  { create(:image) }
     let(:alt)    { Faker::Lorem.sentence }
-    let(:mleft)  { "margin-left: 1em" }
-    let(:mright) { "margin-right: 1em" }
+    let(:fleft)  { "float-left" }
+    let(:fright) { "float-right" }
+    let(:mleft)  { "left-margin" }
+    let(:mright) { "right-margin" }
 
     it "defaults" do
       result = d.expand_all("[IMG:#{image.id}]")
-      expect(result).to match /\A<img src="[^"]+" width="[^"]+" height="[^"]+" align="left" style="[^"]+" alt="[^"]+">\z/
+      expect(result).to match /\A<img src="[^"]+" width="[^"]+" height="[^"]+" class="[^"]+" alt="[^"]+">\z/
       expect(result).to match /src="#{Regexp.escape(image.data.url)}"/
       expect(result).to match /width="#{image.width}"/
       expect(result).to match /height="#{image.height}"/
-      expect(result).to match /style="#{mright}"/
+      expect(result).to match /class="#{fleft} #{mright}"/
       expect(result).to match /alt="#{Regexp.escape(image.caption)}"/
     end
 
@@ -159,39 +161,33 @@ describe Expandable do
 
     it "explicit align left" do
       result = d.expand_all("[IMG:#{image.id}:align=left]")
-      expect(result).to match /align="left"/
-      expect(result).to match /style="#{mright}"/
+      expect(result).to match /class="#{fleft} #{mright}"/
     end
 
     it "implicit align left" do
       result = d.expand_all("[IMG:#{image.id}:left]")
-      expect(result).to match /align="left"/
-      expect(result).to match /style="#{mright}"/
+      expect(result).to match /class="#{fleft} #{mright}"/
     end
 
     it "explicit align right" do
       result = d.expand_all("[IMG:#{image.id}:align=right]")
-      expect(result).to match /align="right"/
-      expect(result).to match /style="#{mleft}"/
+      expect(result).to match /class="#{fright} #{mleft}"/
     end
 
     it "implicit align right" do
       result = d.expand_all("[IMG:#{image.id}:right]")
-      expect(result).to match /align="right"/
-      expect(result).to match /style="#{mleft}"/
+      expect(result).to match /class="#{fright} #{mleft}"/
     end
 
     it "explicit align center" do
       result = d.expand_all("[IMG:#{image.id}:align=center]")
-      expect(result).to_not match /align=/
-      expect(result).to_not match /style=/
+      expect(result).to_not match /class=/
       expect(result).to match /\A<center><img[^>]+><\/center>\z/
     end
 
     it "implicit align center" do
       result = d.expand_all("[IMG:#{image.id}:center]")
-      expect(result).to_not match /align=/
-      expect(result).to_not match /style=/
+      expect(result).to_not match /class=/
       expect(result).to match /\A<center><img[^>]+><\/center>\z/
     end
 
@@ -207,22 +203,22 @@ describe Expandable do
 
     it "explicit margin on" do
       result = d.expand_all("[IMG:#{image.id}:margin=yes]")
-      expect(result).to match /style="#{mright}"/
+      expect(result).to match /class="#{fleft} #{mright}"/
     end
 
     it "implicit margin on" do
       result = d.expand_all("[IMG:#{image.id}:yes]")
-      expect(result).to match /style="#{mright}"/
+      expect(result).to match /class="#{fleft} #{mright}"/
     end
 
     it "explicit margin off" do
       result = d.expand_all("[IMG:#{image.id}:margin:no]")
-      expect(result).to_not match /style=/
+      expect(result).to match /class="#{fleft}"/
     end
 
     it "implicit margin off" do
       result = d.expand_all("[IMG:#{image.id}:no]")
-      expect(result).to_not match /style=/
+      expect(result).to match /class="#{fleft}"/
     end
 
     it "invalid ID" do

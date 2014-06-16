@@ -66,6 +66,20 @@
   padding: 0.4em;
 }
 
+/* Mainly for images because the align attribute is not supported in html5 */
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.left-margin {
+  margin-left: 1em;
+}
+.right-margin {
+  margin-right: 1em;
+}
+
 /* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */
 .btn-file {
   position: relative;

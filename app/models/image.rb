@@ -90,12 +90,10 @@ class Image < ActiveRecord::Base
       atrs.push %Q/width="#{width}"/
       atrs.push %Q/height="#{height}"/
       if opt[:align] == "left" || opt[:align].blank?
-        atrs.push 'align="left"'
-        atrs.push 'style="margin-right: 1em"' if margin == "yes"
+        atrs.push 'class="float-left%s"' % (margin == "yes" ? " right-margin" : "")
       end
       if opt[:align] == "right"
-        atrs.push 'align="right"'
-        atrs.push 'style="margin-left: 1em"' if margin == "yes"
+        atrs.push 'class="float-right%s"' % (margin == "yes" ? " left-margin" : "")
       end
       atrs.push %Q/alt="#{alt}"/
       cl, cr = opt[:align] == "center" ? ["<center>", "</center>"] : ["", ""]
