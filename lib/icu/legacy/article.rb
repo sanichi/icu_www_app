@@ -116,8 +116,8 @@ module ICU
         if [9, 137].include?(params[:id])
           params[:text].gsub!(/\[FEN:[^\]]+\]/) do |fen|
             fen.sub!(/fen=/, "")
-            fen.sub!(/size=[^:]*/, "")
-            fen.sub!(/design=[^:]*/, "")
+            fen.sub!(/size=[^:\]]*/, "")
+            fen.sub!(/design=[^:\]]*/, "")
             fen.gsub!(/::+/, ":")
             fen.sub!(/:\]/, "]")
             fen
