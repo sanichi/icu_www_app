@@ -119,7 +119,7 @@ module ICU
             fen.sub!(/size=[^:]*/, "")
             fen.sub!(/design=[^:]*/, "")
             fen.gsub!(/::+/, ":")
-            fen.sub!(/:\]/, "")
+            fen.sub!(/:\]/, "]")
             fen
           end
         end
