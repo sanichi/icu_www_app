@@ -113,6 +113,16 @@ module ICU
         end
         params[:year] = params[:year].year
         params[:title].sub!(/\AGarry Kasparov's visit to Ireland 2014 - /, "") if [427, 428, 429, 430].include?(params[:id])
+        if [9, 137].include?(params[:id])
+          params[:text].gsub!(/\[FEN:[^\]]+\]/) do |fen|
+            fen.sub!(/fen=/, "")
+            fen.sub!(/size=[^:]*/, "")
+            fen.sub!(/design=[^:]*/, "")
+            fen.gsub!(/::+/, ":")
+            fen.sub!(/:\]/, "")
+            fen
+          end
+        end
       end
 
       def bulletins(params)

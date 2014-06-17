@@ -57,16 +57,30 @@
 }
 #article th
 {
-  border: solid 1px #666;
+  border: solid 1px #bbb;
   padding: 0.4em;
 }
 #article td
 {
-  border: solid 1px #666;
+  border: solid 1px #bbb;
   padding: 0.4em;
 }
 
-/* Mainly for images because the align attribute is not supported in html5 */
+/* General styles for board tables (see models/board.rb). */
+table.board { border: solid 1px #ccc !important; margin-bottom: 0.7em; }
+table.board td { border: 0 !important; padding: 0; }
+table.board th { border: 0 !important; padding: 1em; }
+table.board th.w-to-move { vertical-align: bottom; text-align: center; }
+table.board th.b-to-move { vertical-align: top; text-align: center; }
+table.board th.comment { font-weight:normal; border-top: solid 1px #ccc !important; }
+
+/* This was invented for board tables but it will work with any. */
+table.float-center { margin-left: auto; margin-right: auto; }
+
+/* Custom board styles. There should be one of these for each style in STYLES (see models/board.rb). */
+table.hce30png td { width: 30px; height: 30px; background-image: url("/assets/boards/hce30.png") }
+
+/* Mainly for images (because the align attribute is not supported in html5) but also used for board tables. */
 .float-left {
   float: left;
 }
@@ -74,10 +88,10 @@
   float: right;
 }
 .left-margin {
-  margin-left: 1em;
+  margin-left: 1em !important;
 }
 .right-margin {
-  margin-right: 1em;
+  margin-right: 1em !important;
 }
 
 /* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */

@@ -9,12 +9,15 @@ module Expandable
     "TRN" => { class: Tournament, name: /\S/, title: /\S/ },
     "UPL" => { class: Upload, text: /\S/ },
   }
-  SPECIAL = %w[EMA]
+  SPECIAL = {
+    "EMA" => nil,
+    "FEN" => { align: /\A(center|left|right)\z/, style: Board::VALID_STYLE, comment: /\S/ },
+  }
 
   def expand_all(text)
     text.gsub(/\[(#{EXPANDABLE.keys.join('|')}):([1-9]\d*)(:[^\]]+)?\]/) do
       expand_each(EXPANDABLE[$1][:class], $2.to_i, options($1, $3))
-    end.gsub(/\[(#{SPECIAL.join('|')}):([^:]+)(?::(.+))?\]/) do
+    end.gsub(/\[(#{SPECIAL.keys.join('|')}):([^:]+)(?::(.*))?\]/) do
       expand_special($1, $2, $3)
     end
   end
@@ -35,6 +38,10 @@ module Expandable
       raise "invalid email (#{data})" unless data.match(/\A[^.@\s][^@\s]*@[^.@\s]+(\.[^@\s]+)+\z/)
       link = %Q{<a href="mailto:#{data}">#{option || data}</a>}
       "<script>liame(#{link.obscure})</script>"
+    when "FEN"
+      board = Board.new(data)
+      options = options(type, option)
+      board.expand(options)
     else
       raise "unrecognised shortcut type (#{type})"
     end
@@ -48,7 +55,7 @@ module Expandable
     opt.to_s.split(/:/).each do |pair|
       key, val = pair.to_s.split(/=/)
       if key.present?
-        allowed = EXPANDABLE[type].reject{ |k,v| k == :class || k == :type }
+        allowed = (EXPANDABLE[type] || SPECIAL[type]).reject{ |k,v| k == :class || k == :type }
         k2s = key.to_sym
         if val.present?
           hash[k2s] = val if allowed[k2s] && val.match(allowed[k2s])

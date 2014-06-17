@@ -13,7 +13,7 @@ describe Expandable do
     let(:link)  { '<a href="/articles/%d">%s</a>' }
 
     it "default title" do
-      expect(d.expand_all("[ART:#{article.id}]")).to eq  link % [article.id, article.title]
+      expect(d.expand_all("[ART:#{article.id}]")).to eq link % [article.id, article.title]
     end
 
     it "explicit title" do
@@ -26,6 +26,50 @@ describe Expandable do
 
     it "invalid ID" do
       expect(d.expand_all("[ART:99]")).to eq "[Error: no Article 99]"
+    end
+  end
+
+  context "boards" do
+    let(:fen)     { "k7/8/8/8/8/8/8/7K w" }
+    let(:nef)     { "k7/8/8/8/8/8/8/7K b" }
+    let(:style)   { "hce30png" }
+    let(:comment) { "White to play and mate in 3" }
+
+    it "defaults" do
+      result = d.expand_all("[FEN:#{fen}]")
+      expect(result).to match /\A<table class="board float-left right-margin #{style}">/
+      expect(result).to match /<th colspan="8" class="comment small" width="240">⇧<\/th>/
+    end
+
+    it "black to move" do
+      result = d.expand_all("[FEN:#{nef}]")
+      expect(result).to match /<th colspan="8" class="comment small" width="240">⬇︎<\/th>/
+    end
+
+    it "left align" do
+      result = d.expand_all("[FEN:#{fen}:align=left]")
+      expect(result).to match /\A<table class="board float-left right-margin #{style}">/
+    end
+
+    it "right align" do
+      result = d.expand_all("[FEN:#{fen}:align=right]")
+      expect(result).to match /\A<table class="board float-right left-margin #{style}">/
+    end
+
+    it "centered" do
+      result = d.expand_all("[FEN:#{fen}:align=center]")
+      expect(result).to match /\A<table class="board float-center #{style}">/
+    end
+
+    it "comment" do
+      result = d.expand_all("[FEN:#{fen}:comment=#{comment}]")
+      expect(result).to match /<th colspan="8" class="comment small" width="240">⇧ #{comment}<\/th>/
+    end
+
+    it "comment and alignment" do
+      result = d.expand_all("[FEN:#{fen}:align=right:comment=#{comment}]")
+      expect(result).to match /\A<table class="board float-right left-margin #{style}">/
+      expect(result).to match /<th colspan="8" class="comment small" width="240">⇧ #{comment}<\/th>/
     end
   end
 
@@ -279,8 +323,8 @@ describe Expandable do
     let(:article) { create(:article) }
 
     it "expansions" do
-      text = "See [ART:#{article.id}:here] and\n[IML:#{image.id}:here]."
-      expect(d.expand_all(text)).to match /\ASee <a href="[^"]+">here<\/a> and\n<a href="[^"]+">here<\/a>.\z/
+      text = "See [ART:#{article.id}:here] and\n[IML:#{image.id}:here].\n"
+      expect(d.expand_all(text)).to match /\ASee <a href="[^"]+">here<\/a> and\n<a href="[^"]+">here<\/a>.\n\z/
     end
   end
 end
