@@ -123,7 +123,15 @@ class Game < ActiveRecord::Base
   end
 
   def expand(opt)
-    %q{<a href="/games/%d">%s</a>} % [id, opt[:text] || "game"]
+    text = case opt[:text].to_s
+    when /\A\s*\z/
+      "#{white}—#{black}"
+    when "*-*"
+      then result
+    else
+      opt[:text]
+    end
+    %q{<a href="/games/%d">%s</a>} % [id, text]
   end
 
   private

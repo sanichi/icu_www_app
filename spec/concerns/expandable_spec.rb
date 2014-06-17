@@ -121,7 +121,7 @@ describe Expandable do
     %w[GAM PGN].each do |type|
       context type do
         it "default text" do
-          expect(d.expand_all("[#{type}:#{game.id}]")).to eq link % [game.id, "game"]
+          expect(d.expand_all("[#{type}:#{game.id}]")).to eq link % [game.id, "#{game.white}—#{game.black}"]
         end
 
         it "explicit text" do
@@ -130,6 +130,14 @@ describe Expandable do
 
         it "implicit text" do
           expect(d.expand_all("[#{type}:#{game.id}:#{text}]")).to eq link % [game.id, text]
+        end
+
+        it "explicit result text" do
+          expect(d.expand_all("[#{type}:#{game.id}:text=*-*]")).to eq link % [game.id, game.result]
+        end
+
+        it "implicit result text" do
+          expect(d.expand_all("[#{type}:#{game.id}:*-*]")).to eq link % [game.id, game.result]
         end
 
         it "invalid ID" do
