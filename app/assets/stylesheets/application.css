@@ -9,6 +9,7 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require boards
  */
 
 /* Text styling. */
@@ -77,8 +78,7 @@ table.board th.comment { font-weight:normal; border-top: solid 1px #ccc !importa
 /* This was invented for board tables but it will work with any. */
 table.float-center { margin-left: auto; margin-right: auto; }
 
-/* Custom board styles. There should be one of these for each style in STYLES (see models/board.rb). */
-table.hce30png td { width: 30px; height: 30px; background-image: url("/assets/boards/hce30.png") }
+/* See also custom board styles in boards.css.scss. */
 
 /* Mainly for images (because the align attribute is not supported in html5) but also used for board tables. */
 .float-left {
