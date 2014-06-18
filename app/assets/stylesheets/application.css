@@ -13,7 +13,7 @@
  */
 
 /* Text styling. */
-.text-done { text-decoration: line-through; }
+.text-done { text-decoration: line-through !important; }
 
 /* Indicator for maintenance mode. */
 #maintenance {

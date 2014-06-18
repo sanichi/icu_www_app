@@ -278,6 +278,28 @@ describe Expandable do
     end
   end
 
+  context "news" do
+    let(:news) { create(:news) }
+    let(:text) { Faker::Lorem.sentence }
+    let(:link)  { '<a href="/news/%d">%s</a>' }
+
+    it "default text" do
+      expect(d.expand_all("[NWS:#{news.id}]")).to eq link % [news.id, news.headline]
+    end
+
+    it "explicit text" do
+      expect(d.expand_all("[NWS:#{news.id}:text=#{text}]")).to eq link % [news.id, text]
+    end
+
+    it "implicit text" do
+      expect(d.expand_all("[NWS:#{news.id}:#{text}]")).to eq link % [news.id, text]
+    end
+
+    it "invalid ID" do
+      expect(d.expand_all("[NWS:99]")).to eq "[Error: no News 99]"
+    end
+  end
+
   context "tournaments" do
     let(:tournament) { create(:tournament) }
     let(:name)       { Faker::Lorem.sentence }

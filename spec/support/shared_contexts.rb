@@ -3,6 +3,7 @@ shared_context "features" do
   let(:address)      { I18n.t("address") }
   let(:city)         { I18n.t("city") }
   let(:confirm)      { I18n.t("confirm") }
+  let(:date)         { I18n.t("date") }
   let(:delete)       { I18n.t("delete") }
   let(:description)  { I18n.t("description") }
   let(:details)      { I18n.t("details") }

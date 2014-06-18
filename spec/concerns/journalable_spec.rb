@@ -13,6 +13,7 @@ describe Journalable do
     [Fee, "/admin/fees/%d"],
     [Game, "/games/%d"],
     [Image, "/images/%d"],
+    [News, "/news/%d"],
     [Pgn, "/admin/pgns/%d"],
     [Player, "/admin/players/%d"],
     [Series, "/series/%d"],

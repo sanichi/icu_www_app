@@ -1,0 +1,8 @@
+= form_tag news_index_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :headline, text: t("news.headline"), size: 20
+  = render "utils/inline_text_field", param: :summary, text: t("news.summary"), size: 20
+  = render "utils/inline_text_field", param: :date, text: t("date"), size: 10
+  - if can?(:create, News)
+    = render "utils/inline_select", param: :active, text: t("active"), menu: active_menu(params[:active], true)
+    = render "utils/inline_select", param: :player_id, text: t("user.role.editor"), menu: news_user_menu(params[:player_id])
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

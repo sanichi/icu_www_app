@@ -25,7 +25,11 @@ module UsersHelper
   end
 
   def user_theme_menu(selected)
-    options_for_select User::THEMES, selected
+    themes = User::THEMES.map do |theme|
+      label = theme == User::DEFAULT_THEME ? "#{theme} (#{t("default")})" : theme
+      [label, theme]
+    end
+    options_for_select themes, selected
   end
 
   def user_verify_menu(selected)

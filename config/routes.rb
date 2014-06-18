@@ -22,6 +22,7 @@ IcuWwwApp::Application.routes.draw do
   resources :images,      only: [:index, :show]
   resources :items,       only: [:new, :create, :destroy]
   resources :new_players, only: [:create]
+  resources :news,        only: [:index, :show]
   resources :player_ids,  only: [:index]
   resources :players,     only: [:index]
   resources :series,      only: [:index, :show]
@@ -51,6 +52,7 @@ IcuWwwApp::Application.routes.draw do
     resources :items,           only: [:index]
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
+    resources :news,            only: [:new, :create, :edit, :update, :destroy]
     resources :payment_errors,  only: [:index]
     resources :pgns
     resources :players,         only: [:show, :new, :create, :edit, :update]

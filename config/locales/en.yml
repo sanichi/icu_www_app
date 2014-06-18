@@ -13,6 +13,7 @@ en:
   created_at: Created
   date: Date
   date_format: YYYY-MM-DD
+  default: default
   delete: Delete
   description: Description
   details: Details

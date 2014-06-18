@@ -14,9 +14,10 @@ class User < ActiveRecord::Base
   SessionError = Class.new(RuntimeError)
 
   has_many :articles, dependent: :nullify
+  has_many :carts, dependent: :nullify
+  has_many :news, dependent: :nullify
   has_many :logins, dependent: :destroy
   has_many :refunds, dependent: :nullify
-  has_many :carts, dependent: :nullify
   has_many :pgns, dependent: :nullify
   belongs_to :player
 

@@ -1,0 +1,9 @@
+%p.small.text-center
+  = t("created_at")
+  %strong= object.created_at.to_date
+  = "◦"
+  = t("updated_at")
+  %strong= object.created_at.to_date
+  = "◦"
+  = t("user.role.editor")
+  %strong= object.user.player.initials

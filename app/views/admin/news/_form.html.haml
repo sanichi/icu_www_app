@@ -1,0 +1,22 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @news], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %legend= "#{@news.new_record? ? 'New' : 'Edit'} News"
+        - locals = { form: f, object: @news, col: "sm", pad: 2, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :headline, text: t("news.headline"), width: 7)
+        - unless @news.new_record?
+          = render "utils/text_field_for", locals.merge(param: :date, text: t("date"), width: 3)
+        = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1, mark: "none")
+        .form-group{class: @news.errors[:text].any? ? "has-error" : ""}
+          .row
+            .col-sm-12.text-center= f.label :summary, t("news.summary"), class: "control-label"
+          .row
+            .col-sm-12.voffset1= f.text_area :summary, class: "form-control insignificant-space", rows: 10
+        %hr
+        = f.submit t("save"), class: "btn btn-primary"
+        - last_path = last_search(:news)
+        = link_to t("cancel"), @news.new_record? ? last_path || news_index_path : @news, class: "btn btn-default"
+        - if last_path
+          = link_to t("last_search"), last_path, class: "btn btn-default"

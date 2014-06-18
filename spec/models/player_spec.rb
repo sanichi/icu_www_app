@@ -128,5 +128,11 @@ describe Player do
       player = build(:player, first_name: "Mark", last_name: "Orr")
       expect(player.name(id: true)).to eq "Mark Orr (#{I18n.t('new')})"
     end
+
+    it "#initials" do
+      expect(create(:player, first_name: "Mark", last_name: "Orr").initials).to eq "MO"
+      expect(create(:player, first_name: "jonathan", last_name: "o'connor").initials).to eq "JOC"
+      expect(create(:player, first_name: "Úna", last_name: "O'Boyle").initials).to eq "UOB"
+    end
   end
 end

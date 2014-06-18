@@ -42,7 +42,7 @@ class Article < ActiveRecord::Base
       matches = matches.where("players.id = ?", params[:player_id].to_i)
     end
     matches = accessibility_matches(user, params[:access], matches)
-    matches = matches.where(active: true) if params[:active] == "true" || params[:active].blank?
+    matches = matches.where(active: true) if params[:active] == "true"
     matches = matches.where(active: false) if params[:active] == "false"
     paginate(matches, params, path, opt)
   end

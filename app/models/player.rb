@@ -54,6 +54,10 @@ class Player < ActiveRecord::Base
     names.join(" ")
   end
 
+  def initials
+    name.gsub(/[^A-Z]/, "")
+  end
+
   def duplicate?
     player_id.present?
   end

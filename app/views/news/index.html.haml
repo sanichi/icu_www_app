@@ -1,0 +1,14 @@
+- content_for :title, t("news.news")
+
+= render "utils/search_panel", form: "search_form", title: t("news.news"), col: "sm"
+
+- if @news.count > 0
+  .row
+    .col-md-10.col-md-offset-1
+      - @news.matches.each do |news|
+        = render "panel", news: news
+
+= render "utils/pagination_links", pager: @news
+
+- if can?(:create, News)
+  = link_to "New", new_admin_news_path, class: "btn btn-info"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140607050315) do
+ActiveRecord::Schema.define(version: 20140618065206) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -234,6 +234,21 @@ ActiveRecord::Schema.define(version: 20140607050315) do
     t.string   "ip",         limit: 50
     t.datetime "created_at"
   end
+
+  create_table "news", force: true do |t|
+    t.boolean  "active"
+    t.date     "date"
+    t.string   "headline",   limit: 100
+    t.text     "summary"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "news", ["active"], name: "index_news_on_active", using: :btree
+  add_index "news", ["date"], name: "index_news_on_date", using: :btree
+  add_index "news", ["headline"], name: "index_news_on_headline", using: :btree
+  add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
 
   create_table "payment_errors", force: true do |t|
     t.integer  "cart_id"

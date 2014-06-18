@@ -2,25 +2,16 @@
 - content_for :includes do
   = javascript_include_tag "email.js"
 
-%h1.text-center= @article.title
+%h1.text-center{class: @article.active ? nil : "text-done"}= @article.title
 - if @article.author
   %p.text-center= @article.author
 - @article.series.each do |series|
   = render "series", series: series, article: @article
+#article= @article.html
 %hr
-#article
-  = @article.html
+= render "utils/editing_details", object: @article
 %hr
-%p.small.text-center
-  = t("created_at")
-  %strong= @article.created_at.to_date
-  = "◦"
-  = t("updated_at")
-  %strong= @article.created_at.to_date
-  = "◦"
-  = t("user.role.editor")
-  %strong= @article.user.player.name
-%hr
+
 - if can?(:update, @article)
   = link_to t("edit"), edit_admin_article_path(@article), class: "btn btn-primary"
 - if can?(:destroy, @article)

@@ -2,7 +2,7 @@
 
 = render "utils/search_panel", form: "search_form", title: t("article.articles"), col: "sm"
 
-- admin = can?(:create, Event)
+- admin = can?(:create, Article)
 
 .row
   .col-sm-12
@@ -20,7 +20,7 @@
         %tbody
           - @articles.matches.each do |article|
             %tr.result
-              %td= link_to article.title, article
+              %td= link_to article.title, article, class: article.active ? nil : "text-done"
               %td= article.year
               %td= article.author
               %td= t("article.category.#{article.category}")
