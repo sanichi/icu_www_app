@@ -62,7 +62,7 @@ class Game < ActiveRecord::Base
       matches = matches.where("black LIKE ?", "%#{normalize_name(params[:black], true)}%") if params[:black].present?
     end
     matches = matches.where(result: params[:result]) if RESULTS.include?(params[:result])
-    matches = matches.where("result LIKE ?", "%#{params[:result]}%") if params[:result].present?
+    matches = matches.where("event LIKE ?", "%#{params[:event]}%") if params[:event].present?
     matches = matches.where(pgn_id: params[:pgn_id].to_i) if params[:pgn_id].to_i > 0
     paginate(matches, params, path)
   end

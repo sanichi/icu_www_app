@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Player
       include Database
+      include Utils
 
       MAP = {
         plr_id:           :id,
@@ -32,8 +33,6 @@ module ICU
           report_error "can't synchronize when players or player journal entries exist unless force is used"
           return
         end
-
-        @stats = Hash.new { Array.new }
 
         get_legacy_ratings
 
@@ -156,10 +155,6 @@ module ICU
         end
       end
 
-      def add_stat(key, id)
-        @stats[key] = @stats[key] << id
-      end
-
       def gather_stats(player, params)
         add_stat(:name_adjustments,    player.id) unless player.first_name == params[:first_name] && player.last_name == params[:last_name]
         add_stat(:unknown_dob,         player.id) if player.dob.nil?
@@ -182,22 +177,6 @@ module ICU
         add_stat(:phones_none,         player.id) if player.home_phone.blank? && player.mobile_phone.blank? && player.work_phone.blank?
         add_stat(:notes,               player.id) if player.note.present?
         add_stat(:irish_titles,        player.id) if player.titles.present? && player.fed == "IRL"
-      end
-
-      def dump_stats
-        max = @stats.keys.inject(0) { |m, k| m = k.length if k.length > m; m }
-        puts "stats:"
-        @stats.keys.sort.each do |name|
-          ids = @stats[name]
-          size = ids.size
-          ids = ids.sort
-          ids = ids.sort[0,10] << "..." << ids[-10,10] if size > 20
-          puts "  %-#{max}s %5d: %s" % [name, size, ids.join(',')]
-        end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
 
       def legacy_ratings_sql

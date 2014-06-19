@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Club
       include Database
+      include Utils
 
       MAP = {
         club_id:        :id,
@@ -64,10 +65,6 @@ module ICU
         else
           true
         end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

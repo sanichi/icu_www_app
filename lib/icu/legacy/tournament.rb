@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Tournament
       include Database
+      include Utils
 
       MAP = {
         trn_id:      :id,
@@ -166,10 +167,6 @@ module ICU
         else
           true
         end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

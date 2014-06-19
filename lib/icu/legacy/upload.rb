@@ -1,6 +1,7 @@
 module ICU
   module Legacy
     class Upload
+      include Utils
       #
       # Unusually, this sync does not involve the legacy database. Instead we are synchronizing a bunch of www1
       # files (whose location on the lagacy server was prd/htd/misc) with a new database table called uploads.
@@ -381,10 +382,6 @@ module ICU
           year = 2012
         end
         [description, year, access]
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

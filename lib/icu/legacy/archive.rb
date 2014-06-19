@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Archive
       include Database
+      include Utils
 
       MAP = {
         icu_id:     :id,
@@ -26,7 +27,6 @@ module ICU
         return unless existing_players_and_clubs?
 
         get_clubs
-        @stats = Hash.new { Array.new }
 
         player_count = 0
         rat_database.query("SELECT #{MAP.keys.join(", ")} FROM old_players where status = 'archived'").each do |player|
@@ -134,26 +134,6 @@ module ICU
         else
           true
         end
-      end
-
-      def add_stat(key, id)
-        @stats[key] = @stats[key] << id
-      end
-
-      def dump_stats
-        max = @stats.keys.inject(0) { |m, k| m = k.length if k.length > m; m }
-        puts "stats:"
-        @stats.keys.sort.each do |name|
-          ids = @stats[name]
-          size = ids.size
-          ids = ids.sort
-          ids = ids.sort[0,10] << "..." << ids[-10,10] if size > 20
-          puts "  %-#{max}s %5d: %s" % [name, size, ids.join(',')]
-        end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

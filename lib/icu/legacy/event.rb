@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Event
       include Database
+      include Utils
 
       MAP = {
         event_contact:    :contact,
@@ -110,10 +111,6 @@ module ICU
         else
           true
         end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

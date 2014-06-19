@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Image
       include Database
+      include Utils
 
       MAP = {
         img_id:          :id,
@@ -100,10 +101,6 @@ module ICU
 
       def remove_journal_items
         puts "old image journal entries deleted: #{JournalEntry.images.delete_all}"
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

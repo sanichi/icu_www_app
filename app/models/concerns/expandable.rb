@@ -2,7 +2,7 @@ module Expandable
   EXPANDABLE = {
     "ART" => { class: Article, title: /\S/ },
     "EVT" => { class: Event, name: /\S/, title: /\S/ },
-    "GAM" => { class: Game, text: /\S/ },
+    "GME" => { class: Game, text: /\S/ },
     "IMG" => { class: Image, height: /\A[1-9]\d*\z/, width: /\A[1-9]\d*\z/, align: /\A(center|left|right)\z/, margin: /\A(yes|no)\z/, alt: /\S/ },
     "IML" => { class: Image, text: /\S/ },
     "NWS" => { class: News, text: /\S/ },

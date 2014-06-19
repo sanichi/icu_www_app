@@ -118,7 +118,7 @@ describe Expandable do
     let(:text) { Faker::Lorem.sentence }
     let(:link) { '<a href="/games/%d">%s</a>' }
 
-    %w[GAM PGN].each do |type|
+    %w[GME PGN].each do |type|
       context type do
         it "default text" do
           expect(d.expand_all("[#{type}:#{game.id}]")).to eq link % [game.id, "#{game.white}—#{game.black}"]

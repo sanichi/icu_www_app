@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Pgn
       include Database
+      include Utils
 
       MAP = {
         pup_id:       :id,
@@ -71,10 +72,6 @@ module ICU
         else
           true
         end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
     end
   end

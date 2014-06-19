@@ -2,6 +2,7 @@ module ICU
   module Legacy
     class Subscription
       include Database
+      include Utils
 
       ONLINE_MAP = {
         sub_id:        nil,
@@ -163,10 +164,6 @@ module ICU
         else
           true
         end
-      end
-
-      def report_error(msg)
-        puts "ERROR: #{msg}"
       end
 
       def online_sub_query
