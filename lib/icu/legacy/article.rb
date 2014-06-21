@@ -124,6 +124,7 @@ module ICU
           when "administrator" then "admins"
           else "all"
         end
+        params[:created_at] = params[:year].to_time.utc
         params[:year] = params[:year].year
         params[:title].sub!(/\AGarry Kasparov's visit to Ireland 2014 - /, "") if [427, 428, 429, 430].include?(params[:id])
         if [9, 137].include?(params[:id])

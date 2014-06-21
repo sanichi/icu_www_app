@@ -54,6 +54,7 @@ module ICU
 
       def adjust(params)
         params[:active] = params[:active] == "online"
+        params[:created_at] = params[:date].to_time
         convert!(params[:summary])
         mark_down!(params[:summary], params[:id])
         if params[:id] == 498
