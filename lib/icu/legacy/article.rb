@@ -23,9 +23,13 @@ module ICU
         end
 
         @bulletins = {}
+        [185, 212, 267, 402, 407, 408].each { |id| add_stat(".php (OK)", id) }
+
+        # See concerns/expandable.rb. Avoids validation errors when article refers to another that does not yet exist.
+        ENV["SYNC_ARTICLE"] = "|" + old_database.query("SELECT art_id FROM articles ORDER BY art_id").map{ |r| r[:art_id] }.join("|") + "|"
 
         article_count = 0
-        old_database.query("SELECT #{MAP.keys.join(", ")} FROM articles").each do |article|
+        old_database.query("SELECT #{MAP.keys.join(", ")} FROM articles ORDER BY art_id").each do |article|
           article_count += 1
           if [283,322].include?(article[:art_id])
             add_stat("skipped articles", article[:art_id])
@@ -131,76 +135,16 @@ module ICU
             fen
           end
         end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/articles\/display\.php\?id=(\d+)(?:#[^"]+)?">([^<]+)<\/[Aa]>/) { %Q{[ART:#{$1}:#{$2}]} }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/events\/display\.php\?id=(\d+)">([^<]+)<\/[Aa]>/) { %Q{[EVT:#{$1}:#{$2}]} }
-        params[:text].gsub!(/>\s*<[Aa]\s+href=["'](?:http:\/\/(?:www\.)?icu\.ie)?\/games\/display\.php\?id=(\d+)["']>([^<]+)<\/[Aa]>\s*</) { %Q{>[GME:#{$1}:#{$2}]<} }
-        params[:text].gsub!(/<[Aa]\s+href=["'](?:http:\/\/(?:www\.)?icu\.ie)?\/games\/display\.php\?id=(\d+)["']>([^<]+)<\/[Aa]>/) { %Q{[GME:#{$1}:#{$2}]} }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/news\/display\.php\?id=(\d+)">([^<]+)<\/[Aa]>/) { %Q{[NWS:#{$1}:#{$2}]} }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/articles\/list\.php\?title=([^&]+)">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/articles?title=#{$1}">#{$2}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/articles\/list\.php\?title=([^&]+)&cat_id=2">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/articles?title=#{$1}&category=bulletin">#{$2}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/clubs\/list\.php">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/clubs">#{$1}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/games\/list\.php\?date=([^&]+)&event=([^&]+)(?:&order=[^&]+)?">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/games?date=#{$1}&event=#{$2}">#{$3}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/games\/list\.php\?event=([^&]+)&date=([^&]+)(?:&order=[^&]+)?">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/games?date=#{$2}&event=#{$1}">#{$3}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/games\/list\.php\?event=([^&]+)(?:&order=[^&]+)?">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/games?event=#{$1}">#{$2}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/images\/list\.php\?text=([^"]+)(?:\+|%20)(\d{4})">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/images?caption=#{$1}&year=#{$2}">#{$3}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/images\/list\.php\?(?:page=\d+&)?text=([^&]+)(?:\+|%20)(\d{4})">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/images?caption=#{$1}&year=#{$2}">#{$3}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/images\/list\.php\?text=([^&]+)(?:\+|%20)(\d{4})(?:&psize=\d+)?(?:&page=\d+)?">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/images?caption=#{$1}&year=#{$2}">#{$3}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/images\/list\.php\?text=([^&]+)(?:&psize=\d+)?(?:&page=\d+)?">([^<]+)<\/[Aa]>/) do
-          caption, label = $1, $2
-          if caption == "Kevin+Connell"
-            caption = "Kevin+O%27Connell"
-            if label == "more"
-              label = "More pictures"
-            end
-          end
-          %Q{<a href="/images?caption=#{caption}">#{label}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/tournaments\/list\.php\?title=([^&]+)">([^<]+)<\/[Aa]>/) do
-          %Q{<a href="/tournaments?name=#{$1}">#{$2}</a>}
-        end
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/icu\/(?:\w+)\.php(?:[^"]*)">([^<]+)<\/[Aa]>/) { $1 }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/index\.php(?:[^"]*)">([^<]+)<\/[Aa]>/) { $1 }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/juniors\/index\.php(?:[^"]*)">([^<]+)<\/[Aa]>/) { $1 }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/ratings\/(?:\w+)\.php(?:[^"]*)">([^<]+)<\/[Aa]>/) { $1 }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/tournaments\/index\.php">([^<]+)<\/[Aa]>/) { %Q{<a href="/tournaments">#{$1}</a>} }
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/shop\/(?:\w+)\.php">([^<]+)<\/[Aa]>/) { %Q{<a href="/shop">#{$1}</a>} }
-        params[:text].gsub!(/<b><\/b>/, "")
-        params[:text].gsub!(/<[Aa]\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?(\/misc\/[^"]+)"(?:\s+target="[^"]+")?>([^<]+)<\/[Aa]>/) do
-          upload = Upload.where(www1_path: $1).first
-          if upload
-            %Q{[UPL:#{upload.id}:#{$2}]}
-          else
-            $0
-          end
-        end
-        params[:text].gsub!(/<[Aa]\s+href="mailto:([^"]+)">([^<]+)<\/[Aa]>/) do
-          "[EMA:#{$1}:#{$2}]"
-        end
+        convert!(params[:text])
       end
 
       def gather_article_stats(article)
-        add_stat(".php (185,212,267,402,407,408 OK)", article.id) if article.text.match(/\.php/)
+        add_stat(".php", article.id) if article.text.match(/\.php/)
         add_stat("/misc/ (should be none)", article.id) if article.text.match(/\/misc\//)
         add_stat("mailto (should be none)", article.id) if article.text.match(/mailto\:/)
         add_stat("ART", article.id) if article.text.match(/\[ART:/)
+        add_stat("ART:283 (should be none)", article.id) if article.text.match(/\[ART:283/)
+        add_stat("FAQ (should be none)", article.id) if article.text.match(/\[FAQ:/)
         add_stat("EVT", article.id) if article.text.match(/\[EVT:/)
         add_stat("GME", article.id) if article.text.match(/\[GME:/)
         add_stat("IMG", article.id) if article.text.match(/\[IMG:/)

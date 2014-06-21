@@ -17,6 +17,7 @@ class Article < ActiveRecord::Base
   validates :category, inclusion: { in: CATEGORIES }
   validates :text, :title, presence: true
   validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
+  validate :expansions
 
   scope :include_player, -> { includes(user: :player) }
   scope :include_series, -> { includes(episodes: :series) }
@@ -44,6 +45,7 @@ class Article < ActiveRecord::Base
     matches = accessibility_matches(user, params[:access], matches)
     matches = matches.where(active: true) if params[:active] == "true"
     matches = matches.where(active: false) if params[:active] == "false"
+    matches = matches.where(category: params[:category]) if CATEGORIES.include?(params[:category])
     paginate(matches, params, path, opt)
   end
 
@@ -66,6 +68,16 @@ class Article < ActiveRecord::Base
     end
     if text.present?
       text.gsub!(/\r\n/, "\n")
+    end
+  end
+
+  def expansions
+    if text.present?
+      begin
+        expand_all(text)
+      rescue => e
+        errors.add(:base, e.message)
+      end
     end
   end
 end

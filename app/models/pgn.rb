@@ -111,7 +111,7 @@ class Pgn < ActiveRecord::Base
         self.imports += 1
       end
     else
-      if @game.errors.size == 1 && @game.errors.include?(:signature) && @game.signature.length == 32
+      if @game.errors.include?(:signature) && @game.signature.to_s.length == 32
         self.duplicates += 1
       else
         raise PGNError.new("line #{lines}: #{@game.errors.full_messages.first || 'Unknown error'}")

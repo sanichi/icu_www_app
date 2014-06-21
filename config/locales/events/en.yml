@@ -16,6 +16,7 @@ en:
     prize_fund: Prize fund
     url: Event website
     category:
+      any: Any type
       category: Type
       irish: Irish
       junior: Juniors only

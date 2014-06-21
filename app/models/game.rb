@@ -14,12 +14,13 @@ class Game < ActiveRecord::Base
   validates :black_elo, :white_elo, numericality: { integer_only: true, greater_than: 0, less_than: MAX_ELO }, allow_nil: true
   validates :date, format: { with: /\A\d{4}\.(0[1-9]|1[012]|\?\?)\.(0[1-9]|[12][0-9]|3[01]|\?\?)\z/ }
   validates :eco, format: { with: /\A[A-E]\d\d\z/ }, allow_nil: true
-  validates :signature, length: { is: 32 }, uniqueness: { message: "duplicate detected" }
   validates :moves, presence: true
   validates :pgn_id, numericality: { integer_only: true, greater_than: 0 }
   validates :ply, numericality: { integer_only: true, greater_than: 0 }, allow_nil: true
   validates :result, inclusion: { in: RESULTS }, allow_nil: true
   validates :round, format: { with: /\A[0-9]\d{0,2}([-.\/][0-9]\d{0,2})?\z/ }, allow_nil: true
+  validates :signature, length: { is: 32 }
+  validate :unique_signature
 
   scope :ordered, -> { order(date: :desc) }
 
@@ -176,6 +177,16 @@ class Game < ActiveRecord::Base
     move_text.trim!                         # strip whitespace at either end and turn internal whitespace runs into single spaces
     signature += move_text
     self.signature = Digest::MD5.hexdigest(signature)
+  end
+
+  def unique_signature
+    duplicates = Game.where(signature: signature)
+    duplicates = duplicates.where.not(id: id) unless new_record?
+    duplicate = duplicates.first
+    if duplicate
+      errors.add(:base, "Duplicate game found (ID: #{duplicate.id})") # to higlight the error for the user
+      errors.add(:signature, "duplicate")                             # so the PGN parser (see models/pgn.rb) can be sure the problem is a duplicate error
+    end
   end
 
   def remove_html_tags(str)

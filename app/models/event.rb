@@ -52,6 +52,7 @@ class Event < ActiveRecord::Base
     params[:year] = default.year.to_s unless params[:year].to_s.match(/\A20\d\d\z/)
     params[:month] = "%02d" % default.month unless params[:month].to_s.match(/\A(0[1-9]|1[0-2])\z/)
     matches = matches.where("start_date >= ?", "#{params[:year]}-#{params[:month]}-01")
+    matches = matches.where(category: params[:category]) if CATEGORIES.include?(params[:category])
     paginate(matches, params, path)
   end
 

@@ -11,15 +11,15 @@ module Expandable
     "UPL" => { class: Upload, text: /\S/ },
   }
   SPECIAL = {
-    "EMA" => nil,
+    "EMA" => { text: /\S/ },
     "FEN" => { align: /\A(center|left|right)\z/, style: Board::VALID_STYLE, comment: /\S/ },
   }
 
   def expand_all(text)
-    text.gsub(/\[(#{EXPANDABLE.keys.join('|')}):([1-9]\d*)(:[^\]]+)?\]/) do
+    text.to_s.gsub(/\[(#{EXPANDABLE.keys.join('|')}):([1-9]\d*)(:[^\]]+)?\]/) do
       expand_each(EXPANDABLE[$1][:class], $2.to_i, options($1, $3))
-    end.gsub(/\[(#{SPECIAL.keys.join('|')}):([^:]+)(?::(.*))?\]/) do
-      expand_special($1, $2, $3)
+    end.gsub(/\[(#{SPECIAL.keys.join('|')}):([^:\]]+)(:[^\]]+)?\]/) do
+      expand_special($1, $2, options($1, $3))
     end
   end
 
@@ -28,26 +28,25 @@ module Expandable
   def expand_each(klass, id, options)
     klass.find(id).expand(options)
   rescue ActiveRecord::RecordNotFound => e
-    "[Error: no #{klass} #{id}]"
-  rescue => e
-    "[Error: #{e.message}]"
+    if ENV["SYNC_#{klass.to_s.upcase}"] && ENV["SYNC_#{klass.to_s.upcase}"].include?("|#{id}|")
+      "valid"
+    else
+      raise "#{id} is not a valid #{klass.to_s.downcase} ID"
+    end
   end
 
-  def expand_special(type, data, option)
+  def expand_special(type, data, options)
     case type
     when "EMA"
-      raise "invalid email (#{data})" unless data.match(/\A[^.@\s][^@\s]*@[^.@\s]+(\.[^@\s]+)+\z/)
-      link = %Q{<a href="mailto:#{data}">#{option || data}</a>}
+      raise "#{data} is not a valid email address" unless data.match(/\A[^.@\s][^@\s]*@[^.@\s]+(\.[^@\s]+)+\z/)
+      link = %Q{<a href="mailto:#{data}">#{options[:text] || data}</a>}
       "<script>liame(#{link.obscure})</script>"
     when "FEN"
       board = Board.new(data)
-      options = options(type, option)
       board.expand(options)
     else
-      raise "unrecognised shortcut type (#{type})"
+      raise "unrecognised expansion keyword (#{type})"
     end
-  rescue => e
-    "[Error: #{e.message}]"
   end
 
   def options(type, opt)

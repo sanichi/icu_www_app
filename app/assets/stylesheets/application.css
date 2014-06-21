@@ -67,6 +67,34 @@
   padding: 0.4em;
 }
 
+/* For news items. */
+.news dd {
+  margin-left: 1em !important;
+}
+.news table {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+.news table.blank
+{
+  border-style: none !important;
+}
+.news table.blank > tbody > tr > td
+{
+  border-style: none !important;
+}
+.news th
+{
+  border: solid 1px #bbb;
+  padding: 0.4em;
+}
+.news td
+{
+  border: solid 1px #bbb;
+  padding: 0.4em;
+}
+
 /* General styles for board tables (see models/board.rb). */
 table.board { border: solid 1px #ccc !important; margin-bottom: 0.7em; }
 table.board td { border: 0 !important; padding: 0; }

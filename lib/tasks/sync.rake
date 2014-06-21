@@ -75,6 +75,11 @@ namespace :sync do
     ICU::Legacy::Article.new.synchronize(args[:force])
   end
 
+  desc "Convert icuadmi_main/news to www_production/news"
+  task :news, [:force] => :environment do |task, args|
+    ICU::Legacy::News.new.synchronize(args[:force])
+  end
+
   desc "Check all synchronized data"
   task :check => :environment do |task|
     ICU::Legacy::Check.new.check

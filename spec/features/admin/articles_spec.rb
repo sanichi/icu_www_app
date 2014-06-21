@@ -3,12 +3,11 @@ require 'spec_helper'
 describe Article do;
   include_context "features"
 
-  let(:access_menu)   { I18n.t("access.access") }
-  let(:author_input)  { I18n.t("article.author") }
-  let(:category_menu) { I18n.t("article.category.category") }
-  let(:text_text)     { I18n.t("article.text") }
-  let(:title_input)   { I18n.t("article.title") }
-  let(:year_input)    { I18n.t("year") }
+  let(:access)   { I18n.t("access.access") }
+  let(:author)   { I18n.t("article.author") }
+  let(:category) { I18n.t("article.category.category") }
+  let(:text)     { I18n.t("article.text") }
+  let(:title)    { I18n.t("article.title") }
 
   context "authorization" do
     let!(:article) { create(:article, user: user) }
@@ -117,6 +116,7 @@ describe Article do;
 
   context "create" do
     let(:user) { create(:user, roles: "editor") }
+    let(:data) { build(:article) }
 
     before(:each) do
       login user
@@ -124,19 +124,12 @@ describe Article do;
     end
 
     it "everyone, active" do
-      access = "all"
-      author = "Anthony Penrose"
-      category = "bulletin"
-      text = "Lee Miller, fashion model, photographer, war correspondent, writer.\n\nA paradox of irascibility and effusive warmth."
-      title = "The Lives of Lee Miller"
-      year = 2014
-
-      fill_in title_input, with: title
-      fill_in year_input, with: year
-      fill_in author_input, with: author
-      fill_in text_text, with: text
-      select I18n.t("article.category.#{category}"), from: category_menu
-      select I18n.t("access.#{access}"), from: access_menu
+      fill_in title, with: data.title
+      fill_in year, with: data.year
+      fill_in author, with: data.author
+      fill_in text, with: data.text
+      select I18n.t("article.category.#{data.category}"), from: category
+      select I18n.t("access.#{data.access}"), from: access
       check active
       click_button save
 
@@ -144,16 +137,31 @@ describe Article do;
       expect(Article.count).to eq 1
       article = Article.first
 
-      expect(article.access).to eq access
-      expect(article.active).to be_true
-      expect(article.author).to eq author
-      expect(article.category).to eq category
-      expect(article.text).to eq text
-      expect(article.title).to eq title
+      expect(article.access).to eq data.access
+      expect(article.active).to eq data.active
+      expect(article.author).to eq data.author
+      expect(article.category).to eq data.category
+      expect(article.text).to eq data.text
+      expect(article.title).to eq data.title
+      expect(article.year).to eq data.year
       expect(article.user_id).to eq user.id
-      expect(article.year).to eq year
 
       expect(JournalEntry.articles.where(action: "create", by: user.signature, journalable_id: article.id).count).to eq 1
+    end
+
+    it "invalid expansion" do
+      fill_in title, with: data.title
+      fill_in year, with: data.year
+      fill_in author, with: data.author
+      fill_in text, with: data.text + "\n\nSee also [ART:99].\n"
+      select I18n.t("article.category.#{data.category}"), from: category
+      select I18n.t("access.#{data.access}"), from: access
+      check active
+      click_button save
+
+      expect(page).to have_css(failure, text: "valid")
+      expect(Article.count).to eq 0
+      expect(JournalEntry.count).to eq 0
     end
   end
 
@@ -166,6 +174,7 @@ describe Article do;
     let(:option)   { "select option" }
 
     let(:article)  { create(:article, user: user) }
+    let(:data)     { build(:article, title: "New Title") }
     let(:user)     { create(:user, roles: "editor") }
 
     before(:each) do
@@ -175,13 +184,12 @@ describe Article do;
     end
 
     it "title" do
-      new_title = "New Title"
-      fill_in title_input, with: new_title
+      fill_in title, with: data.title
       click_button save
 
       expect(page).to have_css(success, text: updated)
       article.reload
-      expect(article.title).to eq new_title
+      expect(article.title).to eq data.title
 
       expect(JournalEntry.articles.where(action: "update", by: user.signature, journalable_id: article.id).count).to eq 1
     end
@@ -194,28 +202,28 @@ describe Article do;
       visit article_path(article)
 
       click_link edit
-      select adm_access, from: access_menu
+      select adm_access, from: access
       click_button save
 
       article.reload
       expect(article.access).to eq "admins"
 
       click_link edit
-      select edr_access, from: access_menu
+      select edr_access, from: access
       click_button save
 
       article.reload
       expect(article.access).to eq "editors"
 
       click_link edit
-      select mem_access, from: access_menu
+      select mem_access, from: access
       click_button save
 
       article.reload
       expect(article.access).to eq "members"
 
       click_link edit
-      select all_access, from: access_menu
+      select all_access, from: access
       click_button save
 
       article.reload

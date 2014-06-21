@@ -10,6 +10,7 @@ class News < ActiveRecord::Base
   before_validation :normalize_attributes
   validates :date, :headline, :summary, presence: true
   validates_date :date, on_or_before: -> { Date.today }
+  validate :expansions
 
   scope :include_player, -> { includes(user: :player) }
   scope :ordered, -> { order(date: :desc, updated_at: :desc) }
@@ -41,6 +42,16 @@ class News < ActiveRecord::Base
   def normalize_attributes
     if summary.present?
       summary.gsub!(/\r\n/, "\n")
+    end
+  end
+
+  def expansions
+    if summary.present?
+      begin
+        expand_all(summary)
+      rescue => e
+        errors.add(:base, e.message)
+      end
     end
   end
 end

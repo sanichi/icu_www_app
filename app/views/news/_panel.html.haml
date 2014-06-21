@@ -2,4 +2,4 @@
   .panel-heading
     = link_to_if can?(:update, news), news.headline, news, class: news.active ? nil : "text-done"
     .pull-right= news.date
-  .panel-body= news.html
+  .panel-body.news= news.html

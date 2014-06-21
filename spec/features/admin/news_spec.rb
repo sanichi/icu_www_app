@@ -60,13 +60,14 @@ describe News do;
   end
 
   context "create" do
+    let(:data) { build(:news) }
+
     before(:each) do
       login user
       visit new_admin_news_path
     end
 
     it "defaulted date" do
-      data = build(:news)
 
       fill_in headline, with: data.headline
       fill_in summary, with: data.summary
@@ -84,6 +85,16 @@ describe News do;
       expect(news.user_id).to eq user.id
 
       expect(JournalEntry.news.where(action: "create", by: user.signature, journalable_id: news.id).count).to eq 1
+    end
+
+    it "invalid expansion" do
+      fill_in headline, with: data.headline
+      fill_in summary, with: data.summary + "\n\n[ART:99:Further details].\n"
+      click_button save
+
+      expect(page).to have_css(failure, text: "valid")
+      expect(News.count).to eq 0
+      expect(JournalEntry.count).to eq 0
     end
   end
 

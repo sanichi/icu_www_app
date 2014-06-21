@@ -1,10 +1,15 @@
 require 'spec_helper'
 
 describe Expandable do
-  let(:d) { Class.new{ include Expandable }.new }
+  let(:d)      { Class.new{ include Expandable }.new }
+  let(:bad_id) { 99 }
 
-  def shortcut(type, id, options=nil)
-    [type, id, options].compact.join(":")
+  def error(obj, atr: "ID", data: bad_id)
+    if data && atr
+      "#{data} is not a valid #{obj} #{atr}"
+    else
+      obj
+    end
   end
 
   context "articles" do
@@ -25,7 +30,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect(d.expand_all("[ART:99]")).to eq "[Error: no Article 99]"
+      expect{d.expand_all("[ART:#{bad_id}]")}.to raise_error error("article")
     end
   end
 
@@ -71,6 +76,10 @@ describe Expandable do
       expect(result).to match /\A<table class="board float-right left-margin #{style}">/
       expect(result).to match /<th colspan="8" class="comment small" width="240">⇧ #{comment}<\/th>/
     end
+
+    it "invalid FEN" do
+      expect{d.expand_all("[FEN:rubbish]")}.to raise_error error("invalid board position", data: nil)
+    end
   end
 
   context "emails" do
@@ -83,7 +92,7 @@ describe Expandable do
     end
 
     it "invalid email" do
-      expect(d.expand_all("[EMA:chairman.icu.ie]")).to eq "[Error: invalid email (chairman.icu.ie)]"
+      expect{d.expand_all("[EMA:chairman.icu.ie]")}.to raise_error error("email", atr: "address", data: "chairman.icu.ie")
     end
   end
 
@@ -104,12 +113,12 @@ describe Expandable do
       expect(d.expand_all("[EVT:#{event.id}:#{name}]")).to eq link % [event.id, name]
     end
 
-    it "invalid ID" do
-      expect(d.expand_all("[EVT:99]")).to eq "[Error: no Event 99]"
-    end
-
     it "backward compatibility" do
       expect(d.expand_all("[EVT:#{event.id}:title=#{name}]")).to eq link % [event.id, name]
+    end
+
+    it "invalid ID" do
+      expect{d.expand_all("[EVT:#{bad_id}]")}.to raise_error error("event")
     end
   end
 
@@ -141,7 +150,7 @@ describe Expandable do
         end
 
         it "invalid ID" do
-          expect(d.expand_all("[#{type}:99]")).to eq "[Error: no Game 99]"
+          expect{d.expand_all("[#{type}:#{bad_id}]")}.to raise_error error("game")
         end
       end
     end
@@ -165,7 +174,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect(d.expand_all("[IML:99]")).to eq "[Error: no Image 99]"
+      expect{d.expand_all("[IML:#{bad_id}]")}.to raise_error error("image")
     end
   end
 
@@ -274,7 +283,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect(d.expand_all("[IMG:99]")).to eq "[Error: no Image 99]"
+      expect{d.expand_all("[IML:#{bad_id}]")}.to raise_error error("image")
     end
   end
 
@@ -296,7 +305,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect(d.expand_all("[NWS:99]")).to eq "[Error: no News 99]"
+      expect{d.expand_all("[NWS:#{bad_id}]")}.to raise_error error("news")
     end
   end
 
@@ -317,12 +326,12 @@ describe Expandable do
       expect(d.expand_all("[TRN:#{tournament.id}:#{name}]")).to eq link % [tournament.id, name]
     end
 
-    it "invalid ID" do
-      expect(d.expand_all("[TRN:99]")).to eq "[Error: no Tournament 99]"
-    end
-
     it "backward compatibility" do
       expect(d.expand_all("[TRN:#{tournament.id}:title=#{name}]")).to eq link % [tournament.id, name]
+    end
+
+    it "invalid ID" do
+      expect{d.expand_all("[TRN:#{bad_id}]")}.to raise_error error("tournament")
     end
   end
 
@@ -344,7 +353,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect(d.expand_all("[UPL:99]")).to eq "[Error: no Upload 99]"
+      expect{d.expand_all("[UPL:#{bad_id}]")}.to raise_error error("upload")
     end
   end
 

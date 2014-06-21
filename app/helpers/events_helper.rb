@@ -1,6 +1,7 @@
 module EventsHelper
-  def event_category_menu(selected)
+  def event_category_menu(selected, default=nil)
     cats = Event::CATEGORIES.map { |cat| [t("event.category.#{cat}"), cat] }
+    cats.unshift([t(default), ""]) if default
     options_for_select(cats, selected)
   end
 
