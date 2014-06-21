@@ -25,8 +25,9 @@ module ICU
         @bulletins = {}
         [185, 212, 267, 402, 407, 408].each { |id| add_stat(".php (OK)", id) }
 
-        # See concerns/expandable.rb. Avoids validation errors when article refers to another that does not yet exist.
+        # See concerns/expandable.rb. Avoids validation errors when an article refers to things that don't yet exist.
         ENV["SYNC_ARTICLE"] = "|" + old_database.query("SELECT art_id FROM articles ORDER BY art_id").map{ |r| r[:art_id] }.join("|") + "|"
+        ENV["SYNC_NEWS"] = "|739|"
 
         article_count = 0
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM articles ORDER BY art_id").each do |article|
