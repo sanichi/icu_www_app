@@ -27,7 +27,7 @@ module ICU
 
         # See concerns/expandable.rb. Avoids validation errors when an article refers to things that don't yet exist.
         ENV["SYNC_ARTICLE"] = "|" + old_database.query("SELECT art_id FROM articles ORDER BY art_id").map{ |r| r[:art_id] }.join("|") + "|"
-        ENV["SYNC_NEWS"] = "|95|221|526|720|739|908|"
+        ENV["SYNC_NEWS"] = "|95|221|526|688|720|739|908|"
 
         article_count = 0
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM articles ORDER BY art_id").each do |article|
