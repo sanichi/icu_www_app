@@ -4,7 +4,7 @@
   .col-sm-8.col-sm-offset-2
     = form_for [:admin, @cash_payment], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "Payment received"
+        = render "utils/form_header", header: "Payment received"
         - locals = { form: f, object: @cash_payment, col: "sm", pad: 3, width: 4, mark: "required"}
         = render "utils/text_field_for", locals.merge(param: :amount, text: "Amount received", width: 2)
         = render "utils/text_field_for", locals.merge(param: :first_name, text: "Payer's first name")

@@ -10,7 +10,6 @@
   - links += 1 if nfees   = can?(:manage, Fee)
   - links += 1 if items   = can?(:index, Item)
   - links += 1 if trans   = can?(:manage, Translation)
-  - links += 1 if pgns    = can?(:manage, Pgn)
   - links += 1 if pages   = can?(:read, Page)
   - if links > 0
     %li.dropdown
@@ -38,8 +37,6 @@
           %li{class: active("admin/items")}= link_to "Items", admin_items_path
         - if trans
           %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
-        - if pgns
-          %li{class: active("admin/pgns")}= link_to "PGN Uploads", admin_pgns_path
         - if pages
           %li{class: active("admin/pages", "system_info")}= link_to "System Info", admin_system_info_path
           %li{class: active("admin/pages", "test_email")}= link_to "Test Email", admin_test_email_path

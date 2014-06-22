@@ -8,7 +8,7 @@
   .col-sm-10
     = form_for [:admin, @pgn], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "#{new_record ? 'New' : 'Edit'} PGN"
+        = render "utils/form_header", object: @pgn, type: t("game.pgn.upload"), atr: :file_name
         - locals = { form: f, object: @pgn, col: "sm", pad: 2 }
         - if new_record
           = render "utils/file_field_for", locals.merge(param: :file, text: t("file"), width: 2, mark: "required")

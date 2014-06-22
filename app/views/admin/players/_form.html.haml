@@ -3,7 +3,7 @@
   .col-sm-10
     = form_for [:admin, @player], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= @player.new_record? ? "New Player" : "Edit Player #{@player.id}"
+        = render "utils/form_header", object: @player, atr: [:name, { id: true }]
         - locals = { form: f, object: @player, col: "sm", pad: 2, width: 4 }
         = render "utils/text_field_for", locals.merge(param: :first_name, text: t("player.first_name"), width: 3)
         = render "utils/text_field_for", locals.merge(param: :last_name, text: t("player.last_name"), width: 3)

@@ -3,7 +3,7 @@
   .col-sm-10
     = form_for [:admin, @fee], html: { class: "form-horizontal", role: "form" } do |form|
       %fieldset
-        %legend= "#{@fee.new_record? ? 'New' : 'Edit'} " + t("fee.type.#{@fee.subtype}")
+        = render "utils/form_header", object: @fee
         = form.hidden_field :type
         - locals = { form: form, object: @fee, col: "sm", pad: 3, width: 2 }
         = render "admin/fees/forms/#{@fee.subtype}", f: form, locals: locals

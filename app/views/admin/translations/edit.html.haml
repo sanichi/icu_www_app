@@ -5,7 +5,7 @@
   .col-sm-8
     = form_for [:admin, @translation], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= @translation.key
+        = render "utils/form_header", header: @translation.key
         - updatable = @translation.updatable?
         - if updatable
           = render "edit_panel", heading: "Previous English", body: @translation.old_english

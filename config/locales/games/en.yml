@@ -18,4 +18,5 @@ en:
     white_elo: White's rating
     white_or_black: White/Black
     pgn:
-      new: New PGN Upload
+      upload: "PGN Upload"
+      uploads: "PGN Uploads"

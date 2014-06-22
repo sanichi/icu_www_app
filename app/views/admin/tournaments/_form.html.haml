@@ -3,8 +3,7 @@
   .col-sm-10
     = form_for [:admin, @tournament], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %h2= @tournament.new_record? ? "New Tournament" : "Edit #{@tournament.name}"
-        %hr
+        = render "utils/form_header", object: @tournament, atr: :name
         - locals = { form: f, object: @tournament, col: "sm", pad: 2, width: 4 }
         = render "utils/text_field_for", locals.merge(param: :name, text: t("name"), width: 5)
         = render "utils/text_field_for", locals.merge(param: :city, text: t("city"))

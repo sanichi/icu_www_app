@@ -3,7 +3,7 @@
   .col-sm-10
     = form_for [:admin, @news], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "#{@news.new_record? ? 'New' : 'Edit'} News"
+        = render "utils/form_header", object: @news, atr: :headline
         - locals = { form: f, object: @news, col: "sm", pad: 2, mark: "required" }
         = render "utils/text_field_for", locals.merge(param: :headline, text: t("news.headline"), width: 7)
         - unless @news.new_record?

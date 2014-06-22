@@ -1,10 +1,9 @@
 - content_for :title, t("user.preferences")
 
-%h3.text-center= t("user.preferences")
-%hr
 .row
-  .col-sm-7.col-sm-offset-4
+  .col-sm-4.col-sm-offset-4
     = form_tag update_preferences_path, class: "form-horizontal", role: "form" do
-      - locals = { col: "sm", pad: 3, width: 3 }
+      = render "utils/form_header", header: t("user.preferences")
+      - locals = { col: "sm", pad: 3, width: 6 }
       = render "utils/select_tag", locals.merge(param: "user[theme]", text: t("user.theme"), menu: user_theme_menu(@user.preferred_theme), auto: true)
       = render "utils/select_tag", locals.merge(param: "user[locale]", text: t("user.locale"), menu: user_locale_menu(@user.locale), auto: true)

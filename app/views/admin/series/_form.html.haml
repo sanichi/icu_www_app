@@ -2,7 +2,7 @@
   .col-sm-12
     = form_for [:admin, @series], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "#{@series.new_record? ? 'New' : 'Edit'} series"
+        = render "utils/form_header", object: @series
         - locals = { form: f, object: @series, col: "sm", pad: 2, mark: "required" }
         = render "utils/text_field_for", locals.merge(param: :title, text: t("article.series.title"), width: 7)
         %table{class: "table table-bordered table-striped"}

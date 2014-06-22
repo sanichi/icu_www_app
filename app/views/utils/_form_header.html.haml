@@ -1,0 +1,12 @@
+- defined?(atr) || atr = nil
+
+- unless defined?(header)
+  - unless defined?(type)
+    - type = object.class.to_s.underscore.titleize
+  - if object.new_record?
+    - header = "New #{type}"
+  - else
+    - header = "Edit #{atr ? object.send(*atr) : type}"
+
+%h3.text-center= header
+%hr

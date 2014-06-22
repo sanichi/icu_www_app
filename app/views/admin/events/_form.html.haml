@@ -6,7 +6,7 @@
   .col-md-10
     = form_for [:admin, @event], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "#{@event.new_record? ? 'New' : 'Edit'} Event"
+        = render "utils/form_header", object: @event, atr: :name
         - locals = { form: f, object: @event, col: "md", pad: 3, mark: "required" }
         = render "utils/text_field_for", locals.merge(param: :name, text: t("event.name"), width: 5)
         = render "utils/text_field_for", locals.merge(param: :location, text: t("event.location"), width: 6)
