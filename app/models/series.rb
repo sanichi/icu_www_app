@@ -1,5 +1,5 @@
 class Series < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   journalize %w[title], "/series/%d"
 

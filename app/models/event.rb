@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Remarkable
   include Journalable
   journalize %w[flyer_file_name flyer_content_type flyer_file_size name location lat long start_date end_date active category contact email phone url prize_fund note], "/events/%d"

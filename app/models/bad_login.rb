@@ -1,5 +1,5 @@
 class BadLogin < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
 
   validates_presence_of :email, :encrypted_password, :ip
 

@@ -1,5 +1,5 @@
 class News < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Expandable
   include Remarkable
   include Journalable

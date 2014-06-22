@@ -1,5 +1,5 @@
 class Fee < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   ATTRS = column_names.reject{ |n| n.match(/\A(id|type|created_at|updated_at)\z/) }
   journalize ATTRS, "/admin/fees/%d"

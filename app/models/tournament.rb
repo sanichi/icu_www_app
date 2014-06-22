@@ -1,5 +1,5 @@
 class Tournament < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Expandable
   include Journalable
   journalize %w[active category city details format name year], "/tournaments/%d"

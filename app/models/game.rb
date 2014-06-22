@@ -1,5 +1,5 @@
 class Game < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   journalize %w[annotator black black_elo date eco event fen moves ply result round site white white_elo], "/games/%d"
 

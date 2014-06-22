@@ -1,5 +1,5 @@
 class Pgn < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   journalize %w[comment], "/admin/pgns/%d"
 

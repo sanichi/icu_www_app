@@ -1,5 +1,5 @@
 class Item < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Payable
 
   serialize :notes, Array

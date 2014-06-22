@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
 

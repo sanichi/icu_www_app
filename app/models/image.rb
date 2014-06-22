@@ -1,5 +1,5 @@
 class Image < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Journalable
   journalize %w[data_file_name data_content_type data_file_size caption credit year], "/images/%d"
 

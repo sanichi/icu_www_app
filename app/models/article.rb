@@ -1,5 +1,5 @@
 class Article < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   include Accessible
   include Expandable
   include Remarkable

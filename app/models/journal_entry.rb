@@ -1,5 +1,5 @@
 class JournalEntry < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
 
   belongs_to :journalable, polymorphic: true
 

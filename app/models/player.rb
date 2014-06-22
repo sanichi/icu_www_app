@@ -1,5 +1,5 @@
 class Player < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
   extend Util::Params
   extend ICU::Util::AlternativeNames
   include Remarkable

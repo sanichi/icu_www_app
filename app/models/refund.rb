@@ -1,5 +1,5 @@
 class Refund < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
 
   belongs_to :cart
   belongs_to :user

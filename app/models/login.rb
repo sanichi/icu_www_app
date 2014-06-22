@@ -1,5 +1,5 @@
 class Login < ActiveRecord::Base
-  extend Util::Pagination
+  include Pageable
 
   belongs_to :user
   validates_presence_of :ip, :user_id

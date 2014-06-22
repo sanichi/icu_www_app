@@ -1,5 +1,7 @@
-module Util
-  module Pagination
+module Pageable
+  extend ActiveSupport::Concern
+
+  module ClassMethods
     def paginate(matches, params, path, opt={})
       count = matches.count
       page = params[:page].to_i > 0 ? params[:page].to_i : 1
@@ -25,7 +27,7 @@ module Util
       @count    = count
       @remote   = remote
     end
-    
+
     def multi_page?
       @count > @per_page
     end
@@ -49,7 +51,7 @@ module Util
     def prev_page
       page_path(@page - 1)
     end
-    
+
     def last_page
       page_path(1 + (@count > 0 ? (@count - 1) / @per_page : 0))
     end
@@ -66,7 +68,7 @@ module Util
     def page_path(page)
       @path + "?" + query_params(page)
     end
-    
+
     def query_params(page)
       params = @params.dup
       [:action, :controller, :button, :utf8].each { |key| params.delete(key) }
