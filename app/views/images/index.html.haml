@@ -30,6 +30,4 @@
               %td.vcenter.small.text-center= image.user.player.name
               %td.vcenter.small.text-center= image.credit
           = render "utils/pagination_links", pager: @images, columns: 5
-    - if can?(:create, Image)
-      = link_to "New", new_admin_image_path, class: "btn btn-info"
-
+    = render "utils/index_buttons", klass: Image

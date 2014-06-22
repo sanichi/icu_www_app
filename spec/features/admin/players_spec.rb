@@ -59,14 +59,13 @@ describe Player do
   end
 
   context "create" do
-    let(:new_player) { "New Player" }
-
     before(:each) do
       login "membership"
+      visit players_path
+      click_link new_one
     end
 
     it "sucessful creation with set join date" do
-      click_link new_player
       fill_in first_name, with: "mark j l"
       fill_in last_name, with: "orr"
       fill_in dob, with: "1955/11/09"
@@ -106,7 +105,6 @@ describe Player do
     end
 
     it "sucessful creation with default join date" do
-      click_link new_player
       fill_in first_name, with: "Gearóidín"
       fill_in last_name, with: "Uí Laighléis"
       fill_in dob, with: "1964-06-10"
@@ -127,7 +125,6 @@ describe Player do
     end
 
     it "join date and dob should be consistent" do
-      click_link new_player
       fill_in first_name, with: "Penny"
       fill_in last_name, with: "Orr"
       fill_in dob, with: "1986-06-16"
@@ -139,7 +136,6 @@ describe Player do
     end
 
     it "join date should not be in the future" do
-      click_link new_player
       fill_in first_name, with: "Penny"
       fill_in last_name, with: "Orr"
       fill_in dob, with: "1986-06-16"
@@ -151,7 +147,6 @@ describe Player do
     end
 
     it "create a guest user" do
-      click_link new_player
       fill_in first_name, with: "Guest"
       fill_in last_name, with: "User"
       select inactive_status, from: status

@@ -23,5 +23,4 @@
               - if extra
                 %td.text-center= tournament.active ? "✔" : "✘"
           = render "utils/pagination_links", pager: @tournaments, columns: 3 + (extra ? 1 : 0)
-    - if extra
-      = link_to "New", new_admin_tournament_path, class: "btn btn-info"
+    = render "utils/index_buttons", klass: Tournament

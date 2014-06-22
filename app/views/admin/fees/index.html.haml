@@ -21,5 +21,4 @@
               %td.text-center= fee.within_sale_dates? ? "✔" : "✘"
               %td.text-center= fee.active && fee.within_sale_dates? ? "✔" : "✘"
           = render "utils/pagination_links", pager: @fees, columns: 5
-
-    = link_to "New", new_admin_fee_path, class: "btn btn-info"
+    = render "utils/index_buttons", klass: Fee

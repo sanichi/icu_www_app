@@ -1,5 +1,5 @@
 = form_tag admin_pgns_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :comment, text: t("comment"), size: 20
   = render "utils/inline_text_field", param: :file_name, text: t("file"), size: 15
   = render "utils/inline_select", param: :player_id, text: t("user.role.editor"), menu: pgn_user_menu(params[:player_id])
+  = render "utils/inline_text_field", param: :comment, text: t("comment"), size: 15
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

@@ -28,5 +28,4 @@
                 %td= article.user.player.name
                 %td.text-center= article.active ? "✔" : "✘"
           = render "utils/pagination_links", pager: @articles, columns: 4 + (admin ? 2 : 0)
-    - if admin
-      = link_to "New", new_admin_article_path, class: "btn btn-info"
+    = render "utils/index_buttons", klass: Article

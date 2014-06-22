@@ -1,9 +1,9 @@
 - content_for :title, t("club.clubs")
 
 = render "utils/search_panel", form: "search_form", title: t("club.clubs"), col: "md"
-= render "utils/pagination_links", pager: @clubs
 .row
   .col-md-10.col-md-offset-1
+    = render "utils/pagination_links", pager: @clubs
     - if @clubs.count > 0
       - @clubs.matches.each do |club|
         %div{class: "panel panel-default", id: "club_#{club.id}"}
@@ -33,4 +33,5 @@
                 - contact << club.phone                                              if club.phone
                 - contact << link_to(simple_url(club.web), club.web, target: "club") if club.web
                 = contact.join(', ').html_safe
-= render "utils/pagination_links", pager: @clubs
+    = render "utils/pagination_links", pager: @clubs
+    = render "utils/index_buttons", klass: Club

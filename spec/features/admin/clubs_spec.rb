@@ -10,7 +10,6 @@ describe Club do;
   let(:longitude)     { I18n.t("club.long") }
   let(:meetings)      { I18n.t("club.meet") }
   let(:phone)         { I18n.t("club.phone") }
-  let(:please_select) { I18n.t("please_select") }
   let(:website)       { I18n.t("club.web") }
 
   context "authorization" do
@@ -49,10 +48,11 @@ describe Club do;
   context "create" do
     before(:each) do
       login "editor"
+      visit clubs_path
+      click_link new_one
     end
 
     it "sucessful creation with all attributes" do
-      click_link "New Club"
       fill_in name, with: "Bangor"
       fill_in website, with: "www.ulsterchess.org/membership/Clubs/bangor"
       fill_in meetings, with: "Thursdays"
@@ -88,7 +88,6 @@ describe Club do;
     end
 
     it "sucessful creation with minimal attributes" do
-      click_link "New Club"
       fill_in name, with: "Millisle"
       fill_in city, with: "Millisle"
       select "Down", from: county
@@ -135,7 +134,7 @@ describe Club do;
     end
 
     it "county is mandatory" do
-      select please_select, from: county
+      select please, from: county
       click_button save
       expect(page).to have_css(field_error, text: "invalid")
     end

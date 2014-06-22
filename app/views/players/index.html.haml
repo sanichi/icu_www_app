@@ -31,5 +31,5 @@
               - unless current_user.guest?
                 %td= t("player.status.#{player.status}")
                 %td= t("player.source.#{player.source}")
-              
           = render "utils/pagination_links", pager: @players, columns: 7 + (current_user.guest? ? 0 : 2)
+= render "utils/index_buttons", klass: Player

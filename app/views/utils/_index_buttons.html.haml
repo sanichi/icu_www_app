@@ -1,0 +1,6 @@
+- defined?(text) || text = t("new")
+- defined?(path) || path = send("new_admin_#{klass.to_s.underscore}_path")
+
+- if can?(:create, klass)
+  .text-center
+    = link_to text, path, class: "btn btn-info"

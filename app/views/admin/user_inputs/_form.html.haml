@@ -7,7 +7,7 @@
     - new_record = @user_input.new_record?
     = form_for [:admin, @user_input], html: { class: "form-horizontal", role: "form" } do |f|
       %fieldset
-        %legend= "#{new_record ? "New" : "Edit"} User Input"
+        %legend= "#{new_record ? 'New' : 'Edit'} User Input"
         - locals = { form: f, object: @user_input, col: "sm", pad: 3, width: 4 }
         - if new_record
           = f.hidden_field :fee_id

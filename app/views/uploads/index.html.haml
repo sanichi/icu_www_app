@@ -25,5 +25,4 @@
               - if extra
                 %td= t("access.#{upload.access}")
           = render "utils/pagination_links", pager: @uploads, columns: 3 + (extra ? 1 : 0)
-    - if admin
-      = link_to "New", new_admin_upload_path, class: "btn btn-info"
+    = render "utils/index_buttons", klass: Upload

@@ -9,10 +9,11 @@
         %thead
           %tr
             %th= t("article.series.title")
+            %th.text-center.col-sm-1= t("article.articles")
         %tbody
           - @series.matches.each do |series|
             %tr.result
               %td= link_to series.title, series
-          = render "utils/pagination_links", pager: @series, columns: 1
-    - if can?(:create, Series)
-      = link_to "New", new_admin_series_path, class: "btn btn-info"
+              %td.text-center= series.articles.count
+          = render "utils/pagination_links", pager: @series, columns: 2
+    = render "utils/index_buttons", klass: Series

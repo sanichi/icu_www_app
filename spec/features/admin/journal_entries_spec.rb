@@ -4,7 +4,8 @@ describe JournalEntry do;
   include_context "features"
 
   def create_club
-    click_link "New Club"
+    visit clubs_path
+    click_link new_one
     fill_in "Name", with: "Wandering Dragons"
     fill_in "City", with: "Bangor"
     select "Down", from: "County"

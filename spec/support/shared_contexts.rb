@@ -15,6 +15,7 @@ shared_context "features" do
   let(:inactive)     { I18n.t("inactive") }
   let(:last_search)  { I18n.t("last_search") }
   let(:member)       { I18n.t("member") }
+  let(:new_one)      { I18n.t("new") }
   let(:name)         { I18n.t("name") }
   let(:notes)        { I18n.t("notes") }
   let(:please)       { I18n.t("please_select") }

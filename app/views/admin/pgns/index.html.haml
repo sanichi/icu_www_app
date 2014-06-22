@@ -22,5 +22,4 @@
               %td.text-center= pgn.created_at.to_date.to_s
               %td= pgn.user.name
           = render "utils/pagination_links", pager: @pgns, columns: 5
-    - if can?(:create, Pgn)
-      = link_to "New", new_admin_pgn_path, class: "btn btn-info"
+    = render "utils/index_buttons", klass: Pgn
