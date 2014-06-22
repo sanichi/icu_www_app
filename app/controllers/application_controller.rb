@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   def save_last_search(*paths)
+    return unless request.fullpath.match(/\?/)
     paths.unshift :last_search
     session[paths.join("_").to_sym] = request.fullpath
   end

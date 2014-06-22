@@ -18,9 +18,4 @@
             .col-sm-12.text-center= f.label :text, t("article.text"), class: "control-label"
           .row
             .col-sm-12.voffset1= f.text_area :text, class: "form-control insignificant-space", rows: 50
-        %hr
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:articles)
-        = link_to t("cancel"), @article.new_record? ? last_path || articles_path : @article, class: "btn btn-default"
-        - if last_path
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @article

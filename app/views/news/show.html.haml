@@ -5,14 +5,8 @@
 .row
   .col-md-10.col-md-offset-1
     = render "panel", news: @news
-= render "utils/editing_details", object: @news
+    = render "utils/editing_details", object: @news
+    %hr
+    = render "utils/show_buttons", object: @news
 
-- if can?(:update, @news)
-  = link_to t("edit"), edit_admin_news_path(@news), class: "btn btn-primary"
-- if can?(:destroy, @news)
-  = link_to t("delete"), admin_news_path(@news), data: { confirm: "Sure you want to delete this news item?" }, method: :delete, class: "btn btn-danger"
-- if path = last_search(:news)
-  = link_to t("last_search"), path, class: "btn btn-default"
-- else
-  = link_to t("news.news"), news_index_path, class: "btn btn-default"
 = render "admin/journal_entries/changes", entries: @entries

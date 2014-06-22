@@ -14,6 +14,7 @@
         = render "utils/select_for", locals.merge(param: :roles, text: t("user.role.roles"), menu: user_roles_menu(@user.roles), multiple: true, width: 4, size: User::ROLES.size)
         - unless @user.new_record? || @user.verified?
           = render "utils/check_box_for", locals.merge(param: :verify, text: t("user.verify"), on: "yes", off: "no", width: 1)
-        %hr
+      %hr
+      .text-center
         = f.submit t("save"), class: "btn btn-primary"
         = link_to t("cancel"), [:admin, @user], class: "btn btn-default"

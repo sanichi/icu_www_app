@@ -28,9 +28,9 @@
           %th Irish
           %td= @translation.value
       = render "utils/timestamps", object: @translation, updated_by: @translation.user
-    = render "action", translation: @translation
-    - if path = last_search(:admin, :translations)
-      = link_to t("last_search"), path, class: "btn btn-default"
-    - else
-      = link_to "Translations", admin_translations_path, class: "btn btn-default"
+    .text-center
+      = render "action", translation: @translation
+      - if path = last_search(:admin, :translations)
+        = link_to t("last_search"), path, class: "btn btn-default"
+      = link_to t("new_search"), admin_translations_path, class: "btn btn-default"
 = render "admin/journal_entries/changes", entries: @entries

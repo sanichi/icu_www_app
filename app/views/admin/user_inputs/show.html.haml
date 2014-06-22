@@ -29,7 +29,8 @@
         %tr
           %th Required
           %td= @user_input.required.to_s
-    = link_to t("edit"), edit_admin_user_input_path(@user_input), class: "btn btn-primary"
-    = link_to t("delete"), admin_user_input_path(@user_input), data: { confirm: "Sure you want to delete this user input?" }, method: :delete, class: "btn btn-danger"
+    .text-center
+      = link_to t("edit"), edit_admin_user_input_path(@user_input), class: "btn btn-primary"
+      = link_to t("delete"), admin_user_input_path(@user_input), data: { confirm: "Sure you want to delete this user input?" }, method: :delete, class: "btn btn-danger"
 
 = render "admin/journal_entries/changes", entries: @entries

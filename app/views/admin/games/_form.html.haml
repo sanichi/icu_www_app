@@ -20,7 +20,4 @@
         = render "utils/text_field_for", locals.merge(param: :black_elo, text: t("game.black_elo"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :annotator, text: t("game.annotator"), width: 3)
         = render "utils/text_area_for", locals.merge(param: :moves, text: t("game.moves"), width: 10, rows: 20, klass: "significant-space")
-        = f.submit t("save"), class: "btn btn-primary"
-        = link_to t("cancel"), @game, class: "btn btn-default"
-        - if last_path = last_search(:games)
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @game

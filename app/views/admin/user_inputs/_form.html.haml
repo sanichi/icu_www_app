@@ -21,6 +21,7 @@
           = render "utils/select_for", locals.merge(param: :date_constraint, text: "Date constraint", width: 3, menu: user_input_date_constraint_menu(@user_input.date_constraint))
         #extra_required
           = render "utils/check_box_for", locals.merge(param: :required, text: "Required", width: 1)
-        %hr
+      %hr
+      .text-center
         = f.submit t("save"), class: "btn btn-primary"
         = link_to t("cancel"), new_record ? [:admin, @fee] : [:admin, @user_input], class: "btn btn-default"

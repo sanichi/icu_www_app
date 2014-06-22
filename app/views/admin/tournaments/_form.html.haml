@@ -17,9 +17,4 @@
             .col-sm-12.text-center= f.label :details, t("details"), class: "control-label"
           .row
             .col-sm-12.voffset1= f.text_area :details, class: "form-control significant-space", rows: 30
-        %hr
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:tournaments)
-        = link_to t("cancel"), @tournament.new_record? ? last_path || tournaments_path : @tournament, class: "btn btn-default"
-        - if last_path
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @tournament

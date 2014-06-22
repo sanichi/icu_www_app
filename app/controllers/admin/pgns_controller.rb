@@ -5,7 +5,7 @@ class Admin::PgnsController < ApplicationController
   def index
     @pgns = Pgn.search(params, admin_pgns_path)
     flash.now[:warning] = t("no_matches") if @pgns.count == 0
-    save_last_search(:pgns)
+    save_last_search(:admin, :pgns)
   end
 
   def show

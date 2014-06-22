@@ -27,9 +27,4 @@
           = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.master_id"), width: 2)
         = render "utils/text_area_for", locals.merge(param: :note, text: t("notes"), width: 10, rows: 10)
         = hidden_field :player, :source
-        %hr
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:players)
-        = link_to t("cancel"), @player.new_record? ? last_path || players_path : [:admin, @player], class: "btn btn-default"
-        - if last_path
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @player

@@ -12,8 +12,7 @@
           = render "edit_panel", heading: "Previous Irish", body: @translation.value
         = render "edit_panel", heading: updatable ? "New English" : "English", body: @translation.english
         = render "edit_panel", heading: updatable ? "New Irish" : "Irish", body: f.text_field(:value, class: "form-control")
-        %hr
+      %hr
+      .text-center
         = f.submit t("save"), class: "btn btn-primary"
         = link_to t("cancel"), [:admin, @translation], class: "btn btn-default"
-        - if path = last_search(:admin, :translations)
-          = link_to t("last_search"), path, class: "btn btn-default"

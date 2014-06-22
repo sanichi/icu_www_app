@@ -8,6 +8,7 @@
         - locals = { form: form, object: @fee, col: "sm", pad: 3, width: 2 }
         = render "admin/fees/forms/#{@fee.subtype}", f: form, locals: locals
         = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1)
-        %hr
+      %hr
+      .text-center
         = form.submit t("save"), class: "btn btn-primary"
         = link_to t("cancel"), @fee.new_record? ? admin_fees_path : [:admin, @fee], class: "btn btn-default"

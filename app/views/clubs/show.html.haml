@@ -48,10 +48,6 @@
         - clubs = @club.players.where(status: "active").count
         %td= link_to_if clubs > 0, clubs, players_path(club_id: @club.id, status: "active")
       = render "utils/timestamps", object: @club, ability: :manage
-    - if can? :manage, @club
-      = link_to t("edit"), edit_admin_club_path(@club), class: "btn btn-primary"
-    - if path = last_search(:clubs)
-      = link_to t("last_search"), path, class: "btn btn-default"
-    - else
-      = link_to "Clubs", admin_clubs_path, class: "btn btn-default"
+    = render "utils/show_buttons", object: @club, delete: false
+
 = render "admin/journal_entries/changes", entries: @entries

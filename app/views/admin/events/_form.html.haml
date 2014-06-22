@@ -23,10 +23,4 @@
         = render "utils/text_field_for", locals.merge(param: :long, text: t("event.long"), width: 3, mark: "none")
         = render "utils/check_box_for",  locals.merge(param: :active, text: t("active"), width: 1)
         = render "utils/text_area_for",  locals.merge(param: :note, text: t("notes"), width: 9, rows: 10)
-
-        %hr
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:events)
-        = link_to t("cancel"), @event.new_record? ? last_path || events_path : @event, class: "btn btn-default"
-        - if last_path
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @event

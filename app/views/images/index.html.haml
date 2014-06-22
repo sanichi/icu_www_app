@@ -19,7 +19,7 @@
         %tbody
           - @images.matches.each do |image|
             %tr
-              %td.vcenter{colspan: 5}= image.caption
+              %td.vcenter{colspan: 5}= link_to image.caption, image
               %td.vcenter.text-center{width: Image::THUMB_SIZE, rowspan: 2}
                 = link_to image do
                   = image_tag image.data.url(:thumbnail), width: image.width(:thumbnail), height: image.height(:thumbnail)

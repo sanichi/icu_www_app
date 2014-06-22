@@ -35,13 +35,6 @@
           %th= "File last updated"
           %td= @upload.data_updated_at.to_s(:nosec)
       = render "utils/timestamps", object: @upload, ability: :create
-    - if can?(:update, @upload)
-      = link_to t("edit"), edit_admin_upload_path(@upload), class: "btn btn-primary"
-    - if can?(:destroy, @upload)
-      = link_to t("delete"), admin_upload_path(@upload), data: { confirm: "Sure you want to delete this upload?" }, method: :delete, class: "btn btn-danger"
-    - if path = last_search(:uploads)
-      = link_to t("last_search"), path, class: "btn btn-default"
-    - else
-      = link_to t("upload.uploads"), uploads_path, class: "btn btn-default"
+    = render "utils/show_buttons", object: @upload
 
 = render "admin/journal_entries/changes", entries: @entries

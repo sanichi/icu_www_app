@@ -14,11 +14,4 @@
           = render "utils/file_field_for", locals.merge(param: :file, text: t("file"), width: 2, mark: "required")
           = render "utils/check_box_for", locals.merge(param: :import, text: "Import?", width: 1, on: "true", off: "false")
         = render "utils/text_field_for", locals.merge(param: :comment, text: t("comment"), width: 10)
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:pgns)
-        = link_to t("cancel"), new_record ? last_path || admin_pgns_path : [:admin, @pgn], class: "btn btn-default"
-        - unless new_record
-          - if last_path
-            = link_to t("last_search"), last_path, class: "btn btn-default"
-          - else
-            = link_to "PGN Uploads", uploads_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @pgn, admin: "search"

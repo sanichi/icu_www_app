@@ -61,7 +61,7 @@ describe Image do;
         visit edit_admin_image_path(image)
         expect(page).to_not have_css(failure)
         visit images_path
-        find(href(image)).click
+        first(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to have_link(edit)
         expect(page).to have_link(delete)
@@ -76,7 +76,7 @@ describe Image do;
         visit edit_admin_image_path(image)
         expect(page).to have_css(failure)
         visit images_path
-        find(href(image)).click
+        first(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to_not have_link(edit)
         expect(page).to_not have_link(delete)
@@ -91,7 +91,7 @@ describe Image do;
         visit edit_admin_image_path(image)
         expect(page).to have_css(failure, text: unauthorized)
         visit images_path
-        find(href(image)).click
+        first(href(image)).click
         expect(page).to have_xpath(cell(caption), text: image.caption)
         expect(page).to_not have_link(edit)
         expect(page).to_not have_link(delete)

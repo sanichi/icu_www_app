@@ -18,9 +18,4 @@
         = render "utils/text_field_for", locals.merge(param: :email, text: t("email"))
         = render "utils/text_field_for", locals.merge(param: :phone, text: t("club.phone"))
         = render "utils/check_box_for", locals.merge(param: :active, text: t("active"), width: 1)
-        %hr
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:clubs)
-        = link_to t("cancel"), @club.new_record? ? last_path || clubs_path : @club, class: "btn btn-default"
-        - if last_path
-          = link_to t("last_search"), last_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @club

@@ -13,11 +13,4 @@
         = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
         - menu = access_menu(@upload.access, Upload.accessibilities_for(current_user), @upload.new_record? && "please_select")
         = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
-        = f.submit t("save"), class: "btn btn-primary"
-        - last_path = last_search(:uploads)
-        = link_to t("cancel"), @upload.new_record? ? last_path || uploads_path : [:admin, @upload], class: "btn btn-default"
-        - unless @upload.new_record?
-          - if last_path
-            = link_to t("last_search"), last_path, class: "btn btn-default"
-          - else
-            = link_to t("upload.uploads"), uploads_path, class: "btn btn-default"
+      = render "utils/form_buttons", form: f, object: @upload

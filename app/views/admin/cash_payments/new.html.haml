@@ -11,6 +11,7 @@
         = render "utils/text_field_for", locals.merge(param: :last_name, text: "Payer's last name")
         = render "utils/select_for", locals.merge(param: :payment_method, text: "Payment method", width: 3, menu: cash_payment_method_menu(@cash_payment.payment_method))
         = render "utils/text_field_for", locals.merge(param: :email, text: "Payer's email", mark: "none")
-        %hr
+      %hr
+      .text-center
         = f.submit t("confirm"), class: "btn btn-primary"
         = link_to t("cancel"), cart_path, class: "btn btn-default"

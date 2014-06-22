@@ -12,6 +12,7 @@
       %button.close{"type" => "button", "data-dismiss" => "alert"} ×
       = @new_player.errors[:base].first
   %hr
-  = f.submit t("save"), class: "btn btn-primary"
-  = link_to t("cancel"), "#", class: "btn btn-default", id: "cancel_new_player"
+  .text-center
+    = f.submit t("save"), class: "btn btn-primary"
+    = link_to t("cancel"), "#", class: "btn btn-default", id: "cancel_new_player"
 

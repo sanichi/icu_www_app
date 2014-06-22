@@ -14,16 +14,6 @@
   %p.text-center= "#{t('game.annotator')}: #{@game.annotator}"
 %pre= @game.moves
 
-%hr
-
-%p
-  - if can?(:edit, @game)
-    = link_to t("edit"), edit_admin_game_path(@game), class: "btn btn-primary"
-  - if can?(:destroy, @game)
-    = link_to t("delete"), admin_game_path(@game), data: { confirm: "Sure you want to delete this game?" }, method: :delete, class: "btn btn-danger"
-  - if path = last_search(:games)
-    = link_to t("last_search"), path, class: "btn btn-default"
-  - else
-    = link_to t("game.games"), games_path, class: "btn btn-default"
+= render "utils/show_buttons", object: @game
 
 = render "admin/journal_entries/changes", entries: @entries

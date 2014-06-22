@@ -7,6 +7,7 @@
         - locals = { col: "sm", pad: 4, width: 4 }
         = render "utils/text_field_tag", locals.merge(param: :email, text: t("email"))
         = render "utils/text_field_tag", locals.merge(param: :password, text: t("user.password"), type: "password")
-        %hr
+      %hr
+      .text-center
         = submit_tag t("session.sign_in"), class: "btn btn-primary"
         = link_to t("cancel"), home_path, class: "btn btn-default"
