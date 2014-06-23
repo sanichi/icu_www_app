@@ -6,11 +6,14 @@ class Champion < ActiveRecord::Base
   journalize %w[category notes winners year], "/champions/%d"
 
   CATEGORIES = %w[open women]
-  WINNERS = /\A([A-Z]\.)+((O')?[A-Z][-A-Za-z]+)(, ([A-Z]\.)+((O')?[A-Z][-A-Za-z]+))*\z/
+  INITIALS = "([A-Z]\\.)+"
+  SURNAME = "(O'|Mac|Mc)?[A-Z][a-z]+"
+  SURNAMES = "#{SURNAME}([- ]#{SURNAME}){0,2}"
+  WINNERS = /\A#{INITIALS}#{SURNAMES}(, #{INITIALS}#{SURNAMES})*\z/
 
   scope :ordered, -> { order(year: :desc, category: :asc) }
 
-  before_validation :normalize_attributes
+  before_validation :normalize_attributes, :correct_winners
 
   validates :category, inclusion: { in: CATEGORIES }, uniqueness: { scope: :year, message: "one category per year" }
   validates :winners, format: { with: WINNERS }, length: { maximum: 256 }
@@ -29,5 +32,16 @@ class Champion < ActiveRecord::Base
 
   def normalize_attributes
     normalize_blanks(:notes)
+  end
+
+  def correct_winners
+    if winners.present?
+      winners.gsub!(/[`‘’]/, "'")
+      winners.gsub!(/\.\s+/, ".")
+      winners.gsub!(/\s*([-.'])\s*/, '\1')
+      winners.gsub!(/\b([A-Z])\s+(?!\.)/, '\1.')
+      winners.gsub!(/\b([A-Z]{2,}|[a-z]{2,})\b/) { $1.capitalize }
+      winners.trim!
+    end
   end
 end
