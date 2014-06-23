@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Fee::Subscription do
   let(:fee) { create(:subscription_fee, years: "2013-14", name: "Standard") }
@@ -36,15 +36,15 @@ describe Fee::Subscription do
 
   context "rollover" do
     it "#rolloverable?" do
-      expect(fee.rolloverable?).to be_true
+      expect(fee.rolloverable?).to be true
       create(:subscription_fee, years: fee.season.next.to_s)
-      expect(fee.rolloverable?).to be_false
+      expect(fee.rolloverable?).to be false
     end
 
     it "#rollover" do
       rof = fee.rollover
 
-      expect(rof.new_record?).to be_true
+      expect(rof.new_record?).to be true
       expect(rof.class).to eq Fee
       expect(rof.name).to eq fee.name
       expect(rof.amount).to eq fee.amount

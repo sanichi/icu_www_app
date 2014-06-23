@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Ireland do
   it "::provinces" do
@@ -6,46 +6,46 @@ describe Ireland do
   end
 
   it "::counties" do
-    expect(Ireland.counties).to have(32).counties
+    expect(Ireland.counties.size).to eq 32
     expect(Ireland.counties.join).to eq Ireland.counties.sort.join
-    expect(Ireland.counties(nil)).to have(32).counties
-    expect(Ireland.counties(:connaught)).to have(5).counties
-    expect(Ireland.counties("leinster")).to have(12).counties
-    expect(Ireland.counties(:munster)).to have(6).counties
-    expect(Ireland.counties("ulster")).to have(9).counties
-    expect(Ireland.counties("scotland")).to have(0).counties
-    expect(Ireland.counties("")).to have(0).counties
+    expect(Ireland.counties(nil).size).to eq 32
+    expect(Ireland.counties(:connaught).size).to eq 5
+    expect(Ireland.counties("leinster").size).to eq 12
+    expect(Ireland.counties(:munster).size).to eq 6
+    expect(Ireland.counties("ulster").size).to eq 9
+    expect(Ireland.counties("scotland").size).to eq 0
+    expect(Ireland.counties("").size).to eq 0
   end
 
   it "::county?" do
-    expect(Ireland.county?("down")).to be_true
-    expect(Ireland.county?(:galway)).to be_true
-    expect(Ireland.county?("leinster")).to be_false
-    expect(Ireland.county?("")).to be_false
-    expect(Ireland.county?(nil)).to be_false
+    expect(Ireland.county?("down")).to be true
+    expect(Ireland.county?(:galway)).to be true
+    expect(Ireland.county?("leinster")).to be false
+    expect(Ireland.county?("")).to be false
+    expect(Ireland.county?(nil)).to be false
   end
 
   it "::province?" do
-    expect(Ireland.province?("munster")).to be_true
-    expect(Ireland.province?(:ulster)).to be_true
-    expect(Ireland.province?("dublin")).to be_false
-    expect(Ireland.province?("")).to be_false
-    expect(Ireland.province?(nil)).to be_false
+    expect(Ireland.province?("munster")).to be true
+    expect(Ireland.province?(:ulster)).to be true
+    expect(Ireland.province?("dublin")).to be false
+    expect(Ireland.province?("")).to be false
+    expect(Ireland.province?(nil)).to be false
   end
 
   it "::has?" do
-    expect(Ireland.has?(:connaught, "sligo")).to be_true
-    expect(Ireland.has?("leinster", "dublin")).to be_true
-    expect(Ireland.has?("munster", :cork)).to be_true
-    expect(Ireland.has?(:ulster, :down)).to be_true
-    expect(Ireland.has?(:connaught, :offaly)).to be_false
-    expect(Ireland.has?(:leinster, :armagh)).to be_false
-    expect(Ireland.has?(:munster, :kilkenny)).to be_false
-    expect(Ireland.has?(:ulster, :leitrim)).to be_false
-    expect(Ireland.has?(:ulster, :lothians)).to be_false
-    expect(Ireland.has?("wales", "glamorgan")).to be_false
-    expect(Ireland.has?("", "")).to be_false
-    expect(Ireland.has?(nil, nil)).to be_false
+    expect(Ireland.has?(:connaught, "sligo")).to be true
+    expect(Ireland.has?("leinster", "dublin")).to be true
+    expect(Ireland.has?("munster", :cork)).to be true
+    expect(Ireland.has?(:ulster, :down)).to be true
+    expect(Ireland.has?(:connaught, :offaly)).to be false
+    expect(Ireland.has?(:leinster, :armagh)).to be false
+    expect(Ireland.has?(:munster, :kilkenny)).to be false
+    expect(Ireland.has?(:ulster, :leitrim)).to be false
+    expect(Ireland.has?(:ulster, :lothians)).to be false
+    expect(Ireland.has?("wales", "glamorgan")).to be false
+    expect(Ireland.has?("", "")).to be false
+    expect(Ireland.has?(nil, nil)).to be false
   end
 
   it "::province" do

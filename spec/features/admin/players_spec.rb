@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Player do
   include_context "features"
@@ -215,7 +215,7 @@ describe Player do
     end
 
     it "marking a player as a duplicate" do
-      expect(player.duplicate?).to be_false
+      expect(player.duplicate?).to be false
       expect(player.status).to eq "active"
       visit edit_admin_player_path(player)
       fill_in master_id, with: master.id
@@ -226,7 +226,7 @@ describe Player do
       expect(page).to have_xpath("//th[.='#{I18n.t("player.status.status")}']/following-sibling::td", text: inactive_status)
       player.reload
 
-      expect(player.duplicate?).to be_true
+      expect(player.duplicate?).to be true
       expect(player.player_id).to eq master.id
       expect(player.status).to eq "inactive"
       click_link master.id

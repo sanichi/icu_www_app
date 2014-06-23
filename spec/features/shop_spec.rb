@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Shop" do
   include_context "features"
@@ -743,8 +743,8 @@ describe "Shop" do
           expect(item.cost).to eq rating_fee.amount
           expect(item.description).to eq rating_fee.description(:full)
           expect(item.notes.size).to eq 2
-          expect(item.notes.include?(my_name)).to be_true
-          expect(item.notes.include?(date)).to be_true
+          expect(item.notes.include?(my_name)).to be true
+          expect(item.notes.include?(date)).to be true
         end
 
         it "missing" do

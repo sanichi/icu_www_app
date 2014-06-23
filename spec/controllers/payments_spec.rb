@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe PaymentsController do
   context "no cart exists" do
@@ -8,7 +8,7 @@ describe PaymentsController do
       expect(response).to_not be_redirect
       expect(Cart.count).to eq 1
       cart = Cart.last
-      expect(cart.unpaid?).to be_true
+      expect(cart.unpaid?).to be true
       expect(session[:cart_id]).to eq cart.id
     end
 
@@ -118,8 +118,8 @@ describe PaymentsController do
         expect(response).to_not be_redirect
         expect(Cart.count).to eq 2
         cart = Cart.last
-        expect(cart.unpaid?).to be_true
-        expect(cart.items.empty?).to be_true
+        expect(cart.unpaid?).to be true
+        expect(cart.items.empty?).to be true
         expect(session[:cart_id]).to eq cart.id
       end
 
@@ -151,8 +151,8 @@ describe PaymentsController do
         expect(response).to_not be_redirect
         expect(Cart.count).to eq 2
         cart = Cart.last
-        expect(cart.unpaid?).to be_true
-        expect(cart.items.empty?).to be_true
+        expect(cart.unpaid?).to be true
+        expect(cart.items.empty?).to be true
         expect(session[:cart_id]).to eq cart.id
       end
 

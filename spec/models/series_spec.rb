@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Series do
   let(:articles) { (0..3).each_with_object([]) { |n, a| a << create(:article) } }

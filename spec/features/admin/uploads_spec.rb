@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Upload do;
   include_context "features"
@@ -37,18 +37,18 @@ describe Upload do;
 
   def expect_unobfuscated(upload)
     dir = Pathname.new(upload.data.path).dirname
-    expect(File.directory?(dir)).to be_true
-    expect(File.file?(dir + upload.data_file_name)).to be_true
-    expect(upload.url.include?(upload.data_file_name)).to be_true
-    expect(upload.data.url.include?(upload.data_file_name)).to be_false
+    expect(File.directory?(dir)).to be true
+    expect(File.file?(dir + upload.data_file_name)).to be true
+    expect(upload.url.include?(upload.data_file_name)).to be true
+    expect(upload.data.url.include?(upload.data_file_name)).to be false
   end
 
   def expect_obfuscated(upload)
     dir = Pathname.new(upload.data.path).dirname
-    expect(File.directory?(dir)).to be_true
-    expect(File.file?(dir + upload.data_file_name)).to be_false
-    expect(upload.url.include?(upload.data_file_name)).to be_false
-    expect(upload.data.url.include?(upload.data_file_name)).to be_false
+    expect(File.directory?(dir)).to be true
+    expect(File.file?(dir + upload.data_file_name)).to be false
+    expect(upload.url.include?(upload.data_file_name)).to be false
+    expect(upload.data.url.include?(upload.data_file_name)).to be false
   end
 
   context "authorization" do
@@ -333,14 +333,14 @@ describe Upload do;
     let(:directory) { Pathname.new(upload.data.path).dirname.to_s }
 
     it "by owner" do
-      expect(File.directory?(directory)).to be_true
+      expect(File.directory?(directory)).to be true
       login user
       visit admin_upload_path(upload)
       click_link delete
 
       expect(page).to have_css(success, text: deleted)
       expect(Upload.count).to be 0
-      expect(File.exist?(directory)).to be_false
+      expect(File.exist?(directory)).to be false
     end
 
     it "by non-owner" do

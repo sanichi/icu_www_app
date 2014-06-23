@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Util::Diff do
   def diff(a, b, *opts)
@@ -46,7 +46,7 @@ describe Util::Diff do
     expect(a).to eq "2013-10-13"
     expect(b).to eq "2013-11-13"
   end
-  
+
   it "datetimes" do
     a, b = diff(DateTime.new(2013, 10, 13, 22, 10, 40), DateTime.new(2013, 10, 13, 12, 20, 50))
     expect(a).to eq "2013-10-13 22:10:40"

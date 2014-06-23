@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Episode do
   let(:articles) { 5.times.map { create(:article) } }

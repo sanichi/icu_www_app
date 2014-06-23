@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Article do
   let(:admin)  { create(:user, roles: "admin") }
@@ -31,34 +31,34 @@ describe Article do
   context "#accessible_to?" do
     it "everyone" do
       article = create(:article, access: "all")
-      expect(article.accessible_to?(admin)).to be_true
-      expect(article.accessible_to?(editor)).to be_true
-      expect(article.accessible_to?(member)).to be_true
-      expect(article.accessible_to?(guest)).to be_true
+      expect(article.accessible_to?(admin)).to be true
+      expect(article.accessible_to?(editor)).to be true
+      expect(article.accessible_to?(member)).to be true
+      expect(article.accessible_to?(guest)).to be true
     end
 
     it "members only" do
       article = create(:article, access: "members")
-      expect(article.accessible_to?(admin)).to be_true
-      expect(article.accessible_to?(editor)).to be_true
-      expect(article.accessible_to?(member)).to be_true
-      expect(article.accessible_to?(guest)).to be_false
+      expect(article.accessible_to?(admin)).to be true
+      expect(article.accessible_to?(editor)).to be true
+      expect(article.accessible_to?(member)).to be true
+      expect(article.accessible_to?(guest)).to be false
     end
 
     it "editors only" do
       article = create(:article, access: "editors")
-      expect(article.accessible_to?(admin)).to be_true
-      expect(article.accessible_to?(editor)).to be_true
-      expect(article.accessible_to?(member)).to be_false
-      expect(article.accessible_to?(guest)).to be_false
+      expect(article.accessible_to?(admin)).to be true
+      expect(article.accessible_to?(editor)).to be true
+      expect(article.accessible_to?(member)).to be false
+      expect(article.accessible_to?(guest)).to be false
     end
 
     it "admins only" do
       article = create(:article, access: "admins")
-      expect(article.accessible_to?(admin)).to be_true
-      expect(article.accessible_to?(editor)).to be_false
-      expect(article.accessible_to?(member)).to be_false
-      expect(article.accessible_to?(guest)).to be_false
+      expect(article.accessible_to?(admin)).to be true
+      expect(article.accessible_to?(editor)).to be false
+      expect(article.accessible_to?(member)).to be false
+      expect(article.accessible_to?(guest)).to be false
     end
   end
 

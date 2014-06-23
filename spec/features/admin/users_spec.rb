@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe User do;
   include_context "features"
@@ -77,7 +77,7 @@ describe User do;
       expect(new_user.roles).to eq role
       expect(new_user.player_id).to eq player.id
       expect(new_user.status).to eq User::OK
-      expect(new_user.verified?).to be_true
+      expect(new_user.verified?).to be true
 
       click_link sign_out
       fill_in email, with: my_email

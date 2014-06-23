@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CashPayment do
   let(:blank) { CashPayment.new }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Upload do
   context "years in description" do
@@ -61,34 +61,34 @@ describe Upload do
 
     it "everyone" do
       upload = create(:upload, access: "all")
-      expect(upload.accessible_to?(admin)).to be_true
-      expect(upload.accessible_to?(editor)).to be_true
-      expect(upload.accessible_to?(member)).to be_true
-      expect(upload.accessible_to?(guest)).to be_true
+      expect(upload.accessible_to?(admin)).to be true
+      expect(upload.accessible_to?(editor)).to be true
+      expect(upload.accessible_to?(member)).to be true
+      expect(upload.accessible_to?(guest)).to be true
     end
 
     it "members only" do
       upload = create(:upload, access: "members")
-      expect(upload.accessible_to?(admin)).to be_true
-      expect(upload.accessible_to?(editor)).to be_true
-      expect(upload.accessible_to?(member)).to be_true
-      expect(upload.accessible_to?(guest)).to be_false
+      expect(upload.accessible_to?(admin)).to be true
+      expect(upload.accessible_to?(editor)).to be true
+      expect(upload.accessible_to?(member)).to be true
+      expect(upload.accessible_to?(guest)).to be false
     end
 
     it "editors only" do
       upload = create(:upload, access: "editors")
-      expect(upload.accessible_to?(admin)).to be_true
-      expect(upload.accessible_to?(editor)).to be_true
-      expect(upload.accessible_to?(member)).to be_false
-      expect(upload.accessible_to?(guest)).to be_false
+      expect(upload.accessible_to?(admin)).to be true
+      expect(upload.accessible_to?(editor)).to be true
+      expect(upload.accessible_to?(member)).to be false
+      expect(upload.accessible_to?(guest)).to be false
     end
 
     it "admins only" do
       upload = create(:upload, access: "admins")
-      expect(upload.accessible_to?(admin)).to be_true
-      expect(upload.accessible_to?(editor)).to be_false
-      expect(upload.accessible_to?(member)).to be_false
-      expect(upload.accessible_to?(guest)).to be_false
+      expect(upload.accessible_to?(admin)).to be true
+      expect(upload.accessible_to?(editor)).to be false
+      expect(upload.accessible_to?(member)).to be false
+      expect(upload.accessible_to?(guest)).to be false
     end
   end
 

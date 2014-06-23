@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Item do
   context "duplicate_of?" do
@@ -6,8 +6,8 @@ describe Item do
     let(:ent) { create(:entry_item) }
 
     it "items with different subclasses" do
-      expect(sub.duplicate_of?(ent)).to be_false
-      expect(ent.duplicate_of?(sub)).to be_false
+      expect(sub.duplicate_of?(ent)).to be false
+      expect(ent.duplicate_of?(sub)).to be false
     end
   end
 end

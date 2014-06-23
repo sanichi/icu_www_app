@@ -1,2 +1,3 @@
---colour
---format nested
+--color
+--format=doc
+--require spec_helper

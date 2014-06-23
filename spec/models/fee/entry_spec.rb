@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Fee::Entry do
   context "implicitly set attributes" do

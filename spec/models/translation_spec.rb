@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Translation do
   context "::update_db" do
@@ -32,9 +32,9 @@ describe Translation do
       expect(Translation.where(active: true).where("english != old_english").count).to eq 2
       expect(Translation.where(value: nil, active: true, user: nil).count).to eq @count - 3
       @t.each_value { |t| t.reload }
-      expect(@t[:to_inactive].active).to be_false
-      expect(@t[:already_inactive].active).to be_false
-      expect(@t[:to_active].active).to be_true
+      expect(@t[:to_inactive].active).to be false
+      expect(@t[:already_inactive].active).to be false
+      expect(@t[:to_active].active).to be true
       expect(@t[:to_update_no_val].english).to eq "Save"
       expect(@t[:to_update_no_val].old_english).to eq "Store"
       expect(@t[:to_update_with_val].english).to eq "Administrator"

@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 source 'https://code.stripe.com'
 
-gem "rails", "4.1.0"
+gem "rails", "4.1.1"
 gem "mysql2"
 gem "haml-rails"
 gem "sass-rails", "~> 4.0.3"
@@ -28,7 +28,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "rspec-rails"
+  gem "rspec-rails", "~> 3.0"
   gem "capybara"
   gem "selenium-webdriver"
   gem "factory_girl_rails", "~> 4.0", require: false

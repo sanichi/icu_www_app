@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe News do;
   include_context "features"
@@ -113,7 +113,7 @@ describe News do;
 
       expect(page).to have_css(success, text: updated)
       news.reload
-      expect(news.active).to be_false
+      expect(news.active).to be false
 
       expect(JournalEntry.news.where(action: "update", by: user.signature, journalable_id: news.id, column: "active").count).to eq 1
     end

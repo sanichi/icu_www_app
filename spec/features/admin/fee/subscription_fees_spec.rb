@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Fee::Subscription do
   include_context "features"
@@ -33,7 +33,7 @@ describe Fee::Subscription do
       expect(fee.sale_start.to_s).to eq "2013-08-01"
       expect(fee.sale_end.to_s).to eq "2014-08-31"
       expect(fee.journal_entries.count).to eq 1
-      expect(fee.active).to be_true
+      expect(fee.active).to be true
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 
@@ -108,7 +108,7 @@ describe Fee::Subscription do
       click_button save
 
       fee.reload
-      expect(fee.active).to be_false
+      expect(fee.active).to be false
 
       expect(JournalEntry.where(journalable_type: "Fee", action: "update").count).to eq 1
     end

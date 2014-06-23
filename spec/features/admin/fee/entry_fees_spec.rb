@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Fee::Entry do
   include_context "features"
@@ -166,7 +166,7 @@ describe Fee::Entry do
       expect(fee.max_age).to eq 12
       expect(fee.age_ref_date).to eq late_next_year
       expect(fee.journal_entries.count).to eq 1
-      expect(fee.active).to be_true
+      expect(fee.active).to be true
       expect(JournalEntry.where(journalable_type: "Fee", action: "create").count).to eq 1
     end
 

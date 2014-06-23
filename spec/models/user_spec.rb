@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe User do
   context "model validation" do
@@ -55,7 +55,7 @@ describe User do
       user = create(:user)
       expect(user.roles).to be_nil
       User::ROLES.each do |role|
-        expect(user.send("#{role}?")).to be_false
+        expect(user.send("#{role}?")).to be false
       end
     end
 
@@ -63,23 +63,23 @@ describe User do
       user = create(:user, roles: "admin")
       expect(user.roles).to eq("admin")
       User::ROLES.each do |role|
-        expect(user.send("#{role}?")).to be_true
+        expect(user.send("#{role}?")).to be true
       end
     end
 
     it "multiple non-admin" do
       user = create(:user, roles: @roles_without_admin.shuffle.join(" "))
       expect(user.roles).to eq(@non_admin_roles)
-      expect(user.admin?).to be_false
+      expect(user.admin?).to be false
       @roles_without_admin.each do |role|
-        expect(user.send("#{role}?")).to be_true
+        expect(user.send("#{role}?")).to be true
       end
     end
 
     it "single non-admin" do
       user = create(:user, roles: @non_admin_role)
       expect(user.roles).to eq(@non_admin_role)
-      expect(user.admin?).to be_false
+      expect(user.admin?).to be false
       @roles_without_admin.each do |role|
         expect(user.send("#{role}?")).to eq(role == @non_admin_role)
       end
@@ -89,8 +89,8 @@ describe User do
   context "#valid_password?" do
     it "default factory password should pass" do
       user = create(:user)
-      expect(user.valid_password?("password")).to be_true
-      expect(user.valid_password?("drowssap")).to be_false
+      expect(user.valid_password?("password")).to be true
+      expect(user.valid_password?("drowssap")).to be false
     end
 
     it "random password should pass" do
@@ -98,8 +98,8 @@ describe User do
       salt = User.random_salt
       encrypted_password = User.encrypt_password(password, salt)
       user = create(:user, encrypted_password: encrypted_password, salt: salt)
-      expect(user.valid_password?(password)).to be_true
-      expect(user.valid_password?(password.upcase)).to be_false
+      expect(user.valid_password?(password)).to be true
+      expect(user.valid_password?(password.upcase)).to be false
     end
   end
 
@@ -145,11 +145,11 @@ describe User do
     let(:user) { create(:user) }
 
     it "#guest?" do
-      expect(user.guest?).to be_false
+      expect(user.guest?).to be false
     end
 
     it "#member?" do
-      expect(user.member?).to be_true
+      expect(user.member?).to be true
     end
   end
 
@@ -177,16 +177,16 @@ describe User::Guest do
   let(:user) { User::Guest.new }
 
   it "#guest?" do
-    expect(user.guest?).to be_true
+    expect(user.guest?).to be true
   end
 
   it "#member?" do
-    expect(user.member?).to be_false
+    expect(user.member?).to be false
   end
 
   it "roles" do
     User::ROLES.each do |role|
-      expect(user.send("#{role}?")).to be_false
+      expect(user.send("#{role}?")).to be false
     end
   end
 end

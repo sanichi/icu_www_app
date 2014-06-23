@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Expandable do
   let(:d)      { Class.new{ include Expandable }.new }

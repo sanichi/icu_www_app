@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "pages" do
   let(:home) { { :controller => "pages", :action => "home" } }

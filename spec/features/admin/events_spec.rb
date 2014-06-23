@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Event do;
   include_context "features"
@@ -110,7 +110,7 @@ describe Event do;
       expect(Event.count).to eq 1
       event = Event.first
 
-      expect(event.active).to be_false
+      expect(event.active).to be false
       expect(event.category).to eq Event::CATEGORIES[0]
       expect(event.contact).to be_nil
       expect(event.email).to be_nil
@@ -146,7 +146,7 @@ describe Event do;
       expect(Event.count).to eq 1
       event = Event.first
 
-      expect(event.active).to be_true
+      expect(event.active).to be true
       expect(event.category).to eq Event::CATEGORIES[1]
       expect(event.contact).to eq contact_text
       expect(event.email).to eq email_text

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Tournament do;
   include_context "features"
@@ -66,7 +66,7 @@ describe Tournament do;
       expect(Tournament.count).to eq 1
       tournament = Tournament.first
 
-      expect(tournament.active).to be_false
+      expect(tournament.active).to be false
       expect(tournament.category).to eq my_category
       expect(tournament.city).to be_nil
       expect(tournament.format).to eq my_format
@@ -85,7 +85,7 @@ describe Tournament do;
       expect(Tournament.count).to eq 1
       tournament = Tournament.first
 
-      expect(tournament.active).to be_true
+      expect(tournament.active).to be true
       expect(tournament.city).to eq my_city
 
       expect(JournalEntry.tournaments.where(action: "create", by: @user.signature, journalable_id: tournament.id).count).to eq 1

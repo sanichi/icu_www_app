@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Pay", js: true do
   include_context "features"
@@ -119,7 +119,7 @@ describe "Pay", js: true do
       expect(cart.payment_ref).to be_present
       expect(cart.payment_method).to eq stripe
       expect(cart.payment_errors.count).to eq 0
-      expect(cart.confirmation_sent).to be_true
+      expect(cart.confirmation_sent).to be true
       expect(cart.confirmation_error).to be_nil
       expect(cart.confirmation_text).to be_present
 
@@ -273,7 +273,7 @@ describe "Pay", js: true do
       expect(cart.user).to eq officer
       expect(cart.payment_errors.count).to eq 0
       expect(cart.items.count).to eq 1
-      expect(cart.confirmation_sent).to be_true
+      expect(cart.confirmation_sent).to be true
       expect(cart.confirmation_error).to be_nil
       expect(cart.confirmation_text).to be_present
 
@@ -311,7 +311,7 @@ describe "Pay", js: true do
 
       cart = Cart.last
       expect(cart).to be_paid
-      expect(cart.confirmation_sent).to be_false
+      expect(cart.confirmation_sent).to be false
       expect(cart.confirmation_error).to eq "no email address available"
       expect(cart.confirmation_text).to be_present
 

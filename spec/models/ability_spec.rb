@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'cancan/matchers'
 
 describe Ability do
@@ -10,8 +10,8 @@ describe Ability do
       let(:user) { create(:user) }
 
       it "can only view own player" do
-        ability.should be_able_to :show, user.player
-        ability.should_not be_able_to :show, player
+        expect(ability.can?(:show, user.player)).to be true
+        expect(ability.can?(:show, player)).to be false
       end
     end
   end
