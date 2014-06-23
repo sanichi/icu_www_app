@@ -1,5 +1,6 @@
 class Season
   include Comparable
+
   attr_reader :error
 
   def initialize(date_or_desc=Date.today)

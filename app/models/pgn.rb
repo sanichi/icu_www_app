@@ -1,6 +1,8 @@
 class Pgn < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Normalizable
+  include Pageable
+
   journalize %w[comment], "/admin/pgns/%d"
 
   attr_accessor :file, :import
@@ -56,11 +58,7 @@ class Pgn < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[comment problem].each do |atr|
-      if self.send(atr).blank?
-        self.send("#{atr}=", nil)
-      end
-    end
+    normalize_blanks(:comment, :problem)
   end
 
   def import?

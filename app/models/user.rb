@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Pageable
+
   journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
 
   attr_accessor :password

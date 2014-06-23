@@ -1,6 +1,7 @@
 class Image < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Pageable
+
   journalize %w[data_file_name data_content_type data_file_size caption credit year], "/images/%d"
 
   serialize :dimensions, Hash

@@ -18,6 +18,7 @@ class Admin::TournamentsController < ApplicationController
   end
 
   def update
+    normalize_newlines(:tournament, :details)
     if @tournament.update(tournament_params)
       @tournament.journal(:update, current_user, request.ip)
       redirect_to @tournament, notice: "Tournament was successfully updated"

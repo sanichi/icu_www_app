@@ -1,8 +1,10 @@
 class News < ActiveRecord::Base
-  include Pageable
   include Expandable
+  include Normalizable
+  include Pageable
   include Remarkable
   include Journalable
+
   journalize %w[active date headline summary], "/news/%d"
 
   belongs_to :user
@@ -40,9 +42,7 @@ class News < ActiveRecord::Base
   private
 
   def normalize_attributes
-    if summary.present?
-      summary.gsub!(/\r\n/, "\n")
-    end
+    normalize_newlines(:summary)
   end
 
   def expansions

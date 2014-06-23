@@ -1,6 +1,6 @@
 class Cart < ActiveRecord::Base
-  include Payable
   include Pageable
+  include Payable
 
   MAX_AMOUNT = 10000000.00
   MIN_AMOUNT = 0.0

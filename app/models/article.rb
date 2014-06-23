@@ -1,9 +1,11 @@
 class Article < ActiveRecord::Base
-  include Pageable
   include Accessible
   include Expandable
-  include Remarkable
   include Journalable
+  include Normalizable
+  include Pageable
+  include Remarkable
+
   journalize %w[access active author category text title year], "/article/%d"
 
   CATEGORIES = %w[bulletin tournament biography obituary coaching juniors general]
@@ -61,14 +63,8 @@ class Article < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[author].each do |atr|
-      if self.send(atr).blank?
-        self.send("#{atr}=", nil)
-      end
-    end
-    if text.present?
-      text.gsub!(/\r\n/, "\n")
-    end
+    normalize_blanks(:author)
+    normalize_newlines(:text)
   end
 
   def expansions

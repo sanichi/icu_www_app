@@ -1,6 +1,8 @@
 class Game < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Normalizable
+  include Pageable
+
   journalize %w[annotator black black_elo date eco event fen moves ply result round site white white_elo], "/games/%d"
 
   MAX_ELO = 3000
@@ -138,6 +140,7 @@ class Game < ActiveRecord::Base
   private
 
   def normalize_attributes
+    normalize_newlines(:moves)
     %w[annotator eco event fen round site].each do |atr|
       if send(atr).blank? || send(atr).trim.match(/\A\?+\z/)
         send("#{atr}=", nil)
@@ -149,9 +152,6 @@ class Game < ActiveRecord::Base
       self.result = "½-½"
     elsif result == "*"
       self.result = "?-?"
-    end
-    if moves.present?
-      moves.gsub!(/\r\n/, "\n")
     end
     if date.present?
       parts = date.scan(/\d+/).map{ |n| n.length == 1 ? "0#{n}" : n }

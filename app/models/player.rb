@@ -1,9 +1,11 @@
 class Player < ActiveRecord::Base
-  include Pageable
   extend Util::Params
   extend ICU::Util::AlternativeNames
-  include Remarkable
   include Journalable
+  include Normalizable
+  include Pageable
+  include Remarkable
+
   journalize %w[
     first_name last_name dob gender fed email address home_phone mobile_phone work_phone
     joined player_title arbiter_title trainer_title note status player_id club_id
@@ -197,13 +199,11 @@ class Player < ActiveRecord::Base
   private
 
   def normalize_attributes
-    nillable = %w[dob gender joined email address note]
-    nillable+= %w[home_phone mobile_phone work_phone]
-    nillable+= %w[player_title arbiter_title trainer_title]
-    nillable+= %w[legacy_rating legacy_rating_type legacy_games latest_rating]
-    nillable.each do |atr|
-      self.send("#{atr}=", nil) unless self.send(atr).present?
-    end
+    nillable = %i[dob gender joined email address note]
+    nillable+= %i[home_phone mobile_phone work_phone]
+    nillable+= %i[player_title arbiter_title trainer_title]
+    nillable+= %i[legacy_rating legacy_rating_type legacy_games latest_rating]
+    normalize_blanks(*nillable)
     %w[club_id player_id].each do |atr|
       self.send("#{atr}=", nil) unless self.send(atr).to_s.to_i > 0
     end

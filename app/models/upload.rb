@@ -1,9 +1,11 @@
 class Upload < ActiveRecord::Base
-  attr_accessor :dir_to_remove
-  include Pageable
   include Accessible
   include Journalable
+  include Pageable
+
   journalize %w[access data_file_name data_content_type data_file_size description year access], "/admin/uploads/%d"
+
+  attr_accessor :dir_to_remove
 
   MIN_SIZE = 500
   MAX_SIZE = 4.megabytes

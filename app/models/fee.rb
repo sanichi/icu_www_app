@@ -1,6 +1,8 @@
 class Fee < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Normalizable
+  include Pageable
+
   ATTRS = column_names.reject{ |n| n.match(/\A(id|type|created_at|updated_at)\z/) }
   journalize ATTRS, "/admin/fees/%d"
 
@@ -94,9 +96,7 @@ class Fee < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[name years url].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
-    end
+    normalize_blanks(:name, :years, :url)
     if url.present? && url.match(/\A[-\w]+(\.[-\w]+)*(:\d+)?\z/)
       self.url = "http://#{url}"
     end

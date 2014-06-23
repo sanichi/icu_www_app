@@ -1,5 +1,6 @@
 class UserInput < ActiveRecord::Base
   include Journalable
+
   journalize %w[label type], "/admin/user_inputs/%d"
 
   belongs_to :fee

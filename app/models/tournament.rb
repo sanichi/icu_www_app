@@ -1,7 +1,9 @@
 class Tournament < ActiveRecord::Base
-  include Pageable
   include Expandable
   include Journalable
+  include Normalizable
+  include Pageable
+
   journalize %w[active category city details format name year], "/tournaments/%d"
 
   CATEGORIES = %w[championship open junior section international veteran blind grand_prix]
@@ -43,9 +45,8 @@ class Tournament < ActiveRecord::Base
   private
 
   def normalize_attributes
-    [:city].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
-    end
+    normalize_blanks(:city)
+    normalize_newlines(:details)
   end
 
   def no_markup_in_details

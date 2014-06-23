@@ -20,7 +20,7 @@ class Admin::ArticlesController < ApplicationController
   end
 
   def update
-    normalize_newlines
+    normalize_newlines(:article, :text)
     if @article.update(article_params)
       @article.journal(:update, current_user, request.ip)
       redirect_to @article, notice: "Article was successfully updated"
@@ -44,11 +44,5 @@ class Admin::ArticlesController < ApplicationController
 
   def article_params
     params[:article].permit(:access, :active, :author, :category, :markdown, :text, :title, :year)
-  end
-
-  def normalize_newlines
-    if params[:article] && params[:article][:text].present?
-      params[:article][:text].gsub!(/\r\n/, "\n")
-    end
   end
 end

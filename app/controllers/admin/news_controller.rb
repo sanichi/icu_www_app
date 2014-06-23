@@ -21,7 +21,7 @@ class Admin::NewsController < ApplicationController
   end
 
   def update
-    normalize_newlines
+    normalize_newlines(:news, :summary)
     if @news.update(news_params(false))
       @news.journal(:update, current_user, request.ip)
       redirect_to @news, notice: "News was successfully updated"
@@ -47,11 +47,5 @@ class Admin::NewsController < ApplicationController
     atrs = [:active, :headline, :summary]
     atrs.push(:date) unless new_record
     params[:news].permit(*atrs)
-  end
-
-  def normalize_newlines
-    if params[:news] && params[:news][:summary].present?
-      params[:news][:summary].gsub!(/\r\n/, "\n")
-    end
   end
 end

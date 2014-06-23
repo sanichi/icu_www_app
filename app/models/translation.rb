@@ -1,6 +1,7 @@
 class Translation < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Pageable
+
   journalize :value, "/admin/translations/%d"
 
   scope :deletable, -> { where(active: false) }

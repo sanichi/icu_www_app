@@ -3,7 +3,7 @@ class Admin::GamesController < ApplicationController
   authorize_resource
 
   def update
-    normalize_newlines
+    normalize_newlines(:game, :moves)
     if @game.update(game_params)
       @game.journal(:update, current_user, request.ip)
       redirect_to @game, notice: "Game was successfully updated"
@@ -27,11 +27,5 @@ class Admin::GamesController < ApplicationController
 
   def game_params
     params[:game].permit(:annotator, :black, :black_elo, :date, :eco, :event, :fen, :moves, :ply, :result, :round, :site, :white, :white_elo)
-  end
-
-  def normalize_newlines
-    if params[:game] && params[:game][:moves].present?
-      params[:game][:moves].gsub!(/\r\n/, "\n")
-    end
   end
 end

@@ -1,7 +1,9 @@
 class Event < ActiveRecord::Base
+  include Journalable
+  include Normalizable
   include Pageable
   include Remarkable
-  include Journalable
+
   journalize %w[flyer_file_name flyer_content_type flyer_file_size name location lat long start_date end_date active category contact email phone url prize_fund note], "/events/%d"
 
   MIN_SIZE = 1.kilobyte
@@ -67,9 +69,7 @@ class Event < ActiveRecord::Base
   private
 
   def normalize_attributes
-    %w[contact phone email url note].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
-    end
+    normalize_blanks(:contact, :phone, :email, :url, :note)
   end
 
   def valid_dates

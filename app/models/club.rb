@@ -1,6 +1,8 @@
 class Club < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Normalizable
+  include Pageable
+
   journalize %w[name web meet address district city county lat long contact email phone active], "/clubs/%d"
 
   has_many :players
@@ -56,10 +58,7 @@ class Club < ActiveRecord::Base
   end
 
   def normalize_attributes
-    # Note: 'active' is normalised automatically.
-    [:name, :web, :meet, :address, :district, :city, :lat, :long, :contact, :email, :phone].each do |atr|
-      self.send("#{atr}=", nil) if self.send(atr).blank?
-    end
+    normalize_blanks(:name, :web, :meet, :address, :district, :city, :lat, :long, :contact, :email, :phone)
     if web.present? && web.match(/\A#{WEB_FORMAT[1]}/)
       self.web = "http://#{web}"
     end

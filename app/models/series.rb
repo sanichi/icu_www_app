@@ -1,6 +1,7 @@
 class Series < ActiveRecord::Base
-  include Pageable
   include Journalable
+  include Pageable
+
   journalize %w[title], "/series/%d"
 
   has_many :articles, through: :episodes

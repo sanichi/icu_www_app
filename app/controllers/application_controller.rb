@@ -49,4 +49,10 @@ class ApplicationController < ActionController::Base
       target.alert = error
     end
   end
+
+  def normalize_newlines(model, atr)
+    if params[model] && params[model][atr].is_a?(String)
+      params[model][atr].gsub!(/\r\n/, "\n")
+    end
+  end
 end
