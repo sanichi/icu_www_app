@@ -129,6 +129,7 @@ module ICU
           false
         when force
           puts "old journal entries deleted: #{JournalEntry.delete_all(source: "www1")}"
+          ActiveRecord::Base.connection.execute("ALTER TABLE journal_entries AUTO_INCREMENT = 1")
           false
         else
           true

@@ -21,13 +21,19 @@ module ICU
           return
         end
         tournament_count = 0
+        skipped_tournaments = 0
         @links = {}
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM tournaments").each do |tournament|
           tournament_count += 1
-          create_tournament(tournament)
+          if [105, 113, 116, 117].include?(tournament[:trn_id])
+            skipped_tournaments += 1
+          else
+            create_tournament(tournament)
+          end
         end
         puts "old tournament records processed: #{tournament_count}"
         puts "new tournament records created: #{::Tournament.count}"
+        puts "skipped tournaments: #{skipped_tournaments}"
         puts "links:"
         @links.each do |type, ids|
           puts "  #{type}: #{ids.join(', ')}"

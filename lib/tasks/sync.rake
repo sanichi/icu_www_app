@@ -60,6 +60,11 @@ namespace :sync do
     ICU::Legacy::Tournament.new.synchronize(args[:force])
   end
 
+  desc "Convert icuadmi_main/tournaments to www_production/champions"
+  task :champions, [:force] => :environment do |task, args|
+    ICU::Legacy::Champion.new.synchronize(args[:force])
+  end
+
   desc "Convert icuadmi_main/pgn_uploads to www_production/pgns"
   task :pgns, [:force] => :environment do |task, args|
     ICU::Legacy::Pgn.new.synchronize(args[:force])
@@ -86,5 +91,5 @@ namespace :sync do
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images uploads tournaments articles check]
+  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images uploads tournaments champions articles check]
 end

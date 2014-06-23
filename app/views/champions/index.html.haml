@@ -15,8 +15,8 @@
           - @champions.matches.each do |champion|
             %tr
               %td.text.center= champion.year
-              %td= link_to champion.winners, champion
+              %td= link_to_if can?(:edit, champion), champion.winners, champion
               %td= t("champion.category.#{champion.category}")
               %td= champion.notes
-            = render "utils/pagination_links", pager: @champions, columns: 4
+          = render "utils/pagination_links", pager: @champions, columns: 4
     = render "utils/index_buttons", klass: Champion
