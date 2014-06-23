@@ -3,10 +3,11 @@ require 'spec_helper'
 describe Tournament do;
   include_context "features"
 
-  let(:category_menu) { I18n.t("tournament.category.category") }
-  let(:format_menu)   { I18n.t("tournament.format.format") }
-  let(:dup_error)     { "once per year" }
-  let(:header)        { "h1" }
+  let(:category) { I18n.t("tournament.category.category") }
+  let(:format)   { I18n.t("tournament.format.format") }
+
+  let(:dup_error) { "once per year" }
+  let(:header)    { "h1" }
 
   context "authorization" do
     let(:level1)     { %w[admin editor] }
@@ -53,8 +54,8 @@ describe Tournament do;
       visit new_admin_tournament_path
       fill_in name, with: my_name
       fill_in year, with: my_year
-      select I18n.t("tournament.category.#{my_category}"), from: category_menu
-      select I18n.t("tournament.format.#{my_format}"), from: format_menu
+      select I18n.t("tournament.category.#{my_category}"), from: category
+      select I18n.t("tournament.format.#{my_format}"), from: format
       fill_in details, with: my_details
     end
 

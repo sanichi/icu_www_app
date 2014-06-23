@@ -3,17 +3,16 @@ require 'spec_helper'
 describe Pgn do;
   include_context "features"
 
-  let(:comment_input) { I18n.t("comment") }
-  let(:import)        { "Import?" }
-  let(:pgn_dir)       { Rails.root + "spec/files/pgns/" }
+  let(:import)  { "Import?" }
+  let(:pgn_dir) { Rails.root + "spec/files/pgns/" }
 
   context "authorization" do
-    let(:cell)         { "//td[.='#{pgn.file_name}']" }
-    let(:level1)       { ["admin", user] }
-    let(:level2)       { ["editor"] }
-    let(:level3)       { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
-    let(:pgn)          { create(:pgn, user: user) }
-    let(:user)         { create(:user, roles: "editor") }
+    let(:cell)   { "//td[.='#{pgn.file_name}']" }
+    let(:level1) { ["admin", user] }
+    let(:level2) { ["editor"] }
+    let(:level3) { User::ROLES.reject { |r| r == "admin" || r == "editor" }.append("guest") }
+    let(:pgn)    { create(:pgn, user: user) }
+    let(:user)   { create(:user, roles: "editor") }
 
     it "some roles can manage PGNs" do
       level1.each do |role|
@@ -64,10 +63,9 @@ describe Pgn do;
   end
 
   context "create" do
-    let(:comment)   { "Mark Orr's Best Games" }
-    let(:file_name) { "mjo.pgn" }
-    let(:imported)  { "games imported" }
-    let(:parsed)    { "parsed successfully" }
+    let(:data)     { build(:pgn, comment: "Mark Orr's Best Games", file_name: "mjo.pgn") }
+    let(:imported) { "games imported" }
+    let(:parsed)   { "parsed successfully" }
 
     before(:each) do
       @user = login("editor")
@@ -75,18 +73,18 @@ describe Pgn do;
     end
 
     it "check" do
-      attach_file file, pgn_dir + file_name
-      fill_in comment_input, with: comment
+      attach_file file, pgn_dir + data.file_name
+      fill_in comment, with: data.comment
       click_button save
       expect(page).to have_css(warning, text: parsed)
 
       expect(Pgn.count).to eq 1
       pgn = Pgn.first
 
-      expect(pgn.comment).to eq comment
+      expect(pgn.comment).to eq data.comment
       expect(pgn.content_type).to eq "text/plain"
       expect(pgn.duplicates).to eq 0
-      expect(pgn.file_name).to eq file_name
+      expect(pgn.file_name).to eq data.file_name
       expect(pgn.file_size).to eq 242697
       expect(pgn.game_count).to eq 268
       expect(pgn.imports).to eq 0
@@ -99,7 +97,7 @@ describe Pgn do;
     end
 
     it "import" do
-      attach_file file, pgn_dir + file_name
+      attach_file file, pgn_dir + data.file_name
       check import
       click_button save
       expect(page).to have_css(success, text: imported)
@@ -110,7 +108,7 @@ describe Pgn do;
       expect(pgn.comment).to be_nil
       expect(pgn.content_type).to eq "text/plain"
       expect(pgn.duplicates).to eq 1
-      expect(pgn.file_name).to eq file_name
+      expect(pgn.file_name).to eq data.file_name
       expect(pgn.file_size).to eq 242697
       expect(pgn.game_count).to eq 268
       expect(pgn.imports).to eq 267
@@ -124,7 +122,7 @@ describe Pgn do;
   end
 
   context "edit" do
-    let(:comment) { "I like to comment" }
+    let(:data) { build(:pgn, comment: "I like to comment") }
 
     before(:each) do
       @user = login "editor"
@@ -140,13 +138,13 @@ describe Pgn do;
       expect(pgn.comment).to be_nil
 
       click_link edit
-      fill_in comment_input, with: comment
+      fill_in comment, with: data.comment
       click_button save
 
       expect(page).to have_css(success, text: updated)
 
       pgn.reload
-      expect(pgn.comment).to eq comment
+      expect(pgn.comment).to eq data.comment
 
       expect(JournalEntry.pgns.where(action: "update", by: @user.signature, journalable_id: pgn.id, column: "comment").count).to eq 1
     end

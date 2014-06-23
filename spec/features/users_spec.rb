@@ -6,11 +6,11 @@ describe User do
   let(:english)        { I18n.t("user.lang.en") }
   let(:irish)          { I18n.t("user.lang.ga") }
   let(:irish_ga)       { I18n.t("user.lang.ga", locale: "ga") }
-  let(:locale_menu)    { I18n.t("user.locale") }
-  let(:locale_menu_ga) { I18n.t("user.locale", locale: "ga") }
+  let(:locale)         { I18n.t("user.locale") }
+  let(:locale_ga)      { I18n.t("user.locale", locale: "ga") }
   let(:preferences)    { I18n.t("user.preferences") }
   let(:signed_in_as)   { I18n.t("session.signed_in_as") }
-  let(:theme_menu)     { I18n.t("user.theme") }
+  let(:theme)          { I18n.t("user.theme") }
 
   context "authorization" do
     let!(:other_user) { create(:user) }
@@ -35,28 +35,28 @@ describe User do
   end
 
   context "preferences" do
-    let(:user)  { create(:user) }
-    let(:theme) { User::THEMES.reject{ |t| t == User::DEFAULT_THEME }.sample }
+    let(:user)   { create(:user) }
+    let(:random) { User::THEMES.reject{ |t| t == User::DEFAULT_THEME }.sample }
 
-    it "change theme", js: true do
-      expect(user.theme).to be_nil
+    before(:each) do
       login user
       click_link user.player.name
       click_link preferences
-      select theme, from: theme_menu
-      expect(page).to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{theme.downcase}.min.css')]", visible: false)
-      expect(page).to have_select(theme_menu, selected: theme)
+    end
+
+    it "change theme", js: true do
+      expect(user.theme).to be_nil
+      select random, from: theme
+      expect(page).to have_xpath("/html/head/link[@rel='stylesheet' and starts-with(@href,'/assets/#{random.downcase}.min.css')]", visible: false)
+      expect(page).to have_select(theme, selected: random)
       user.reload
-      expect(user.theme).to eq(theme)
+      expect(user.theme).to eq(random)
     end
 
     it "change locale", js: true do
       expect(user.locale).to eq("en")
-      login user
-      click_link user.player.name
-      click_link preferences
-      select irish, from: locale_menu
-      expect(page).to have_select(locale_menu_ga, selected: irish_ga)
+      select irish, from: locale
+      expect(page).to have_select(locale_ga, selected: irish_ga)
       user.reload
       expect(user.locale).to eq("ga")
     end

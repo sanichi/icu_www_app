@@ -5,9 +5,8 @@ describe User do;
 
   let(:administrator)  { I18n.t("user.role.admin") }
   let(:editor)         { I18n.t("user.role.editor") }
-  let(:email_input)    { I18n.t("email") }
   let(:expires)        { I18n.t("user.expires") }
-  let(:password_input) { I18n.t("user.password") }
+  let(:password)       { I18n.t("user.password") }
   let(:role)           { I18n.t("user.role.role") }
   let(:roles)          { I18n.t("user.role.roles") }
   let(:sign_in)        { I18n.t("session.sign_in") }
@@ -62,15 +61,15 @@ describe User do;
       visit player_path
 
       click_link new_user
-      fill_in email_input, with: user.email
-      fill_in password_input, with: my_password
+      fill_in email, with: user.email
+      fill_in password, with: my_password
       fill_in expires, with: expires_on
       select I18n.t("user.role.#{role}"), from: roles
 
       click_button save
       expect(page).to have_css(field_error, text: "taken")
 
-      fill_in email_input, with: my_email
+      fill_in email, with: my_email
       click_button save
       expect(page).to have_css(success, text: created)
 
@@ -81,8 +80,8 @@ describe User do;
       expect(new_user.verified?).to be_true
 
       click_link sign_out
-      fill_in email_input, with: my_email
-      fill_in password_input, with: my_password
+      fill_in email, with: my_email
+      fill_in password, with: my_password
       click_button sign_in
       expect(page).to have_css(success, text: signed_in_as)
     end
@@ -100,21 +99,21 @@ describe User do;
       visit edit_path
 
       new_password = "blah"
-      fill_in password_input, with: new_password
+      fill_in password, with: new_password
       click_button save
       expect(page).to have_css(field_error, text: min_length)
       user.reload
       expect(user.encrypted_password).to eq(old_encrypted_password)
 
       new_password = "blahblah"
-      fill_in password_input, with: new_password
+      fill_in password, with: new_password
       click_button save
       expect(page).to have_css(field_error, text: no_digits)
       user.reload
       expect(user.encrypted_password).to eq(old_encrypted_password)
 
       new_password = "blah1234"
-      fill_in password_input, with: new_password
+      fill_in password, with: new_password
       click_button save
       expect(page).to have_css(success, text: updated)
       user.reload
@@ -243,7 +242,7 @@ describe User do;
     end
 
     it "email" do
-      fill_in email_input, with: @admin.email
+      fill_in email, with: @admin.email
       click_button search
       expect(page).to have_xpath(@xpath, count: 1)
     end
