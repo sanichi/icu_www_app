@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Tournament do;
   include_context "features"
 
-  let(:category) { I18n.t("tournament.category.category") }
   let(:format)   { I18n.t("tournament.format.format") }
 
   let(:dup_error) { "once per year" }

@@ -1,0 +1,22 @@
+- content_for :title, t("champion.champions")
+
+= render "utils/search_panel", form: "search_form", title: t("champion.champions"), col: "md"
+.row
+  .col-md-10.col-md-offset-1
+    - if @champions.count > 0
+      %table{class: "table table-bordered", id: "results"}
+        %thead
+          %tr
+            %th.col-md-1.text.center= t("year")
+            %th= t("champion.winners")
+            %th= t("category")
+            %th= t("notes")
+        %tbody
+          - @champions.matches.each do |champion|
+            %tr
+              %td.text.center= champion.year
+              %td= link_to champion.winners, champion
+              %td= t("champion.category.#{champion.category}")
+              %td= champion.notes
+            = render "utils/pagination_links", pager: @champions, columns: 4
+    = render "utils/index_buttons", klass: Champion

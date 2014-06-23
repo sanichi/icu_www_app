@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Event do;
   include_context "features"
 
-  let(:category)      { I18n.t("event.category.category") }
   let(:contact)       { I18n.t("event.contact") }
   let(:event_email)   { I18n.t("event.email") }
   let(:end_date)      { I18n.t("event.end") }

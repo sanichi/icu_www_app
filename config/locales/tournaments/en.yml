@@ -4,7 +4,6 @@ en:
     tournaments: Tournaments
     category:
       any: Any category
-      category: Category
       championship: Championship
       blind: Blind
       grand_prix: Grand Prix

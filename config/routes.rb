@@ -16,6 +16,7 @@ IcuWwwApp::Application.routes.draw do
   end
 
   resources :articles,    only: [:index, :show]
+  resources :champions,   only: [:index, :show]
   resources :clubs,       only: [:index, :show]
   resources :events,      only: [:index, :show]
   resources :games,       only: [:index, :show]
@@ -42,6 +43,7 @@ IcuWwwApp::Application.routes.draw do
       get :show_charge, on: :member
     end
     resources :cash_payments,   only: [:new, :create]
+    resources :champions,       only: [:new, :create, :edit, :update, :destroy]
     resources :clubs,           only: [:new, :create, :edit, :update]
     resources :events,          only: [:new, :create, :edit, :update, :destroy]
     resources :images,          only: [:new, :create, :edit, :update, :destroy]

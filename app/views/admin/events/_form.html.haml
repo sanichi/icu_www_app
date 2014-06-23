@@ -12,7 +12,7 @@
         = render "utils/text_field_for", locals.merge(param: :location, text: t("event.location"), width: 6)
         = render "utils/text_field_for", locals.merge(param: :start_date, text: t("event.start"), width: 3, placeholder: t("date_format"))
         = render "utils/text_field_for", locals.merge(param: :end_date, text: t("event.end"), width: 3, placeholder: t("date_format"))
-        = render "utils/select_for",     locals.merge(param: :category, text: t("event.category.category"), width: 3, menu: event_category_menu(params[:category]))
+        = render "utils/select_for",     locals.merge(param: :category, text: t("category"), width: 3, menu: event_category_menu(params[:category]))
         = render "utils/file_field_for", locals.merge(param: :flyer, text: t("event.flyer"), width: 2, mark: "none")
         = render "utils/text_field_for", locals.merge(param: :contact, text: t("event.contact"), width: 5, mark: "none")
         = render "utils/text_field_for", locals.merge(param: :email, text: t("event.email"), width: 5, mark: "none")

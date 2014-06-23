@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618065206) do
+ActiveRecord::Schema.define(version: 20140623142059) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -58,6 +58,19 @@ ActiveRecord::Schema.define(version: 20140618065206) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "champions", force: true do |t|
+    t.string   "category",   limit: 20
+    t.string   "notes"
+    t.string   "winners"
+    t.integer  "year",       limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "champions", ["category"], name: "index_champions_on_category", using: :btree
+  add_index "champions", ["winners"], name: "index_champions_on_winners", using: :btree
+  add_index "champions", ["year"], name: "index_champions_on_year", using: :btree
 
   create_table "clubs", force: true do |t|
     t.string   "county",     limit: 20

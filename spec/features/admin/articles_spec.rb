@@ -5,7 +5,6 @@ describe Article do;
 
   let(:access)   { I18n.t("access.access") }
   let(:author)   { I18n.t("article.author") }
-  let(:category) { I18n.t("article.category.category") }
   let(:text)     { I18n.t("article.text") }
   let(:title)    { I18n.t("article.title") }
 

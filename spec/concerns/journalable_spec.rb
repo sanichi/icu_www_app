@@ -8,6 +8,7 @@ describe Journalable do
 
   [
     [Article, "/article/%d"],
+    [Champion, "/champions/%d"],
     [Club, "/clubs/%d"],
     [Event, "/events/%d"],
     [Fee, "/admin/fees/%d"],

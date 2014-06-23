@@ -1,0 +1,23 @@
+- content_for :title, t("champion.champion")
+
+= render "utils/prev_next", prev: @prev, id: @champion.id, nixt: @next
+
+.row
+  .col-md-8.col-md-offset-2
+    %table.table.table-bordered
+      %tr
+        %th= t("year")
+        %td= @champion.year
+      %tr
+        %th= t("champion.winners")
+        %td= @champion.winners
+      %tr
+        %th= t("category")
+        %td= t("champion.category.#{@champion.category}")
+      %tr
+        %th= t("notes")
+        %td= @champion.notes
+      = render "utils/timestamps", object: @champion, ability: :create
+    = render "utils/show_buttons", object: @champion
+
+= render "admin/journal_entries/changes", entries: @entries

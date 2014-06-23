@@ -8,7 +8,7 @@
         = render "utils/text_field_for", locals.merge(param: :name, text: t("name"), width: 5)
         = render "utils/text_field_for", locals.merge(param: :city, text: t("city"))
         = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
-        = render "utils/select_for", locals.merge(param: :category, text: t("tournament.category.category"), width: 3, menu: tournament_category_menu(@tournament.category, "please_select"))
+        = render "utils/select_for", locals.merge(param: :category, text: t("category"), width: 3, menu: tournament_category_menu(@tournament.category, "please_select"))
         = render "utils/select_for", locals.merge(param: :format, text: t("tournament.format.format"), width: 3, menu: tournament_format_menu(@tournament.format, "please_select"))
         = render "utils/check_box_for",  locals.merge(param: :active, text: t("active"), width: 1)
         .form-group{class: @tournament.errors[:details].any? ? "has-error" : ""}

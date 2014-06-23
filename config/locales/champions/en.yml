@@ -1,0 +1,9 @@
+en:
+  champion:
+    champion: Irish Champion
+    champions: Irish Champions
+    winners: Winner(s)
+    category:
+      any: Any category
+      open: Irish Champion
+      women: Irish Women's Champion

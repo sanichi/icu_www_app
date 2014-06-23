@@ -2,7 +2,7 @@
   = render "utils/inline_text_field", param: :title, text: t("article.title"), size: 20
   = render "utils/inline_text_field", param: :year, text: t("year"), size: 10
   = render "utils/inline_text_field", param: :author, text: t("article.author"), size: 10
-  = render "utils/inline_select", param: :category, text: t("article.category.category"), menu: article_category_menu(params[:category])
+  = render "utils/inline_select", param: :category, text: t("category"), menu: article_category_menu(params[:category])
   - if current_user.guest?
     = hidden_field_tag :access, "all"
   - else

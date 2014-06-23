@@ -16,7 +16,7 @@ class Ability
         can [:create, :index, :show], Pgn
         can [:destroy, :update], [Article, Image, News, Pgn, Upload], user_id: user.id
         can [:destroy, :update], Game, pgn: { user_id: user.id }
-        can :manage, [Club, Series, Tournament]
+        can :manage, [Champion, Club, Series, Tournament]
       end
 
       if user.calendar? || user.editor?

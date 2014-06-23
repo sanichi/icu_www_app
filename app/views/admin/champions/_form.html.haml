@@ -1,0 +1,12 @@
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for [:admin, @champion], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        = render "utils/form_header", object: @champion
+        - locals = { form: f, object: @champion, col: "sm", pad: 2, width: 6, mark: "required" }
+        = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
+        = render "utils/text_field_for", locals.merge(param: :winners, text: t("champion.winners"))
+        = render "utils/select_for", locals.merge(param: :category, text: t("category"), menu: champion_category_menu(@champion.category, "please_select"))
+        = render "utils/text_field_for", locals.merge(param: :notes, text: t("notes"), width: 8, mark: "none")
+      = render "utils/form_buttons", form: f, object: @champion

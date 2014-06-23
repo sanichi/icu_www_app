@@ -4,7 +4,7 @@
     .col-sm-12
       = render "utils/text_field_tag", locals.merge(param: :title, text: t("article.title"), width: 6)
       = render "utils/text_field_tag", locals.merge(param: :author, text: t("article.author"), width: 5)
-      = render "utils/select_tag", locals.merge(param: :category, text: t("article.category.category"), menu: article_category_menu(params[:category]))
+      = render "utils/select_tag", locals.merge(param: :category, text: t("category"), menu: article_category_menu(params[:category]))
       - menu = access_menu(params[:access], Article.accessibilities_for(current_user), "access.any")
       = render "utils/select_tag", locals.merge(param: :access, text: t("access.access"), menu: menu)
 
