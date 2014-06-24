@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20140623142059) do
 
   create_table "champions", force: true do |t|
     t.string   "category",   limit: 20
-    t.string   "notes"
+    t.string   "notes",      limit: 140
     t.string   "winners"
     t.integer  "year",       limit: 2
     t.datetime "created_at"

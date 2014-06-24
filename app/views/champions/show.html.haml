@@ -16,7 +16,7 @@
         %td= t("champion.category.#{@champion.category}")
       %tr
         %th= t("notes")
-        %td= @champion.notes
+        %td= @champion.html_notes
       = render "utils/timestamps", object: @champion, ability: :create
     = render "utils/show_buttons", object: @champion
 

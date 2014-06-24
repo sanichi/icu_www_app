@@ -73,7 +73,7 @@ class Game < ActiveRecord::Base
   def add_tag(name, value)
     return if value.blank?
     value.trim!
-    remove_html_tags(value)
+    value.markoff!
     if name.match(/\A(Annotator|Black|Date|ECO|Event|FEN|Result|Round|Site|White)\z/i)
       send("#{name.underscore}=", value)
     elsif name.match(/\A(BlackElo|Ply|WhiteElo)\z/i)
@@ -83,7 +83,7 @@ class Game < ActiveRecord::Base
   end
 
   def add_moves(line)
-    remove_html_tags(line)
+    line.markoff!
     if moves.blank?
       self.moves = line
     else
@@ -187,9 +187,5 @@ class Game < ActiveRecord::Base
       errors.add(:base, "Duplicate game found (ID: #{duplicate.id})") # to higlight the error for the user
       errors.add(:signature, "duplicate")                             # so the PGN parser (see models/pgn.rb) can be sure the problem is a duplicate error
     end
-  end
-
-  def remove_html_tags(str)
-    str.gsub!(/<[^>]*>/, "")
   end
 end

@@ -1,4 +1,5 @@
 class Champion < ActiveRecord::Base
+  include Expandable
   include Journalable
   include Normalizable
   include Pageable
@@ -16,7 +17,7 @@ class Champion < ActiveRecord::Base
   before_validation :normalize_attributes, :correct_winners
 
   validates :category, inclusion: { in: CATEGORIES }, uniqueness: { scope: :year, message: "one category per year" }
-  validates :winners, format: { with: WINNERS }, length: { maximum: 256 }
+  validates :winners, format: { with: WINNERS }, length: { maximum: 140 }
   validates :notes, length: { maximum: 256 }, allow_nil: true
   validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR, less_than_or_equal_to: Date.today.year }
 
@@ -28,9 +29,14 @@ class Champion < ActiveRecord::Base
     paginate(matches, params, path)
   end
 
+  def html_notes
+    notes.present? ? expand_all(notes).html_safe : ""
+  end
+
   private
 
   def normalize_attributes
+    notes.markoff!.trim! if notes.present?
     normalize_blanks(:notes)
   end
 

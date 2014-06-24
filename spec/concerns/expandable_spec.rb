@@ -309,6 +309,28 @@ describe Expandable do
     end
   end
 
+  context "rated tournaments" do
+    let(:text) { Faker::Lorem.sentence }
+    let(:id)   { 100 }
+    let(:link) { %q{<a href="http://ratings.icu.ie/tournaments/%d" target="ratings">%s</a>} }
+
+    it "default text" do
+      expect(d.expand_all("[RTN:#{id}]")).to eq  link % [id, id]
+    end
+
+    it "explicit text" do
+      expect(d.expand_all("[RTN:#{id}:text=#{text}]")).to eq link % [id, text]
+    end
+
+    it "implicit text" do
+      expect(d.expand_all("[RTN:#{id}:#{text}]")).to eq link % [id, text]
+    end
+
+    it "invalid ID" do
+      expect{d.expand_all("[RTN:rubbish]")}.to raise_error error("rated tournament", data: "rubbish")
+    end
+  end
+
   context "tournaments" do
     let(:tournament) { create(:tournament) }
     let(:name)       { Faker::Lorem.sentence }

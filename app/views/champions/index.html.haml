@@ -17,6 +17,6 @@
               %td.text.center= champion.year
               %td= link_to_if can?(:edit, champion), champion.winners, champion
               %td= t("champion.category.#{champion.category}")
-              %td= champion.notes
+              %td= champion.html_notes
           = render "utils/pagination_links", pager: @champions, columns: 4
     = render "utils/index_buttons", klass: Champion

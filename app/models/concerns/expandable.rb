@@ -13,6 +13,7 @@ module Expandable
   SPECIAL = {
     "EMA" => { text: /\S/ },
     "FEN" => { align: /\A(center|left|right)\z/, style: Board::VALID_STYLE, comment: /\S/ },
+    "RTN" => { text: /\S/ },
   }
 
   def expand_all(text)
@@ -44,6 +45,9 @@ module Expandable
     when "FEN"
       board = Board.new(data)
       board.expand(options)
+    when "RTN"
+      raise "#{data} is not a valid rated tournament ID" unless data.match(/\A[1-9]\d*\z/)
+      %Q{<a href="http://ratings.icu.ie/tournaments/#{data}" target="ratings">#{options[:text] || data}</a>}
     else
       raise "unrecognised expansion keyword (#{type})"
     end
@@ -58,10 +62,10 @@ module Expandable
         allowed = (EXPANDABLE[type] || SPECIAL[type]).reject{ |k,v| k == :class || k == :type }
         k2s = key.to_sym
         if val.present?
-          hash[k2s] = val if allowed[k2s] && val.match(allowed[k2s])
+          hash[k2s] = val.markoff if allowed[k2s] && val.match(allowed[k2s])
         else
           match = allowed.find { |k,v| key.match(v) && !hash.has_key?(k) }
-          hash[match[0]] = key if match
+          hash[match[0]] = key.markoff if match
         end
       end
     end

@@ -25,7 +25,7 @@ module ICU
         @links = {}
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM tournaments").each do |tournament|
           tournament_count += 1
-          if [105, 113, 116, 117].include?(tournament[:trn_id])
+          if [105, 113, 115, 116, 117].include?(tournament[:trn_id])
             skipped_tournaments += 1
           else
             create_tournament(tournament)

@@ -2,7 +2,7 @@ class CreateChampions < ActiveRecord::Migration
   def change
     create_table :champions do |t|
       t.string   :category, limit: 20
-      t.string   :notes
+      t.string   :notes, limit: 140
       t.string   :winners
       t.integer  :year, limit: 2
 

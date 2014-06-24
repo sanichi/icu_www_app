@@ -18,7 +18,7 @@ describe String do
 
   context "removing markup" do
     it "#markoff and #markoff!" do
-      before = "<p>The <em>Daily Telegraph</em> <br/> or the <b>Times</b>.</p>"
+      before = "<p>The <em>Daily Telegraph</em> <br/> or the <B>Times</B>.</p>"
       after = "The Daily Telegraph  or the Times."
       expect(before.markoff).to eq after
       expect(before).to_not eq after
