@@ -5,6 +5,7 @@ describe "Sign up" do
 
   let(:account)     { I18n.t("user.account") }
   let(:complete)    { I18n.t("user.complete_registration") }
+  let(:completed)   { I18n.t("user.completed_registration") }
   let(:created)     { I18n.t("user.created") }
   let(:digits)      { I18n.t("errors.attributes.password.digits") }
   let(:expired)     { I18n.t("errors.attributes.ticket.expired") }
@@ -53,6 +54,8 @@ describe "Sign up" do
       expect(User.count).to eq 1
       user = User.first
 
+      expect(JournalEntry.users.where(action: "create", by: user.signature, journalable_id: user.id).count).to eq 1
+
       expect(user.player).to eq player
       expect(user.email).to eq data.email
       expect(user.valid_password?(valid_password)).to eq true
@@ -83,6 +86,9 @@ describe "Sign up" do
       expect(user.verified_at).to be_nil
 
       visit verify_user_path(user, vp: user.verification_param)
+      expect(page).to have_css(success, text: completed)
+
+      expect(JournalEntry.users.where(action: "update", by: user.signature, journalable_id: user.id, column: "verified_at").count).to eq 1
 
       user.reload
       expect(user.verified_at).to_not be_nil
@@ -94,12 +100,34 @@ describe "Sign up" do
       expect(page).to have_css(success, text: signed_in_as)
     end
 
+    it "verify twice" do
+      expect(User.count).to eq 1
+      user = User.first
+      expect(JournalEntry.users.count).to eq 1
+
+      visit verify_user_path(user, vp: user.verification_param)
+      expect(page).to have_css(success, text: completed)
+      expect(page.title).to eq sign_in
+
+      expect(JournalEntry.users.count).to eq 2
+
+      visit verify_user_path(user, vp: user.verification_param)
+      expect(page).to_not have_css(success)
+      expect(page).to_not have_css(failure)
+      expect(page.title).to eq sign_in
+
+      expect(JournalEntry.users.count).to eq 2
+    end
+
     it "incorrect verification" do
+      expect(JournalEntry.users.count).to eq 1
       expect(User.count).to eq 1
       user = User.first
       expect(user.verified_at).to be_nil
 
       visit verify_user_path(user, vp: "")
+      expect(page).to_not have_css(success)
+      expect(page).to_not have_css(failure)
 
       user.reload
       expect(user.verified_at).to be_nil
@@ -109,6 +137,8 @@ describe "Sign up" do
       fill_in password, with: valid_password
       click_button sign_in
       expect(page).to have_css(failure, text: unverified)
+
+      expect(JournalEntry.users.count).to eq 1
     end
   end
 
@@ -120,13 +150,18 @@ describe "Sign up" do
       %Q{//input[@id="#{atr}"]/parent::div[contains(@class,"field_with_errors")]/parent::div/following-sibling::div[contains(@class,"help-block")]}
     end
 
+    def nothing_happened(users=0)
+      expect(User.count).to eq users
+      expect(JournalEntry.count).to eq 0
+      expect(ActionMailer::Base.deliveries).to be_empty
+    end
+
     it "nothing filled in" do
       click_button save
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_player_id), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "invalid ICU ID" do
@@ -135,8 +170,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_player_id), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "missing season ticket" do
@@ -145,8 +179,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_ticket), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "invalid season ticket" do
@@ -156,8 +189,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_ticket), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "mismatched season ticket" do
@@ -167,8 +199,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_ticket), text: mismatch)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "expired season ticket" do
@@ -178,8 +209,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_ticket), text: expired)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "missing email" do
@@ -190,8 +220,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_email), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "rubbish email" do
@@ -203,8 +232,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_email), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "taken email" do
@@ -217,8 +245,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_email), text: taken)
 
-      expect(User.count).to eq 1
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened(1)
     end
 
     it "unverified email" do
@@ -231,8 +258,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_email), text: incomplete)
 
-      expect(User.count).to eq 1
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened(1)
     end
 
     it "missing password" do
@@ -243,8 +269,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_password), text: invalid)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "password too short" do
@@ -256,8 +281,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_password), text: length)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
 
     it "password needs digits" do
@@ -269,8 +293,7 @@ describe "Sign up" do
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_password), text: digits)
 
-      expect(User.count).to eq 0
-      expect(ActionMailer::Base.deliveries).to be_empty
+      nothing_happened
     end
   end
 end

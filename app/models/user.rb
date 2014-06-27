@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   include Journalable
   include Pageable
 
-  journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
+  journalize [:status, :encrypted_password, :roles, :verified_at], "/admin/users/%d"
 
   attr_accessor :password, :ticket
 

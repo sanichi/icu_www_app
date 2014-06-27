@@ -1,11 +1,9 @@
-Hi<%= @user.player.first_name.split(/\s+/).first %>,
+Hi <%= @user.player.first_name.split(/\s+/).first %>,
 
-You registered a new login account for ICU member <%= @user.player.name(id: true) %> at <%= @user.created_at.to_s(:npsec) %> UTC.
+You registered a new login account for ICU member <%= @user.player.name(id: true) %> at <%= @user.created_at.to_s(:nosec) %> UTC using <%= @user.email %> as the username.
 
-You used <%= @user.email %> for the account username.
+To complete the process, please verify this email address by clicking the following link: <%= verify_user_url(@user, vp: @user.verification_param) %>
 
-To complete the process, please verify that email address by clicking the following link: <%= verify_user_url(@user, vp: @user.verification_param) %>
-
-If you think this message has been sent in error, please forward it to webmaster@icu.ie.
+If you think this message has been sent in error, please contact webmaster@icu.ie.
 
 Regards, The Irish Chess Union
