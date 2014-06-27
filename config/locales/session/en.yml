@@ -1,13 +1,13 @@
 en:
   session:
-    sign_in: Sign in
-    sign_out: Sign out
-    signed_in_as: Signed in as
-    signed_out: Signed out!
+    account_disabled: Account disabled
     enter_email: Please enter an email
     enter_password: Please enter a password
     invalid_email: Invalid email or password
     invalid_password: Invalid email or password
-    unverified_email: Unverified email
-    account_disabled: Account disabled
+    sign_in: Sign in
+    sign_out: Sign out
+    signed_in_as: Signed in as
+    signed_out: Signed out!
     subscription_expired: Subscription expired
+    unverified_email: Unverified email

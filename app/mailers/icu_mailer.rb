@@ -3,6 +3,7 @@ class IcuMailer < ActionMailer::Base
 
   FROM = "NO-REPLY@icu.ie"
   CONFIRMATION = "Confirmation of your Payment to the ICU"
+  VERIFICATION = "Please verify your ICU login account email address"
 
   default from: FROM
 
@@ -16,6 +17,11 @@ class IcuMailer < ActionMailer::Base
   def payment_receipt(cart_id)
     @cart = Cart.find(cart_id)
     mail(to: payment_receipt_to(@cart), subject: CONFIRMATION)
+  end
+
+  def verify_new_user_email(user_id)
+    @user = User.include_player.find(user_id)
+    mail(to: @user.email, subject: VERIFICATION)
   end
 
   private

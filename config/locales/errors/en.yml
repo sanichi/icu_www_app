@@ -2,6 +2,13 @@ en:
   errors:
     alerts:
       application: System error — please send screenshot to webmaster@icu.ie
+    attributes:
+      password:
+        length: minimum length is %{minimum}
+        digits: should contain at least 1 digit
+      ticket:
+        expired: expired
+        mismatch: invalid
     messages:
       accepted: must be accepted
       after: must be after %{restriction}
@@ -25,3 +32,4 @@ en:
       on_or_after: must be on or after %{restriction}
       on_or_before: must be on or before %{restriction}
       present: must be blank
+      taken: has already been taken

@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  before_action :set_user, only: [:edit, :update, :destroy, :login]
+  before_action :set_user, only: [:edit, :update, :destroy, :login, :show]
   authorize_resource
 
   def index
@@ -28,7 +28,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
-    @user = User.includes(:player).find(params[:id])
     @entries = @user.journal_entries if current_user.roles.present?
   end
 
@@ -68,7 +67,8 @@ class Admin::UsersController < ApplicationController
   private
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.include_player.find(params[:id])
+    @player = @user.player
   end
 
   def user_params(new_record=false)

@@ -1,12 +1,12 @@
-%li{class: active("sessions")}
-  - if current_user.guest?
-    = link_to t("session.sign_in"), sign_in_path
-  - else
-    %li.dropdown
-      = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
-        = current_user.name
-        %b.caret
-      %ul.dropdown-menu
-        %li= link_to t("session.sign_out"), sign_out_path
-        %li{class: active("users", "account")}= link_to t("user.account"), account_path(current_user)
-        %li{class: active("users", "preferences")}= link_to t("user.preferences"), preferences_path(current_user)
+- if current_user.guest?
+  %li{class: active("sessions")}= link_to t("session.sign_in"), sign_in_path
+  %li{class: active("users")}= link_to t("user.sign_up"), sign_up_path
+- else
+  %li.dropdown
+    = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
+      = current_user.name
+      %b.caret
+    %ul.dropdown-menu
+      %li= link_to t("session.sign_out"), sign_out_path
+      %li{class: active("users", "account")}= link_to t("user.account"), account_path(current_user)
+      %li{class: active("users", "preferences")}= link_to t("user.preferences"), preferences_path(current_user)

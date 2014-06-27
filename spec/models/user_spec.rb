@@ -154,11 +154,11 @@ describe User do
   end
 
   context "#season_ticket" do
-    it "should give correct response" do
+    it "get" do
       user = create(:user)
-      ticket = user.season_ticket
-      expect(ticket).to match(/\A\w{4,}\z/)
-      object = SeasonTicket.new(ticket)
+      string = user.season_ticket
+      expect(string).to match(/\A\w{4,}\z/)
+      object = SeasonTicket.new(string)
       expect(object.icu_id).to eq(user.player_id)
       expect(object.expires_on).to eq(user.expires_on.to_s)
     end
@@ -169,6 +169,14 @@ describe User do
       expect(create(:user).human_roles).to eq("")
       expect(create(:user, roles: "admin").human_roles).to eq("Administrator")
       expect(create(:user, roles: "treasurer translator").human_roles).to eq("Translator Treasurer")
+    end
+  end
+
+  context "#verification_param" do
+    let(:user) { create(:user) }
+
+    it "should be a fixed length hexidecimal" do
+      expect(user.verification_param).to match /\A[a-f0-9]{10}\z/
     end
   end
 end

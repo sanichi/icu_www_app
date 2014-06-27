@@ -16,7 +16,7 @@ describe JournalEntry do;
   end
 
   def edit_translation
-    translation = create(:translation) # translations aren't created via the web app
+    translation = create(:translation)
     visit admin_translation_path(translation)
     click_link "Edit"
     fill_in "translation_value", with: "bruscar"
@@ -25,7 +25,7 @@ describe JournalEntry do;
   end
 
   def edit_user
-    user = create(:user) # users aren't created via the web app
+    user = create(:user)
     visit admin_user_path(user)
     click_link "Edit"
     fill_in "Status", with: "banned"

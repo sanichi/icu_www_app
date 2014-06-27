@@ -61,7 +61,7 @@ class Item::Subscription < Item
   def season_ticket
     t = SeasonTicket.new(player.id, end_date.at_end_of_year)
     raise t.error if t.error
-    t.ticket
+    t.to_s
   rescue => e
     logger.error("subscription season ticket error, cart: #{cart.present? && cart.id}, player: #{player.present? && player.id}, end date: #{end_date.present? && end_date.to_s}, error: #{e.message}")
     nil

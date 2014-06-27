@@ -10,6 +10,7 @@ describe Season do
       expect(s.last.to_s).to eq "2012-13"
       expect(s.start.to_s).to eq "2013-09-01"
       expect(s.end.to_s).to eq "2014-08-31"
+      expect(s.end_of_grace_period.to_s).to eq "2014-12-31"
     end
 
     it "turn of century valid" do
@@ -20,6 +21,7 @@ describe Season do
       expect(s.last.to_s).to eq "1998-99"
       expect(s.start.to_s).to eq "1999-09-01"
       expect(s.end.to_s).to eq "2000-08-31"
+      expect(s.end_of_grace_period.to_s).to eq "2000-12-31"
     end
 
     it "valid variations" do
@@ -45,6 +47,7 @@ describe Season do
       expect(s.to_s).to eq "2013-14"
       expect(s.start.to_s).to eq "2013-09-01"
       expect(s.end.to_s).to eq "2014-08-31"
+      expect(s.end_of_grace_period.to_s).to eq "2014-12-31"
     end
 
     it "turn of century valid" do
@@ -53,6 +56,7 @@ describe Season do
       expect(s.to_s).to eq "1999-00"
       expect(s.start.to_s).to eq "1999-09-01"
       expect(s.end.to_s).to eq "2000-08-31"
+      expect(s.end_of_grace_period.to_s).to eq "2000-12-31"
     end
 
     it "season boundary" do
@@ -68,6 +72,7 @@ describe Season do
       expect(s.to_s).to match /\A20\d\d-\d\d\z/
       expect(s.start.month).to eq 9
       expect(s.end.month).to eq 8
+      expect(s.end_of_grace_period.month).to eq 12
     end
   end
 end

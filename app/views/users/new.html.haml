@@ -1,0 +1,16 @@
+- content_for :title, t("user.new")
+
+.row
+  .col-sm-10.col-sm-offset-1
+    = form_for @user, html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        = render "utils/form_header", header: t("user.new")
+        - locals = { form: f, object: @user, col: "sm", pad: 2, width: 3 }
+        = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.id"))
+        = render "utils/text_field_for", locals.merge(param: :ticket, text: t("user.ticket"))
+        = render "utils/text_field_for", locals.merge(param: :email, text: t("email"), width: 4)
+        = render "utils/text_field_for", locals.merge(param: :password, text: t("user.password"))
+      %hr
+      .text-center
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), home_path, class: "btn btn-default"

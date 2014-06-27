@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   journalize [:status, :encrypted_password, :roles], "/admin/users/%d"
 
-  attr_accessor :password
+  attr_accessor :password, :ticket
 
   OK = "OK"
   ROLES = %w[admin calendar editor membership translator treasurer]
@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   belongs_to :player
 
   default_scope { order(:email) }
+  scope :include_player, -> { includes(:player) }
 
   before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 
@@ -74,7 +75,7 @@ class User < ActiveRecord::Base
 
   def season_ticket
     t = SeasonTicket.new(player_id, expires_on)
-    t.valid? ? t.ticket : t.error
+    t.valid? ? t.to_s : t.error
   end
 
   def preferred_theme
@@ -113,7 +114,7 @@ class User < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    matches = includes(:player).references(:players)
+    matches = include_player.references(:players)
     if params[:last_name].present? || params[:first_name].present?
       matches = matches.joins(:player)
       matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
@@ -151,11 +152,11 @@ class User < ActiveRecord::Base
     raise SessionError.new("enter_email") if email.blank?
     raise SessionError.new("enter_password") if password.blank?
     user = User.find_by(email: email)
-    self.bad_login(ip, email, password)        unless user
-    user.add_login(ip, "invalid_password")     unless user.valid_password?(password)
-    user.add_login(ip, "unverified_email")     unless user.verified?
-    user.add_login(ip, "account_disabled")     unless user.status_ok?
-    user.add_login(ip, "subscription_expired") unless user.subscribed?
+    self.bad_login(ip, email, password)            unless user
+    user.add_login(ip, "invalid_password")         unless user.valid_password?(password)
+    user.add_login(ip, "unverified_email")         unless user.verified?
+    user.add_login(ip, "account_disabled")         unless user.status_ok?
+    user.add_login(ip, "subscription_expired")     unless user.subscribed?
     user.add_login(ip)
   end
 
@@ -180,6 +181,44 @@ class User < ActiveRecord::Base
     when logins.count > 0 then "has recorded logins"
     else false
     end
+  end
+
+  # Prepare a new user record for further validation and possible saving where the virtual "ticket" attribute contains a season ticket value.
+  # If everything is OK set an appropriate expiry date and return true. Otherwise add errors (for display) and return false.
+  def sign_up
+    return false unless new_record?
+    t = SeasonTicket.new(ticket)
+    if player
+      if t.valid?
+        if t.valid?(player.id)
+          if t.valid?(player.id, Season.new.end_of_grace_period)
+            if player.users.where(email: email, verified_at: nil).empty?
+              if password.present?
+                self.expires_on = t.expires_on
+                return true
+              else
+                errors.add(:password, I18n.t("errors.messages.invalid"))
+              end
+            else
+              errors.add(:email, I18n.t("user.incomplete_registration"))
+            end
+          else
+            errors.add(:ticket, I18n.t("errors.attributes.ticket.expired"))
+          end
+        else
+          errors.add(:ticket, I18n.t("errors.attributes.ticket.mismatch"))
+        end
+      else
+        errors.add(:ticket, I18n.t("errors.messages.invalid"))
+      end
+    else
+      errors.add(:player_id, I18n.t("errors.messages.invalid"))
+    end
+    false
+  end
+
+  def verification_param
+    eval(Rails.application.secrets.verification_encryptor)
   end
 
   private

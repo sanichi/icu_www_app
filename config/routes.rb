@@ -3,6 +3,7 @@ IcuWwwApp::Application.routes.draw do
 
   get  "sign_in"  => "sessions#new"
   get  "sign_out" => "sessions#destroy"
+  get  "sign_up"  => "users#new"
   get  "redirect" => "redirects#redirect"
 
   %w[home].each do |page|
@@ -30,6 +31,9 @@ IcuWwwApp::Application.routes.draw do
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
   resources :uploads,     only: [:index, :show]
+  resources :users,       only: [:new, :create] do
+    get :verify, on: :member
+  end
 
   namespace :admin do
     %w[system_info test_email].each do |page|

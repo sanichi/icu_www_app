@@ -4,7 +4,7 @@ module SessionsHelper
   def current_user
     return @current_user if @current_user
     if session[:user_id]
-      @current_user = User.includes(:player).where(id: session[:user_id]).first
+      @current_user = User.include_player.where(id: session[:user_id]).first
       logger.error("no user found for session user ID #{session[:user_id]}") unless @current_user
     end
     @current_user ||= User::Guest.new

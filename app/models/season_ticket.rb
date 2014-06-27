@@ -1,5 +1,5 @@
 class SeasonTicket
-  attr_reader :icu_id, :expires_on, :ticket, :error
+  attr_reader :icu_id, :expires_on, :error
 
   def initialize(icu_id_or_ticket, expires_on=nil)
     if expires_on
@@ -28,6 +28,10 @@ class SeasonTicket
     end
   end
 
+  def to_s
+    @ticket.to_s
+  end
+
   private
 
   def base
@@ -41,8 +45,8 @@ class SeasonTicket
   end
 
   def decode
-    raise "invalid season ticket (bad characters)" unless valid_ticket?(ticket)
-    unpack(to_decimal(shuffle(ticket)))
+    raise "invalid season ticket (bad characters)" unless valid_ticket?(@ticket)
+    unpack(to_decimal(shuffle(@ticket)))
   end
 
   def shuffle(str)

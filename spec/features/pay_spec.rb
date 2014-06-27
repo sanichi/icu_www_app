@@ -138,7 +138,7 @@ describe "Pay", js: true do
       text = email.body.decoded
       expect(text).to include(player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
-      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).ticket}")
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).to_s}")
       expect(text).to eq cart.confirmation_text
     end
 
@@ -293,7 +293,7 @@ describe "Pay", js: true do
       text = email.body.decoded
       expect(text).to include(player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
-      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).ticket}")
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(player.id, subscription.end_date.at_end_of_year).to_s}")
       expect(text).to eq cart.confirmation_text
     end
 
@@ -372,7 +372,7 @@ describe "Pay", js: true do
       text = email.body.decoded
       expect(text).to include(new_player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
-      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(new_player.id, subscription.end_date.at_end_of_year).ticket}")
+      expect(text).to include("#{season_ticket}: #{SeasonTicket.new(new_player.id, subscription.end_date.at_end_of_year).to_s}")
     end
   end
 end

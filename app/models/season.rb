@@ -23,6 +23,11 @@ class Season
     Date.new(@desc[0,4].to_i + 1, 8, 31)
   end
 
+  def end_of_grace_period
+    return nil unless @desc
+    self.end.end_of_year
+  end
+
   def next
     return nil unless @desc
     year = @desc[0,4].to_i

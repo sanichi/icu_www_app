@@ -2,36 +2,65 @@ require 'rails_helper'
 
 describe SeasonTicket do
   context "decode" do
-    let(:ticket) { SeasonTicket.new("brDK6") }
 
-    it "ICU ID and expiry date", if: SeasonTicket.standard_config? do
-      expect(ticket.error).to be_nil
-      expect(ticket.valid?).to be true
-      expect(ticket.icu_id).to eq 87
-      expect(ticket.expires_on).to eq "2008-12-31"
+    context "valid" do
+      let(:ticket) { SeasonTicket.new("brDK6") }
+
+      it "attributes", if: SeasonTicket.standard_config? do
+        expect(ticket.error).to be_nil
+        expect(ticket.valid?).to be true
+        expect(ticket.icu_id).to eq 87
+        expect(ticket.expires_on).to eq "2008-12-31"
+        expect(ticket.to_s).to eq "brDK6"
+      end
     end
 
-    it "invalid" do
-      expect(SeasonTicket.new(nil).error).to match(/invalid/)
-      expect(SeasonTicket.new("").error).to match(/invalid/)
-      expect(SeasonTicket.new("AcEgI").error).to match(/invalid/)
+    context "invalid" do
+      it "nil" do
+        ticket = SeasonTicket.new(nil)
+        expect(ticket.error).to match(/invalid/)
+        expect(ticket.to_s).to eq ""
+      end
+
+      it "blank" do
+        ticket = SeasonTicket.new("")
+        expect(ticket.error).to match(/invalid/)
+        expect(ticket.to_s).to eq ""
+      end
+
+      it "wrong" do
+        ticket = SeasonTicket.new("AcEgI")
+        expect(ticket.error).to match(/invalid/)
+        expect(ticket.to_s).to eq "AcEgI"
+      end
     end
   end
 
   context "encoding" do
-    let(:icu_id) { 10470 }
-    let(:expiry) { "2012-12-31" }
+    context "valid" do
+      let(:icu_id) { 10470 }
+      let(:expiry) { "2012-12-31" }
 
-    it "valid", if: SeasonTicket.standard_config? do
-      ticket = SeasonTicket.new(icu_id, expiry)
-      expect(ticket.error).to be_nil
-      expect(ticket.valid?).to be true
-      expect(ticket.ticket).to eq "M2kFCFx"
+      it "attributes", if: SeasonTicket.standard_config? do
+        ticket = SeasonTicket.new(icu_id, expiry)
+        expect(ticket.error).to be_nil
+        expect(ticket.valid?).to be true
+        expect(ticket.to_s).to eq "M2kFCFx"
+      end
     end
 
-    it "invalid" do
-      expect(SeasonTicket.new(0, "2013-12-31").error).to match(/ID/)
-      expect(SeasonTicket.new(1, "1999-12-31").error).to match(/expiry/)
+    context "invalid" do
+      it "ID" do
+        ticket = SeasonTicket.new(0, "2013-12-31")
+        expect(ticket.error).to match(/ID/)
+        expect(ticket.to_s).to match ""
+      end
+
+      it "expiry" do
+        ticket = SeasonTicket.new(1, "1999-12-31")
+        expect(ticket.error).to match(/expiry/)
+        expect(ticket.to_s).to match ""
+      end
     end
   end
 

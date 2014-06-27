@@ -3,11 +3,18 @@ en:
     any: Any user
     any_editor: Any editor
     account: User account
+    complete_registration: To complete the process please click the link in the verification message sent to
+    completed_registration: "User account successfully verified, you can login now"
+    created: New user account successsfully created
+    create_failed: New user account NOT created
     expires: Expires on
+    incomplete_registration: Already created but waiting for response to verification message
     locale: Language
+    new: New user account
     password: Password
     preferences: Preferences
     status: Status
+    sign_up: Sign up
     theme: Theme
     ticket: Season ticket
     updated: Preferences successfully updated
@@ -26,8 +33,3 @@ en:
       membership: Membership Officer
       translator: Translator
       treasurer: Treasurer
-  errors:
-    attributes:
-      password:
-        length: minimum length is %{minimum}
-        digits: should contain at least 1 digit
