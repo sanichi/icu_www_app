@@ -141,7 +141,7 @@ class User < ActiveRecord::Base
   end
 
   def self.encrypt_password(password, salt)
-    eval(Rails.application.secrets.password_encryptor)
+    eval(Rails.application.secrets.crypt["password"])
   end
 
   def self.random_salt
@@ -218,7 +218,7 @@ class User < ActiveRecord::Base
   end
 
   def verification_param
-    eval(Rails.application.secrets.verification_encryptor)
+    eval(Rails.application.secrets.crypt["verifier"])
   end
 
   private
