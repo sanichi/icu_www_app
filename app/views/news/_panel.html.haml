@@ -1,5 +1,7 @@
+- defined?(link) || link = false
+
 .panel.panel-default
   .panel-heading
-    = link_to_if can?(:update, news), news.headline, news, class: news.active ? nil : "text-done"
+    = link_to_if link && can?(:update, news), news.headline, news, class: news.active ? nil : "text-done"
     .pull-right= news.date
   .panel-body.news= news.html

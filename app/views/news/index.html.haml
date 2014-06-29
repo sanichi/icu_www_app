@@ -6,7 +6,7 @@
   .row
     .col-md-10.col-md-offset-1
       - @news.matches.each do |news|
-        = render "panel", news: news
+        = render "panel", news: news, link: true
 
 = render "utils/pagination_links", pager: @news
 = render "utils/index_buttons", klass: News
