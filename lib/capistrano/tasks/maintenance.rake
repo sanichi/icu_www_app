@@ -9,7 +9,7 @@ namespace :deploy do
         end
       end
     end
-    
+
     desc "Remove the maintenance file"
     task :enable do
       on roles :web do
@@ -18,7 +18,7 @@ namespace :deploy do
         end
       end
     end
-    
+
     def maintenance_html
       require "haml"
       template = File.read("app/views/layouts/maintenance.html.haml")
