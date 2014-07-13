@@ -42,9 +42,11 @@ module ICU
         params.delete(:season_ticket)
         begin
           case params[:id]
-          when 1   then params[:roles] = "admin"       # Mark
-          when 4   then params[:roles] = "translator"  # Gearoidin
-          when 634 then params[:roles] = "translator"  # Una
+          when 1   then params[:roles] = "admin"   # MO
+          when 73  then params[:roles] = "editor"  # GG
+          when 232 then params[:roles] = "editor"  # PM
+          when 943 then params[:roles] = "editor"  # KOF
+          when 951 then params[:roles] = "editor"  # JOC
           end
           User.create!(params)
           puts "created user #{params[:id]}, #{params[:email]}"
