@@ -158,13 +158,3 @@ textarea.insignificant-space {
 a.no-underline {
   text-decoration: none !important;
 }
-
-/* For beta-quality indicator image. */
-#beta-badge {
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 100;
-  border: none;
-  pointer-events: none;
-}

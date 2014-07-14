@@ -14,7 +14,6 @@
         = yield :javascript
     = csrf_meta_tags
   %body
-    = image_tag "misc/beta-badge.png", alt: t("beta"), title: t("beta"), size: "150x150", id: "beta-badge"
     - if Rails.root.join("public", "system", "maintenance.html").exist?
       #maintenance Maintenance Mode
     .jumbotron
