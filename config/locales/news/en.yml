@@ -2,4 +2,5 @@ en:
   news:
     headline: Headline
     news: News
+    search: Search News
     summary: Summary

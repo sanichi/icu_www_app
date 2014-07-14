@@ -1,7 +1,7 @@
 class NewsController < ApplicationController
   def index
     params[:active] = "true" unless can?(:create, News)
-    @news = News.search(params, news_index_path, current_user)
+    @news = News.search(params, news_index_path)
     flash.now[:warning] = t("no_matches") if @news.count == 0
     save_last_search(:news)
   end

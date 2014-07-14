@@ -1,7 +1,0 @@
-%span{class: "#{!items || items.values.any?{ |done| !done } ? '' : 'text-done'}"}= "#{topic}: "
-- if items
-  - items.keys.each do |item|
-    = succeed "#{item == items.keys.last ? '' : ','}" do
-      %span{class: "#{items[item] ? 'text-done' : ''}"}= item
-- else
-  %em ⋯

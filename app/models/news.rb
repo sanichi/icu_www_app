@@ -17,7 +17,7 @@ class News < ActiveRecord::Base
   scope :include_player, -> { includes(user: :player) }
   scope :ordered, -> { order(date: :desc, updated_at: :desc) }
 
-  def self.search(params, path, user)
+  def self.search(params, path, opt={})
     matches = ordered.include_player
     matches = matches.where("headline LIKE ?", "%#{params[:headline]}%") if params[:headline].present?
     matches = matches.where("summary LIKE ?", "%#{params[:summary]}%") if params[:summary].present?
@@ -28,7 +28,7 @@ class News < ActiveRecord::Base
     end
     matches = matches.where(active: true) if params[:active] == "true"
     matches = matches.where(active: false) if params[:active] == "false"
-    paginate(matches, params, path)
+    paginate(matches, params, path, opt)
   end
 
   def html
