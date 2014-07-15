@@ -39,8 +39,6 @@ en:
       gender: Gender
       F: Female
       M: Male
-    latest:
-      rating: Latest rating
     legacy:
       rating: Legacy rating
       games: Legacy games
@@ -55,6 +53,8 @@ en:
           mobile: m
           work: w
     rating:
+      latest: Latest rating
+      ratings: Ratings
       type:
         full: Full
         provisional: Provisional

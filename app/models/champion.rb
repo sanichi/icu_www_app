@@ -7,7 +7,7 @@ class Champion < ActiveRecord::Base
   journalize %w[category notes winners year], "/champions/%d"
 
   CATEGORIES = %w[open women]
-  INITIALS = "([A-Z]\\.)+"
+  INITIALS = "([A-Z]\\. )+"
   SURNAME = "(O'|Mac|Mc)?[A-Z][a-z]+"
   SURNAMES = "#{SURNAME}([- ]#{SURNAME}){0,2}"
   WINNERS = /\A#{INITIALS}#{SURNAMES}(, #{INITIALS}#{SURNAMES})*\z/
@@ -43,9 +43,9 @@ class Champion < ActiveRecord::Base
   def correct_winners
     if winners.present?
       winners.gsub!(/[`‘’]/, "'")
-      winners.gsub!(/\.\s+/, ".")
-      winners.gsub!(/\s*([-.'])\s*/, '\1')
-      winners.gsub!(/\b([A-Z])\s+(?!\.)/, '\1.')
+      winners.gsub!(/\s*([-.',])\s*/, '\1')
+      winners.gsub!(/([\.,])/, '\1 ')
+      winners.gsub!(/\b([A-Z])\s+(?!\.)/, '\1. ')
       winners.gsub!(/\b([A-Z]{2,}|[a-z]{2,})\b/) { $1.capitalize }
       winners.trim!
     end

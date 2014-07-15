@@ -17,26 +17,27 @@
         Admin
         %b.caret
       %ul.dropdown-menu
-        - if logins
-          %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
-        - if bdlgns
-          %li{class: active("admin/bad_logins")}= link_to "Bad Logins", admin_bad_logins_path
-        - if entries
-          %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
-        - if users
-          %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if carts
           %li{class: active("admin/carts")}= link_to "Carts", admin_carts_path
-        - if rfnds
-          %li{class: active("admin/refunds")}= link_to "Refunds", admin_refunds_path
-        - if perrs
-          %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
+        - if bdlgns
+          %li{class: active("admin/bad_logins")}= link_to "Bad Logins", admin_bad_logins_path
         - if nfees
           %li{class: active("admin/fees")}= link_to "Fees", admin_fees_path
         - if items
           %li{class: active("admin/items")}= link_to "Items", admin_items_path
-        - if trans
-          %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
+        - if entries
+          %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
+        - if logins
+          %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
+        - if perrs
+          %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
+        - if rfnds
+          %li{class: active("admin/refunds")}= link_to "Refunds", admin_refunds_path
         - if pages
           %li{class: active("admin/pages", "system_info")}= link_to "System Info", admin_system_info_path
+        - if trans
+          %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
+        - if users
+          %li{class: active("admin/users")}= link_to "Users", admin_users_path
+        - if pages
           %li{class: active("admin/pages", "test_email")}= link_to "Test Email", admin_test_email_path

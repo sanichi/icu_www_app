@@ -22,6 +22,7 @@
           %li{class: active("champions")}= link_to t("champion.champions"), champions_path
           %li{class: active("news")}= link_to t("news.news"), news_index_path
           %li{class: active("players")}= link_to t("player.players"), players_path
+          %li= link_to t("player.rating.ratings"), "http://ratings.icu.ie", target: "ratings"
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
           %li{class: active("uploads")}= link_to t("upload.uploads"), uploads_path
     %ul.nav.navbar-nav.navbar-right

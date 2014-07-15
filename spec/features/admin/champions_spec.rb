@@ -105,7 +105,7 @@ describe Champion do
 
   context "edit" do
     let(:champion) { create(:champion) }
-    let(:data)     { build(:champion, year: 1980, winners: "S.Connolly, A.T.Delaney", category: "women", notes: "Weyhey") }
+    let(:data)     { build(:champion, year: 1980, winners: "S. Connolly, A. T. Delaney", category: "women", notes: "Weyhey") }
 
     before(:each) do
       @user = login("editor")
