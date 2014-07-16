@@ -1,4 +1,4 @@
-- if request.get? && controller_path !~ /^admin\//
+- if irish_enabled? && request.get? && controller_path !~ /^admin\//
   %li.dropdown
     = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
       = t("user.locale")

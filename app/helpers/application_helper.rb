@@ -64,4 +64,9 @@ module ApplicationHelper
   def preserve_leading_space(str)
     str.sub(/\A /, "\u00A0")
   end
+
+  # Don't display Irish language features in production (because the translations are incomplete) unless a translator is logged in.
+  def irish_enabled?
+    Rails.env != "production" || current_user.translator?
+  end
 end
