@@ -67,6 +67,6 @@ module ApplicationHelper
 
   # Don't display Irish language features in production (because the translations are incomplete) unless a translator is logged in.
   def irish_enabled?
-    Rails.env != "production" || current_user.translator?
+    Rails.env != "production" || (current_user.translator? && !current_user.admin?)
   end
 end
