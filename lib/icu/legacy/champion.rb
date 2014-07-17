@@ -66,7 +66,7 @@ EOQ
         end
         case
           when params[:year] == 2014 && params[:category] == "open"  then params[:notes] = "[RTN:474:Rated tournament]"
-          when params[:year] == 2014 && params[:category] == "women" then params[:notes] = "[RTN:480:Rated tournament]"
+          when params[:year] == 2014 && params[:category] == "women" then params[:notes] = "[RTN:483:Rated tournament]"
           when params[:year] == 2013 && params[:category] == "open"  then params[:notes] += ", [RTN:311:rated tournament]"
           when params[:year] == 2013 && params[:category] == "women" then params[:notes] += ", [RTN:327:rated tournament]"
           when params[:year] == 2012 && params[:category] == "open"  then params[:notes] += ", [RTN:156:rated tournament]"

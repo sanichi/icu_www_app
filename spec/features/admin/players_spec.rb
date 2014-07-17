@@ -266,4 +266,127 @@ describe Player do
       expect(player.status).to eq "inactive"
     end
   end
+
+  context "previous and next links" do
+    11.times do |i|
+      let!("player#{i+1}".to_sym) { create(:player, id: i + 1) }
+    end
+    let!(:user1) { create(:user, roles: "admin", player: player1) }
+    let!(:user2) { create(:user, player: player2) }
+
+    before(:each) do
+      login user1
+    end
+
+    let(:header)    { "h1" }
+    let(:prev_link) { "☜" }
+    let(:next_link) { "☞" }
+
+    it "first few" do
+      visit players_path
+      click_link player1.name(reversed: true)
+
+      expect(page).to have_css(header, text: player1.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: player2.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: player3.name)
+      expect(page).to have_link(next_link)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: player2.name)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: player1.name)
+      expect(page).to_not have_link(prev_link)
+    end
+
+    it "last few" do
+      visit players_path
+      click_link player9.name(reversed: true)
+
+      expect(page).to have_css(header, text: player9.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: player10.name)
+      click_link next_link
+
+      expect(page).to have_button(search)
+      click_link player11.name(reversed: true)
+
+      expect(page).to have_css(header, text: player11.name)
+      expect(page).to_not have_link(next_link)
+      click_link prev_link
+
+      expect(page).to have_button(search)
+      click_link player10.name(reversed: true)
+
+      expect(page).to have_css(header, text: player10.name)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: player9.name)
+      expect(page).to have_link(prev_link)
+    end
+
+    it "only enough for one page" do
+      player11.destroy
+      visit players_path
+
+      visit admin_player_path(player1)
+      expect(page).to have_css(header, text: player1.name)
+      expect(page).to_not have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      visit admin_player_path(player10)
+      expect(page).to have_css(header, text: player10.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+    end
+
+    it "one is destroyed after the search is saved" do
+      visit players_path
+
+      visit admin_player_path(player2)
+      expect(page).to have_css(header, text: player2.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      visit admin_player_path(player4)
+      expect(page).to have_css(header, text: player4.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      player3.destroy
+
+      visit admin_player_path(player2)
+      expect(page).to have_css(header, text: player2.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+
+      visit admin_player_path(player4)
+      expect(page).to have_css(header, text: player4.name)
+      expect(page).to_not have_link(prev_link)
+      expect(page).to have_link(next_link)
+    end
+
+    it "none without a search" do
+      visit admin_player_path(player7)
+
+      expect(page).to_not have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+    end
+
+    it "none for ordinary user" do
+      login user2
+
+      visit players_path
+      click_link player2.name(reversed: true)
+
+      expect(page).to have_css(header, text: player2.name)
+      expect(page).to_not have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+    end
+  end
 end

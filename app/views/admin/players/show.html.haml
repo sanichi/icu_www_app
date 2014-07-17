@@ -1,6 +1,6 @@
 - content_for :title, t("player.player")
 
-- if can?(:manage, Player)
+- if @prev_next
   = render "utils/prev_next", prev_next: @prev_next, numbers: true
 
 .row
