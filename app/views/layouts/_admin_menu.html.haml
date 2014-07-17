@@ -11,6 +11,7 @@
   - links += 1 if items   = can?(:index, Item)
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
+  - links += 1 if pgns    = can?(:index, Pgn)
   - if links > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
@@ -23,6 +24,8 @@
           %li{class: active("admin/bad_logins")}= link_to "Bad Logins", admin_bad_logins_path
         - if nfees
           %li{class: active("admin/fees")}= link_to "Fees", admin_fees_path
+        - if pgns
+          %li{class: active("admin/pgns")}= link_to "Game Uploads", admin_pgns_path
         - if items
           %li{class: active("admin/items")}= link_to "Items", admin_items_path
         - if entries

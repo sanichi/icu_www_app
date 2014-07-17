@@ -5,7 +5,7 @@ class Admin::UsersController < ApplicationController
   def index
     @users = User.search(params, admin_users_path)
     flash.now[:warning] = t("no_matches") if @users.count == 0
-    save_last_search(:admin, :users)
+    save_last_search(@users, :users)
   end
 
   def new
@@ -28,6 +28,7 @@ class Admin::UsersController < ApplicationController
   end
 
   def show
+    @prev_next = Util::PrevNext.new(session, User, params[:id], admin: true)
     @entries = @user.journal_entries if current_user.roles.present?
   end
 

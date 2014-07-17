@@ -2,9 +2,9 @@
 - content_for :includes do
   = javascript_include_tag "email.js"
 
-- admin = can?(:manage, @tournament)
+= render "utils/prev_next", prev_next: @prev_next
 
-= render "utils/prev_next", prev: @prev, id: @tournament.id, nixt: @next
+- admin = can?(:manage, @tournament)
 
 .row
   .col-md-8.col-md-offset-2

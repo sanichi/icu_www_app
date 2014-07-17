@@ -1,5 +1,7 @@
 - content_for :title, "Journal Entry"
 
+= render "utils/prev_next", prev_next: @prev_next
+
 .row
   .col-sm-12
     %h1.text-center Journal Entry
@@ -32,8 +34,9 @@
       %tr
         %th Source
         %td= @entry.source
-    - if can?(:index, JournalEntry)
-      - if path = last_search(:admin, :journal_entries)
-        = link_to t("last_search"), path, class: "btn btn-default"
-      - else
-        = link_to "Journal Entries", admin_journal_entries_path, class: "btn btn-default"
+
+- if can?(:index, JournalEntry)
+  .text-center
+    - if path = last_search(:journal_entries)
+      = link_to t("last_search"), path, class: "btn btn-default"
+    = link_to t("new_search"), admin_journal_entries_path, class: "btn btn-default"

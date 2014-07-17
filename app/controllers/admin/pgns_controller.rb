@@ -5,13 +5,12 @@ class Admin::PgnsController < ApplicationController
   def index
     @pgns = Pgn.search(params, admin_pgns_path)
     flash.now[:warning] = t("no_matches") if @pgns.count == 0
-    save_last_search(:admin, :pgns)
+    save_last_search(@pgns, :pgns)
   end
 
   def show
     @pgn = Pgn.find(params[:id])
-    @prev = Pgn.where("id < ?", params[:id]).order(id: :desc).limit(1).first
-    @next = Pgn.where("id > ?", params[:id]).order(id:  :asc).limit(1).first
+    @prev_next = Util::PrevNext.new(session, Pgn, params[:id], admin: true)
     @entries = @pgn.journal_entries if current_user.roles.present?
   end
 

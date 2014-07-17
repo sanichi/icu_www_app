@@ -25,9 +25,8 @@ module ApplicationHelper
     raw "#{pager.min_and_max} #{t('pagination.of')} #{pager.count} #{links.size > 0 ? '∙' : ''} #{links.join(' ∙ ')}"
   end
 
-  def last_search(*paths)
-    paths.unshift :last_search
-    session[paths.join("_").to_sym]
+  def last_search(key)
+    session["last_search_path_#{key}".to_sym]
   end
 
   def auto_submit(klass, on)

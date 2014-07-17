@@ -3,8 +3,7 @@ class Admin::UploadsController < ApplicationController
   authorize_resource
 
   def show
-    @prev = Upload.where("id < ?", params[:id]).order(id: :desc).limit(1).first
-    @next = Upload.where("id > ?", params[:id]).order(id:  :asc).limit(1).first
+    @prev_next = Util::PrevNext.new(session, Upload, params[:id], admin: true)
     @entries = @upload.journal_entries
   end
 

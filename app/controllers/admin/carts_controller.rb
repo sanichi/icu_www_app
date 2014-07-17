@@ -4,11 +4,12 @@ class Admin::CartsController < ApplicationController
   def index
     @carts = Cart.search(params, admin_carts_path)
     flash.now[:warning] = t("no_matches") if @carts.count == 0
-    save_last_search(:admin, :carts)
+    save_last_search(@carts, :carts)
   end
 
   def show
     @cart = Cart.include_items.include_errors.include_refunds.find(params[:id])
+    @prev_next = Util::PrevNext.new(session, Cart, params[:id], admin: true)
   end
 
   def show_charge

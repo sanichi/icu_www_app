@@ -1,5 +1,7 @@
 - content_for :title, t("club.club")
 
+= render "utils/prev_next", prev_next: @prev_next
+
 .row
   .col-md-8.col-md-offset-2
     %h1.text-center= @club.name

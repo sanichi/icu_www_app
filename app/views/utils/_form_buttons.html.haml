@@ -2,13 +2,9 @@
 
 - type = object.class.to_s.underscore
 - if object.new_record?
-  - last_args = [type.pluralize]
-  - last_args.unshift(:admin) if admin.include?("search")
-  - last_path = last_search(*last_args)
-  - new_path = send("#{admin.include?("search") ? 'admin_' : ''}#{type.pluralize}_#{type.pluralize == type ? 'index_' : ''}path")
-  - cancel_path = last_path || new_path
+  - cancel_path = send("#{admin.include?("index") ? 'admin_' : ''}#{type.pluralize}_#{type.pluralize == type ? 'index_' : ''}path")
 - else
-  - cancel_path = respond_to?("#{type}_path") ? object : [:admin, object]
+  - cancel_path = admin.include?("show") ? [:admin, object] : object
 
 %hr
 .text-center

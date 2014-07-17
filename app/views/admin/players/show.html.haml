@@ -1,6 +1,7 @@
 - content_for :title, t("player.player")
 
-= render "utils/prev_next", prev: @prev, id: @player.id, nixt: @next, namespace: :admin
+- if can?(:manage, Player)
+  = render "utils/prev_next", prev_next: @prev_next, numbers: true
 
 .row
   .col-md-8.col-md-offset-2
@@ -86,7 +87,7 @@
               - if n > 0
                 %br
               = link_to_if can?(:manage, @user), user.email, [:admin, user]
-      - if @player.note.present?
+      - if @player.note.present? && can?(:manage, Player)
         %tr
           %th{colspan: 2, class: "text-center"}= t("notes")
         %tr

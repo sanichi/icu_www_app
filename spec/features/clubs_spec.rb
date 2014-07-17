@@ -140,4 +140,109 @@ describe Club do
       end
     end
   end
+
+  context "previous and next links" do
+    11.times do |i|
+      let!("club#{i}".to_sym) { create(:club, name: "Club #{(i + 65).chr}", lat: nil, long: nil) }
+    end
+
+    let(:header)    { "h1" }
+    let(:prev_link) { "☜" }
+    let(:next_link) { "☞" }
+
+    it "first few" do
+      visit clubs_path
+      click_link club0.name
+
+      expect(page).to have_css(header, text: club0.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: club1.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: club2.name)
+      expect(page).to have_link(next_link)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: club1.name)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: club0.name)
+      expect(page).to_not have_link(prev_link)
+    end
+
+    it "last few" do
+      visit clubs_path
+      click_link club8.name
+
+      expect(page).to have_css(header, text: club8.name)
+      click_link next_link
+
+      expect(page).to have_css(header, text: club9.name)
+      click_link next_link
+
+      expect(page).to have_button(search)
+      click_link club10.name
+
+      expect(page).to_not have_link(next_link)
+      click_link prev_link
+
+      expect(page).to have_button(search)
+      click_link club9.name
+
+      expect(page).to have_css(header, text: club9.name)
+      click_link prev_link
+
+      expect(page).to have_css(header, text: club8.name)
+      expect(page).to have_link(prev_link)
+    end
+
+    it "only enough for one page" do
+      club10.destroy
+      visit clubs_path
+
+      visit club_path(club0)
+      expect(page).to have_css(header, text: club0.name)
+      expect(page).to_not have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      visit club_path(club9)
+      expect(page).to have_css(header, text: club9.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+    end
+
+    it "one is destroyed after the search is saved" do
+      visit clubs_path
+
+      visit club_path(club3)
+      expect(page).to have_css(header, text: club3.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      visit club_path(club5)
+      expect(page).to have_css(header, text: club5.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to have_link(next_link)
+
+      club4.destroy
+
+      visit club_path(club3)
+      expect(page).to have_css(header, text: club3.name)
+      expect(page).to have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+
+      visit club_path(club5)
+      expect(page).to have_css(header, text: club5.name)
+      expect(page).to_not have_link(prev_link)
+      expect(page).to have_link(next_link)
+    end
+
+    it "none without a search" do
+      visit club_path(club3)
+
+      expect(page).to_not have_link(prev_link)
+      expect(page).to_not have_link(next_link)
+    end
+  end
 end

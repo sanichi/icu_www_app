@@ -1,5 +1,7 @@
 - content_for :title, "Translation"
 
+= render "utils/prev_next", prev_next: @prev_next
+
 .row
   .col-md-8.col-md-offset-2
     %h1.text-center Translation
@@ -30,7 +32,7 @@
       = render "utils/timestamps", object: @translation, updated_by: @translation.user
     .text-center
       = render "action", translation: @translation
-      - if path = last_search(:admin, :translations)
+      - if path = last_search(:translations)
         = link_to t("last_search"), path, class: "btn btn-default"
       = link_to t("new_search"), admin_translations_path, class: "btn btn-default"
 = render "admin/journal_entries/changes", entries: @entries

@@ -11,6 +11,7 @@ module Pageable
       page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
       matches = matches.offset(per_page * (page - 1)) if page > 1
       matches = matches.limit(per_page)
+      logger.info("paginate: #{self.class}")
       Pager.new(matches, params, path, per_page, page, count, remote)
     end
   end
@@ -61,6 +62,14 @@ module Pageable
       max = @per_page * @page
       max = @count if @count < max
       min == max ? min.to_s : "#{min}-#{max}"
+    end
+
+    def id_list
+      return "" if @matches.empty?
+      ids = @matches.map(&:id)
+      ids.push    "page" if before_end?
+      ids.unshift "page" if after_start?
+      "_" + ids.join("_") + "_"
     end
 
     private

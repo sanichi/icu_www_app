@@ -1,6 +1,6 @@
 - content_for :title, t("game.pgn.upload")
 
-= render "utils/prev_next", prev: @prev, id: @pgn.id, nixt: @next, namespace: :admin
+= render "utils/prev_next", prev_next: @prev_next
 
 .row
   .col-sm-12
@@ -34,7 +34,7 @@
             - elsif @pgn.remaining == @pgn.imports
               = link_to @pgn.imports, games_path(pgn_id: @pgn.id)
             - else
-              = suceed(",") do
+              = succeed(",") do
                 = @pgn.imports
               = link_to "#{@pgn.remaining} remaining", games_path(pgn_id: @pgn.id)
       = render "utils/timestamps", object: @pgn, two_col: true

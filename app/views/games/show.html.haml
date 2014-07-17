@@ -1,6 +1,6 @@
 - content_for :title, t("game.game")
 
-= render "utils/prev_next", prev: @prev, id: @game.id, nixt: @next, numbers: false
+= render "utils/prev_next", prev_next: @prev_next
 
 %h3.text-center
   = @game.white_with_elo

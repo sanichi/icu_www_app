@@ -6,6 +6,7 @@
     = javascript_include_tag "spin.js"
 
 = render "charge_modal"
+= render "utils/prev_next", prev_next: @prev_next, numbers: true
 = render "summary", cart: @cart
 - unless @cart.items.empty?
   = render "items", cart: @cart

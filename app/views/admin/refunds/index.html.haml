@@ -1,6 +1,7 @@
 - content_for :title, "Refunds"
 
 = render "utils/search_panel", form: "admin/refunds/search_form", title: "Refunds"
+
 - if @refunds.count > 0
   .row
     .col-xs-12

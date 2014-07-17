@@ -1,6 +1,6 @@
 - content_for :title, t("event.event")
 
-= render "utils/prev_next", prev: @prev, id: @event.id, nixt: @next
+= render "utils/prev_next", prev_next: @prev_next
 
 - admin = can?(:create, Image)
 

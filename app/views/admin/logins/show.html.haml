@@ -1,5 +1,7 @@
 - content_for :title, "Login"
 
+= render "utils/prev_next", prev_next: @prev_next
+
 .row
   .col-sm-6.col-sm-offset-3
     %h1.text-center Login
@@ -19,7 +21,7 @@
       %tr
         %th Error
         %td= @login.error
-    - if path = last_search(:admin, :users)
-      = link_to t("last_search"), path, class: "btn btn-default"
-    - else
-      = link_to "Logins", admin_logins_path, class: "btn btn-default"
+.text-center
+  - if path = last_search(:logins)
+    = link_to t("last_search"), path, class: "btn btn-default"
+  = link_to t("new_search"), admin_logins_path, class: "btn btn-default"

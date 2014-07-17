@@ -2,11 +2,14 @@
 - content_for :includes do
   = javascript_include_tag "email.js"
 
+= render "utils/prev_next", prev_next: @prev_next
+
 %h1.text-center{class: @article.active ? nil : "text-done"}= @article.title
 - if @article.author
   %p.text-center= @article.author
 - @article.series.each do |series|
   = render "series", series: series, article: @article
+%hr
 #article= @article.html
 %hr
 = render "utils/editing_details", object: @article

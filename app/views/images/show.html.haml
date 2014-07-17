@@ -1,6 +1,6 @@
 - content_for :title, t("image.image")
 
-= render "utils/prev_next", prev: @prev, id: @image.id, nixt: @next
+= render "utils/prev_next", prev_next: @prev_next
 
 .text-center.voffset3
   = image_tag @image.data.url

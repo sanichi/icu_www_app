@@ -7,13 +7,14 @@ class Admin::TranslationsController < ApplicationController
     @creates = Translation.creates_required
     @updates = Translation.updates_required
     flash.now[:warning] = t("no_matches") if @translations.count == 0
-    save_last_search(:admin, :translations)
+    save_last_search(@translations, :translations)
   end
 
   def show
     if @translation.deletable?
       flash.now.notice = "This translation is no longer in use and may be deleted or kept for reference"
     end
+    @prev_next = Util::PrevNext.new(session, Translation, params[:id], admin: true)
     @entries = @translation.journal_entries if current_user.roles.present?
   end
 
@@ -34,7 +35,7 @@ class Admin::TranslationsController < ApplicationController
     if @translation.deletable?
       @translation.journal(:destroy, current_user, request.ip)
       @translation.destroy
-      redirect_to view_context.last_search(:admin, :translations) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
+      redirect_to view_context.last_search(:translations) || admin_translations_path, notice: "Translation #{@translation.locale_key} was destroyed"
     else
       redirect_to [:admin, @translation], alert: "Can't destroy active translation #{@translation.locale_key}"
     end

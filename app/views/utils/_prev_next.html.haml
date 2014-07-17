@@ -1,16 +1,15 @@
-- defined?(namespace) || namespace = nil
-- defined?(numbers)   || numbers = true
+- defined?(numbers) || numbers = false
 
-- if prev || nixt
+- if prev_next.prev_link || prev_next.next_link
   .text-center
     .btn-group
-      - if prev
-        - text = ("☜" + (numbers ? "&nbsp;&nbsp;#{prev.id}" : "")).html_safe
-        = link_to text, namespace ? [namespace, prev] : prev, class: "btn btn-primary"
+      - if prev_next.prev_link
+        - text = ("☜" + (numbers && prev_next.prev_id ? "&nbsp;&nbsp;#{prev_next.prev_id}" : "")).html_safe
+        = link_to text, prev_next.prev_link, class: "btn btn-primary"
       - if numbers
-        %span.btn.btn-info= id
-      - if nixt
-        - text = ((numbers ? "#{nixt.id}&nbsp;&nbsp;" : "") + "☞").html_safe
-        = link_to text, namespace ? [namespace, nixt] : nixt, class: "btn btn-primary"
+        %span.btn.btn-info= prev_next.curr_id
+      - if prev_next.next_link
+        - text = ((numbers && prev_next.next_id ? "#{prev_next.next_id}&nbsp;&nbsp;" : "") + "☞").html_safe
+        = link_to text, prev_next.next_link, class: "btn btn-primary"
 
 .voffset3

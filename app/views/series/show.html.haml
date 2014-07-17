@@ -1,5 +1,7 @@
 - content_for :title, @series.title
 
+= render "utils/prev_next", prev_next: @prev_next
+
 %h1.text-center= @series.title
 %hr
 .row
