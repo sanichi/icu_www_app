@@ -15,7 +15,7 @@ module Global
     selection_committee: "terms of reference for this sub-committee",
     ncc_rules: "",
     affiliation_byelaws: "rules for bodies such as the Connaught, Leinster and Munster Chess Unions",
-    officer_roles: "descriptions of the various roles within the ICU",
+    officer_roles: "descriptions of the various roles within the ICU committee",
     allegro_rules: "rules for all-moves-in-X type time controls",
   }
 end
