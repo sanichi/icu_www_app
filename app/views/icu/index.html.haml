@@ -1,0 +1,8 @@
+%h1.text-center= t("icu.index")
+
+%ul
+  - Global::ICU_PAGES.keys.each do |page|
+    %li
+      = succeed(Global::ICU_PAGES[page].present? ? ":" : "") do
+        = link_to t("icu.#{page}"), send("icu_#{page}_path")
+      = Global::ICU_PAGES[page]

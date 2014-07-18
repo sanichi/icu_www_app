@@ -4,12 +4,11 @@
 
 - admin = can?(:create, Image)
 
+%h1.text-center= @event.name
+
 .row.voffset3
   .col-md-8.col-md-offset-2
     %table.table.table-bordered
-      %tr
-        %th= t("event.name")
-        %td= @event.name
       %tr
         %th= t("event.location")
         %td= @event.location

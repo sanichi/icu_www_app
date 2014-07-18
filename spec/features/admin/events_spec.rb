@@ -29,12 +29,8 @@ describe Event do;
     let(:level2) { ["calendar", "editor"] }
     let(:level3) { User::ROLES.reject { |r| r.match(/\A(admin|editor|calendar)\z/) }.append("guest") }
     let(:user)   { create(:user, roles: "calendar") }
-
     let(:event)  { create(:event, user: user) }
-
-    def cell(label)
-      "//th[.='#{label}']/following-sibling::td"
-    end
+    let(:header) { "h1" }
 
     it "level 1 can update as well as create" do
       level1.each do |role|
@@ -45,7 +41,7 @@ describe Event do;
         expect(page).to_not have_css(failure)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(event_name), text: event.name)
+        expect(page).to have_css(header, text: event.name)
         expect(page).to have_link(edit)
       end
     end
@@ -59,7 +55,7 @@ describe Event do;
         expect(page).to have_css(failure)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(event_name), text: event.name)
+        expect(page).to have_css(header, text: event.name)
         expect(page).to_not have_link(edit)
       end
     end
@@ -73,7 +69,7 @@ describe Event do;
         expect(page).to have_css(failure, text: unauthorized)
         visit events_path
         click_link event.name
-        expect(page).to have_xpath(cell(event_name), text: event.name)
+        expect(page).to have_css(header, text: event.name)
         expect(page).to_not have_link(edit)
       end
     end

@@ -1,0 +1,10 @@
+- pages = Global::ICU_PAGES.keys
+- index = pages.index(page)
+
+.text-center
+  .btn-group
+    - if index > 0
+      = link_to "☜", send("icu_#{pages[index - 1]}_path"), class: "btn btn-primary btn-sm"
+    - if index < pages.size - 1
+      = link_to "☞", send("icu_#{pages[index + 1]}_path"), class: "btn btn-primary btn-sm"
+.voffset3

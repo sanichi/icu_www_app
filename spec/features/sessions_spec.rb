@@ -5,6 +5,7 @@ describe "Sessions" do
 
   let(:disabled)         { I18n.t("session.account_disabled") }
   let(:expired)          { I18n.t("session.subscription_expired") }
+  let(:icu)              { I18n.t("icu.icu") }
   let(:invalid_email)    { I18n.t("session.invalid_email") }
   let(:invalid_password) { I18n.t("session.invalid_password") }
   let(:passwordinput)    { I18n.t("user.password") }

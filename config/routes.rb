@@ -15,6 +15,9 @@ IcuWwwApp::Application.routes.draw do
   %w[account preferences update_preferences].each do |page|
     match "#{page}/:id" => "users##{page}", via: page.match(/^update/) ? :post : :get, as: page
   end
+  (Global::ICU_PAGES.keys + %w[index]).each do |page|
+    get "icu/#{page}" => "icu##{page}"
+  end
 
   resources :articles,    only: [:index, :show]
   resources :champions,   only: [:index, :show]

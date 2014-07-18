@@ -13,7 +13,6 @@ shared_context "features" do
   let(:either)       { I18n.t("either") }
   let(:email)        { I18n.t("email") }
   let(:file)         { I18n.t("file") }
-  let(:icu)          { I18n.t("icu") }
   let(:inactive)     { I18n.t("inactive") }
   let(:last_search)  { I18n.t("last_search") }
   let(:member)       { I18n.t("member") }
