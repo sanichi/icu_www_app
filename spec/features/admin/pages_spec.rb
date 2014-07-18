@@ -6,8 +6,7 @@ describe Page do;
   context "authorization" do
     let(:level1) { %w[admin] }
     let(:level2) { User::ROLES.reject { |r| level1.include?(r) }.append("guest") }
-    let(:paths)  { [admin_system_info_path, admin_test_email_path] }
-
+    let(:paths)  { [admin_session_info_path, admin_system_info_path, admin_test_email_path] }
     it "level 1 can view all pages" do
       level1.each do |role|
         login role

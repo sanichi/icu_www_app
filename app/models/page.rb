@@ -6,4 +6,10 @@ class Page
       hash[key] = val
     end
   end
+
+  def self.session(session)
+    session.keys.sort.each_with_object({}) do |key, hash|
+      hash[key] = session[key].to_s
+    end
+  end
 end

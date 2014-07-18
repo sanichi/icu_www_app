@@ -36,7 +36,7 @@ IcuWwwApp::Application.routes.draw do
   end
 
   namespace :admin do
-    %w[system_info test_email].each do |page|
+    %w[session_info system_info test_email].each do |page|
       get page => "pages##{page}"
     end
 

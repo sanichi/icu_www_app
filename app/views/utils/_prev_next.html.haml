@@ -5,11 +5,11 @@
     .btn-group
       - if prev_next.prev_link
         - text = ("☜" + (numbers && prev_next.prev_id ? "&nbsp;&nbsp;#{prev_next.prev_id}" : "")).html_safe
-        = link_to text, prev_next.prev_link, class: "btn btn-primary"
+        = link_to text, prev_next.prev_link, class: "btn btn-primary btn-sm"
       - if numbers
-        %span.btn.btn-info= prev_next.curr_id
+        %span.btn.btn-info.btn-sm= prev_next.curr_id
       - if prev_next.next_link
         - text = ((numbers && prev_next.next_id ? "#{prev_next.next_id}&nbsp;&nbsp;" : "") + "☞").html_safe
-        = link_to text, prev_next.next_link, class: "btn btn-primary"
+        = link_to text, prev_next.next_link, class: "btn btn-primary btn-sm"
 
 .voffset3

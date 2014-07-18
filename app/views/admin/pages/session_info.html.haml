@@ -1,0 +1,16 @@
+- content_for :title, "Session Info"
+
+%h2{class: "text-center"} Session Info
+
+- if @session.empty?
+  .text-center= "No session"
+- else
+  %table{class: "table table-striped"}
+    %tr
+      %th Name
+      %th Value
+    - @session.each_pair do |key, value|
+      %tr
+        %td= key
+        %td
+          %code= truncate(value, length: 150)

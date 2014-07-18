@@ -1,6 +1,10 @@
 class Admin::PagesController < ApplicationController
   before_action :authorize
 
+  def session_info
+    @session = Page.session(session)
+  end
+
   def system_info
     @env = Page.environment
   end
