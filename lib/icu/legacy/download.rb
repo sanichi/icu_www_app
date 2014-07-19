@@ -363,6 +363,21 @@ module ICU
         when "games/olm38.pgn"
           description = "38th Olympiad 2008, Desden, Germany"
           year = 2008
+        when /\Aicj\/icj_(\d\d)(\d\d)\.pdf\z/
+          month = case $2
+            when "02" then "February"
+            when "05" then "May"
+            when "06" then "June"
+            when "08" then "August"
+            when "09" then "September"
+            when "10" then "October"
+            when "12" then "December"
+          end
+          description = "Irish Chess Journal, #{month} 20#{$1}"
+          year = "20#{$1}".to_i
+        when "icj/jcc_0706.pdf"
+          description = "Junior Chess Corner, June 2007"
+          year = 2007
         when "lcu/2010_Novices_League.pdf"
           description = "LCU O'Connell Cup, Novices Chess League, 2010-11"
           year = 2010

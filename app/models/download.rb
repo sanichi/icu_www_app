@@ -8,7 +8,7 @@ class Download < ActiveRecord::Base
   attr_accessor :dir_to_remove
 
   MIN_SIZE = 500
-  MAX_SIZE = 4.megabytes
+  MAX_SIZE = 5.megabytes
   TYPES = {
     csv:  "text/csv",
     doc:  "application/msword",
