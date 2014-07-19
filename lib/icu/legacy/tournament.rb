@@ -90,13 +90,13 @@ module ICU
         params[:category] = "section" if [2, 14, 562].include?(params[:id])
         params[:category] = "open"    if params[:id] == 13
         if params[:id] == 199
-          params[:details].sub!(/\n/, "\n[UPL:138:PGN]\n")
+          params[:details].sub!(/\n/, "\n[DLD:141:PGN]\n")
         end
         if params[:id] == 468
-          params[:details].sub!(/\n/, "\n[UPL:139:PGN]\n")
+          params[:details].sub!(/\n/, "\n[DLD:142:PGN]\n")
         end
         if params[:id] == 566
-          params[:details].sub!(/\n/, "\n[UPL:141:PGN]\n")
+          params[:details].sub!(/\n/, "\n[DLD:144:PGN]\n")
         end
         if params[:id] == 605
           params[:details].markoff!

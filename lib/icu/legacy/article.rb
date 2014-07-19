@@ -146,15 +146,15 @@ module ICU
         add_stat("mailto (should be none)", article.id) if article.text.match(/mailto\:/)
         add_stat("ART", article.id) if article.text.match(/\[ART:/)
         add_stat("ART:283 (should be none)", article.id) if article.text.match(/\[ART:283/)
-        add_stat("FAQ (should be none)", article.id) if article.text.match(/\[FAQ:/)
+        add_stat("DLD", article.id) if article.text.match(/\[DLD:/)
         add_stat("EVT", article.id) if article.text.match(/\[EVT:/)
+        add_stat("FAQ (should be none)", article.id) if article.text.match(/\[FAQ:/)
         add_stat("GME", article.id) if article.text.match(/\[GME:/)
         add_stat("IMG", article.id) if article.text.match(/\[IMG:/)
         add_stat("IML", article.id) if article.text.match(/\[IML:/)
         add_stat("NWS", article.id) if article.text.match(/\[NWS:/)
         add_stat("PGN", article.id) if article.text.match(/\[PGN:/)
         add_stat("TRN", article.id) if article.text.match(/\[TRN:/)
-        add_stat("UPL", article.id) if article.text.match(/\[UPL:/)
       end
 
       def bulletins(params)
