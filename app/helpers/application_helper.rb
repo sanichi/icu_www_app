@@ -1,8 +1,12 @@
 module ApplicationHelper
   def active(controller, action=nil, active="active", inactive="")
-    boolean = params[:controller] == controller
-    boolean = boolean && params[:action] == action if action
+    boolean = controller_name == controller
+    boolean = boolean && action_name == action if action
     boolean ? active : inactive
+  end
+
+  def home_page?
+    controller_name = "pages" && action_name == "home"
   end
 
   def flash_style(name)

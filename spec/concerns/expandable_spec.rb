@@ -207,6 +207,7 @@ describe Expandable do
     let(:fright) { "float-right" }
     let(:mleft)  { "left-margin" }
     let(:mright) { "right-margin" }
+    let(:imgres) { "img-responsive" }
 
     it "defaults" do
       result = d.expand_all("[IMG:#{image.id}]")
@@ -302,6 +303,13 @@ describe Expandable do
     it "implicit margin off" do
       result = d.expand_all("[IMG:#{image.id}:no]")
       expect(result).to match /class="#{fleft}"/
+    end
+
+    it "responsive" do
+      result = d.expand_all("[IMG:#{image.id}:align=center:responsive=true]")
+      expect(result).to match /class="#{imgres}"/
+      expect(result).to_not match /width=/
+      expect(result).to_not match /height=/
     end
 
     it "invalid ID" do

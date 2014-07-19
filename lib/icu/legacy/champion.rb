@@ -65,12 +65,12 @@ EOQ
           params[:notes] = "[TRN:#{old[:trn_id]}:Details]"
         end
         case
-          when params[:year] == 2014 && params[:category] == "open"  then params[:notes] = "[RTN:474:Rated tournament]"
-          when params[:year] == 2014 && params[:category] == "women" then params[:notes] = "[RTN:483:Rated tournament]"
-          when params[:year] == 2013 && params[:category] == "open"  then params[:notes] += ", [RTN:311:rated tournament]"
-          when params[:year] == 2013 && params[:category] == "women" then params[:notes] += ", [RTN:327:rated tournament]"
-          when params[:year] == 2012 && params[:category] == "open"  then params[:notes] += ", [RTN:156:rated tournament]"
-          when params[:year] == 2012 && params[:category] == "women" then params[:notes] += ", [RTN:224:rated tournament]"
+          when params[:year] == 2014 && params[:category] == "open"  then params[:notes] = "[RTN:474:Cross table], Chess Today [DLD:91:article]"
+          when params[:year] == 2014 && params[:category] == "women" then params[:notes] = "[RTN:483:Cross table]"
+          when params[:year] == 2013 && params[:category] == "open"  then params[:notes] += ", [RTN:311:cross table]"
+          when params[:year] == 2013 && params[:category] == "women" then params[:notes] += ", [RTN:327:cross table]"
+          when params[:year] == 2012 && params[:category] == "open"  then params[:notes] += ", [RTN:156:cross table]"
+          when params[:year] == 2012 && params[:category] == "women" then params[:notes] += ", [RTN:224:cross table]"
           when params[:year] == 1953 && params[:category] == "women" then params[:notes] = "Miss Hilda Chater beat Miss Beth Cassidy 3-0 in the play-off"
         end
       end

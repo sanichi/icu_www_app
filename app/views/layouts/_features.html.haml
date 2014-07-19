@@ -1,0 +1,32 @@
+- if sam = Image.where(id: 1068).first
+  .panel.panel-primary
+    .panel-heading
+      .text-center.small Sam Collins
+    .panel-body= sam.expand(type: "IMG", align: "center", responsive: "true", alt: "Sam Collins").html_safe
+    .panel-footer
+      .text-center.small 2014 Champion
+
+- if gul = Image.where(id: 1067).first
+  .panel.panel-primary
+    .panel-heading
+      .text-center.small G. Uí Laighléis
+    .panel-body= gul.expand(type: "IMG", align: "center", responsive: "true", alt: "Gearóidín Uí Laighléis").html_safe
+    .panel-footer
+      .text-center.small 2014 Women's Champion
+
+.panel.panel-primary
+  .panel-heading
+    .text-center.small Chess Today
+  .panel-body
+    .text-center.small
+      %a{href: "/articles/32"} Free Samples
+
+.panel.panel-primary
+  .panel-body
+    .text-center.small
+      Apart from its two websites,
+      %strong www.icu.ie
+      and
+      = succeed(",") do
+        %strong ratings.icu.ie
+      the ICU is not responsible for any other internet media relating to Irish chess.

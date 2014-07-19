@@ -4,7 +4,7 @@ module Expandable
     "DLD" => { class: Download, text: /\S/ },
     "EVT" => { class: Event, name: /\S/, title: /\S/ },
     "GME" => { class: Game, text: /\S/ },
-    "IMG" => { class: Image, height: /\A[1-9]\d*\z/, width: /\A[1-9]\d*\z/, align: /\A(center|left|right)\z/, margin: /\A(yes|no)\z/, alt: /\S/ },
+    "IMG" => { class: Image, height: /\A[1-9]\d*\z/, width: /\A[1-9]\d*\z/, align: /\A(center|left|right)\z/, margin: /\A(yes|no)\z/, alt: /\S/, responsive: /\A(true|false)\z/ },
     "IML" => { class: Image, text: /\S/ },
     "NWS" => { class: News, text: /\S/ },
     "PGN" => { class: Game, text: /\S/ },

@@ -88,16 +88,23 @@ class Image < ActiveRecord::Base
       margin = opt[:margin] || "yes"
       atrs = []
       atrs.push %Q/src="#{data.url}"/
-      atrs.push %Q/width="#{width}"/
-      atrs.push %Q/height="#{height}"/
+      unless opt[:align] == "center" && opt[:responsive] == "true"
+        atrs.push %Q/width="#{width}"/
+        atrs.push %Q/height="#{height}"/
+      end
+      cl, cr = nil, nil
       if opt[:align] == "left" || opt[:align].blank?
         atrs.push 'class="float-left%s"' % (margin == "yes" ? " right-margin" : "")
       end
       if opt[:align] == "right"
         atrs.push 'class="float-right%s"' % (margin == "yes" ? " left-margin" : "")
       end
+      if opt[:align] == "center"
+        atrs.push 'class="img-responsive"' if opt[:responsive] == "true"
+        cl = "<center>"
+        cr = "</center>"
+      end
       atrs.push %Q/alt="#{alt}"/
-      cl, cr = opt[:align] == "center" ? ["<center>", "</center>"] : ["", ""]
       "#{cl}<img #{atrs.join(" ")}>#{cr}"
     else
       raise "invalid expandable type (#{opt[:type]}) for Image"
