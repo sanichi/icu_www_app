@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140623142059) do
+ActiveRecord::Schema.define(version: 20140719074720) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -89,6 +89,26 @@ ActiveRecord::Schema.define(version: 20140623142059) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "downloads", force: true do |t|
+    t.string   "access",            limit: 20
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
+    t.string   "description",       limit: 150
+    t.string   "www1_path",         limit: 128
+    t.integer  "user_id"
+    t.integer  "year",              limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "downloads", ["access"], name: "index_downloads_on_access", using: :btree
+  add_index "downloads", ["description"], name: "index_downloads_on_description", using: :btree
+  add_index "downloads", ["user_id"], name: "index_downloads_on_user_id", using: :btree
+  add_index "downloads", ["www1_path"], name: "index_downloads_on_www1_path", using: :btree
+  add_index "downloads", ["year"], name: "index_downloads_on_year", using: :btree
 
   create_table "episodes", force: true do |t|
     t.integer  "article_id"
@@ -369,26 +389,6 @@ ActiveRecord::Schema.define(version: 20140623142059) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "uploads", force: true do |t|
-    t.string   "access",            limit: 20
-    t.string   "data_file_name"
-    t.string   "data_content_type"
-    t.integer  "data_file_size"
-    t.datetime "data_updated_at"
-    t.string   "description",       limit: 150
-    t.string   "www1_path",         limit: 128
-    t.integer  "user_id"
-    t.integer  "year",              limit: 2
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "uploads", ["access"], name: "index_uploads_on_access", using: :btree
-  add_index "uploads", ["description"], name: "index_uploads_on_description", using: :btree
-  add_index "uploads", ["user_id"], name: "index_uploads_on_user_id", using: :btree
-  add_index "uploads", ["www1_path"], name: "index_uploads_on_www1_path", using: :btree
-  add_index "uploads", ["year"], name: "index_uploads_on_year", using: :btree
 
   create_table "user_inputs", force: true do |t|
     t.integer "fee_id"

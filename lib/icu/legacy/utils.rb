@@ -105,9 +105,9 @@ module ICU
         text.gsub!(/<a\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?\/shop\/buy_item\.php\?type=[A-Z]{3}">([^<]+)<\/a>/i) { %Q{<a href="/shop">#{$1}</a>} }
         text.gsub!(/<b><\/b>/, "")
         text.gsub!(/<a\s+href="(?:http:\/\/(?:www\.)?icu\.ie)?(\/misc\/[^"]+)"(?:\s+target="[^"]+")?>([^<]+)<\/a>/i) do
-          upload = Upload.where(www1_path: $1).first
-          if upload
-            %Q{[UPL:#{upload.id}:#{$2}]}
+          download = Download.where(www1_path: $1).first
+          if download
+            %Q{[DLD:#{download.id}:#{$2}]}
           else
             $0
           end

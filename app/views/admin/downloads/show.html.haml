@@ -1,0 +1,40 @@
+- content_for :title, t("download.download")
+
+= render "utils/prev_next", prev_next: @prev_next
+
+.row
+  .col-sm-12
+    %table.table.table-bordered
+      %tr
+        %th= t("file")
+        %td= link_to @download.data_file_name, @download.url, target: "download"
+      %tr
+        %th= t("description")
+        %td= @download.description
+      %tr
+        %th= t("year")
+        %td= @download.year
+      %tr
+        %th= t("access.access")
+        %td= t("access.#{@download.access}")
+      %tr
+        %th= t("user.role.editor")
+        %td= @download.user.player.name
+      %tr
+        %th= "Content type"
+        %td= @download.data_content_type
+      %tr
+        %th= "Size"
+        %td= @download.data_file_size
+      - if @download.www1_path.present?
+        %tr
+          %th= "Old www1 path"
+          %td= @download.www1_path
+      - unless @download.updated_at == @download.data_updated_at
+        %tr
+          %th= "File last updated"
+          %td= @download.data_updated_at.to_s(:nosec)
+      = render "utils/timestamps", object: @download, ability: :create
+    = render "utils/show_buttons", object: @download
+
+= render "admin/journal_entries/changes", entries: @entries

@@ -10,6 +10,7 @@ describe Journalable do
     [Article, "/article/%d"],
     [Champion, "/champions/%d"],
     [Club, "/clubs/%d"],
+    [Download, "/admin/downloads/%d"],
     [Event, "/events/%d"],
     [Fee, "/admin/fees/%d"],
     [Game, "/games/%d"],
@@ -20,7 +21,6 @@ describe Journalable do
     [Series, "/series/%d"],
     [Tournament, "/tournaments/%d"],
     [Translation, "/admin/translations/%d"],
-    [Upload, "/admin/uploads/%d"],
     [User, "/admin/users/%d"],
     [UserInput, "/admin/user_inputs/%d"],
   ].each do |klass, path|

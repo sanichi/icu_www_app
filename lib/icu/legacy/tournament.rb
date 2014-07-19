@@ -120,8 +120,8 @@ module ICU
           m = str.match(/\A<a\s+href="(?<href>[^"]+)"\s*>(?<text>[^<]+)<\/a>\z/i)
           if m[:href] && m[:text]
             if m[:href].match(/\A\/misc/)
-              count_link("uploads", params[:id])
-              upload_link(m[:href], m[:text])
+              count_link("downloads", params[:id])
+              download_link(m[:href], m[:text])
             elsif m[:href].match(/\A\/(articles|games|images|tournaments)\/display\.php\?id=([1-9]\d*)\z/)
               count_link($1, params[:id])
               generic_link($1, $2, m[:text])
@@ -134,12 +134,12 @@ module ICU
         end
       end
 
-      def upload_link(href, text)
-        upload = ::Upload.find_by(www1_path: href)
-        if upload
-          "[UPL:#{upload.id}:#{text}]"
+      def download_link(href, text)
+        download = ::Download.find_by(www1_path: href)
+        if download
+          "[DLD:#{download.id}:#{text}]"
         else
-          raise "can't find upload for path: #{href}"
+          raise "can't find download for path: #{href}"
         end
       end
 
@@ -149,7 +149,7 @@ module ICU
         when "images"      then "IML"
         when "games"       then "PGN"
         when "tournaments" then "TRN"
-        when "uploads"     then "UPL"
+        when "downloads"   then "DLD"
         else raise "invalid generic link type: #{type}"
         end
         "[#{code}:#{id}:#{text}]"

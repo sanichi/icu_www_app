@@ -1,18 +1,18 @@
 module ICU
   module Legacy
-    class Upload
+    class Download
       include Utils
       #
       # Unusually, this sync does not involve the legacy database. Instead we are synchronizing a bunch of www1
-      # files (whose location on the lagacy server was prd/htd/misc) with a new database table called uploads.
+      # files (whose location on the lagacy server was prd/htd/misc) with a new database table called downloads.
       # In www1 the files were uploaded via FTP, but in www2 they will be uploaded via HTTP and also create rows
       # in the new table.
       #
       # To enable this sync to work, you need to first copy the files to tmp/www1/misc.
       #
       def synchronize(force)
-        if existing_uploads?(force)
-          report_error "can't synchronize when uploads or upload journal entries exist unless force is used"
+        if existing_downloads?(force)
+          report_error "can't synchronize when downloads or download journal entries exist unless force is used"
           return
         end
         return unless chdir
@@ -29,8 +29,8 @@ module ICU
                 when /\.docx\z/ then params[:data] = Rack::Test::UploadedFile.new(name, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                 else params[:data] = File.new(name)
                 end
-                ::Upload.create!(params)
-                puts "created upload for #{www1_path}"
+                ::Download.create!(params)
+                puts "created download for #{www1_path}"
                 synced += 1
               rescue => e
                 report_error "couldn't save #{name}: #{e.message}"
@@ -52,16 +52,16 @@ module ICU
 
       private
 
-      def existing_uploads?(force)
-        count = ::Upload.count
-        changes = JournalEntry.uploads.count
+      def existing_downloads?(force)
+        count = ::Download.count
+        changes = JournalEntry.downloads.count
         case
         when count == 0 && changes == 0
           false
         when force
-          puts "old upload records deleted: #{::Upload.delete_all}"
-          puts "old upload journal entries deleted: #{JournalEntry.uploads.delete_all}"
-          ActiveRecord::Base.connection.execute("ALTER TABLE uploads AUTO_INCREMENT = 1")
+          puts "old download records deleted: #{::Download.delete_all}"
+          puts "old download journal entries deleted: #{JournalEntry.downloads.delete_all}"
+          ActiveRecord::Base.connection.execute("ALTER TABLE downloads AUTO_INCREMENT = 1")
           remove_old_files
           false
         else
@@ -70,7 +70,7 @@ module ICU
       end
 
       def remove_old_files
-        path = Rails.root + "public" + "system" + "uploads"
+        path = Rails.root + "public" + "system" + "downloads"
         FileUtils.remove_dir(path) if File.directory?(path)
       end
 
@@ -193,6 +193,9 @@ module ICU
         when "bulletins/JSC_2013_08.pdf"
           description = "Junior Selection Committee, report, August 2013"
           year = 2013
+        when "bulletins/JSC_2014_05.pdf"
+          description = "Junior Selection Committee, report, May 2014"
+          year = 2014
         when "bulletins/kasparov_2014_en.pdf"
           description = "Garry Kasparov, press release, March 2014"
           year = 2014
@@ -226,6 +229,7 @@ module ICU
             when 3052..3324 then 2009
             when 3353..3690 then 2010
             when 4000..4002 then 2011
+            when 4996       then 2014
           end
         when "development/comments_received.doc"
           description = "ICU development plan (request for comments) 2010"

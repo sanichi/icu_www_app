@@ -1,9 +1,9 @@
-class Upload < ActiveRecord::Base
+class Download < ActiveRecord::Base
   include Accessible
   include Journalable
   include Pageable
 
-  journalize %w[access data_file_name data_content_type data_file_size description year access], "/admin/uploads/%d"
+  journalize %w[access data_file_name data_content_type data_file_size description year access], "/admin/downloads/%d"
 
   attr_accessor :dir_to_remove
 
@@ -63,7 +63,7 @@ class Upload < ActiveRecord::Base
   end
 
   def expand(opt)
-    %q{<a href="/uploads/%d">%s</a>} % [id, opt[:text] || "upload"]
+    %q{<a href="/downloads/%d">%s</a>} % [id, opt[:text] || "download"]
   end
 
   private
@@ -81,7 +81,7 @@ class Upload < ActiveRecord::Base
       FileUtils.rm(unobscured, force: true)
     end
   rescue => e
-    logger.error("problem managing unobfuscated file for upload #{id} (#{access}): " + e.message)
+    logger.error("problem managing unobfuscated file for download #{id} (#{access}): " + e.message)
   end
 
   def remember_directory
@@ -92,14 +92,14 @@ class Upload < ActiveRecord::Base
     # We're going to remove a directory recursively so be careful here.
     # The check is based on the fact that we're using Paperclip's ID partition.
     raise "no directory to cleanup" if dir_to_remove.blank?
-    if dir_to_remove.match(/uploads\/\d{3}\/\d{3}\/\d{3}\z/)
+    if dir_to_remove.match(/downloads\/\d{3}\/\d{3}\/\d{3}\z/)
       FileUtils.remove_dir(dir_to_remove, force: true)
     else
       raise "#{dir_to_remove} doesn't match the expected pattern"
     end
     raise "#{dir_to_remove} still exists" if File.exist?(dir_to_remove)
   rescue => e
-    logger.error("problem cleaning up old directory for upload #{id}: " + e.message)
+    logger.error("problem cleaning up old directory for download #{id}: " + e.message)
   end
 
   def correct_plain_text

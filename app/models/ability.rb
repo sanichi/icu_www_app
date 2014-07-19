@@ -12,9 +12,9 @@ class Ability
 
       if user.editor?
         can :create, [Article, Image, News]
-        can [:create, :show], Upload
+        can [:create, :show], Download
         can [:create, :index, :show], Pgn
-        can [:destroy, :update], [Article, Image, News, Pgn, Upload], user_id: user.id
+        can [:destroy, :update], [Article, Image, News, Pgn, Download], user_id: user.id
         can [:destroy, :update], Game, pgn: { user_id: user.id }
         can :manage, [Champion, Club, Series, Tournament]
       end

@@ -1,6 +1,7 @@
 module Expandable
   EXPANDABLE = {
     "ART" => { class: Article, title: /\S/ },
+    "DLD" => { class: Download, text: /\S/ },
     "EVT" => { class: Event, name: /\S/, title: /\S/ },
     "GME" => { class: Game, text: /\S/ },
     "IMG" => { class: Image, height: /\A[1-9]\d*\z/, width: /\A[1-9]\d*\z/, align: /\A(center|left|right)\z/, margin: /\A(yes|no)\z/, alt: /\S/ },
@@ -8,7 +9,6 @@ module Expandable
     "NWS" => { class: News, text: /\S/ },
     "PGN" => { class: Game, text: /\S/ },
     "TRN" => { class: Tournament, name: /\S/, title: /\S/ },
-    "UPL" => { class: Upload, text: /\S/ },
   }
   SPECIAL = {
     "EMA" => { text: /\S/ },

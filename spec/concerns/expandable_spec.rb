@@ -82,6 +82,28 @@ describe Expandable do
     end
   end
 
+  context "downloads" do
+    let(:download) { create(:download) }
+    let(:text)     { Faker::Lorem.sentence }
+    let(:link)     { '<a href="/downloads/%d">%s</a>' }
+
+    it "default text" do
+      expect(d.expand_all("[DLD:#{download.id}]")).to eq link % [download.id, "download"]
+    end
+
+    it "explicit text" do
+      expect(d.expand_all("[DLD:#{download.id}:text=#{text}]")).to eq link % [download.id, text]
+    end
+
+    it "implicit text" do
+      expect(d.expand_all("[DLD:#{download.id}:#{text}]")).to eq link % [download.id, text]
+    end
+
+    it "invalid ID" do
+      expect{d.expand_all("[DLD:#{bad_id}]")}.to raise_error error("download")
+    end
+  end
+
   context "emails" do
     it "text" do
       expect(d.expand_all("[EMA:ratings@icu.ie:Rating Officer]")).to eq %q{<script>liame('vr">Engvat Bssvpre<\057n>', '<n uers="znvygb:engvatf\100vph')</script>}
@@ -354,28 +376,6 @@ describe Expandable do
 
     it "invalid ID" do
       expect{d.expand_all("[TRN:#{bad_id}]")}.to raise_error error("tournament")
-    end
-  end
-
-  context "uploads" do
-    let(:upload) { create(:upload) }
-    let(:text)   { Faker::Lorem.sentence }
-    let(:link)   { '<a href="/uploads/%d">%s</a>' }
-
-    it "default text" do
-      expect(d.expand_all("[UPL:#{upload.id}]")).to eq link % [upload.id, "upload"]
-    end
-
-    it "explicit text" do
-      expect(d.expand_all("[UPL:#{upload.id}:text=#{text}]")).to eq link % [upload.id, text]
-    end
-
-    it "implicit text" do
-      expect(d.expand_all("[UPL:#{upload.id}:#{text}]")).to eq link % [upload.id, text]
-    end
-
-    it "invalid ID" do
-      expect{d.expand_all("[UPL:#{bad_id}]")}.to raise_error error("upload")
     end
   end
 

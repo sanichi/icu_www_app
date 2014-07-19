@@ -50,9 +50,9 @@ namespace :sync do
     ICU::Legacy::Image.new.synchronize
   end
 
-  desc "Convert legacy files in prd/htd/misc to www_production/uploads"
-  task :uploads, [:force] => :environment do |task, args|
-    ICU::Legacy::Upload.new.synchronize(args[:force])
+  desc "Convert legacy files in prd/htd/misc to www_production/downloads"
+  task :downloads, [:force] => :environment do |task, args|
+    ICU::Legacy::Download.new.synchronize(args[:force])
   end
 
   desc "Convert icuadmi_main/tournaments to www_production/tournaments"
@@ -91,5 +91,5 @@ namespace :sync do
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images uploads tournaments champions articles check]
+  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images downloads tournaments champions articles check]
 end

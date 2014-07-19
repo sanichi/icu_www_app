@@ -22,6 +22,7 @@ IcuWwwApp::Application.routes.draw do
   resources :articles,    only: [:index, :show]
   resources :champions,   only: [:index, :show]
   resources :clubs,       only: [:index, :show]
+  resources :downloads,   only: [:index, :show]
   resources :events,      only: [:index, :show]
   resources :games,       only: [:index, :show]
   resources :images,      only: [:index, :show]
@@ -33,7 +34,6 @@ IcuWwwApp::Application.routes.draw do
   resources :series,      only: [:index, :show]
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
-  resources :uploads,     only: [:index, :show]
   resources :users,       only: [:new, :create] do
     get :verify, on: :member
   end
@@ -52,6 +52,7 @@ IcuWwwApp::Application.routes.draw do
     resources :cash_payments,   only: [:new, :create]
     resources :champions,       only: [:new, :create, :edit, :update, :destroy]
     resources :clubs,           only: [:new, :create, :edit, :update]
+    resources :downloads,       only: [:show, :new, :create, :edit, :update, :destroy]
     resources :events,          only: [:new, :create, :edit, :update, :destroy]
     resources :fees do
       get :rollover, :clone, on: :member
@@ -69,7 +70,6 @@ IcuWwwApp::Application.routes.draw do
     resources :series,          only: [:new, :create, :edit, :update, :destroy]
     resources :tournaments,     only: [:new, :create, :edit, :update, :destroy]
     resources :translations,    only: [:index, :show, :edit, :update, :destroy]
-    resources :uploads,         only: [:show, :new, :create, :edit, :update, :destroy]
     resources :user_inputs,     only: [:show, :new, :create, :edit, :update, :destroy]
     resources :users do
       get :login, on: :member

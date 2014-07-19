@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Upload do
+describe Download do
   include_context "features"
 
   let(:access)     { I18n.t("access.access") }
@@ -10,15 +10,15 @@ describe Upload do
   let(:mem_access) { I18n.t("access.members") }
 
   context "access" do
-    let!(:upload_all) { create(:upload, access: "all") }
-    let!(:upload_mem) { create(:upload, access: "members") }
-    let!(:upload_edt) { create(:upload, access: "editors") }
-    let!(:upload_adm) { create(:upload, access: "admins") }
+    let!(:download_all) { create(:download, access: "all") }
+    let!(:download_mem) { create(:download, access: "members") }
+    let!(:download_edt) { create(:download, access: "editors") }
+    let!(:download_adm) { create(:download, access: "admins") }
 
-    let(:url_all)     { "a[href='#{upload_all.url}']" }
-    let(:url_mem)     { "a[href='#{upload_mem.url}']" }
-    let(:url_edt)     { "a[href='#{upload_edt.url}']" }
-    let(:url_adm)     { "a[href='#{upload_adm.url}']" }
+    let(:url_all)     { "a[href='#{download_all.url}']" }
+    let(:url_mem)     { "a[href='#{download_mem.url}']" }
+    let(:url_edt)     { "a[href='#{download_edt.url}']" }
+    let(:url_adm)     { "a[href='#{download_adm.url}']" }
 
     let(:result_row)  { "tr.result" }
     let(:access_menu) { "//select[@name='access']" }
@@ -28,7 +28,7 @@ describe Upload do
     end
 
     it "guests" do
-      visit uploads_path
+      visit downloads_path
       expect(page).to have_css(url_all)
       expect(page).to_not have_css(url_mem)
       expect(page).to_not have_css(url_edt)
@@ -40,7 +40,7 @@ describe Upload do
 
     it "members" do
       login "member"
-      visit uploads_path
+      visit downloads_path
       expect(page).to have_css(url_all)
       expect(page).to have_css(url_mem)
       expect(page).to_not have_css(url_edt)
@@ -66,7 +66,7 @@ describe Upload do
 
     it "editors" do
       login "editor"
-      visit uploads_path
+      visit downloads_path
       expect(page).to have_css(url_all)
       expect(page).to have_css(url_mem)
       expect(page).to have_css(url_edt)
@@ -97,7 +97,7 @@ describe Upload do
 
     it "admins" do
       login "admin"
-      visit uploads_path
+      visit downloads_path
       expect(page).to have_css(url_all)
       expect(page).to have_css(url_mem)
       expect(page).to have_css(url_edt)
