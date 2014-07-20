@@ -4,7 +4,10 @@
 
 = render "utils/prev_next", prev_next: @prev_next
 
-%h1.text-center{class: @article.active ? nil : "text-done"}= @article.title
+%h1.text-center
+  = @article.title
+  - unless @article.active
+    = "(inactive)"
 - if @article.author
   %p.text-center= @article.author
 - @article.series.each do |series|
