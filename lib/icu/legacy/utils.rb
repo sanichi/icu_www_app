@@ -109,7 +109,7 @@ module ICU
           if download
             %Q{[DLD:#{download.id}:#{$2}]}
           else
-            $0
+            "XXX (#{$1}|#{$2})"
           end
         end
         text.gsub!(/<a\s+href=["']mailto:([^"']+)["']>([^<]+)<\/a>/i) do

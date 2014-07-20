@@ -6,28 +6,13 @@
   .col-sm-12
     - if @images.count > 0
       %table{class: "table table-bordered table-striped", id: "results"}
-        %thead
-          %tr
-            %th.text-center{colspan: 5}= t("image.caption")
-            %th.text-center.vcenter{rowspan: 2}= t("image.thumbnail")
-          %tr
-            %th.text-center.small= t("year")
-            %th.text-center.small= t("image.dimensions")
-            %th.text-center.small= t("type")
-            %th.text-center.small= t("user.role.editor")
-            %th.text-center.small= t("image.credit")
         %tbody
           - @images.matches.each do |image|
             %tr
-              %td.vcenter{colspan: 5}= link_to image.caption, image
-              %td.vcenter.text-center{width: Image::THUMB_SIZE, rowspan: 2}
+              %td.vcenter.col-sm-10= link_to image.caption, image
+              %td.vcenter.text-center.small.col-sm-1= image.year
+              %td.vcenter.text-center.col-sm-1
                 = link_to image do
                   = image_tag image.data.url(:thumbnail), width: image.width(:thumbnail), height: image.height(:thumbnail)
-            %tr
-              %td.vcenter.small.text-center= image.year
-              %td.vcenter.small.text-center= "#{image.width}×#{image.height}"
-              %td.vcenter.small.text-center= image.short_type
-              %td.vcenter.small.text-center= image.user.player.name
-              %td.vcenter.small.text-center= image.credit
           = render "utils/pagination_links", pager: @images, columns: 5
     = render "utils/index_buttons", klass: Image

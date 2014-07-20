@@ -24,7 +24,7 @@ module ICU
         news_count = 0
         old_database.query("SELECT #{MAP.keys.join(", ")} FROM news ORDER BY news_id").each do |news|
           news_count += 1
-          if [227, 520, 521, 522].include?(news[:news_id])
+          if [72, 227, 520, 521, 522, 650, 698, 868].include?(news[:news_id])
             add_stat("skipped news items", news[:news_id])
           else
             create_news(news)

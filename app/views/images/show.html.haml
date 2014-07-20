@@ -14,9 +14,10 @@
       %tr
         %th= t("year")
         %td= @image.year
-      %tr
-        %th= t("image.credit")
-        %td= @image.credit
+      - if @image.credit.present?
+        %tr
+          %th= t("image.credit")
+          %td= @image.credit
       %tr
         %th= t("image.dimensions")
         %td= @image.dimensions_description
@@ -34,7 +35,8 @@
           %tr
             %th= "Image last updated"
             %td= @image.data_updated_at.to_s(:nosec)
-      = render "utils/timestamps", object: @image, ability: :create
+    = render "utils/editing_details", object: @image
+    %hr
     = render "utils/show_buttons", object: @image
 
 = render "admin/journal_entries/changes", entries: @entries

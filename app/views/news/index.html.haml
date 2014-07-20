@@ -2,11 +2,22 @@
 
 = render "utils/search_panel", form: "search_form", title: t("news.news"), col: "sm"
 
+- admin = can?(:create, News)
+
 - if @news.count > 0
   .row
     .col-md-10.col-md-offset-1
-      - @news.matches.each do |news|
-        = render "panel", news: news, link: true
+      %table{class: "table table-striped"}
+        %tbody
+          - @news.matches.each do |news|
+            %tr
+              %td{class: "col-sm-#{admin ? 9 : 10}"}
+                = link_to news.headline, news
+                - unless news.active
+                  = "(inactive)"
+              %td.col-sm-2.small.text-center= news.date
+              - if admin
+                %td.col-sm-1.small.text-center= news.user.player.initials
+          = render "utils/pagination_links", pager: @news, columns: 2 + (admin ? 1 : 0)
 
-= render "utils/pagination_links", pager: @news
 = render "utils/index_buttons", klass: News

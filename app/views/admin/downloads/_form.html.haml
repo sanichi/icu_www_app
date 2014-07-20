@@ -13,4 +13,4 @@
         = render "utils/text_field_for", locals.merge(param: :year, text: t("year"), width: 2)
         - menu = access_menu(@download.access, Download.accessibilities_for(current_user), @download.new_record? && "please_select")
         = render "utils/select_for", locals.merge(param: :access, text: t("access.access"), width: 3, menu: menu)
-      = render "utils/form_buttons", form: f, object: @download
+      = render "utils/form_buttons", form: f, object: @download, admin: "show"

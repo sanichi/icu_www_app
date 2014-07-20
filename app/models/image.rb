@@ -33,15 +33,14 @@ class Image < ActiveRecord::Base
   def self.search(params, path)
     matches = include_player
     matches = case params[:order]
+    when "id"
+      matches.order(id: :asc)
     when "updated_at"
       matches.order(updated_at: :desc)
-    when "year"
-      matches.order(year: :desc, id: :desc)
     else
-      matches.order(id: :asc)
+      matches.order(year: :desc, id: :desc)
     end
     matches = matches.where("caption LIKE ?", "%#{params[:caption]}%") if params[:caption].present?
-    matches = matches.where("credit LIKE ?", "%#{params[:credit]}%") if params[:credit].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
     paginate(matches, params, path)
   end
