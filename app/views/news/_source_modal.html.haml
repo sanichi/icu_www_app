@@ -1,0 +1,8 @@
+#source_modal{class: "modal fade", tabindex: "-1", role: "dialog", "aria-labelledby" => "modal_label", "aria-hidden" => "true"}
+  .modal-dialog.modal_width_lg
+    .modal-content
+      .modal-header
+        %button{type: "button", class: "close", "data-dismiss" => "modal", "aria-hidden" => "true"} &times;
+        %h4.modal-title#modal_label News Source
+      .modal-body
+        %pre{id: "source_modal_data"}

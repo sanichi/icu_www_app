@@ -12,4 +12,11 @@ class ArticlesController < ApplicationController
     @prev_next = Util::PrevNext.new(session, Article, params[:id])
     @entries = @article.journal_entries if current_user.roles.present?
   end
+
+  def source
+    authorize! :create, Article
+    @article = Article.find(params[:id])
+  rescue => e
+    @error = e.message
+  end
 end

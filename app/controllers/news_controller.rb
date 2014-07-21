@@ -11,4 +11,11 @@ class NewsController < ApplicationController
     @prev_next = Util::PrevNext.new(session, News, params[:id])
     @entries = @news.journal_entries if current_user.roles.present?
   end
+
+  def source
+    authorize! :create, News
+    @news = News.find(params[:id])
+  rescue => e
+    @error = e.message
+  end
 end

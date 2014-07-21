@@ -122,6 +122,17 @@ table.float-center { margin-left: auto; margin-right: auto; }
   margin-right: 1em !important;
 }
 
+/* For popup modals. */
+.modal_width_lg {
+  width: 90% !important;
+}
+.modal_width_md {
+  width: 70% !important;
+}
+.modal_width_sm {
+  width: 50% !important;
+}
+
 /* From http://www.abeautifulsite.net/blog/2013/08/whipping-file-inputs-into-shape-with-bootstrap-3/. */
 .btn-file {
   position: relative;

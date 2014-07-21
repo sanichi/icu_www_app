@@ -19,7 +19,9 @@ IcuWwwApp::Application.routes.draw do
     get "icu/#{page}" => "icu##{page}"
   end
 
-  resources :articles,    only: [:index, :show]
+  resources :articles,    only: [:index, :show] do
+    get :source, on: :member
+  end
   resources :champions,   only: [:index, :show]
   resources :clubs,       only: [:index, :show]
   resources :downloads,   only: [:index, :show]
@@ -28,7 +30,9 @@ IcuWwwApp::Application.routes.draw do
   resources :images,      only: [:index, :show]
   resources :items,       only: [:new, :create, :destroy]
   resources :new_players, only: [:create]
-  resources :news,        only: [:index, :show]
+  resources :news,        only: [:index, :show] do
+    get :source, on: :member
+  end
   resources :player_ids,  only: [:index]
   resources :players,     only: [:index]
   resources :series,      only: [:index, :show]

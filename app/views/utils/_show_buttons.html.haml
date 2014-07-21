@@ -2,6 +2,7 @@
 - defined?(extras)   || extras = {}
 - defined?(delete)   || delete = true
 - defined?(last_key) || last_key = object.class.to_s.tableize
+- defined?(template) || template = nil
 
 - type = object.class.to_s.underscore
 - last_path = last_search(last_key) if last_key
@@ -17,3 +18,5 @@
   = link_to t("new_search"), new_path, class: "btn btn-default"
   - extras.each do |text, link|
     = link_to text, link, class: "btn btn-info"
+  - if template
+    = render template, object: object

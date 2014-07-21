@@ -42,6 +42,7 @@ en:
   season: Season
   season_format: YYYY-YY
   show: Show
+  source: Source
   type: Type
   under_construction: Under Construction
   updated_at: Last updated
