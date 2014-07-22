@@ -17,6 +17,7 @@
           %li{class: active("articles")}= link_to t("article.articles"), articles_path
           %li{class: active("series")}= link_to t("article.series.series"), series_index_path
           %li{class: active("clubs")}= link_to t("club.clubs"), clubs_path
+          %li{class: active("downloads")}= link_to t("download.downloads"), downloads_path
           %li{class: active("games")}= link_to t("game.games"), games_path
           %li{class: active("help")}= link_to t("help.HELP"), help_index_path
           %li{class: active("icu")}= link_to t("icu.ICU"), icu_index_path
@@ -26,7 +27,6 @@
           %li{class: active("players")}= link_to t("player.players"), players_path
           %li= link_to t("player.rating.ratings"), "http://ratings.icu.ie", target: "ratings"
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
-          %li{class: active("downloads")}= link_to t("download.downloads"), downloads_path
       - if whats_new = Article.where(title: "What's New", user_id: 1).first
         %li= link_to "WHAT'S NEW", whats_new
     %ul.nav.navbar-nav.navbar-right

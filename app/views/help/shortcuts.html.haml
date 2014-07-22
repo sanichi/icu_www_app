@@ -2,4 +2,69 @@
 
 %h2.text-center= t("help.shortcuts")
 
-%p TODO.
+%p
+  As a website editor, you can use shortcuts to quickly produce links to resources (such as articles, downloads, images and games)
+  when authoring news items and articles. In some cases, shortcuts can automatically retrieve information from the database and add
+  it to the link, saving you the trouble of typing it yourself.
+%p
+  All shortcuts follow the same general pattern, starting with an opening square bracket, then three capital letters (which identify
+  the type of resource), followed by a colon and (usually) an integer (identifying the particular resource), followed by further
+  colon-separated options to specify such things as the text of the link or the width of an image. For example:
+%pre [ART:451]
+%p
+  Here, the 3-letter code ART identifies the article resource and the number is the particular article ID.
+  Since no link text is specified, the database is queried for the article title and the HTML link finally
+  rendered as a results of this shortcut would be:
+%pre &lt;a href="/articles/451"&gt;What's New&lt;/a&gt;
+%p
+  You can still type the whole HTML link out by hand if you wish, or use the equivalent Markdown, which is:
+%pre [What's New](/articles/451)
+%p
+  and both will produce exactly the same link on the page, but using shortcuts is generally quicker and less error prone.
+  In addition, shortcuts can help detect certain types of errors. For example if you were to enter a non-existent ID for a download:
+%pre [DLD:99999]
+%p In this case the database would be consulted, the invalid ID detected and an error message displayed prompting you to correct the error.
+
+%h3 Articles (ART)
+
+%p TODO
+
+%h3 Calendar Events (EVT)
+
+%p TODO
+
+%h3 Chess Diagrams (FEN)
+
+%p TODO
+
+%h3 Downloads (DLD)
+
+%p TODO
+
+%h3 Emails addresses (EMA)
+
+%p TODO
+
+%h3 Games (GME)
+
+%p TODO
+
+%h3 Images (IMG)
+
+%p TODO
+
+%h3 Image Links (IML)
+
+%p TODO
+
+%h3 News (NWS)
+
+%p TODO
+
+%h3 Rated Tournaments (RTN)
+
+%p TODO
+
+%h3 Tournaments (TRN)
+
+%p TODO
