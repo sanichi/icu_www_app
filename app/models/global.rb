@@ -5,7 +5,7 @@ module Global
   # The oldest date before which we can be sure the ICU did not exist (used in validating dates and years).
   MIN_YEAR = 1850
 
-  # The list of pages names (keys), in order, where ICU info is stored plus optional comments for the index page (values).
+  # A list of ICU page names (keys), in order, where ICU info is stored plus optional comments for the index page (values).
   ICU_PAGES = {
     constitution: "",
     membership_byelaws: "rules applying to individual members of the ICU",
@@ -18,4 +18,10 @@ module Global
     officer_roles: "descriptions of the various roles within the ICU committee",
     allegro_rules: "rules for all-moves-in-X type time controls",
   }
+
+  # A list of help page names.
+  HELP_PAGES = %w[
+    index accounts membership
+    offline_payments shortcuts
+  ]
 end

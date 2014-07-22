@@ -18,6 +18,7 @@
           %li{class: active("series")}= link_to t("article.series.series"), series_index_path
           %li{class: active("clubs")}= link_to t("club.clubs"), clubs_path
           %li{class: active("games")}= link_to t("game.games"), games_path
+          %li{class: active("help")}= link_to t("help.HELP"), help_index_path
           %li{class: active("icu")}= link_to t("icu.ICU"), icu_index_path
           %li{class: active("images")}= link_to t("image.images"), images_path
           %li{class: active("champions")}= link_to t("champion.champions"), champions_path
@@ -27,7 +28,7 @@
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
           %li{class: active("downloads")}= link_to t("download.downloads"), downloads_path
       - if whats_new = Article.where(title: "What's New", user_id: 1).first
-        %li= link_to "What's New", whats_new
+        %li= link_to "WHAT'S NEW", whats_new
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"
       = render "layouts/admin_menu"

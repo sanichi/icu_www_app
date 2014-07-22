@@ -1,0 +1,14 @@
+.row
+  .col-md-10.col-md-offset-1
+    %h1.text-center= t("help.index")
+    %hr
+    %h2= t("help.members")
+    %ul
+      %li= link_to t("help.membership"), help_membership_path
+      %li= link_to t("help.accounts"), help_accounts_path
+    %hr
+    %h2= t("help.admins")
+    %ul
+      %li= link_to t("help.offline_payments"), help_offline_payments_path
+      %li= link_to t("help.shortcuts"), help_shortcuts_path
+    %hr

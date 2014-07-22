@@ -18,6 +18,9 @@ IcuWwwApp::Application.routes.draw do
   (Global::ICU_PAGES.keys + %w[index]).each do |page|
     get "icu/#{page}" => "icu##{page}"
   end
+  Global::HELP_PAGES.each do |page|
+    get "help/#{page}" => "help##{page}"
+  end
 
   resources :articles,    only: [:index, :show] do
     get :source, on: :member

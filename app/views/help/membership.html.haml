@@ -1,0 +1,180 @@
+- content_for :title, t("help.membership")
+
+%h2.text-center= t("help.membership")
+
+%a{name: "subscription_season"}
+%h3 Subscription Season
+
+%p
+  The membership year runs from
+  %strong 1st September
+  to
+  %strong 31st August
+  and payment of an annual subscription grants membership of the ICU for that period.
+%p
+  Subscription seasons are often referred to by the 4 digits of the start year plus the last 2 digits of the end year.
+  For example, the current season is
+  = succeed(".") do
+    %strong= Season.new.to_s
+
+%a{name: "how_to_subscribe"}
+%h3 How to Subscribe
+
+%p
+  Click
+  = succeed(",") do
+    = link_to t("shop.shop"), shop_path
+  click on the type of subscription that suits your circumstances (standard, junior, unemployed, over 65, etc.)
+  and then click one of the following buttons:
+%ul
+  %li
+    %strong= t("item.member.me")
+    if you're already logged in,
+  %li
+    %strong= t("item.member.select")
+    to lookup an existing member by ID or name,
+  %li
+    %strong= t("item.member.new")
+    to create a new member.
+%p
+  %strong Important:
+  before trying to create a
+  %strong new member
+  please check that the person isn't already in the ICU database by clicking on
+  %strong= t("item.member.select")
+  and searching for the person by name. This helps to avoid creating
+  %strong duplicate
+  ICU IDs. The minimum information you need to create a new member is:
+%ol
+  %li last name,
+  %li first names (middle initials suffice),
+  %li full date of birth,
+  %li gender,
+  %li existing FIDE federation (or desired federation if not already FIDE-registered).
+%p
+  When you've added all the items you want to pay for, including your subscription, checkout your cart and pay with your credit or debit card.
+  Please supply an email address so we can send you a confirmation email.
+
+%a{name: "icu_id"}
+%h3 ICU ID
+
+%p
+  When you subscribe for the first time you are sent (via the confirmation email) a unique number which is yours for life and
+  is used to identify you when, for example, you:
+%ul
+  %li enter Irish chess tournaments (so your rating can be tracked),
+  %li subscribe again in the future (and identify yourself by ID rather than name),
+  %li
+    = link_to "create a login account", help_accounts_path(anchor: "create_account")
+    for the ICU websites (so they can display information relevant to you).
+
+%a{name: "season_ticket"}
+%h3 Season Ticket
+
+%p
+  This is a short sequence of letters and digits which is proof that a subscription has been paid by a particular member for a particular season.
+  It is used to create a login account for the ICU websites and should be kept secret to avoid someone impersonating you.
+  If you've already got a login account then you don't need your season ticket but unless you subscribe each season your
+  account will become inactive and can only be re-activated by re-subscribing.
+%p
+  For any payments that involve subscriptions, the confirmation email includes ICU IDs and season tickets for each subscriber.
+  If you're paying subscriptions for other people, please pass on this information in confidence.
+
+%a{name: "grace_period"}
+%h3 Grace Period
+
+%p
+  In practice many subscribers pay late, even though the
+  = link_to "membership bye-laws", icu_membership_byelaws_path
+  specify that subscriptions are due on of before September 1st.
+  For the purposes of the September rating list and logging into the ICU websites,
+  members who subscribed for the previous season are considered to still be members for the months of September to December.
+  However, if you still haven't subscribed by January your rating won't be published that month and your logins,
+  if you have any, will expire.
+%p
+  Other organisations who require membership of the ICU to enter their tournaments (such as the Leinster and Munster leagues)
+  may or may not have a similar grace period. The safe option is to subscribe promtly.
+
+%a{name: "fide_federation"}
+%h3 FIDE Federation
+
+%p
+  If you're subscribing for the first time (creating a new ICU ID) and are not yet registered with FIDE you must choose which
+  federation you want to belong to for when you play in your first FIDE-rated Irish tournament (some, not all, tournaments in
+  Ireland are rated by FIDE as well as the ICU). Federation is the same as country for most people, though please note the Irish
+  federation includes Northern Ireland.
+%ul
+  %li
+    If you are
+    %strong Irish (or Norther Irish)
+    then just choose Ireland as your federation and you will automatically be registered with FIDE after your first FIDE-rated tournament.
+  %li
+    If you are
+    %strong foreign, living in Ireland and want to register as Irish with FIDE
+    then choose Ireland for your federation and you will automatically be registered with FIDE after your first FIDE-rated tournament.
+    However, please be aware of the following two points:
+    %ol
+      %li
+        there are additional eligibility requirements to represent Ireland as an
+        = link_to "adult", icu_eligibility_criteria_path
+        or as a
+        = succeed(",") do
+          = link_to "junior", icu_junior_eligibility_criteria_path
+      %li it can be expensive to change federation if you later change your mind.
+  %li
+    If you are
+    %strong foreign and don't want to register as Irish with FIDE
+    then choose whatever federation you want. However, you will not be able to play in any FIDE-rated
+    tournaments in Ireland without first obtaining a FIDE ID from your chosen federation.
+    The Irish rating officer (who reports FIDE-rated Irish tournamants to FIDE) can only register Irish players.
+
+%a{name: "alternative_payment_methods"}
+%h3 Alternative Payment Method
+
+%p
+  We strongly recommend paying for subscriptions online because of the speed and reliability of computers compared to humans.
+  However, if you really can't or won't do this then you may also pay the old fashioned way by sending a cheque in the post.
+  Be advised though that you:
+%ul
+  %li may wait days or even weeks (instead of seconds) for your payment to be processed,
+  %li risk your letter getting lost or forgotten about,
+  %li will add to the workload of an unpaid volunteer for the ICU.
+%p
+  If you still insist on paying for subscriptions this way, then as well as your cheque
+  and contact details, include the following details per subscriber:
+%ul
+  %li
+    For
+    = succeed(":") do
+      %strong existing members
+  %ul
+    %li subscription type,
+    %li name,
+    %li ICU ID.
+  %li
+    For
+    = succeed(":") do
+      %strong new members
+  %ul
+    %li subscription type,
+    %li last name,
+    %li first names (initials of middle names is sufficient),
+    %li full date of birth,
+    %li gender,
+    %li FIDE or non-Irish national rating (if one exists),
+    %li existing FIDE federation (or desired federation if not already FIDE-registered).
+- if @treasurer
+  %p
+    Send your cheque and the above information to:
+    = succeed(".") do
+      %strong
+        = succeed(",") do
+          = @treasurer.name
+        = @treasurer.address
+    = case @treasurer.gender
+      - when "M" then "He"
+      - when "F" then "She"
+      - else "They"
+    will reply with ICU IDs and season tickets for all subscribers.
+    If you're paying for other people, pass the information on
+    (in confidence, because season tickets are private to each subscriber).

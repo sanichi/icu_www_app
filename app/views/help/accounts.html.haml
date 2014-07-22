@@ -1,0 +1,63 @@
+- content_for :title, t("help.accounts")
+
+%h2.text-center= t("help.accounts")
+
+%a{name: "create_account"}
+%h3 Creating a Login Account
+
+%p For this you need the following:
+%ul
+  %li
+    an ICU ID (from a
+    = link_to "subscription", help_membership_path
+    confirmation email)
+  %li
+    a season ticket (from a
+    = link_to "subscription", help_membership_path
+    confirmation email)
+  %li a working email address that you have access to (you choose)
+  %li a password (you choose)
+%p Then:
+%ul
+  %li
+    click the
+    = link_to t("user.sign_up"), sign_up_path
+    button in the top right,
+  %li enter the above information,
+  %li wait for the verification email,
+  %li click the link in the message to complete the process.
+
+%a{name: "signin_www"}
+%h3 Signing into this Website
+
+%p Follow these steps:
+%ul
+  %li
+    click the
+    = link_to t("session.sign_in"), sign_in_path
+    button in the top right,
+  %li enter your email and password,
+  %li
+    click the
+    %em= t("session.sign_in")
+    button under the form.
+
+%a{name: "signin_ratings"}
+%h3 Signing into the Ratings Website
+
+%p Follow these steps:
+%ul
+  %li
+    click the
+    = link_to "Log in", "http://ratings.icu.ie/log_in", target: "ratings"
+    button in the top middle,
+  %li enter your email and password,
+  %li
+    click the
+    %em Log in
+    button under the form.
+%p
+  Note that login accounts are created and updated on this site, not the ratings site,
+  and the database for the ratings site is synced with the main database only once per day.
+  Therefore, you may have to wait up to 24 hours before changes on this site are reflected
+  on the other site.
