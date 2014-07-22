@@ -3,7 +3,7 @@
 %h2.text-center= t("help.offline_payments")
 
 %p
-  Members are strongly encouraged to pay online with their credit or debit cards as this automates the
+  Members are encouraged to pay online with their credit or debit cards as this automates the
   process of recording their purchases in the ICU database, is quick and reliable for them and involves
   no work for ICU volunteers. However, there are still a small number of diehards who like to pay the
   old fashioned way of sending a cheque or cash to the treasurer or membership officer.
@@ -12,10 +12,10 @@
 %ol
   %li
     %strong Check the Purchases:
-    Check that the payer has described their purchase items accurately and included all the required information. Refer to the
+    Check that the payer has described their intended purchases accurately and included all the required information. Refer to the
     = link_to "instructions to payers", help_membership_path(anchor: "alternative_payment_methods")
-    about what information to include for offline subscriptions. If the instructions are unclear or missing information,
-    contact the payer and try to resolve the problem.
+    about what information to include for offline subscriptions. If the payer's request is unclear or missing information,
+    contact them and try to resolve the problem.
   %li
     %strong Check the Amount:
     Check that the amount sent corresponds with the total cost of the purchase items.
@@ -24,13 +24,15 @@
     %strong Fill a Cart with the Purchases:
     Login to the website (having already requested the webmaster to authorize your account to manage purchases), go to the
     = link_to t("shop.shop"), shop_path
-    and fill up a cart with the items requested by the payer.
+    and fill up a cart with the items requested by the payer. In other words, do what the payer would have done
+    if they had chosen to pay online but skip the actual payment step.
   %li
     %strong Mark the Cart as Already Paid:
-    When the cart is complete, instead of paying for it with a credit card like an online payer would, click the
+    When the cart is complete with all the requested items and its total cost matches the amount sent,
+    then instead of paying for it with a credit card like an online payer would have done, click the
     %strong= t("shop.payment.received")
-    button (only available to accounts that can manage payments, of course) which indicates to the system that
-    the cart (and all it's items) should be marked as paid because the payment is already in the ICU's possession.
+    button (only available to accounts, like yours, that can manage payments) which indicates to the system that
+    the cart (and all it's items) should be marked as paid because the payment is already in your (and therefore the ICU's) possession.
   %li
     %strong Reply to the Payer:
     In the case of subscriptions you need to send some information back to the payer,
