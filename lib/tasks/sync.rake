@@ -91,5 +91,5 @@ namespace :sync do
   end
 
   desc "Perform all synchronization tasks"
-  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images downloads tournaments champions articles check]
+  task :all, [:force] => %i[clubs players changes status archive members subscriptions events images downloads tournaments champions articles news check]
 end

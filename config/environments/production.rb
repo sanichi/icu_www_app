@@ -54,12 +54,11 @@ IcuWwwApp::Application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "http://assets.example.com"
 
-  # Ignore bad email addresses and do not raise email delivery errors.
-  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # Configure mail to use Mailgun.
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { :host => "www2.icu.ie" }
+  config.action_mailer.default_url_options = { :host => "www.icu.ie" }
   config.action_mailer.smtp_settings =
   {
     authentication: :plain,
