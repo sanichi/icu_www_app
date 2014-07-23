@@ -3,7 +3,7 @@
 %h2.text-center= t("help.shortcuts")
 
 %p
-  As a website editor, you can use shortcuts to quickly produce links to resources (such as articles, downloads, images and games)
+  As a website editor, you can use shortcuts to quickly produce links to resources (such as articles, downloads, images, games and more)
   when authoring news items and articles. In some cases, shortcuts can automatically retrieve information from the database and add
   it to the link, saving you the trouble of typing it yourself.
 %p
@@ -12,9 +12,9 @@
   colon-separated options to specify such things as the text of the link or the width of an image. For example:
 %pre [ART:451]
 %p
-  Here, the 3-letter code ART identifies the article resource and the number is the particular article ID.
-  Since no link text is specified, the database is queried for the article title and the HTML link finally
-  rendered as a results of this shortcut would be:
+  The 3-letter code ART identifies the resource as an article and the number is its ID (the same number visible in your
+  browser's address bar when the article is displayed). Since, in this example, no link text is specified, the database
+  is queried for the article title and the HTML produced is:
 %pre &lt;a href="/articles/451"&gt;What's New&lt;/a&gt;
 %p
   You can still type the whole HTML link out by hand if you wish, or use the equivalent Markdown, which is:
