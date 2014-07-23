@@ -18,7 +18,7 @@ en:
     series:
       add: Add article
       empty: No articles have been added to this series yet
-      part: "This article part of a series"
+      part: "This article part of the series"
       select: Select
       series: Article Series
       title: Series Title
