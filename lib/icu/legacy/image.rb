@@ -93,8 +93,6 @@ module ICU
       def get_old_image_data(old)
         file = "#{old[:img_id]}.#{old[:img_type]}"
         path = @path + file
-        File.delete(path) if File.exists?(path)
-        `wget http://www.icu.ie/images/db/#{file} --quiet -O #{path}`
         raise "#{path} doesn't exist" unless File.exist?(path)
         File.new(path)
       end
