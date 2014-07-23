@@ -92,8 +92,6 @@ module ICU
         raise "can't handle #{old[:event_form]}" unless old[:event_form].match(/\A(pdf|doc|rtf)\z/)
         file = "#{old[:event_id]}.#{old[:event_form]}"
         path = @path + file
-        File.delete(path) if File.exists?(path)
-        `wget http://www.icu.ie/events/forms/#{file} --quiet -O #{path}`
         raise "#{path} doesn't exist" unless File.exist?(path)
         File.new(path)
       end
