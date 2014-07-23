@@ -1,5 +1,5 @@
 set :stage, :production
-server "www2.icu.ie", user: "mjo", roles: %w{web app db}
+server "www.icu.ie", user: "mjo", roles: %w{web app db}
 
 # Simple Role Syntax
 # ==================
@@ -9,7 +9,7 @@ server "www2.icu.ie", user: "mjo", roles: %w{web app db}
 # role :app, %w{deploy@example.com}
 # role :web, %w{deploy@example.com}
 # role :db,  %w{deploy@example.com}
-# 
+#
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server
