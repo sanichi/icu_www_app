@@ -103,10 +103,10 @@ class Item < ActiveRecord::Base
 
   def age_constraints
     return unless player && fee.try(:age_ref_date)
-    if fee.max_age.present? && player.over_age?(fee.max_age, fee.age_ref_date)
+    if fee.max_age.present? && player.age_over?(fee.max_age, fee.age_ref_date)
       errors.add(:base, I18n.t("item.error.age.old", member: player.name, date: fee.age_ref_date.to_s, limit: fee.max_age))
     end
-    if fee.min_age.present? && player.under_age?(fee.min_age, fee.age_ref_date)
+    if fee.min_age.present? && player.age_under?(fee.min_age, fee.age_ref_date)
       errors.add(:base, I18n.t("item.error.age.young", member: player.name, date: fee.age_ref_date.to_s, limit: fee.min_age))
     end
   end

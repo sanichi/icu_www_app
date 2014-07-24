@@ -79,12 +79,12 @@ class Player < ActiveRecord::Base
     age
   end
 
-  def over_age?(max, ref=Date.today)
+  def age_over?(max, ref=Date.today)
     return false unless dob
     age(ref) > max
   end
 
-  def under_age?(min, ref=Date.today)
+  def age_under?(min, ref=Date.today)
     return false unless dob
     age(ref) < min
   end

@@ -98,6 +98,26 @@ describe Player do
       expect(player.age(Date.new(2012, 3,  1))).to eq 56
     end
 
+    it "#age_under?" do
+      player = create(:player, dob: Date.new(2002, 6, 1), joined: Date.new(2010, 9, 1))
+      expect(player).to_not be_age_under(11, Date.new(2015, 1, 1))
+      expect(player).to_not be_age_under(12, Date.new(2015, 1, 1))
+      expect(player).to be_age_under(13, Date.new(2015, 1, 1))
+      player = create(:player, dob: Date.new(2003, 1, 1), joined: Date.new(2010, 9, 1))
+      expect(player).to be_age_under(12, Date.new(2014, 12, 31))
+      expect(player).to_not be_age_under(12, Date.new(2015, 1, 1))
+    end
+
+    it "#age_over?" do
+      player = create(:player, dob: Date.new(1949, 6, 1), joined: Date.new(1975, 9, 1))
+      expect(player).to be_age_over(64, Date.new(2015, 1, 1))
+      expect(player).to_not be_age_over(65, Date.new(2015, 1, 1))
+      expect(player).to_not be_age_over(66, Date.new(2015, 1, 1))
+      player = create(:player, dob: Date.new(1949, 1, 1), joined: Date.new(1975, 9, 1))
+      expect(player).to_not be_age_over(65, Date.new(2014, 12, 31))
+      expect(player).to be_age_over(65, Date.new(2015, 1, 1))
+    end
+
     it "#federation" do
       player = create(:player, fed: "IRL")
       expect(player.federation).to eq "Ireland"
