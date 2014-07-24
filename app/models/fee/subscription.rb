@@ -45,7 +45,7 @@ class Fee::Subscription < Fee
       self.end_date = season.end
       self.sale_start = season.start.months_ago(1)
       self.sale_end = season.end
-      self.age_ref_date = season.start
+      self.age_ref_date = season.end.beginning_of_year
       self.years = season.to_s
     end
   end
