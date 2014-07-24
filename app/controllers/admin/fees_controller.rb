@@ -4,6 +4,7 @@ class Admin::FeesController < ApplicationController
 
   def index
     @fees = Fee.search(params, admin_fees_path)
+    save_last_search(@fees, :fees)
   end
 
   def show

@@ -66,6 +66,8 @@
         = link_to "Clone", clone_admin_fee_path(@fee), class: "btn btn-info"
       - if @fee.rolloverable?
         = link_to "Rollover", rollover_admin_fee_path(@fee), class: "btn btn-info"
+      - if path = last_search(:fees)
+        = link_to t("last_search"), path, class: "btn btn-default"
       = link_to t("new_search"), admin_fees_path, class: "btn btn-default"
 
 = render "user_inputs", inputs: @inputs
