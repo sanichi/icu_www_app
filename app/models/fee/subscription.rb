@@ -51,6 +51,6 @@ class Fee::Subscription < Fee
   end
 
   def set_more_info
-    self.url = "http://www.icu.ie/articles/display.php?id=283"
+    self.url = "http://www.icu.ie/help/membership"
   end
 end

@@ -1,7 +1,9 @@
 Hi<%= cart.payment_name.present? ? " #{cart.payment_name}" : "" %>,
 
+<%- unless Rails.env == "production" %>
 ** TEST PURCHASE, NO ACTUAL PAYMENT HAS BEEN TAKEN FROM YOUR CARD **
 
+<%- end %>
 This is a receipt from the ICU for your payment of <%= euros(cart.total) %> on <%= cart.payment_completed.to_date.to_s %>.
 
 <%- if cart.items.size == 1 %>
@@ -16,6 +18,6 @@ The purchased items are as follows:
 <%- end %>
 <%- end %>
 
-To enquire about this payment please email <%= cart.payment_method == "stripe" ? "webmaster" : "membership" %>@icu.ie and quote cart ID <%= cart.id %>.
+To enquire about this payment please email <%= cart.payment_method == "stripe" ? "webmaster" : "treasurer" %>@icu.ie and quote cart ID <%= cart.id %>.
 
 Regards, The Irish Chess Union

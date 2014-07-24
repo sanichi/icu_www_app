@@ -73,6 +73,7 @@ describe Fee::Entry do
     end
 
     it "bad URL" do
+      pending "resolution of problem noted in Fee#valid_url"
       expect{Fee::Entry.create!(params.merge(url: "http://www.icu.ie/no_such_page.html"))}.to raise_error(/bad response/i)
     end
 

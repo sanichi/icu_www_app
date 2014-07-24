@@ -168,10 +168,12 @@ class Fee < ActiveRecord::Base
     return if url.blank?
     uri = URI.parse(url)
     raise "invalid URL" unless uri.try(:scheme).try(:match, /\Ahttps?\z/) && uri.host.present? && uri.port.present?
-    req = Net::HTTP.new(uri.host, uri.port)
-    req.read_timeout = 10
-    res = req.start { |http| http.head(uri.path.blank? ? "/" : uri.path) }
-    raise "got bad response for this URL" unless res.kind_of?(Net::HTTPSuccess)
+    # The rest of this check disabled in July 2014 during the migration because HEAD requests were failing (getting a 404)
+    # on (the new) www.icu.ie when in maintenance mode (add_more_info in models/fee/subscription.rb was adding the URL).
+    # req = Net::HTTP.new(uri.host, uri.port)
+    # req.read_timeout = 10
+    # res = req.start { |http| http.head(uri.path.blank? ? "/" : uri.path) }
+    # raise "got bad response for this URL" unless res.kind_of?(Net::HTTPSuccess)
   rescue => e
     errors.add(:url, e.message)
   end
