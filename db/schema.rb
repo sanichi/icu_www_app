@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140719074720) do
+ActiveRecord::Schema.define(version: 20140725095834) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -42,6 +42,10 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "created_at"
   end
 
+  add_index "bad_logins", ["created_at"], name: "index_bad_logins_on_created_at", using: :btree
+  add_index "bad_logins", ["email"], name: "index_bad_logins_on_email", using: :btree
+  add_index "bad_logins", ["ip"], name: "index_bad_logins_on_ip", using: :btree
+
   create_table "carts", force: true do |t|
     t.string   "status",             limit: 20,                          default: "unpaid"
     t.decimal  "total",                          precision: 9, scale: 2
@@ -58,6 +62,12 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "carts", ["confirmation_email"], name: "index_carts_on_confirmation_email", using: :btree
+  add_index "carts", ["payment_method"], name: "index_carts_on_payment_method", using: :btree
+  add_index "carts", ["payment_name"], name: "index_carts_on_payment_name", using: :btree
+  add_index "carts", ["status"], name: "index_carts_on_status", using: :btree
+  add_index "carts", ["user_id"], name: "index_carts_on_user_id", using: :btree
 
   create_table "champions", force: true do |t|
     t.string   "category",   limit: 20
@@ -90,6 +100,11 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "updated_at"
   end
 
+  add_index "clubs", ["active"], name: "index_clubs_on_active", using: :btree
+  add_index "clubs", ["city"], name: "index_clubs_on_city", using: :btree
+  add_index "clubs", ["county"], name: "index_clubs_on_county", using: :btree
+  add_index "clubs", ["name"], name: "index_clubs_on_name", using: :btree
+
   create_table "downloads", force: true do |t|
     t.string   "access",            limit: 20
     t.string   "data_file_name"
@@ -105,6 +120,7 @@ ActiveRecord::Schema.define(version: 20140719074720) do
   end
 
   add_index "downloads", ["access"], name: "index_downloads_on_access", using: :btree
+  add_index "downloads", ["data_content_type"], name: "index_downloads_on_data_content_type", using: :btree
   add_index "downloads", ["description"], name: "index_downloads_on_description", using: :btree
   add_index "downloads", ["user_id"], name: "index_downloads_on_user_id", using: :btree
   add_index "downloads", ["www1_path"], name: "index_downloads_on_www1_path", using: :btree
@@ -119,6 +135,7 @@ ActiveRecord::Schema.define(version: 20140719074720) do
   end
 
   add_index "episodes", ["article_id"], name: "index_episodes_on_article_id", using: :btree
+  add_index "episodes", ["number"], name: "index_episodes_on_number", using: :btree
   add_index "episodes", ["series_id"], name: "index_episodes_on_series_id", using: :btree
 
   create_table "events", force: true do |t|
@@ -147,6 +164,7 @@ ActiveRecord::Schema.define(version: 20140719074720) do
   end
 
   add_index "events", ["active"], name: "index_events_on_active", using: :btree
+  add_index "events", ["category"], name: "index_events_on_category", using: :btree
   add_index "events", ["end_date"], name: "index_events_on_end_date", using: :btree
   add_index "events", ["location"], name: "index_events_on_location", using: :btree
   add_index "events", ["name"], name: "index_events_on_name", using: :btree
@@ -177,6 +195,14 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "fees", ["active"], name: "index_fees_on_active", using: :btree
+  add_index "fees", ["end_date"], name: "index_fees_on_end_date", using: :btree
+  add_index "fees", ["name"], name: "index_fees_on_name", using: :btree
+  add_index "fees", ["sale_end"], name: "index_fees_on_sale_end", using: :btree
+  add_index "fees", ["sale_start"], name: "index_fees_on_sale_start", using: :btree
+  add_index "fees", ["start_date"], name: "index_fees_on_start_date", using: :btree
+  add_index "fees", ["type"], name: "index_fees_on_type", using: :btree
 
   create_table "games", force: true do |t|
     t.string   "annotator",  limit: 50
@@ -245,6 +271,16 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "updated_at"
   end
 
+  add_index "items", ["cart_id"], name: "index_items_on_cart_id", using: :btree
+  add_index "items", ["end_date"], name: "index_items_on_end_date", using: :btree
+  add_index "items", ["fee_id"], name: "index_items_on_fee_id", using: :btree
+  add_index "items", ["payment_method"], name: "index_items_on_payment_method", using: :btree
+  add_index "items", ["player_id"], name: "index_items_on_player_id", using: :btree
+  add_index "items", ["source"], name: "index_items_on_source", using: :btree
+  add_index "items", ["start_date"], name: "index_items_on_start_date", using: :btree
+  add_index "items", ["status"], name: "index_items_on_status", using: :btree
+  add_index "items", ["type"], name: "index_items_on_type", using: :btree
+
   create_table "journal_entries", force: true do |t|
     t.integer  "journalable_id"
     t.string   "journalable_type", limit: 50
@@ -258,7 +294,13 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.string   "source",           limit: 8,  default: "www2"
   end
 
+  add_index "journal_entries", ["action"], name: "index_journal_entries_on_action", using: :btree
+  add_index "journal_entries", ["by"], name: "index_journal_entries_on_by", using: :btree
+  add_index "journal_entries", ["column"], name: "index_journal_entries_on_column", using: :btree
+  add_index "journal_entries", ["ip"], name: "index_journal_entries_on_ip", using: :btree
   add_index "journal_entries", ["journalable_id", "journalable_type"], name: "index_journal_entries_on_journalable_id_and_journalable_type", using: :btree
+  add_index "journal_entries", ["journalable_id"], name: "index_journal_entries_on_journalable_id", using: :btree
+  add_index "journal_entries", ["journalable_type"], name: "index_journal_entries_on_journalable_type", using: :btree
 
   create_table "logins", force: true do |t|
     t.integer  "user_id"
@@ -267,6 +309,10 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.string   "ip",         limit: 50
     t.datetime "created_at"
   end
+
+  add_index "logins", ["error"], name: "index_logins_on_error", using: :btree
+  add_index "logins", ["ip"], name: "index_logins_on_ip", using: :btree
+  add_index "logins", ["user_id"], name: "index_logins_on_user_id", using: :btree
 
   create_table "news", force: true do |t|
     t.boolean  "active"
@@ -291,6 +337,9 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.string   "confirmation_email", limit: 50
     t.datetime "created_at"
   end
+
+  add_index "payment_errors", ["cart_id"], name: "index_payment_errors_on_cart_id", using: :btree
+  add_index "payment_errors", ["confirmation_email"], name: "index_payment_errors_on_confirmation_email", using: :btree
 
   create_table "pgns", force: true do |t|
     t.string   "comment"
@@ -339,9 +388,17 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.integer  "latest_rating",      limit: 2
   end
 
+  add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree
+  add_index "players", ["dob"], name: "index_players_on_dob", using: :btree
+  add_index "players", ["fed"], name: "index_players_on_fed", using: :btree
   add_index "players", ["first_name", "last_name"], name: "index_players_on_first_name_and_last_name", using: :btree
   add_index "players", ["first_name"], name: "index_players_on_first_name", using: :btree
+  add_index "players", ["gender"], name: "index_players_on_gender", using: :btree
+  add_index "players", ["joined"], name: "index_players_on_joined", using: :btree
   add_index "players", ["last_name"], name: "index_players_on_last_name", using: :btree
+  add_index "players", ["player_id"], name: "index_players_on_player_id", using: :btree
+  add_index "players", ["source"], name: "index_players_on_source", using: :btree
+  add_index "players", ["status"], name: "index_players_on_status", using: :btree
 
   create_table "refunds", force: true do |t|
     t.integer  "cart_id"
@@ -350,6 +407,10 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.decimal  "amount",     precision: 9, scale: 2
     t.datetime "created_at"
   end
+
+  add_index "refunds", ["cart_id"], name: "index_refunds_on_cart_id", using: :btree
+  add_index "refunds", ["created_at"], name: "index_refunds_on_created_at", using: :btree
+  add_index "refunds", ["user_id"], name: "index_refunds_on_user_id", using: :btree
 
   create_table "series", force: true do |t|
     t.string   "title",      limit: 100
@@ -390,6 +451,12 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.datetime "updated_at"
   end
 
+  add_index "translations", ["active"], name: "index_translations_on_active", using: :btree
+  add_index "translations", ["english"], name: "index_translations_on_english", using: :btree
+  add_index "translations", ["key"], name: "index_translations_on_key", using: :btree
+  add_index "translations", ["user"], name: "index_translations_on_user", using: :btree
+  add_index "translations", ["value"], name: "index_translations_on_value", using: :btree
+
   create_table "user_inputs", force: true do |t|
     t.integer "fee_id"
     t.string  "type",            limit: 40
@@ -399,6 +466,9 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.decimal "min_amount",                  precision: 6, scale: 2, default: 1.0
     t.string  "date_constraint", limit: 30,                          default: "none"
   end
+
+  add_index "user_inputs", ["fee_id"], name: "index_user_inputs_on_fee_id", using: :btree
+  add_index "user_inputs", ["type"], name: "index_user_inputs_on_type", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email"
@@ -414,5 +484,12 @@ ActiveRecord::Schema.define(version: 20140719074720) do
     t.string   "theme",              limit: 16
     t.string   "locale",             limit: 2,  default: "en"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", using: :btree
+  add_index "users", ["expires_on"], name: "index_users_on_expires_on", using: :btree
+  add_index "users", ["player_id"], name: "index_users_on_player_id", using: :btree
+  add_index "users", ["roles"], name: "index_users_on_roles", using: :btree
+  add_index "users", ["status"], name: "index_users_on_status", using: :btree
+  add_index "users", ["verified_at"], name: "index_users_on_verified_at", using: :btree
 
 end
