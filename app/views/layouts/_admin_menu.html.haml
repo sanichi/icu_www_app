@@ -12,6 +12,7 @@
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
   - links += 1 if pgns    = can?(:index, Pgn)
+  - links += 1 if usage   = Rails.env == "production" && current_user.admin?
   - if links > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
@@ -39,9 +40,11 @@
         - if pages
           %li{class: active("admin/pages", "session_info")}= link_to "Session Info", admin_session_info_path
           %li{class: active("admin/pages", "system_info")}= link_to "System Info", admin_system_info_path
-        - if trans
-          %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
-        - if users
-          %li{class: active("admin/users")}= link_to "Users", admin_users_path
         - if pages
           %li{class: active("admin/pages", "test_email")}= link_to "Test Email", admin_test_email_path
+        - if trans
+          %li{class: active("admin/translations")}= link_to "Translations", admin_translations_path
+        - if usage
+          %li= link_to "Usage Stats", "/webalizer/", target: "_usage"
+        - if users
+          %li{class: active("admin/users")}= link_to "Users", admin_users_path
