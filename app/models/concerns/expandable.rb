@@ -31,7 +31,7 @@ module Expandable
     klass.find(id).expand(options)
   rescue ActiveRecord::RecordNotFound => e
     if ENV["SYNC_#{klass.to_s.upcase}"] && ENV["SYNC_#{klass.to_s.upcase}"].include?("|#{id}|")
-      "valid"
+      "valid" # used in lib/legacy/article.rb as referants may not exist at time article is processed
     else
       raise "#{id} is not a valid #{klass.to_s.downcase} ID"
     end
@@ -40,6 +40,7 @@ module Expandable
   def expand_special(type, data, options)
     case type
     when "EMA"
+      # see the hack compensate_redcarpet_ema_escaping in concerns/remarkable.rb necessary for this to function
       raise "#{data} is not a valid email address" unless data.match(/\A[^.@\s][^@\s]*@[^.@\s]+(\.[^@\s]+)+\z/)
       link = %Q{<a href="mailto:#{data}">#{options[:text] || data}</a>}
       "<script>liame(#{link.obscure})</script>"
