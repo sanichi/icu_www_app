@@ -12,7 +12,7 @@ describe Fee::Subscription do
     end
 
     it "age reference date" do
-      expect(fee.age_ref_date.to_s).to eq "2013-09-01"
+      expect(fee.age_ref_date.to_s).to eq "2014-01-01"
     end
 
     it "description" do
@@ -30,7 +30,7 @@ describe Fee::Subscription do
       fee.save
       expect(fee.season.to_s).to eq fee.years
       expect(fee.start_date).to eq fee.season.start
-      expect(fee.age_ref_date).to eq fee.season.start
+      expect(fee.age_ref_date).to eq fee.season.end.beginning_of_year
     end
   end
 
