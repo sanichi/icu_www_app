@@ -1,6 +1,7 @@
 module Expandable
   EXPANDABLE = {
     "ART" => { class: Article, title: /\S/ },
+    "CAL" => { class: Event, name: /\S/, title: /\S/ },
     "DLD" => { class: Download, text: /\S/ },
     "EVT" => { class: Event, name: /\S/, title: /\S/ },
     "GME" => { class: Game, text: /\S/ },

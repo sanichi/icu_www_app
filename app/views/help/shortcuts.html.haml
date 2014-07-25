@@ -23,48 +23,287 @@
   and both will produce exactly the same link on the page, but using shortcuts is generally quicker and less error prone.
   In addition, shortcuts can help detect certain types of errors. For example if you were to enter a non-existent ID for a download:
 %pre [DLD:99999]
-%p In this case the database would be consulted, the invalid ID detected and an error message displayed prompting you to correct the error.
+%p In this case the database would be consulted, the invalid ID detected and a message displayed prompting you to correct the error.
 
-%h3 Articles (ART)
+%a{name: "ART"}
+%h3 ART: Article
 
-%p TODO
+%p
+  The code for an article link is
+  %strong ART
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [ART:123:Further details]
+%p
+  If it's missing then the
+  %strong article title
+  from the database is used.
+%pre [ART:123]
 
-%h3 Calendar Events (EVT)
+%a{name: "CAL"}
+%h3 CAL: Calendar Event
 
-%p TODO
+%p
+  The code for a calendar event link is
+  %strong CAL
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [CAL:123:For your diary]
+%p
+  If it's missing then the
+  %strong name of the event
+  from the database is used.
+%pre [CAL:123]
 
-%h3 Chess Diagrams (FEN)
+%a{name: "DLD"}
+%h3 DLD: Download
 
-%p TODO
+%p
+  The code for a downlaod link is
+  %strong DLD
+  and an ID is required.
+  The only option is the link text, which follows the ID.
+%pre [DLD:123:full report]
+%p
+  If it's missing then the single word
+  %strong "download"
+  is used.
+%pre [DLD:123]
 
-%h3 Downloads (DLD)
+%a{name: "EMA"}
+%h3 EMA: Emails Address
 
-%p TODO
+%p
+  This shortcut is less about saving typing and more to do with hiding email addresses
+  from automated harvesting programs under the control of spammers. You should
+  %strong always use it
+  instead of inserting raw HTML email links. The code to use is
+  %strong EMA
+  and, unlike most other shortcuts, you specify an email address rather than a database ID. An example is:
+%pre [EMA:secretary@icu.ie]
+%p which would produce the following HTML:
+%pre &lt;script&gt;liame('vr&lt;\057n&gt;', 'vr"&gt;frpergnel\100vph', '&lt;n uers="znvygb:frpergnel\100vph')&lt;/script&gt;
+%p
+  This may not look much like an email link but, thanks to some JavaScript embedded in ICU web pages,
+  it is, believe it or not, exactly equivalent to:
+%pre &lt;a href="mailto:secretary@icu.ie"&gt;secretary@icu.ie&lt;/a&gt;
+%p
+  As you can imagine, the spammers would have a hard time extracting an email address from that!
+  There is one option for the link text. If you don't specify any, then the email address is used
+  (as in the above example). Here's the same example but with the link text explicitly set:
+%pre [EMA:secretary@icu.ie:ICU Secretary]
 
-%h3 Emails addresses (EMA)
+%a{name: "EVT"}
+%h3 EVT: Calendar Event
 
-%p TODO
+%p
+  %strong EVT
+  is an alias for
+  %strong CAL
+  and works the same way.
 
-%h3 Games (GME)
+%a{name: "FEN"}
+%h3 FEN: Chess Diagram
 
-%p TODO
+= Board.new("1K1k4/1P6/8/8/8/8/r7/2R5 w").expand({align: "right", comment: "White to play and win"}).html_safe
 
-%h3 Images (IMG)
+%p
+  This shortcut (the code for which is
+  = succeed(")") do
+    %strong FEN
+  doesn't produce a link, rather it embeds a static chess diagram in the page with some optional text.
+  Unlike most of the other shortcuts, it doesn't use the ID of a database record but instead
+  requires a specification of the chess position using
+  = succeed(".") do
+    = link_to "Forsyth–Edwards Notation", "http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation", target: "wikipedia"
+  For example, here is how to show the Lucena position:
+%pre [FEN:1K1k4/1P6/8/8/8/8/r7/2R5 w - - 4 1]
+%p
+  You can specify the entire FEN code if you like, but since the last 4 parts (castling availability,
+  en passant square, half-move clock and full-move number are not required to produce a diagram) you can
+  omit them:
+%pre [FEN:1K1k4/1P6/8/8/8/8/r7/2R5 w]
+%p
+  There are two options, the first is for board position. If you specify:
+%ul
+  %li
+    %strong left
+    (or don't specify anything at all)
+    then the board will float to the left and surrounding text will flow around it,
+  %li
+    %strong right
+    then the board will float to the right and surrounding text will flow around it,
+  %li
+    %strong center
+    then the board will be centered and not float (surrounding text will be above or below the board).
+%p
+  The second option is for a short comment, which will be left blank if you don't specify one.
+  Putting all this together, here's an example showing how to produce a diagram of the Lucena
+  position floated to the right with a comment (just like the diagram you can see to the right):
+%pre [FEN:1K1k4/1P6/8/8/8/8/r7/2R5 w:right:White to play and win]
 
-%p TODO
+%a{name: "GME"}
+%h3 GME: Game
 
-%h3 Image Links (IML)
+%p
+  The code for a game link is
+  %strong GME
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [GME:123:amazing game]
+%p
+  If it's missing then the
+  %strong player's names
+  from the database are used, as in this example:
+%pre [GME:20838]
+%p which would produce the HTML link:
+%pre &lt;a href="/games/20838"&gt;Orr, Mark-Bologan, Viktor&lt;/a&gt;
+%p If the special value "*_*" is given for the link text,
+%pre [GME:20838:*-*]
+%p
+  then the
+  %strong result of the game
+  from the database is used (rather than the player names):
+%pre &lt;a href="/games/20838"&gt;1-0&lt;/a&gt;
 
-%p TODO
+%a{name: "IMG"}
+%h3 IMG: Image
 
-%h3 News (NWS)
+- if image = Image.where(id: 619).first
+  = image.expand({type: "IMG", align: "right", width: 250}).html_safe
 
-%p TODO
+%p
+  The code
+  %strong IMG
+  is not used for links but to embed images in the page (as shown to the right).
+  For links to images, see
+  %em Image Links
+  (IML), below.
+%pre [IMG:123]
+%p
+  If you specify no options (as in the example above) you get all the defaults, which are:
+%ul
+  %li
+    the image is
+    %strong floated left
+    and the surrounding text flows around it,
+  %li
+    the image is
+    %strong full size,
+  %li
+    it will have a
+    %strong margin
+    to the right (to have some space between it and the surrounding text),
+  %li
+    the
+    %strong alt
+    (alternative) text for blind users or text-only browsers will be the
+    %strong caption
+    from the database.
+%p
+  To make the image float right, instead of left, then specify
+  %strong right
+  as one of the (colon-separated) options.
+  To center it (and not have text flow around it) specify
+  = succeed(".") do
+    %strong center
+%p
+  Unless an image is quite small, you probably don't want to have it display in full size, especially in a news item.
+  To alter the size of an image,
+  = succeed(".") do
+    %strong specify an explict width or height
+  For example, the natural size of the ICU logo
+  (image ID 619) is 600x600. The reduced size image displayed on the right was produced by:
+%pre [IMG:619:width=250:right]
+%p
+  Specifying "width=100" not only reduces the width, but reduces the height by the same amount.
+  The same effect could equally have been acheived by altering the height instead ("height=250").
+%p
+  A left (right)
+  %strong margin
+  is applied by default if the image is floated right (left).
+  The only time you might not want a margin is if you want to float multiple small images
+  left or right and don't want gaps betweem them. In this case, specify "margin=no"
+  for all images floated to one side except the last one. You can see the technique
+  in action in
+  = succeed(".") do
+    = link_to "this news item", news_path(4)
+%p
+  To explicity specify the
+  %strong alt
+  text (instead of defaulting to the image caption from the database)
+  just add a colon and then the text:
+%pre [IMG:123:Philip Short]
 
-%h3 Rated Tournaments (RTN)
+%a{name: "IML"}
+%h3 IML: Image Link
 
-%p TODO
+%p
+  The code for producing a link to an image is
+  %strong IML
+  and an ID is required.
+  The only option is the link text, which follows the ID.
+%pre [IML:123:full resolution image]
+%p
+  If it's missing then the single word
+  %strong "image"
+  is used.
+%pre [IML:123]
 
-%h3 Tournaments (TRN)
+%a{name: "NWS"}
+%h3 NWS: News
 
-%p TODO
+%p
+  The code for a news item link is
+  %strong NWS
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [NWS:123:Announcement]
+%p
+  If it's missing then the
+  %strong news item headline
+  from the database is used.
+%pre [NWS:123]
+
+%a{name: "PGN"}
+%h3 PGN: Game
+
+%p
+  %strong PGN
+  is an alias for
+  %strong GME
+  and works the same way.
+
+%a{name: "RTN"}
+%h3 RTN: Rated Tournament
+
+%p
+  This shortcut produces links on the ICU ratings site (not this site) and it's preferable to use this
+  rather than
+  %strong TRN
+  for a cross table, unless the ratings site doesn't have the one you want (for example, if it's a rapid tournament).
+  The code for a rated tournament link is
+  %strong RTN
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [RTN:123:cross table]
+%p
+  If it's missing then the
+  %ID
+  you specified is used instead. For example:
+%pre [RTN:123]
+%p produces the HTML link:
+%pre &lt;a href="http://ratings.icu.ie/tournaments/123"&gt;123&lt;/a&gt;
+
+%a{name: "TRN"}
+%h3 TRN: Tournament
+
+%p
+  The code for a tournament link is
+  %strong TRN
+  and an ID is required. The only option is the link text, which follows the ID.
+%pre [TRN:123:cross table]
+%p
+  If it's missing then the
+  %strong tournament name
+  from the database is used.
+%pre [TRN:123]
+%p
+  Now that we have the ratings site, it's preferable to use links to it's cross tables with
+  = succeed(".") do
+    %strong RTN

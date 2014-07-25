@@ -123,24 +123,26 @@ describe Expandable do
     let(:name)  { Faker::Lorem.sentence }
     let(:link)  { '<a href="/events/%d">%s</a>' }
 
-    it "default name" do
-      expect(d.expand_all("[EVT:#{event.id}]")).to eq  link % [event.id, event.name]
-    end
+    %w[CAL EVT].each do |type|
+      it "default name" do
+        expect(d.expand_all("[#{type}:#{event.id}]")).to eq  link % [event.id, event.name]
+      end
 
-    it "explicit name" do
-      expect(d.expand_all("[EVT:#{event.id}:name=#{name}]")).to eq link % [event.id, name]
-    end
+      it "explicit name" do
+        expect(d.expand_all("[#{type}:#{event.id}:name=#{name}]")).to eq link % [event.id, name]
+      end
 
-    it "implicit name" do
-      expect(d.expand_all("[EVT:#{event.id}:#{name}]")).to eq link % [event.id, name]
-    end
+      it "implicit name" do
+        expect(d.expand_all("[#{type}:#{event.id}:#{name}]")).to eq link % [event.id, name]
+      end
 
-    it "backward compatibility" do
-      expect(d.expand_all("[EVT:#{event.id}:title=#{name}]")).to eq link % [event.id, name]
-    end
+      it "backward compatibility" do
+        expect(d.expand_all("[#{type}:#{event.id}:title=#{name}]")).to eq link % [event.id, name]
+      end
 
-    it "invalid ID" do
-      expect{d.expand_all("[EVT:#{bad_id}]")}.to raise_error error("event")
+      it "invalid ID" do
+        expect{d.expand_all("[#{type}:#{bad_id}]")}.to raise_error error("event")
+      end
     end
   end
 
