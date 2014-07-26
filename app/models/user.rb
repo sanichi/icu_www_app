@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   attr_accessor :password, :ticket
 
   OK = "OK"
-  ROLES = %w[admin calendar editor membership translator treasurer]
+  ROLES = %w[admin calendar editor inspector membership translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
   THEMES = %w[Amelia Cerulean Cosmo Cyborg Darkly Flatly Journal Lumen Superhero Readable Simplex Slate Spacelab United Yeti]
   DEFAULT_THEME = "Flatly"

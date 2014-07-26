@@ -25,10 +25,11 @@ describe Player do
   context "authorization" do
     let(:header) { "h1" }
     let(:level1) { %w[admin membership] }
-    let(:level2) { User::ROLES.reject { |role| level1.include?(role) }.append("guest") }
+    let(:level2) { %w[inspector] }
+    let(:level3) { User::ROLES.reject { |role| level1.include?(role) || level2.include?(role) }.append("guest") }
     let(:player) { create(:player) }
 
-    it "level 1 can manage players" do
+    it "level 1 can manage" do
       level1.each do |role|
         login role
         visit new_admin_player_path
@@ -43,8 +44,24 @@ describe Player do
       end
     end
 
-    it "level 2 can only index players" do
+    it "level 2 can index and show" do
       level2.each do |role|
+        login role
+        visit new_admin_player_path
+        expect(page).to have_css(failure, text: unauthorized)
+        visit edit_admin_player_path(player)
+        expect(page).to have_css(failure, text: unauthorized)
+        visit players_path
+        expect(page).to_not have_css(failure)
+        visit admin_player_path(player)
+        expect(page).to_not have_css(failure, text: unauthorized)
+        expect(page).to have_css(header, text: player.name)
+        expect(page).to_not have_link(edit)
+      end
+    end
+
+    it "level 3 can only index" do
+      level3.each do |role|
         login role
         visit new_admin_player_path
         expect(page).to have_css(failure, text: unauthorized)

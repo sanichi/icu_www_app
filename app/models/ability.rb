@@ -29,6 +29,10 @@ class Ability
         can :manage, Player
       end
 
+      if user.inspector?
+        can :show, Player
+      end
+
       if user.translator?
         can :manage, Translation
         can :show, JournalEntry, journalable_type: "Translation"
