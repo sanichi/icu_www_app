@@ -24,12 +24,12 @@
   Click
   = succeed(",") do
     = link_to t("shop.shop"), shop_path
-  click on the type of subscription that suits your circumstances (standard, junior, unemployed, over 65, etc.)
-  and then click one of the following buttons:
+  click on the type of subscription that suits the circumstances (standard, junior, unemployed, over 65, etc.)
+  of the person you want to subscribe and then click one of the following buttons:
 %ul
   %li
     %strong= t("item.member.me")
-    if you're already logged in,
+    if you're already logged in and want to subscribe yourself,
   %li
     %strong= t("item.member.select")
     to lookup an existing member by ID or name,
@@ -40,11 +40,12 @@
   %strong Important:
   before trying to create a
   %strong new member
-  please check that the person isn't already in the ICU database by clicking on
+  please check that there isn't an existing record in the ICU database by clicking
   %strong= t("item.member.select")
-  and searching for the person by name. This helps to avoid creating
-  %strong duplicate
-  ICU IDs. The minimum information you need to create a new member is:
+  and searching for the person by name. This helps to avoid
+  %strong duplicate ICU IDs
+  which are bad because, for example, they could lead to more than one rating being tracked for the same person.
+  The minimum information you need to create a new member is:
 %ol
   %li last name,
   %li first names (middle initials suffice),
@@ -66,7 +67,7 @@
   %li subscribe again in the future (and identify yourself by ID rather than name),
   %li
     = link_to "create a login account", help_accounts_path(anchor: "create_account")
-    for the ICU websites (so they can display information relevant to you).
+    for the ICU websites (so information relevant to you can be displayed).
 
 %a{name: "season_ticket"}
 %h3 Season Ticket
@@ -74,8 +75,9 @@
 %p
   This is a short sequence of letters and digits which is proof that a subscription has been paid by a particular member for a particular season.
   A member who is in possession of a valid season ticket can use it to create a login account to the ICU websites. You should keep your season
-  tickets secret to avoid someone impersonating you. If you've already got a login account then you don't need a season ticket but unless you
-  subscribe each season your account will become inactive and you will ned to re-subscribe in order to re-activate it.
+  ticket secret to avoid someone impersonating you. If you've already got a login account then you don't need a season ticket (unless you want
+  a new account using a new email address) but unless you subscribe each season your account will eventually become inactive and you will need
+  to re-subscribe in order to re-activate it.
 %p
   For any payments that involve subscriptions, the confirmation email includes ICU IDs and season tickets for each subscriber.
   If you're paying subscriptions for other people, please pass on this information in confidence.
@@ -171,10 +173,11 @@
         = succeed(",") do
           = @treasurer.name
         = @treasurer.address
-    = case @treasurer.gender
-      - when "M" then "He"
-      - when "F" then "She"
-      - else "They"
+    = succeed(" ") do
+      = case @treasurer.gender
+        - when "M" then "He"
+        - when "F" then "She"
+        - else "They"
     will reply with ICU IDs and season tickets for all subscribers.
-    If you're paying for other people, pass the information on
+    If you're paying for other people, pass on the information
     (in confidence, because season tickets are private to each subscriber).

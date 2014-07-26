@@ -2,6 +2,7 @@ en:
   champion:
     champion: Irish Champion
     champions: Irish Champions
+    winner: Winner
     winners: Winner(s)
     category:
       any: Any category

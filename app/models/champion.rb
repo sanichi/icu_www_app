@@ -24,7 +24,7 @@ class Champion < ActiveRecord::Base
   def self.search(params, path)
     matches = ordered
     matches = matches.where(category: params[:category]) if CATEGORIES.include?(params[:category])
-    matches = matches.where("winners LIKE ?", "%#{params[:winners]}%") if params[:winners].present?
+    matches = matches.where("winners LIKE ?", "%#{params[:winner]}%") if params[:winner].present?
     matches = matches.where("year LIKE ?", "%#{params[:year]}%") if params[:year].present? && params[:year].match(/\A(18|19|20)/)
     paginate(matches, params, path)
   end

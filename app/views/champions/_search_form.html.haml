@@ -1,5 +1,5 @@
 = form_tag champions_path, method: :get, class: "form-inline", role: "form" do
   = render "utils/inline_text_field", param: :year, text: t("year"), size: 5
-  = render "utils/inline_text_field", param: :winners, text: t("champion.winners")
+  = render "utils/inline_text_field", param: :winner, text: t("champion.winner")
   = render "utils/inline_select", param: :category, text: t("category"), menu: champion_category_menu(params[:category])
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"
