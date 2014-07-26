@@ -1,9 +1,19 @@
 # Synchronisation tasks to be performed once (then never again) to build the initial version
 # of the new ICU database (www_production) from data in the old ICU database (icuadmi_main)
 # and also the ratings database (ratings_production).
-# Run it like this:
+# Run them like this:
 #   $ bin/rake sync:all > ~/sync.log     # if performing for the first time, or
 #   $ bin/rake sync:all[f] > ~/sync.log  # if redoing because of changes
+# The actual migration took place on 2014-07-23 and the log files from these tasks
+# are stored in the following places:
+#   * aontas:~/bak/migration/sync (ICU server)
+#   * abidjan:~/Projects/Migration/sync (MO's desktop)
+#   * mogadishu:~/Projects/Migration/sync (MO's laptop)
+# A copy of the legacy database has also been retained on MO's computers and in the file:
+#   * aontas:~/bak/migration/www1/icuadmi_main_2014-07-23.sql.gz
+# After the migration, the tasks in this file (except check which is still OK to run) were
+# all disabled. This code is kept for posterity in case any detective work, in conjunction
+# with the log files and the last state of the legacy database, is ever required.
 namespace :sync do
   desc "Convert icuadmi_main/clubs to www_production/clubs"
   task :clubs, [:force] => :environment do |task, args|
