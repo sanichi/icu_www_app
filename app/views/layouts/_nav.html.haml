@@ -9,6 +9,7 @@
       %li{class: active("pages", "home")}= link_to t("home"), home_path
       %li{class: active("events")}= link_to t("event.calendar"), events_path
       %li{class: active("payments")}= link_to t("shop.shop"), shop_path
+      %li{class: active("icu")}= link_to t("icu.ICU"), icu_index_path
       %li.dropdown
         = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
           = t("more")
@@ -20,7 +21,6 @@
           %li{class: active("downloads")}= link_to t("download.downloads"), downloads_path
           %li{class: active("games")}= link_to t("game.games"), games_path
           %li{class: active("help")}= link_to t("help.HELP"), help_index_path
-          %li{class: active("icu")}= link_to t("icu.ICU"), icu_index_path
           %li{class: active("images")}= link_to t("image.images"), images_path
           %li{class: active("champions")}= link_to t("champion.champions"), champions_path
           %li{class: active("news")}= link_to t("news.news"), news_index_path

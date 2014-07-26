@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725095834) do
+ActiveRecord::Schema.define(version: 20140726181617) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -328,6 +328,16 @@ ActiveRecord::Schema.define(version: 20140725095834) do
   add_index "news", ["date"], name: "index_news_on_date", using: :btree
   add_index "news", ["headline"], name: "index_news_on_headline", using: :btree
   add_index "news", ["user_id"], name: "index_news_on_user_id", using: :btree
+
+  create_table "officers", force: true do |t|
+    t.string   "role",       limit: 20
+    t.string   "emails"
+    t.integer  "player_id"
+    t.integer  "rank",       limit: 1
+    t.boolean  "executive",             default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "payment_errors", force: true do |t|
     t.integer  "cart_id"

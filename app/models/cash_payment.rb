@@ -7,7 +7,7 @@ class CashPayment
   PAYMENT_METHODS = Cart::PAYMENT_METHODS.select{ |method| method.match(/\A(cheque|cash)\z/) }
 
   validates :first_name, :last_name, presence: true
-  validates :email, format: { with: /\A[^\s@]+@[^\s@]+\z/ }, allow_nil: true
+  validates :email, format: { with: Global::EMAIL_RGX }, allow_nil: true
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }
   validates :amount, numericality: { greater_than: 0.0 }
 

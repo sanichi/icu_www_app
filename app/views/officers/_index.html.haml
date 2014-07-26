@@ -1,0 +1,20 @@
+%table{class: "table table-striped"}
+  %thead
+    %tr
+      %th= t("officer.officer")
+      %th= t("name")
+      %th= t("email")
+      %th= t("player.phone.phones")
+  %tbody
+    - officers.each do |officer|
+      %tr
+        %td
+          = succeed(officer.executive ? "" : "*") do
+            = t("officer.role.#{officer.role}")
+        %td= officer.player.name if officer.player
+        %td= officer.html_emails
+        %td= officer.player.phones if officer.player
+%p.small.text-center
+  = "*"
+  = t("officer.non_exec")
+  = t("officer.officer")

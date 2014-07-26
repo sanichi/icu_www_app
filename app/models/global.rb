@@ -2,6 +2,10 @@ module Global
   # Indicates whether data comes from the legacy database and website (www1) or this one (www2).
   SOURCES = %w[www1 www2]
 
+  # Simple regular expression for email addresses.
+  EMAIL = '[^\s@]+@[^\s@]+'
+  EMAIL_RGX = /\A#{EMAIL}\z/
+
   # The oldest date before which we can be sure the ICU did not exist (used in validating dates and years).
   MIN_YEAR = 1850
 

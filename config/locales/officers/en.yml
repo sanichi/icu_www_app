@@ -1,0 +1,28 @@
+en:
+  officer:
+    exec: Executive
+    non_exec: Non-Executive
+    officer: Officer
+    officers: Officers
+    officer_contacts: "Officers & Contact Details"
+    role:
+      arbitration: Arbitration Officer
+      chair: Chairperson
+      connaught: Connaught Delegate
+      development: Development Officer
+      fide_ecu: "FIDE & ECU Delegate"
+      juniors: Junior Officer
+      leinster: Leinster Delegate
+      membership: Membership Officer
+      munster: Munster Delegate
+      president: President
+      pro: Public Relations Officer
+      ratings: Rating Officer
+      secretary: Secretary
+      selections: Selection Committee Chairperson
+      tournaments: Tournament Officer
+      treasurer: Treasurer
+      ulster: Ulster Delegate
+      vicechair: Vice Chairperson
+      webmaster: Webmaster
+      women: Women's Officer

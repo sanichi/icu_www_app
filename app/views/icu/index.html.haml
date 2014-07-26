@@ -1,10 +1,21 @@
 - content_for :title, t("icu.index")
+- content_for :includes do
+  = javascript_include_tag "email.js"
 
-%h1.text-center= t("icu.index")
-
-%ul
-  - Global::ICU_PAGES.keys.each do |page|
-    %li
-      = succeed(Global::ICU_PAGES[page].present? ? ":" : "") do
-        = link_to t("icu.#{page}"), send("icu_#{page}_path")
-      = Global::ICU_PAGES[page]
+.row
+  .col-md-10.col-md-offset-1
+    %h1.text-center= t("icu.index")
+    %hr
+    %a{name: "documents"}
+    %h2.text-center= t("icu.documentation")
+    %ul
+      - Global::ICU_PAGES.keys.each do |page|
+        %li
+          = succeed(Global::ICU_PAGES[page].present? ? ":" : "") do
+            = link_to t("icu.#{page}"), send("icu_#{page}_path")
+          = Global::ICU_PAGES[page]
+    - unless @officers.empty?
+      %hr
+      %a{name: "contact"}
+      %h2.text-center= t("officer.officer_contacts")
+      = render "officers/index", officers: @officers

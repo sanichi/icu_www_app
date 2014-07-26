@@ -8,7 +8,7 @@ class NewPlayer
   validates :fed, format: { with: /\A[A-Z]{3}\z/ }
   validates :gender, inclusion: { in: Player::GENDERS }
   validates :club_id, numericality: { greater_than: 0 }, allow_nil: true
-  validates :email, format: { with: /\A[^\s@]+@[^\s@]+\z/ }, allow_nil: true
+  validates :email, format: { with: Global::EMAIL_RGX }, allow_nil: true
 
   validates_date :dob, after: "1900-01-01", on_or_before: -> { Date.today }
   validates_date :joined, after: "2014-01-01", on_or_before: -> { Date.today }

@@ -2,3 +2,5 @@
 .well.well-sm.text-center.small
     = "© 2004-#{Date.today.year}"
     = t("icu.icu")
+    = "●"
+    = link_to t("icu.contact_us"), icu_index_path(anchor: "contact")
