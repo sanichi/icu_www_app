@@ -21,6 +21,7 @@
         = render "utils/select_for", locals.merge(param: :trainer_title, text: t("player.title.trainer"), width: 2, menu: player_title_trainer_menu(@player.trainer_title))
         = render "utils/select_for", locals.merge(param: :club_id, text: t("club.club"), width: 2, menu: club_menu(@player.club_id, none: true))
         = render "utils/select_for", locals.merge(param: :status, text: t("player.status.status"), width: 2, menu: player_status_menu(@player.status))
+        = render "utils/select_for", locals.merge(param: :privacy, text: t("player.privacy"), menu: player_privacy_menu(@player.privacy), multiple: true, width: 2, size: Player::PRIVACIES.size)
         - if @player.new_record?
           = hidden_field :player, :player_id
         - else

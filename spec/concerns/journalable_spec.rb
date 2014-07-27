@@ -16,6 +16,7 @@ describe Journalable do
     [Game, "/games/%d"],
     [Image, "/images/%d"],
     [News, "/news/%d"],
+    [Officer, "/admin/officers/%d"],
     [Pgn, "/admin/pgns/%d"],
     [Player, "/admin/players/%d"],
     [Series, "/series/%d"],

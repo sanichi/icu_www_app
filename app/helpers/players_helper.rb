@@ -26,6 +26,16 @@ module PlayersHelper
     options_for_select(orders, selected)
   end
 
+  def player_privacy_menu(selected)
+    privacies = []
+    Player::PRIVACIES.each do |privacy|
+      if privacy.match(/\A([a-z]+)_phone\z/)
+        privacies.push [t("player.phone.#{$1}", locale: "en"), privacy]
+      end
+    end
+    options_for_select privacies, selected.try(:split)
+  end
+
   def player_yob_relation_menu(selected)
     options_for_select(%w[= < >], selected)
   end

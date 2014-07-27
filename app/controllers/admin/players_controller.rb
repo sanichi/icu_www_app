@@ -47,6 +47,6 @@ class Admin::PlayersController < ApplicationController
       %i[email address home_phone mobile_phone work_phone] +
       %i[player_title arbiter_title trainer_title] +
       %i[player_id note source status]
-    params[:player].permit(attrs)
+    params[:player].permit(*attrs, privacy: [])
   end
 end

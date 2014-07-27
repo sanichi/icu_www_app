@@ -137,6 +137,11 @@ describe Player do
       expect(player.phones).to eq "h: 01 8304991, m: 086 8540597, w: 01 6477406"
       player = create(:player)
       expect(player.phones).to eq ""
+      player = create(:player, home_phone: "+44 131 553 9051", mobile_phone: "0044 7968 537010", privacy: "home_phone work_phone")
+      expect(player.phones).to eq "h: 0044 131 5539051, m: 0044 7968 537010"
+      expect(player.phones(filter: true)).to eq "m: 0044 7968 537010"
+      player = create(:player, home_phone: "01 8304991", mobile_phone: "086 854 0597", work_phone: "01-6477406", privacy: "home_phone mobile_phone work_phone")
+      expect(player.phones(filter: true)).to eq ""
     end
 
     it "#name" do
@@ -153,6 +158,15 @@ describe Player do
       expect(create(:player, first_name: "Mark", last_name: "Orr").initials).to eq "MO"
       expect(create(:player, first_name: "jonathan", last_name: "o'connor").initials).to eq "JOC"
       expect(create(:player, first_name: "Úna", last_name: "O'Boyle").initials).to eq "UOB"
+    end
+
+    it "#privacy" do
+      expect(create(:player).privacy).to be_nil
+      expect(create(:player, privacy: "home_phone").privacy).to eq "home_phone"
+      expect(create(:player, privacy: " mobile_phone rubbish home_phone ").privacy).to eq "home_phone mobile_phone"
+      expect(create(:player, privacy: %w[mobile_phone work_phone rubbish]).privacy).to eq "mobile_phone work_phone"
+      expect(create(:player, privacy: %w[pinky perky]).privacy).to be_nil
+      expect(create(:player, privacy: %w[mobile_phone work_phone home_phone]).formatted_privacy).to eq %w[home mobile work].map{ |p| I18n.t("player.phone.#{p}") }.join(", ")
     end
   end
 end

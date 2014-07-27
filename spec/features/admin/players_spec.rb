@@ -18,6 +18,7 @@ describe Player do
   let(:master_id)       { I18n.t("player.master_id") }
   let(:mobile)          { I18n.t("player.phone.mobile") }
   let(:none)            { I18n.t("player.no_club") }
+  let(:privacy)         { I18n.t("player.privacy") }
   let(:status)          { I18n.t("player.status.status") }
   let(:title)           { I18n.t("player.title.player") }
   let(:work)            { I18n.t("player.phone.work") }
@@ -281,6 +282,19 @@ describe Player do
       expect(player.joined).to be_nil
       expect(player.gender).to be_nil
       expect(player.status).to eq "inactive"
+    end
+
+    it "privacy" do
+      expect(player.privacy).to be_nil
+      visit edit_admin_player_path(player)
+      select home, from: privacy
+      select work, from: privacy
+      click_button save
+      expect(page).to have_css(success, text: updated)
+      player.reload
+
+      expect(page).to have_content(player.formatted_privacy)
+      expect(player.privacy).to eq "home_phone work_phone"
     end
   end
 

@@ -8,7 +8,7 @@ class Player < ActiveRecord::Base
 
   journalize %w[
     first_name last_name dob gender fed email address home_phone mobile_phone work_phone
-    joined player_title arbiter_title trainer_title note status player_id club_id
+    joined player_title arbiter_title trainer_title note status player_id club_id privacy
   ], "/admin/players/%d"
 
   belongs_to :master, class_name: "Player", foreign_key: :player_id
@@ -23,11 +23,12 @@ class Player < ActiveRecord::Base
   ARBITER_TITLES = %w[IA FA NA]
   TRAINER_TITLES = %w[FST FT FI NI DI]
   RATING_TYPES = %w[full provisional]
+  PRIVACIES = %w[home_phone mobile_phone work_phone]
 
   scope :include_clubs, -> { includes(:club) }
   scope :non_duplicates, -> { where("player_id IS NULL") }
 
-  before_validation :normalize_attributes, :conditional_adjustment
+  before_validation :normalize_attributes, :conditional_adjustment, :canonicalize_privacy
 
   validates :first_name, :last_name, presence: true
   validates :player_id, numericality: { greater_than: 0 }, allow_nil: true
@@ -43,6 +44,7 @@ class Player < ActiveRecord::Base
   validates :legacy_rating, numericality: { only_integer: true }, allow_nil: true
   validates :legacy_rating_type, inclusion: { in: RATING_TYPES }, allow_nil: true
   validates :legacy_games, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :privacy, format: { with: /\A(#{PRIVACIES.join('|')})( (#{PRIVACIES.join('|')}))*\z/ }, allow_nil: true
 
   validates_date :dob, on_or_after: "1900-01-01", on_or_before: -> { Date.today }, allow_nil: true
   validates_date :joined, on_or_after: "1960-01-01", on_or_before: -> { Date.today }, allow_nil: true
@@ -114,12 +116,19 @@ class Player < ActiveRecord::Base
     titles.join(" ")
   end
 
-  def phones
+  def phones(filter: false)
     %w[home mobile work].each_with_object([]) do |type, numbers|
-      number = send("#{type}_phone")
-      if number.present?
+      atr = "#{type}_phone"
+      number = send(atr)
+      if number.present? && (!filter || privacy.blank? || !privacy.include?(atr))
         numbers << I18n.t("player.phone.one_letter.#{type}") + ": " + number
       end
+    end.join(", ")
+  end
+
+  def formatted_privacy
+    privacy.to_s.scan(/\w+/).map do |p|
+      p.match(/\A([a-z]+)_phone\z/) ? I18n.t("player.phone.#{$1}") : p
     end.join(", ")
   end
 
@@ -211,6 +220,14 @@ class Player < ActiveRecord::Base
     name = ICU::Name.new(first_name, last_name)
     self.first_name = name.first(chars: "US-ASCII")
     self.last_name = name.last(chars: "US-ASCII")
+  end
+
+  def canonicalize_privacy
+    if privacy.present?
+      self.privacy = privacy.scan(/\w+/) unless privacy.is_a?(Array)
+      self.privacy = privacy.select{ |p| PRIVACIES.include?(p) }.sort.join(" ")
+    end
+    self.privacy = nil if privacy.blank?
   end
 
   def strict?

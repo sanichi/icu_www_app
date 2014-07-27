@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140726181617) do
+ActiveRecord::Schema.define(version: 20140727073219) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -396,6 +396,7 @@ ActiveRecord::Schema.define(version: 20140726181617) do
     t.string   "legacy_rating_type", limit: 20
     t.integer  "legacy_games",       limit: 2
     t.integer  "latest_rating",      limit: 2
+    t.string   "privacy"
   end
 
   add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree

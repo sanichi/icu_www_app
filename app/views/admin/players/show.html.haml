@@ -78,6 +78,9 @@
       %tr
         %th= t("player.source.source")
         %td= t("player.source.#{@player.source}")
+      %tr
+        %th= t("player.privacy")
+        %td= @player.formatted_privacy
       = render "utils/timestamps", object: @player, ability: :manage
       - if @player.users.count > 0
         %tr
