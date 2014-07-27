@@ -13,7 +13,7 @@
             = t("officer.role.#{officer.role}")
         %td= officer.player.name if officer.player
         %td= officer.html_emails
-        %td= officer.player.phones if officer.player
+        %td= officer.player.phones(filter: true) if officer.player
 %p.small.text-center
   = "*"
   = t("officer.non_exec")
