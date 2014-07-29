@@ -18,9 +18,6 @@
       %tr
         %th= t("event.end")
         %td= @event.end_date
-      %tr
-        %th= t("category")
-        %td= t("event.category.#{@event.category}")
       - if @event.contact.present?
         %tr
           %th= t("event.contact")
@@ -48,6 +45,9 @@
           %tr
             %th= "File last updated"
             %td= @event.flyer_updated_at.to_s(:nosec)
+      %tr
+        %th= t("category")
+        %td= t("event.category.#{@event.category}")
       = render "utils/timestamps", object: @event, ability: :create
       - if admin && @event.user.present?
         %tr
