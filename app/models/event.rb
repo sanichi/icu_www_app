@@ -67,6 +67,36 @@ class Event < ActiveRecord::Base
     %q{<a href="/events/%d">%s</a>} % [id, opt[:name] || opt[:title] || name]
   end
 
+  def dates
+    parts = []
+    if start_date.year == end_date.year
+      parts.unshift start_date.year
+      if start_date.month == end_date.month
+        parts.unshift I18n.t("month.s#{start_date.strftime('%m')}")
+        if start_date.mday == end_date.mday
+          parts.unshift start_date.mday
+        else
+          parts.unshift "#{start_date.mday}–#{end_date.mday}"
+        end
+      else
+        parts.unshift I18n.t("month.s#{end_date.strftime('%m')}")
+        parts.unshift "#{end_date.mday}"
+        parts.unshift "–"
+        parts.unshift I18n.t("month.s#{start_date.strftime('%m')}")
+        parts.unshift "#{start_date.mday}"
+      end
+    else
+      parts.unshift end_date.year
+      parts.unshift I18n.t("month.s#{end_date.strftime('%m')}")
+      parts.unshift "#{end_date.mday}"
+      parts.unshift "–"
+      parts.unshift start_date.year
+      parts.unshift I18n.t("month.s#{start_date.strftime('%m')}")
+      parts.unshift "#{start_date.mday}"
+    end
+    parts.join(" ")
+  end
+
   private
 
   def normalize_attributes

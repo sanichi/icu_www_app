@@ -13,6 +13,7 @@ en:
   contact: Contact
   created_at: Created
   date: Date
+  dates: Dates
   date_format: YYYY-MM-DD
   default: default
   delete: Delete
@@ -67,6 +68,18 @@ en:
     m10: October
     m11: November
     m12: December
+    s01: Jan
+    s02: Feb
+    s03: Mar
+    s04: Apr
+    s05: May
+    s06: Jun
+    s07: Jul
+    s08: Aug
+    s09: Sep
+    s10: Oct
+    s11: Nov
+    s12: Dec
   pagination:
     frst: first
     next: next
