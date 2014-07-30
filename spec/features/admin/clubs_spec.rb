@@ -3,7 +3,6 @@ require 'rails_helper'
 describe Club do;
   include_context "features"
 
-  let(:contact)       { I18n.t("club.contact") }
   let(:county)        { I18n.t("club.county") }
   let(:district)      { I18n.t("club.district") }
   let(:latitude)      { I18n.t("club.lat") }

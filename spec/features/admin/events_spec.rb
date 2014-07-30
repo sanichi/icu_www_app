@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Event do;
   include_context "features"
 
-  let(:contact)       { I18n.t("event.contact") }
+  let(:contact_name)  { I18n.t("event.contact") }
   let(:event_email)   { I18n.t("event.email") }
   let(:end_date)      { I18n.t("event.end") }
   let(:flyer)         { I18n.t("event.flyer") }
@@ -127,7 +127,7 @@ describe Event do;
     it "maximum data" do
       check active
       select I18n.t("event.category.#{Event::CATEGORIES[1]}"), from: category
-      fill_in contact, with: contact_text
+      fill_in contact_name, with: contact_text
       fill_in event_email, with: email_text
       fill_in lat, with: lat_text
       fill_in long, with: long_text

@@ -26,7 +26,7 @@
                 = club.meet
             - if club.contact || club.contactable?
               %li.list-group-item
-                %em= "#{t('club.contact')}:"
+                %em= "#{t('contact')}:"
                 - contact = []
                 - contact << club.contact                                            if club.contact && !club.email
                 - contact << mail_to(club.email, club.contact || club.email)         if club.email

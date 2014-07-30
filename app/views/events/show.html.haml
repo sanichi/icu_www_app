@@ -18,18 +18,18 @@
       %tr
         %th= t("event.end")
         %td= @event.end_date
-      - if @event.contact.present?
+      - if @event.contact.present? || @event.email.present? || @event.phone.present?
         %tr
-          %th= t("event.contact")
-          %td= @event.contact
-      - if @event.email.present?
-        %tr
-          %th= t("event.email")
-          %td= mail_to @event.email, @event.email
-      - if @event.phone.present?
-        %tr
-          %th= t("event.phone")
-          %td= @event.phone
+          %th= t("contact")
+          %td
+            - if @event.contact.present? || @event.email.present?
+              = succeed(@event.phone.present? ? "," : "") do
+                - if @event.email.present?
+                  = mail_to @event.email, @event.contact.present? ? @event.contact : @event.email
+                - else
+                  = @event.contact
+            - if @event.phone.present?
+              = @event.phone
       - if @event.url.present?
         %tr
           %th= t("event.url")

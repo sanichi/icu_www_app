@@ -10,6 +10,7 @@ en:
   city: City
   comment: Comment
   confirm: Confirm
+  contact: Contact
   created_at: Created
   date: Date
   date_format: YYYY-MM-DD
