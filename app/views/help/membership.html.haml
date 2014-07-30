@@ -37,19 +37,28 @@
     %strong= t("item.member.new")
     to create a new member.
 %p
-  Note that when paying for subscriptions that are
+  Note that when paying for subscriptions types that are
   %em only
   for new members, the
-  %strong= t("item.member.me")
+  %em= t("item.member.me")
   and
-  %strong= t("item.member.select")
-  buttons will not be available. The minimum information you need to create a new member is:
+  %em= t("item.member.select")
+  buttons will not be available. The minimum information required to create a new member is:
 %ol
-  %li last name,
-  %li first names (middle initials suffice),
-  %li full date of birth,
-  %li gender,
-  %li existing FIDE federation (or desired federation if not already FIDE-registered).
+  %li
+    %strong last name,
+  %li
+    %strong first names
+    (middle initials suffice),
+  %li
+    full
+    %strong date of birth,
+  %li
+    %strong gender,
+  %li
+    existing
+    %strong FIDE federation
+    (or desired federation if not already FIDE-registered).
 %p
   When you've added all the items you want to pay for, including your subscription, checkout the cart and pay with your credit or debit card.
   Please supply an email address so we can send a confirmation email.
