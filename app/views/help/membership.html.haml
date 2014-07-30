@@ -24,8 +24,8 @@
   Click
   = succeed(",") do
     = link_to t("shop.shop"), shop_path
-  click on the type of subscription that suits the circumstances (standard, junior, unemployed, over 65, etc.)
-  of the person you want to subscribe and then click one of the following buttons:
+  click on the type of subscription that suits the circumstances (standard, unemployed, under 12, over 65, etc.)
+  of the person to be subscribed and then click one of the following buttons:
 %ul
   %li
     %strong= t("item.member.me")
@@ -37,15 +37,13 @@
     %strong= t("item.member.new")
     to create a new member.
 %p
-  %strong Important:
-  before trying to create a
-  %strong new member
-  please check that there isn't an existing record in the ICU database by clicking
+  Note that when paying for subscriptions that are
+  %em only
+  for new members, the
+  %strong= t("item.member.me")
+  and
   %strong= t("item.member.select")
-  and searching for the person by name. This helps to avoid
-  %strong duplicate ICU IDs
-  which are bad because, for example, they could lead to more than one rating being tracked for the same person.
-  The minimum information you need to create a new member is:
+  buttons will not be available. The minimum information you need to create a new member is:
 %ol
   %li last name,
   %li first names (middle initials suffice),
@@ -53,8 +51,8 @@
   %li gender,
   %li existing FIDE federation (or desired federation if not already FIDE-registered).
 %p
-  When you've added all the items you want to pay for, including your subscription, checkout your cart and pay with your credit or debit card.
-  Please supply an email address so we can send you a confirmation email.
+  When you've added all the items you want to pay for, including your subscription, checkout the cart and pay with your credit or debit card.
+  Please supply an email address so we can send a confirmation email.
 
 %a{name: "icu_id"}
 %h3 ICU ID
