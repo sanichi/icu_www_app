@@ -27,6 +27,7 @@ class Fee::Subscription < Fee
   end
 
   def applies_to?(user)
+    return false if new_player_required?
     return false unless user.player
     return false if Item::Subscription.any_duplicates(user.player, end_date).exists?
     true
@@ -34,6 +35,10 @@ class Fee::Subscription < Fee
 
   def new_player_allowed?
     true
+  end
+
+  def new_player_required?
+    name.match(/\bnew\b/i)
   end
 
   private

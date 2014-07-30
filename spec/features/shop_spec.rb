@@ -15,6 +15,7 @@ describe "Shop" do
   let(:item)            { I18n.t("item.item") }
   let(:last_name)       { I18n.t("player.last_name") }
   let(:new_member)      { I18n.t("item.member.new") }
+  let(:select_me)       { I18n.t("item.member.me") }
   let(:select_member)   { I18n.t("item.member.select") }
   let(:total)           { I18n.t("shop.cart.total") }
 
@@ -38,17 +39,18 @@ describe "Shop" do
   end
 
   context "subscriptions", js: true do
-    let!(:player)         { create(:player, dob: 58.years.ago.to_date, joined: 30.years.ago.to_date) }
-    let!(:player2)        { create(:player, dob: 30.years.ago.to_date, joined: 20.years.ago.to_date) }
-    let!(:junior)         { create(:player, dob: 10.years.ago.to_date, joined: 2.years.ago.to_date) }
-    let!(:oldie)          { create(:player, dob: 70.years.ago.to_date, joined: 50.years.ago.to_date) }
-    let!(:standard_sub)   { create(:subscription_fee, name: "Standard", amount: 35.0) }
-    let!(:unemployed_sub) { create(:subscription_fee, name: "Unemployed", amount: 20.0) }
-    let!(:under_12_sub)   { create(:subscription_fee, name: "Under 12", amount: 20.0, max_age: 12) }
-    let!(:over_65_sub)    { create(:subscription_fee, name: "Over 65", amount: 20.0, min_age: 65) }
-    let(:lifetime_sub)    { create(:lifetime_subscription, player: player) }
-    let(:existing_sub)    { create(:paid_subscription_item, player: player, fee: standard_sub) }
-    let(:newbie)          { create(:new_player, dob: 15.years.ago.to_date) }
+    let!(:player)           { create(:player, dob: 58.years.ago.to_date, joined: 30.years.ago.to_date) }
+    let!(:player2)          { create(:player, dob: 30.years.ago.to_date, joined: 20.years.ago.to_date) }
+    let!(:junior)           { create(:player, dob: 10.years.ago.to_date, joined: 2.years.ago.to_date) }
+    let!(:oldie)            { create(:player, dob: 70.years.ago.to_date, joined: 50.years.ago.to_date) }
+    let!(:standard_sub)     { create(:subscription_fee, name: "Standard", amount: 35.0) }
+    let!(:unemployed_sub)   { create(:subscription_fee, name: "Unemployed", amount: 20.0) }
+    let!(:under_12_sub)     { create(:subscription_fee, name: "Under 12", amount: 20.0, max_age: 11) }
+    let!(:new_under_18_sub) { create(:subscription_fee, name: "New Under 18", amount: 20.0, max_age: 17) }
+    let!(:over_65_sub)      { create(:subscription_fee, name: "Over 65", amount: 20.0, min_age: 66) }
+    let(:lifetime_sub)      { create(:lifetime_subscription, player: player) }
+    let(:existing_sub)      { create(:paid_subscription_item, player: player, fee: standard_sub) }
+    let(:newbie)            { create(:new_player, dob: 15.years.ago.to_date) }
 
     let(:lifetime_error)  { I18n.t("item.error.subscription.lifetime_exists", member: player.name(id: true)) }
     let(:exists_error)    { I18n.t("item.error.subscription.already_exists", member: player.name(id: true), season: standard_sub.season.to_s) }
@@ -146,6 +148,15 @@ describe "Shop" do
       expect(page).to have_css(failure, text: /already in.*cart/)
     end
 
+    it "new member required" do
+      visit shop_path
+      click_link new_under_18_sub.description
+
+      expect(page).to have_button(new_member)
+      expect(page).to_not have_button(select_me)
+      expect(page).to_not have_button(select_member)
+    end
+
     it "duplicate new member" do
       newbie_fed = ICU::Federation.find(player.fed).name
       newbie_sex = I18n.t("player.gender.#{player.gender}")
@@ -154,11 +165,11 @@ describe "Shop" do
       click_link standard_sub.description
       click_button new_member
 
-      fill_in first_name, with: player.first_name
-      fill_in last_name, with: player.last_name
       fill_in dob, with: player.dob.to_s
       select newbie_sex, from: gender
       select newbie_fed, from: fed
+      fill_in first_name, with: player.first_name
+      fill_in last_name, with: player.last_name
 
       click_button save
       expect(page).to have_css(failure, text: /matches.*#{player.id}/)
@@ -571,9 +582,6 @@ describe "Shop" do
 
     let(:existing_sub)      { create(:paid_subscription_item, player: user.player, fee: subscription_fee) }
     let(:existing_entry)    { create(:paid_entry_item, player: user.player, fee: entry_fee) }
-
-    let(:cancel)            { I18n.t("cancel") }
-    let(:select_me)         { I18n.t("item.member.me") }
 
     it "guest" do
       visit shop_path

@@ -23,7 +23,8 @@
           = render "fees/more_info", fee: @fee
         .panel-footer
           - if @fee.player_required
-            = render "player_ids_button"
+            - unless @fee.new_player_required?
+              = render "player_ids_button"
             - if @fee.applies_to?(current_user)
               = render "select_user_button"
             - if @fee.new_player_allowed?

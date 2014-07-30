@@ -15,7 +15,7 @@
                 = link_to news.headline, news
                 - unless news.active
                   = "(inactive)"
-              %td.col-sm-2.small.text-center= news.date
+              %td.col-sm-2.text-center= news.date
               - if admin
                 %td.col-sm-1.small.text-center= news.user.player.initials
           = render "utils/pagination_links", pager: @news, columns: 2 + (admin ? 1 : 0)
