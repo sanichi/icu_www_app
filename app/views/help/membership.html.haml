@@ -81,28 +81,27 @@
 
 %p
   This is a short sequence of letters and digits which is proof that a subscription has been paid by a particular member for a particular season.
-  A member who is in possession of a valid season ticket can use it to create a login account to the ICU websites. You should keep your season
-  ticket secret to avoid someone impersonating you. If you've already got a login account then you don't need a season ticket (unless you want
-  a new account using a new email address) but unless you subscribe each season your account will eventually become inactive and you will need
-  to re-subscribe in order to re-activate it.
+  A member who is in possession of a valid season ticket can use it to
+  = link_to "create a login account", help_accounts_path(anchor: "create_account")
+  for the ICU websites. Season tickets should be kept secret to avoid impersonation.
 %p
-  For any payments that involve subscriptions, the confirmation email includes ICU IDs and season tickets for each subscriber.
-  If you're paying subscriptions for other people, please pass on this information in confidence.
+  For payments that involve subscriptions, the confirmation email includes ICU IDs and season tickets for each subscriber.
+  When purchasing subscriptions for other people, please pass on this information in confidence.
 
 %a{name: "grace_period"}
 %h3 Grace Period
 
 %p
   In practice many subscribers pay late, even though the
-  = link_to "membership bye-laws", icu_membership_byelaws_path
-  specify that subscriptions are due on of before September 1st.
+  = link_to "Membership Bye-laws", icu_membership_byelaws_path
+  specify that subscriptions are due on or before September 1st.
   For the purposes of the September rating list and logging into the ICU websites,
   members who subscribed for the previous season are considered to still be members for the months of September to December.
   However, if you still haven't subscribed by January your rating won't be published that month and your logins,
   if you have any, will expire.
 %p
   Other organisations who require membership of the ICU to enter their tournaments (such as the Leinster and Munster leagues)
-  may or may not have a similar grace period. The safe option is to subscribe promtly.
+  may or may not have a similar grace period. The safe option is to subscribe promtly at the start of the season.
 
 %a{name: "fide_federation"}
 %h3 FIDE Federation
