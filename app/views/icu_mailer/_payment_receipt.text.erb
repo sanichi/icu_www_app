@@ -1,6 +1,6 @@
 Hi<%= cart.payment_name.present? ? " #{cart.payment_name}" : "" %>,
 
-<%- unless Rails.env == "production" %>
+<%- unless Rails.env.production? %>
 ** TEST PURCHASE, NO ACTUAL PAYMENT HAS BEEN TAKEN FROM YOUR CARD **
 
 <%- end %>

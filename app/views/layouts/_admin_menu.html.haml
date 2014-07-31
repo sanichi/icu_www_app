@@ -12,7 +12,7 @@
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
   - links += 1 if pgns    = can?(:index, Pgn)
-  - links += 1 if usage   = Rails.env == "production" && current_user.admin?
+  - links += 1 if usage   = Rails.env.production? && current_user.admin?
   - if links > 0
     %li.dropdown
       = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
