@@ -1,0 +1,12 @@
+- content_for :title, t("icu.documents")
+
+%h1.text-center= t("icu.documents")
+
+.row
+  .col-md-10.col-md-offset-1
+    %ul
+      - Global::ICU_DOCS.keys.each do |page|
+        %li
+          = succeed(Global::ICU_DOCS[page].present? ? ":" : "") do
+            = link_to t("icu.#{page}"), send("icu_#{page}_path")
+          = Global::ICU_DOCS[page]

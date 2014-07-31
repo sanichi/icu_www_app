@@ -205,6 +205,50 @@ class Player < ActiveRecord::Base
     paginate(matches, params, path, opt)
   end
 
+  def self.search_subscribers(params, path)
+    matches = include_clubs.order(:last_name, :first_name)
+    if params[:season].present? && params[:season].to_s.match(/\A20\d\d-\d\d\z/)
+      matches = matches.where(search_subscribers_sql, "%#{params[:season]}")
+      matches = matches.where(first_name_like(params[:first_name], params[:last_name])) if params[:first_name].present?
+      matches = matches.where(last_name_like(params[:last_name], params[:first_name])) if params[:last_name].present?
+      if params[:club_id].present?
+        club_id = params[:club_id].to_i
+        matches = matches.where(club_id: club_id > 0 ? club_id : nil)
+      end
+    else
+      matches = matches.none
+    end
+    paginate(matches, params, path)
+  end
+
+  def self.life_members
+    matches = include_clubs.order(:last_name, :first_name).where.not(status: "deceased")
+    matches = matches.where(life_members_sql)
+    matches
+  end
+
+  def self.search_subscribers_sql
+    <<SQL
+EXISTS(SELECT * FROM items WHERE
+  type        = 'Item::Subscription' AND
+  status      = 'paid' AND
+  player_id   = players.id AND
+  description LIKE ?
+)
+SQL
+  end
+
+  def self.life_members_sql
+    <<SQL
+EXISTS(SELECT * FROM items WHERE
+  type        = 'Item::Subscription' AND
+  status      = 'paid' AND
+  player_id   = players.id AND
+  description LIKE 'Lifetime%'
+)
+SQL
+  end
+
   private
 
   def normalize_attributes

@@ -1,0 +1,22 @@
+- content_for :title, t("icu.subscribers")
+
+%h1.text-center= t("icu.subscribers")
+
+= render "utils/search_panel", form: "search_form", col: "md", pad: 1
+
+- if @subscribers.count > 0
+  .row
+    .col-sm-8.col-sm-offset-2
+      %table{class: "table table-striped"}
+        %thead
+          %tr
+            %th= t("player.abbrev.id")
+            %th= t("player.name")
+            %th= t("club.club")
+        %tbody
+          - @subscribers.matches.each do |player|
+            %tr
+              %td= player.id
+              %td= link_to_if can?(:show, player), player.name(reversed: true), [:admin, player]
+              %td= link_to player.club.name, player.club if player.club
+          = render "utils/pagination_links", pager: @subscribers, columns: 3

@@ -1,0 +1,6 @@
+= form_tag icu_subscribers_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :last_name, text: t("player.last_name"), size: 8
+  = render "utils/inline_text_field", param: :first_name, text: t("player.first_name"), size: 8
+  = render "utils/inline_select", param: :club_id, text: t("club.club"), menu: club_menu(params[:club_id], any: true, none: true)
+  = render "utils/inline_select", param: :season, text: t("season"), menu: icu_season_menu(params[:season])
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

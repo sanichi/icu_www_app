@@ -28,6 +28,15 @@
   available. Detailed calculations relating to your ICU rating are available to any ICU member who
   logs in. Information that can help identify you, such as your DOB (copied to the ratings database
   from the main ICU database) is available to users with enhanced access.
+%p
+  The names and clubs of members who have paid a subscription for the current and previous
+  few seasons are listed publicly in
+  = succeed(",") do
+    = link_to t("icu.subscribers"), icu_subscribers_path
+  and there's also a public list of
+  = succeed(",") do
+    = link_to t("icu.life_members"), icu_life_members_path
+  containing names, titles and clubs.
 
 %a{name: "dob"}
 %h3 Date of Birth
@@ -57,10 +66,8 @@
   that are already stored for you.
 %p
   There is one exception to the rule that telephone numbers are never displayed publicly on the website and
-  that is if you become an ICU officer. By default, in that case, all your numbers are displayed in the
-  = link_to t("officer.officer_contacts"), icu_index_path(anchor: "contact")
-  section of the
-  = link_to t("icu.index"), icu_index_path
+  that is if you become an ICU officer. By default, in that case, all your numbers are displayed on the
+  = link_to t("icu.officers"), icu_officers_path
   page. If you don't want all (or even any of) your numbers to be displayed there, then there are two solutions.
 %ol
   %li

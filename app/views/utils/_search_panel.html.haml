@@ -1,9 +1,11 @@
-- defined?(pad) || pad = 0
-- defined?(col) || col = "sm"
+- defined?(pad)   || pad = 0
+- defined?(col)   || col = "sm"
+- defined?(title) || title = nil
 
 .row
   %div{class: "col-#{col}-#{12-pad-pad} col-#{col}-offset-#{pad}"}
     .panel.panel-default
-      .panel-heading.text-center
-        %strong= title
+      - if title.present?
+        .panel-heading.text-center
+          %strong= title
       .panel-body= render form
