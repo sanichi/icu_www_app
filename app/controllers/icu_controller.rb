@@ -6,6 +6,7 @@ class IcuController < ApplicationController
   def subscribers
     params[:season].present? or params[:season] = Season.new.to_s
     @subscribers = Player.search_subscribers(params, icu_subscribers_path)
+    flash.now[:warning] = t("no_matches") if @subscribers.count == 0
   end
 
   def life_members
