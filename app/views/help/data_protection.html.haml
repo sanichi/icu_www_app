@@ -4,10 +4,10 @@
 
 %p.small
   Below, the term
-  %strong "users with enhanced access"
-  when used in the context of this website means selected ICU officers
-  (typically the chairman, secretary, treasurer, rating officer and webmaster).
-  When used in the context of the ICU ratings website it means the rating officer, webmaster and all
+  %strong "user(s) with enhanced access"
+  in the context of this website means certain ICU officers
+  (variable, but typically the chairman, secretary, treasurer, rating officer and webmaster)
+  and in the context of the ICU ratings website it means the rating officer, webmaster and all
   = succeed(".") do
     = link_to "tournament reporters", "http://ratings.icu.ie/contacts", target: "ratings"
 
@@ -43,7 +43,7 @@
 %p
   You can, if you insist, ask us to remove your DOB from the database after you join but we advise against
   this, especially if you're a junior as it may prevent your selection for international competitions.
-  In the current webmaster's experience, only 2 people in the last 10 years have requested this.
+  In the current webmaster's experience, only 2 people in the last 10 years have made such a request.
 
 %a{name: "phone_numbers"}
 %h3 Phone Numbers
@@ -53,22 +53,21 @@
   and may use them to contact you. They will not be published publicly on the web site but will be made
   available to users with enhanced access. Those users may pass on your phone number(s) to other people
   involved in chess organisation (for example, tournament controllers) if they need to contact you urgently.
-  If you never want to be contacted by phone then don't supply any numbers or delete the numbers that are
-  already stored for you.
+  If you never want the ICU to contact you by phone then don't supply any numbers or delete the numbers
+  that are already stored for you.
 %p
   There is one exception to the rule that telephone numbers are never displayed publicly on the website and
   that is if you become an ICU officer. By default, in that case, all your numbers are displayed in the
   = link_to t("officer.officer_contacts"), icu_index_path(anchor: "contact")
   section of the
   = link_to t("icu.index"), icu_index_path
-  page. Most officers allow that but if you don't want to then there are two methods to prevent some or all of
-  your phone numbers appearing on that page:
+  page. If you don't want all (or even any of) your numbers to be displayed there, then there are two solutions.
 %ol
   %li
     Completely remove from the database any phone numbers you don't want displayed. The drawback of this option
-    is that it prevents everyone, including ICU officers, from looking up those numbers.
+    is that it hides your numbers from everyone, including ICU officers.
   %li
     The other, preferred option is to ask the webmaster to mark some or all of your phone numbers as private.
-    In that case, only the remaining (if any), non-private numbers will be displayed on the contacts page
+    In that case, only the remaining, non-private numbers (if any) will be displayed on the contacts page
     while all your numbers will still be available to ICU officers.
-%p As an ICU officer, it's preferable that you make at least one phone number available for ICU members to call you.
+%p As an ICU officer, it's preferable that you make at least one phone number publicly available for ICU members to call you.
