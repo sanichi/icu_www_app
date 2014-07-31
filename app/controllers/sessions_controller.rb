@@ -1,5 +1,8 @@
 class SessionsController < ApplicationController
   def new
+    if Rails.env.production? && request.host == "icu.ie"
+      redirect_to sign_in_url(host: "www.icu.ie")
+    end
   end
 
   def create
