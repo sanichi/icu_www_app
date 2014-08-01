@@ -2,6 +2,8 @@ class PaymentsController < ApplicationController
   def shop
     @fees = Fee.for_sale
     @completed_carts = completed_carts
+    @current_season = Season.new
+    @next_season = @current_season.next if Date.today.month == 8
   end
 
   def cart

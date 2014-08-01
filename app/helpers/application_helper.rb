@@ -41,6 +41,10 @@ module ApplicationHelper
     time.strftime("%Y-%m-%d")
   end
 
+  def formatted_date(date)
+    [t("month.s#{date.strftime('%m')}"), date.mday, date.year].join(" ")
+  end
+
   def escape_single_quoted(string, safe=true)
     escaped = string.gsub("'", "\\\\'").gsub(/\n/, "\\n")
     escaped = escaped.html_safe if safe
