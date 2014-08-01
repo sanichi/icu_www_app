@@ -1,6 +1,6 @@
-- content_for :title, t("help.data_protection")
+- content_for :title, t("help.privacy")
 
-%h2.text-center= t("help.data_protection")
+%h2.text-center= t("help.privacy")
 
 %p.small
   Below, the term
@@ -74,7 +74,13 @@
     Completely remove from the database any phone numbers you don't want displayed. The drawback of this option
     is that it hides your numbers from everyone, including ICU officers.
   %li
-    The other, preferred option is to ask the webmaster to mark some or all of your phone numbers as private.
+    The preferred option is to ask the webmaster to mark some or all of your phone numbers as private.
     In that case, only the remaining, non-private numbers (if any) will be displayed on the contacts page
     while all your numbers will still be available to ICU officers.
 %p As an ICU officer, it's preferable that you make at least one phone number publicly available for ICU members to call you.
+
+%a{name: "account"}
+%h3 Login Accounts
+
+Login email addresses are not published publicly. Passwords are stored in encrypted form so
+there is no password reminder service; forgotten passwords must be reset.

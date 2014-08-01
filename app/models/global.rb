@@ -27,8 +27,5 @@ module Global
   ICU_PAGES = %w[documents index life_members officers subscribers]
 
   # A list of help page names.
-  HELP_PAGES = %w[
-    index accounts data_protection membership
-    offline_payments shortcuts
-  ]
+  HELP_PAGES = %w[accounts index membership offline_payments privacy shortcuts]
 end
