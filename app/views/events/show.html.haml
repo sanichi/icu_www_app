@@ -8,7 +8,7 @@
 
 .row.voffset3
   .col-md-8.col-md-offset-2
-    %table.table.table-bordered
+    %table.table.table-striped
       %tr
         %th= t("event.location")
         %td= @event.location
@@ -18,6 +18,10 @@
       %tr
         %th= t("event.end")
         %td= @event.end_date
+      - if @event.prize_fund.present?
+        %tr
+          %th= t("event.prize_fund")
+          %td= euros(@event.prize_fund, precision: 0)
       - if @event.contact.present? || @event.email.present? || @event.phone.present?
         %tr
           %th= t("contact")
