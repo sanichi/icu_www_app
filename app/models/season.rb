@@ -28,6 +28,11 @@ class Season
     self.end.end_of_year
   end
 
+  def age_ref_date
+    return nil unless @desc
+    self.end.beginning_of_year
+  end
+
   def next
     return nil unless @desc
     year = @desc[0,4].to_i

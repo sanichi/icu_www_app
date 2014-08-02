@@ -18,18 +18,14 @@
     .col-sm-3
     .col-sm-6
       %h3.text-center= t("fee.type.plural.#{Fee.subtype(type)}")
-      - if type == "Fee::Subscription"
-        - [@current_season, @next_season].each do |season|
-          - if season
-            %p.small.text-center
-              = succeed(":") do
-                = season.to_s
-              = formatted_date(season.start)
-              →
-              = formatted_date(season.end)
       %table.table.table-striped
         %tbody
-          - fees.sort{ |a, b| b.amount.to_i.to_s + a.description[8..-1].to_s <=> a.amount.to_i.to_s + b.description[8..-1].to_s }.each do |fee|
+          - done = {} if type == "Fee::Subscription"
+          - fees.sort{ |a, b| a <=> b }.each do |fee|
+            - if done && !done[fee.start_date]
+              - done[fee.start_date] = true
+              %tr
+                %td.text-center.small{colspan: 2}= icu_season_dates(fee.start_date)
             %tr
               %td.col-sm-10= link_to fee.description, new_item_path(fee_id: fee.id)
               %td.col-sm-2.text-center= euros(fee.amount)

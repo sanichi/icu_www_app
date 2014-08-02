@@ -18,4 +18,9 @@ module IcuHelper
     end
     options_for_select(seasons, selected)
   end
+
+  def icu_season_dates(date)
+    season = Season.new(date)
+    "%s: %s → %s" % [season.to_s, formatted_date(season.start), formatted_date(season.end)]
+  end
 end

@@ -1,5 +1,7 @@
 - content_for :title, t("help.membership")
 
+- season = Season.new
+
 %h2.text-center= t("help.membership")
 
 %a{name: "subscription_season"}
@@ -15,7 +17,29 @@
   Subscription seasons are often referred to by the 4 digits of the start year plus the last 2 digits of the end year.
   For example, the current season is
   = succeed(".") do
-    %strong= Season.new.to_s
+    %strong= season.to_s
+
+%a{name: "subscription_type"}
+%h3 Subscription Types
+
+%p
+  The relevant
+  %strong age
+  (for subscriptions types that are age-based) is calculated on the 1st day of the 2nd year of the season.
+  For example, in the current season
+  = precede("(") do
+    = succeed("),") do
+      = season.to_s
+  age must be under 12 on
+  %strong= season.age_ref_date.to_s
+  to be eligible for the
+  %em Under 12
+  subscription.
+
+%p
+  Subscriptions whose description contains the word
+  %strong New
+  (e.g. New U18) are only for new members (players who have no ICU ID yet).
 
 %a{name: "how_to_subscribe"}
 %h3 How to Subscribe
@@ -95,13 +119,14 @@
   In practice many subscribers pay late, even though the
   = link_to "Membership Bye-laws", icu_membership_byelaws_path
   specify that subscriptions are due on or before September 1st.
-  For the purposes of the September rating list and logging into the ICU websites,
+  For the purposes of the September rating list and logging into the ICU websites only,
   members who subscribed for the previous season are considered to still be members for the months of September to December.
   However, if you still haven't subscribed by January your rating won't be published that month and your logins,
   if you have any, will expire.
 %p
-  Other organisations who require membership of the ICU to enter their tournaments (such as the Leinster and Munster leagues)
-  may or may not have a similar grace period. The safe option is to subscribe promtly at the start of the season.
+  For all other purposes, the grace period does not apply. This would include, for example, eligibility to represent
+  Ireland or to play in tournaments (such as the Leinster and Munster leagues) that require membership of the ICU
+  (unless their organisers have a similar grace period).
 
 %a{name: "fide_federation"}
 %h3 FIDE Federation

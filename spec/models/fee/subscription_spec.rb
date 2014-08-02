@@ -56,4 +56,35 @@ describe Fee::Subscription do
       expect(rof.age_ref_date).to eq fee.age_ref_date.years_since(1)
     end
   end
+
+  context "#<=>" do
+    let(:std_1)  { create(:subscription_fee, years: "2013-14", name: "Standard") }
+    let(:std_2)  { create(:subscription_fee, years: "2014-15", name: "Standard") }
+    let(:u18)    { create(:subscription_fee, years: "2013-14", name: "Under 18", amount: 20) }
+    let(:u12)    { create(:subscription_fee, years: "2013-14", name: "Under 12", amount: 20) }
+    let(:o65_1)  { create(:subscription_fee, years: "2013-14", name: "Over 65", amount: 20) }
+    let(:o65_2)  { create(:subscription_fee, years: "2014-15", name: "Over 65", amount: 20) }
+    let(:n18)    { create(:subscription_fee, years: "2013-14", name: "New U18", amount: 10) }
+
+    it "season takes precedence" do
+      expect(std_2).to be < std_1
+      expect(std_2).to be < o65_1
+      expect(o65_2).to be < o65_1
+      expect(o65_2).to be < std_1
+    end
+
+    it "then amount" do
+      expect(std_1).to be < o65_1
+      expect(std_2).to be < o65_2
+      expect(std_1).to be < u18
+      expect(std_1).to be < u12
+      expect(u18).to be < n18
+      expect(u18).to be < n18
+    end
+
+    it "then description" do
+      expect(o65_1).to be < u18
+      expect(u12).to be < u18
+    end
+  end
 end

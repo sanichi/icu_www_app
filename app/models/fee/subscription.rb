@@ -1,4 +1,5 @@
 class Fee::Subscription < Fee
+  include Comparable
   before_validation :set_dates, :set_more_info
 
   validates :start_date, :end_date, :sale_start, :sale_end, :age_ref_date, presence: true
@@ -41,6 +42,11 @@ class Fee::Subscription < Fee
     name.match(/\bnew\b/i)
   end
 
+  def <=>(other)
+    return super(other) unless other.class == self.class
+    [other.start_date, other.amount, description[8..-1].to_s] <=> [start_date, amount, other.description[8..-1].to_s]
+  end
+
   private
 
   def set_dates
@@ -50,7 +56,7 @@ class Fee::Subscription < Fee
       self.end_date = season.end
       self.sale_start = season.start.months_ago(1)
       self.sale_end = season.end
-      self.age_ref_date = season.end.beginning_of_year
+      self.age_ref_date = season.age_ref_date
       self.years = season.to_s
     end
   end
