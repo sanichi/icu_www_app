@@ -6,7 +6,7 @@ IcuWwwApp::Application.routes.draw do
   get  "sign_up"  => "users#new"
   get  "redirect" => "redirects#redirect"
 
-  %w[home].each do |page|
+  %w[home links].each do |page|
     get page => "pages##{page}"
   end
   %w[shop cart card charge confirm completed].each do |page|

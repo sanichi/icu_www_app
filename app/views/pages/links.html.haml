@@ -1,0 +1,13 @@
+%h3.text-center= t("links.links")
+%hr
+
+.row
+  .col-sm-4.col-sm-offset-1
+    %ul
+      %li= link_to "#{t('links.lcu')} (LCU)", "http://www.leinsterchess.com/", target: "external"
+      %li= link_to "#{t('links.mcu')} (MCU)", "http://www.aspennet.ie/MCU/index.html", target: "external"
+      %li= link_to "#{t('links.ucu')} (UCU)", "http://www.ulsterchess.org/", target: "external"
+  .col-sm-4.col-sm-offset-2
+    %ul
+      %li= link_to "#{t('links.fide')} (FIDE)", "http://www.fide.com", target: "external"
+      %li= link_to "#{t('links.ecu')} (ECU)", "http://www.ecuonline.net/", target: "external"
