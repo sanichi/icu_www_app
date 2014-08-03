@@ -148,7 +148,7 @@ class Cart < ActiveRecord::Base
       details.delete(:message) if details.is_a?(Hash) && details[:message] == message
       details = details.to_s
     end
-    payment_errors.build(message: message, details: details, payment_name: name, confirmation_email: email)
+    payment_errors.build(message: message.truncate(255), details: details.truncate(255), payment_name: name.to_s.truncate(100), confirmation_email: email.to_s.truncate(50))
   end
 
   def refund_amount(item_ids, charge)
