@@ -6,7 +6,7 @@ class Admin::PlayersController < ApplicationController
     @player = Player.includes(:users).find(params[:id])
     authorize! :show, @player # for some reason, this is needed to ensure a player can only view their own data
     @prev_next = Util::PrevNext.new(session, Player, params[:id], admin: true) if can?(:manage, Player)
-    @entries = @player.journal_entries if current_user.roles.present?
+    @entries = @player.journal_entries if can?(:create, Player)
   end
 
   def new

@@ -15,7 +15,7 @@ class Admin::TranslationsController < ApplicationController
       flash.now.notice = "This translation is no longer in use and may be deleted or kept for reference"
     end
     @prev_next = Util::PrevNext.new(session, Translation, params[:id], admin: true)
-    @entries = @translation.journal_entries if current_user.roles.present?
+    @entries = @translation.journal_entries if can?(:create, Translation)
   end
 
   def update

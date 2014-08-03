@@ -4,7 +4,7 @@ class Admin::DownloadsController < ApplicationController
 
   def show
     @prev_next = Util::PrevNext.new(session, Download, params[:id], admin: true)
-    @entries = @download.journal_entries
+    @entries = @download.journal_entries if can?(:create, Download)
   end
 
   def new

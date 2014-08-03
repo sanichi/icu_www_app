@@ -8,6 +8,6 @@ class ChampionsController < ApplicationController
   def show
     @champion = Champion.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Champion, params[:id])
-    @entries = @champion.journal_entries if current_user.roles.present?
+    @entries = @champion.journal_entries if can?(:create, Champion)
   end
 end

@@ -29,7 +29,7 @@ class Admin::UsersController < ApplicationController
 
   def show
     @prev_next = Util::PrevNext.new(session, User, params[:id], admin: true)
-    @entries = @user.journal_entries if current_user.roles.present?
+    @entries = @user.journal_entries if can?(:create, User)
   end
 
   def update

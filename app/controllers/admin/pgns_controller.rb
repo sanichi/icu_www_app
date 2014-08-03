@@ -11,7 +11,7 @@ class Admin::PgnsController < ApplicationController
   def show
     @pgn = Pgn.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Pgn, params[:id], admin: true)
-    @entries = @pgn.journal_entries if current_user.roles.present?
+    @entries = @pgn.journal_entries if can?(:create, Pgn)
   end
 
   def new

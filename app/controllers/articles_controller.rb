@@ -10,7 +10,7 @@ class ArticlesController < ApplicationController
     @article = Article.include_player.include_series.find(params[:id])
     raise CanCan::AccessDenied.new(nil, :read, Article) unless @article.accessible_to?(current_user)
     @prev_next = Util::PrevNext.new(session, Article, params[:id])
-    @entries = @article.journal_entries if current_user.roles.present?
+    @entries = @article.journal_entries if can?(:create, Article)
   end
 
   def source

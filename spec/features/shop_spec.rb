@@ -165,11 +165,11 @@ describe "Shop" do
       click_link standard_sub.description
       click_button new_member
 
+      fill_in first_name, with: player.first_name
+      fill_in last_name, with: player.last_name
       fill_in dob, with: player.dob.to_s
       select newbie_sex, from: gender
       select newbie_fed, from: fed
-      fill_in first_name, with: player.first_name
-      fill_in last_name, with: player.last_name
 
       click_button save
       expect(page).to have_css(failure, text: /matches.*#{player.id}/)

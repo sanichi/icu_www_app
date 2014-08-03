@@ -8,6 +8,6 @@ class ClubsController < ApplicationController
   def show
     @club = Club.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Club, params[:id])
-    @entries = @club.journal_entries if current_user.roles.present?
+    @entries = @club.journal_entries if can?(:create, Club)
   end
 end
