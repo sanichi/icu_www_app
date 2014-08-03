@@ -3,5 +3,6 @@
     = news.headline
     - unless news.active
       = "(inactive)"
-    .pull-right= news.date
+    .pull-right.hidden-xs= news.date
+    .pull-right.visible-xs-block= news.short_date
   .panel-body.news= news.html

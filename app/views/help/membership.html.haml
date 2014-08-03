@@ -26,15 +26,13 @@
   The relevant
   %strong age
   (for subscriptions types that are age-based) is calculated on the 1st day of the 2nd year of the season.
-  For example, in the current season
-  = precede("(") do
-    = succeed("),") do
-      = season.to_s
-  age must be under 12 on
+  For example age must be under 12 on
   %strong= season.age_ref_date.to_s
   to be eligible for the
   %em Under 12
-  subscription.
+  subscription in the current season,
+  = succeed(".") do
+    = season.to_s
 
 %p
   Subscriptions whose description contains the word

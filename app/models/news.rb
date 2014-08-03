@@ -39,6 +39,10 @@ class News < ActiveRecord::Base
     %q{<a href="/news/%d">%s</a>} % [id, opt[:text] || headline]
   end
 
+  def short_date
+    "#{date.mon}-#{date.mday}"
+  end
+
   private
 
   def normalize_attributes
