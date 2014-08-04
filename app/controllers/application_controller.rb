@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
     logger.warn "Access denied for #{exception.action} #{exception.subject} by user #{current_user.id} from #{request.ip}"
-    redirect_to sign_in_path, alert: exception.message
+    redirect_to switch_to_ssl(:sign_in), alert: exception.message
   end
 
   # Sets up values in the session for lib/util/prev_next.rb and last_search in helpers/applicaion_helper.rb.

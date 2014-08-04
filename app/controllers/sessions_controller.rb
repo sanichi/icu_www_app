@@ -16,9 +16,9 @@ class SessionsController < ApplicationController
     if session[:user_id]
       %i[user_id cart_id completed_carts].each { |key| session.delete(key) }
       switch_locale(session.delete(:old_locale))
-      redirect_to sign_in_path, notice: t("session.signed_out")
+      redirect_to switch_to_ssl(:sign_in), notice: t("session.signed_out")
     else
-      redirect_to sign_in_path
+      redirect_to switch_to_ssl(:sign_in)
     end
   end
 end
