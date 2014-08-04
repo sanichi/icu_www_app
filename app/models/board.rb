@@ -66,7 +66,7 @@ class Board
     # Calculate the offsets for the relevant portion of the sprite image.
     x = -size                                  # horizontal offset
     x += size unless @color_toggle             # black or white square
-    x += size * 2 unless piece == piece.upcase # black of white piece
+    x += size * 2 unless piece == piece.upcase # black or white piece
     y = size * case piece.downcase             # vertical offset
     when "k" then 7
     when "q" then 6
