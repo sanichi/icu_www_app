@@ -62,11 +62,11 @@ class ApplicationController < ActionController::Base
     controller_path.match(/^admin\//)
   end
 
-  def flash_first_error(model, now: false)
+  def flash_first_error(model, now: true, base_only: false)
     error = nil
     if model.errors[:base].any?
       error = model.errors[:base].first
-    elsif model.errors.messages.any?
+    elsif !base_only && model.errors.messages.any?
       message = model.errors.messages.first
       error = "#{message.first.to_s.capitalize}: #{message.last.first}"
     end

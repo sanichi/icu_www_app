@@ -8,7 +8,7 @@ class Admin::GamesController < ApplicationController
       @game.journal(:update, current_user, request.ip)
       redirect_to @game, notice: "Game was successfully updated"
     else
-      flash.now.alert = @game.errors[:base].first if @game.errors[:base].any?
+      flash_first_error(@game, base_only: true)
       render action: "edit"
     end
   end

@@ -14,7 +14,7 @@ class Admin::ImagesController < ApplicationController
       @image.journal(:create, current_user, request.ip)
       redirect_to @image, notice: "Image was successfully created"
     else
-      flash.now.alert = @image.errors[:base].first if @image.errors[:base].any?
+      flash_first_error(@image, base_only: true)
       render action: "new"
     end
   end
@@ -24,7 +24,7 @@ class Admin::ImagesController < ApplicationController
       @image.journal(:update, current_user, request.ip)
       redirect_to @image, notice: "Image was successfully updated"
     else
-      flash.now.alert = @image.errors[:base].first if @image.errors[:base].any?
+      flash_first_error(@image, base_only: true)
       render action: "edit"
     end
   end

@@ -14,7 +14,7 @@ class Admin::EventsController < ApplicationController
       @event.journal(:create, current_user, request.ip)
       redirect_to @event, notice: "Event was successfully created"
     else
-      flash.now.alert = @event.errors[:base].first if @event.errors[:base].any?
+      flash_first_error(@event, base_only: true)
       render action: "new"
     end
   end
@@ -24,7 +24,7 @@ class Admin::EventsController < ApplicationController
       @event.journal(:update, current_user, request.ip)
       redirect_to @event, notice: "Event was successfully updated"
     else
-      flash.now.alert = @event.errors[:base].first if @event.errors[:base].any?
+      flash_first_error(@event, base_only: true)
       render action: "edit"
     end
   end

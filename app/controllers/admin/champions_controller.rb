@@ -22,7 +22,7 @@ class Admin::ChampionsController < ApplicationController
       @champion.journal(:update, current_user, request.ip)
       redirect_to @champion, notice: "Champion was successfully updated"
     else
-      flash.now.alert = @champion.errors[:base].first if @champion.errors[:base].any?
+      flash_first_error(@champion, base_only: true)
       render action: "edit"
     end
   end

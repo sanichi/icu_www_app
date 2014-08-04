@@ -15,7 +15,7 @@ class Admin::NewsController < ApplicationController
       @news.journal(:create, current_user, request.ip)
       redirect_to @news, notice: "News was successfully created"
     else
-      flash.now.alert = @news.errors[:base].first if @news.errors[:base].any?
+      flash_first_error(@news, base_only: true)
       render action: "new"
     end
   end
@@ -26,7 +26,7 @@ class Admin::NewsController < ApplicationController
       @news.journal(:update, current_user, request.ip)
       redirect_to @news, notice: "News was successfully updated"
     else
-      flash.now.alert = @news.errors[:base].first if @news.errors[:base].any?
+      flash_first_error(@news, base_only: true)
       render action: "edit"
     end
   end

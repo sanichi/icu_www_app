@@ -14,7 +14,7 @@ class Admin::ArticlesController < ApplicationController
       @article.journal(:create, current_user, request.ip)
       redirect_to @article, notice: "Article was successfully created"
     else
-      flash.now.alert = @article.errors[:base].first if @article.errors[:base].any?
+      flash_first_error(@article, base_only: true)
       render action: "new"
     end
   end
@@ -25,7 +25,7 @@ class Admin::ArticlesController < ApplicationController
       @article.journal(:update, current_user, request.ip)
       redirect_to @article, notice: "Article was successfully updated"
     else
-      flash.now.alert = @article.errors[:base].first if @article.errors[:base].any?
+      flash_first_error(@article, base_only: true)
       render action: "edit"
     end
   end

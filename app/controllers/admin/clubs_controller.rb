@@ -22,7 +22,7 @@ class Admin::ClubsController < ApplicationController
       @club.journal(:update, current_user, request.ip)
       redirect_to @club, notice: "Club was successfully updated"
     else
-      flash.now.alert = @club.errors[:base].first if @club.errors[:base].any?
+      flash_first_error(@club, base_only: true)
       render action: "edit"
     end
   end

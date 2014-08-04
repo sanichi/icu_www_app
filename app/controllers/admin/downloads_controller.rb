@@ -19,7 +19,7 @@ class Admin::DownloadsController < ApplicationController
       @download.journal(:create, current_user, request.ip)
       redirect_to [:admin, @download], notice: "Download was successfully created"
     else
-      flash.now.alert = @download.errors[:base].first if @download.errors[:base].any?
+      flash_first_error(@download, base_only: true)
       render action: "new"
     end
   end
@@ -29,7 +29,7 @@ class Admin::DownloadsController < ApplicationController
       @download.journal(:update, current_user, request.ip)
       redirect_to [:admin, @download], notice: "Download was successfully updated"
     else
-      flash.now.alert = @download.errors[:base].first if @download.errors[:base].any?
+      flash_first_error(@download, base_only: true)
       render action: "edit"
     end
   end

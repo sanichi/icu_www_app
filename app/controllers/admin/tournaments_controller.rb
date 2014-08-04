@@ -13,6 +13,7 @@ class Admin::TournamentsController < ApplicationController
       @tournament.journal(:create, current_user, request.ip)
       redirect_to @tournament, notice: "Tournament was successfully created"
     else
+      flash_first_error(@tournament, base_only: true)
       render action: "new"
     end
   end
@@ -23,7 +24,7 @@ class Admin::TournamentsController < ApplicationController
       @tournament.journal(:update, current_user, request.ip)
       redirect_to @tournament, notice: "Tournament was successfully updated"
     else
-      flash.now.alert = @tournament.errors[:base].first if @tournament.errors[:base].any?
+      flash_first_error(@tournament, base_only: true)
       render action: "edit"
     end
   end

@@ -36,7 +36,7 @@ class Admin::PgnsController < ApplicationController
       redirect_to [:admin, @pgn]
     else
       logger.info @pgn.errors.inspect
-      flash_first_error(@pgn, now: true)
+      flash_first_error(@pgn)
       render action: "new"
     end
   end
@@ -46,7 +46,7 @@ class Admin::PgnsController < ApplicationController
       @pgn.journal(:update, current_user, request.ip)
       redirect_to [:admin, @pgn], notice: "PGN data was successfully updated"
     else
-      flash.now.alert = @pgn.errors[:base].first if @pgn.errors[:base].any?
+      flash_first_error(@pgn, base_only: true)
       render action: "edit"
     end
   end

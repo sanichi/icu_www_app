@@ -14,7 +14,7 @@ class Admin::SeriesController < ApplicationController
       update_episodes
       redirect_to @series, notice: "Series was successfully created"
     else
-      flash.now.alert = @series.errors[:base].first if @series.errors[:base].any?
+      flash_first_error(@series, base_only: true)
       render action: "new"
     end
   end
@@ -25,7 +25,7 @@ class Admin::SeriesController < ApplicationController
       update_episodes
       redirect_to @series, notice: "Series was successfully updated"
     else
-      flash.now.alert = @series.errors[:base].first if @series.errors[:base].any?
+      flash_first_error(@series, base_only: true)
       render action: "edit"
     end
   end

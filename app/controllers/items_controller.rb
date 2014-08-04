@@ -21,7 +21,7 @@ class ItemsController < ApplicationController
       @item.update_column(:cart_id, cart.id)
       redirect_to cart_path
     else
-      flash_first_error(@item, now: true)
+      flash_first_error(@item)
       @new_player, @player_name = new_player(@fee, @item)
       @item = @item.becomes(Item)
       @item.notes = original_notes

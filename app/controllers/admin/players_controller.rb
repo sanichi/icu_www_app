@@ -20,7 +20,7 @@ class Admin::PlayersController < ApplicationController
       @player.journal(:create, current_user, request.ip)
       redirect_to [:admin, @player], notice: "Player was successfully created"
     else
-      logger.error @player.errors.inspect
+      flash_first_error(@player, base_only: true)
       render action: "new"
     end
   end
@@ -30,7 +30,7 @@ class Admin::PlayersController < ApplicationController
       @player.journal(:update, current_user, request.ip)
       redirect_to [:admin, @player], notice: "Player was successfully updated"
     else
-      flash.now.alert = @player.errors[:base].first if @player.errors[:base].any?
+      flash_first_error(@player, base_only: true)
       render action: "edit"
     end
   end
