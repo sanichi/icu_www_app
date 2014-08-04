@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   before_filter :set_locale
   protect_from_forgery with: :exception
+  helper_method :switch_to_ssl, :switch_from_ssl
 
   rescue_from CanCan::AccessDenied do |exception|
     logger.warn "Access denied for #{exception.action} #{exception.subject} by user #{current_user.id} from #{request.ip}"
@@ -79,6 +80,22 @@ class ApplicationController < ActionController::Base
   def normalize_newlines(model, atr)
     if params[model] && params[model][atr].is_a?(String)
       params[model][atr].gsub!(/\r\n/, "\n")
+    end
+  end
+
+  def switch_to_ssl(prefix)
+    if Rails.env.production? && !request.ssl?
+      send("#{prefix}_url", protocol: "https")
+    else
+      send("#{prefix}_path")
+    end
+  end
+
+  def switch_from_ssl(prefix)
+    if Rails.env.production? && request.ssl?
+      send("#{prefix}_url", protocol: "http")
+    else
+      send("#{prefix}_path")
     end
   end
 end
