@@ -25,8 +25,11 @@ class Admin::TranslationsController < ApplicationController
       @translation.journal(:update, current_user, request.ip)
       redirect_to [:admin, @translation], notice: "Translation #{@translation.locale_key} was updated"
     else
-      logger.error(@translation.errors.inspect)
-      flash.now[:alert] = @translation.errors[:value].first
+      if @translation.errors[:value].any?
+        flash.now[:alert] = @translation.errors[:value].first
+      else
+        flash_first_error(@translation)
+      end
       render action: "edit"
     end
   end

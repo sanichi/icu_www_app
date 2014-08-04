@@ -31,7 +31,7 @@ class Board
     html = []
     html.push [0, "<table class=\"board #{float} #{style}\">"]
     html.push [1, "<tbody>"]
-    @white_square = true
+    @color_toggle = false
     rows.each_with_index do |pieces, row|
       html.push [2, "<tr>"]
       pieces.split(//).each do |piece|
@@ -42,7 +42,7 @@ class Board
         end
       end
       html.push [2, "</tr>"]
-      @white_square = !@white_square
+      @color_toggle = !@color_toggle
     end
     comment = []
     comment.push to_move == "w" ? "⇧" : "⬇︎"
@@ -65,7 +65,7 @@ class Board
   def cell(piece, size)
     # Calculate the offsets for the relevant portion of the sprite image.
     x = -size                                  # horizontal offset
-    x += size unless @white_square             # black or white square
+    x += size unless @color_toggle             # black or white square
     x += size * 2 unless piece == piece.upcase # black of white piece
     y = size * case piece.downcase             # vertical offset
     when "k" then 7
@@ -76,7 +76,7 @@ class Board
     when "p" then 2
     else 1
     end
-    @white_square = !@white_square # toggle square colour for the next piece
+    @color_toggle = !@color_toggle # toggle square colour for the next piece
     %Q{<td style="background-position: #{x}px #{y}px"></td>} # the table cell HTML
   end
 end

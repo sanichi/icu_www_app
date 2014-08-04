@@ -35,7 +35,6 @@ class Admin::PgnsController < ApplicationController
       flash_feedback
       redirect_to [:admin, @pgn]
     else
-      logger.info @pgn.errors.inspect
       flash_first_error(@pgn)
       render action: "new"
     end
