@@ -4,7 +4,7 @@
   .col-md-12.text-center
     = link_to t("shop.cart.continue"), shop_path, class: "btn btn-info btn-md"
     - if current_cart && current_cart.items.count > 0
-      = link_to t("shop.cart.checkout"), card_path, class: "btn btn-success btn-md"
+      = link_to t("shop.cart.checkout"), switch_to_tls(:card), class: "btn btn-success btn-md"
       - if can?(:create, CashPayment)
         = link_to t("shop.payment.received"), new_admin_cash_payment_path, class: "btn btn-success btn-md"
 %hr

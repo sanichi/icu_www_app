@@ -2,11 +2,11 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   before_filter :set_locale
   protect_from_forgery with: :exception
-  helper_method :switch_to_ssl, :switch_from_ssl
+  helper_method :switch_to_tls, :switch_from_tls
 
   rescue_from CanCan::AccessDenied do |exception|
     logger.warn "Access denied for #{exception.action} #{exception.subject} by user #{current_user.id} from #{request.ip}"
-    redirect_to switch_to_ssl(:sign_in), alert: exception.message
+    redirect_to switch_to_tls(:sign_in), alert: exception.message
   end
 
   # Sets up values in the session for lib/util/prev_next.rb and last_search in helpers/applicaion_helper.rb.
@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def switch_to_ssl(prefix)
+  def switch_to_tls(prefix)
     if Rails.env.production? && !request.ssl?
       send("#{prefix}_url", protocol: "https")
     else
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def switch_from_ssl(prefix)
+  def switch_from_tls(prefix)
     if Rails.env.production? && request.ssl?
       send("#{prefix}_url", protocol: "http")
     else

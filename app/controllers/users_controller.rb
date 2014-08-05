@@ -41,7 +41,7 @@ class UsersController < ApplicationController
       @user.journal(:update, @user, request.ip)
       flash[:notice] = I18n.t("user.completed_registration")
     end
-    redirect_to switch_to_ssl(:sign_in)
+    redirect_to switch_to_tls(:sign_in)
   end
 
   private
