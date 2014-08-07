@@ -5,6 +5,9 @@
   = javascript_include_tag "payment.js"
 - content_for :javascript do
   = render "card.js"
+- if Rails.env.production?
+  - content_for :includes do
+    = javascript_include_tag "switch_from_tls.js"
 
 = form_tag charge_path(format: "js"), id: "icu_form", remote: true do
   = hidden_field_tag :stripe_token
