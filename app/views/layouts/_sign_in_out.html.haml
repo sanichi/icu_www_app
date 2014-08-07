@@ -1,6 +1,8 @@
 - if current_user.guest?
-  %li{class: active("sessions")}= link_to t("session.sign_in"), switch_to_tls(:sign_in)
-  %li{class: active("users")}= link_to t("user.sign_up"), sign_up_path
+  - unless controller_name == "sessions"
+    %li= link_to t("session.sign_in"), switch_to_tls(:sign_in)
+  - unless controller_name == "users"
+    %li= link_to t("user.sign_up"), sign_up_path
 - else
   %li.dropdown
     = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
