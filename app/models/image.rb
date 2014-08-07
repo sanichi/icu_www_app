@@ -7,7 +7,7 @@ class Image < ActiveRecord::Base
   serialize :dimensions, Hash
 
   TYPES = "jpe?g|gif|png"
-  MAX_PIXELS = 600
+  MAX_PIXELS = 1000
   MIN_PIXELS = 30
   THUMB_SIZE = 100
   STYLES = { :thumbnail => "#{THUMB_SIZE}x#{THUMB_SIZE}>" }
