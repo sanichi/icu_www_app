@@ -1,7 +1,7 @@
 - if current_user.guest?
-  - unless controller_name == "sessions"
+  - unless active?("sessions")
     %li= link_to t("session.sign_in"), switch_to_tls(:sign_in)
-  - unless controller_name == "users"
+  - unless active?("users")
     %li= link_to t("user.sign_up"), sign_up_path
 - else
   %li.dropdown

@@ -1,8 +1,10 @@
 module ApplicationHelper
-  def active(controller, action=nil, active="active", inactive="")
-    boolean = controller_name == controller
-    boolean = boolean && action_name == action if action
-    boolean ? active : inactive
+  def active?(controller, action=nil)
+    controller_name == controller && (action.blank? || action_name == action)
+  end
+
+  def active(controller, action=nil)
+    active?(controller, action) ? "active" : nil
   end
 
   def home_page?
