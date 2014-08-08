@@ -19,6 +19,7 @@ gem "stripe"
 gem "mailgun-ruby", require: "mailgun"
 gem "paperclip", "~> 4.1"
 gem "colored"
+gem "whenever", :require => false
 
 group :development do
   gem "capistrano"
