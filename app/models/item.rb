@@ -6,7 +6,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :player
   belongs_to :fee
-  belongs_to :cart
+  belongs_to :cart, touch: true
 
   after_initialize :compensate_for_unchecked_options
   before_validation :copy_fee, :normalise

@@ -12,7 +12,8 @@ class Cart < ActiveRecord::Base
 
   validates :total, :original_total, numericality: { less_than: MAX_AMOUNT }, allow_nil: true
 
-  scope :include_items, -> { includes(items: [:fee, :player]) }
+  scope :include_items_plus, -> { includes(items: [:fee, :player]) }
+  scope :include_items, -> { includes(:items) }
   scope :include_errors, -> { includes(:payment_errors) }
   scope :include_refunds, -> { includes(refunds: { user: :player }) }
 
@@ -86,8 +87,8 @@ class Cart < ActiveRecord::Base
   end
 
   def self.search(params, path)
+    matches = order(updated_at: :desc).include_items
     matches = where(id: params[:id].to_i) if params[:id].to_i > 0
-    matches = order(updated_at: :desc)
     matches = matches.where(status: params[:status]) if params[:status].present?
     matches = matches.where("payment_name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("confirmation_email LIKE ?", "%#{params[:email]}%") if params[:email].present?
@@ -95,6 +96,7 @@ class Cart < ActiveRecord::Base
       date = "%#{params[:date]}%"
       matches = matches.where("created_at LIKE ? OR updated_at LIKE ?", date, date)
     end
+    logger.info matches.to_sql
     paginate(matches, params, path)
   end
 

@@ -6,15 +6,15 @@
 - defined?(updated_by) || updated_by = nil
 
 - if (ability.nil? || can?(ability, object)) && (object.respond_to?(:updated_at) || object.respond_to?(:created_at))
-  - locals = { datetime: object.updated_at, dt_format: dt_format, tdth: tdth }
+  - locals = { dt_format: dt_format, tdth: tdth }
   - if two_col
     %tr
-      = render "utils/datetime_row", locals.merge(text: t("updated_at"), done_by: updated_by)
-      = render "utils/datetime_row", locals.merge(text: t("created_at"), done_by: created_by)
+      = render "utils/datetime_row", locals.merge(datetime: object.updated_at, text: t("updated_at"), done_by: updated_by)
+      = render "utils/datetime_row", locals.merge(datetime: object.created_at, text: t("created_at"), done_by: created_by)
   - else
     - if object.respond_to?(:updated_at)
       %tr
-        = render "utils/datetime_row", locals.merge(text: t("updated_at"), done_by: updated_by)
+        = render "utils/datetime_row", locals.merge(datetime: object.updated_at, text: t("updated_at"), done_by: updated_by)
     - if object.respond_to?(:created_at)
       %tr
-        = render "utils/datetime_row", locals.merge(text: t("created_at"), done_by: created_by)
+        = render "utils/datetime_row", locals.merge(datetime: object.created_at, text: t("created_at"), done_by: created_by)

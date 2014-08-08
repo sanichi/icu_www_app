@@ -9,6 +9,7 @@
           %tr
             %th ID
             %th Total
+            %th Items
             %th Status
             %th Name
             %th Email
@@ -19,6 +20,7 @@
             %tr
               %td= link_to cart.id, [:admin, cart]
               %td= euros(cart.total)
+              %td= cart.items.size
               %td= t("shop.payment.status.#{cart.status}")
               %td= cart.payment_name
               %td= cart.confirmation_email

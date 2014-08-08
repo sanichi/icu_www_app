@@ -13,7 +13,7 @@ module SessionsHelper
   def current_cart(option=nil)
     # If there's no memoized cart, see if there's one in the session.
     if !@current_cart && session[:cart_id]
-      @current_cart = Cart.include_items.where(id: session[:cart_id], status: "unpaid").first
+      @current_cart = Cart.include_items_plus.where(id: session[:cart_id], status: "unpaid").first
       unless @current_cart
         logger.error("no cart found for session cart ID #{session[:cart_id]}")
         session.delete(:cart_id)
@@ -49,12 +49,12 @@ module SessionsHelper
 
   def completed_carts
     cart_ids = session[:completed_carts] || []
-    cart_ids.map { |id| Cart.include_items.where(id: id, status: "paid").first }
+    cart_ids.map { |id| Cart.include_items_plus.where(id: id, status: "paid").first }
   end
 
   def last_completed_cart
     cart_ids = session[:completed_carts] || []
     return if cart_ids.empty?
-    Cart.include_items.where(id: cart_ids[0], status: "paid").first
+    Cart.include_items_plus.where(id: cart_ids[0], status: "paid").first
   end
 end

@@ -8,7 +8,7 @@ class Admin::CartsController < ApplicationController
   end
 
   def show
-    @cart = Cart.include_items.include_errors.include_refunds.find(params[:id])
+    @cart = Cart.include_items_plus.include_errors.include_refunds.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Cart, params[:id], admin: true)
   end
 
@@ -21,12 +21,12 @@ class Admin::CartsController < ApplicationController
   end
 
   def edit
-    @cart = Cart.include_items.find(params[:id])
+    @cart = Cart.include_items_plus.find(params[:id])
     redirect_to [:admin, @cart] unless @cart.refundable?
   end
 
   def update
-    @cart = Cart.include_items.find(params[:id])
+    @cart = Cart.include_items_plus.find(params[:id])
     item_ids = params.keys.map{ |k| k.match(/\Aitem_([1-9]\d*)\z/) ? $1.to_i : nil }.compact
     if item_ids.size == 0
       flash.now[:warning] = "Please either click Cancel or select one or more items and then click Refund"
