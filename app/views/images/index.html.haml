@@ -9,10 +9,10 @@
         %tbody
           - @images.matches.each do |image|
             %tr
-              %td.vcenter.col-sm-10= link_to image.caption, image
-              %td.vcenter.text-center.small.col-sm-1= image.year
               %td.vcenter.text-center.col-sm-1
                 = link_to image do
                   = image_tag image.data.url(:thumbnail), width: image.width(:thumbnail), height: image.height(:thumbnail)
+              %td.vcenter.col-sm-10= image.caption
+              %td.vcenter.text-center.small.col-sm-1= image.year
           = render "utils/pagination_links", pager: @images, columns: 5
     = render "utils/index_buttons", klass: Image
