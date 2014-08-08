@@ -18,10 +18,4 @@ module PaymentsHelper
     years.unshift [t("shop.payment.card.yyyy"), ""]
     options_for_select(years)
   end
-
-  def cart_status_menu(selected, default="any")
-    counties = Cart::STATUSES.map { |s| [t("shop.payment.status.#{s}"), s] }
-    counties.unshift [t(default), ""]
-    options_for_select(counties, selected)
-  end
 end

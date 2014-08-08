@@ -87,9 +87,14 @@ class Cart < ActiveRecord::Base
   end
 
   def self.search(params, path)
+    params[:status] = "active" if params[:status].blank?
     matches = order(updated_at: :desc).include_items
     matches = where(id: params[:id].to_i) if params[:id].to_i > 0
-    matches = matches.where(status: params[:status]) if params[:status].present?
+    if STATUSES.include?(params[:status])
+      matches = matches.where(status: params[:status])
+    elsif params[:status].match(/\A(in)?active\z/)
+      matches = matches.send(params[:status])
+    end
     matches = matches.where("payment_name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("confirmation_email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     if params[:date].present?

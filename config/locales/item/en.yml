@@ -50,4 +50,5 @@ en:
     type:
       any: Any type
       entry: Entry
+      other: Other
       subscription: Subscription

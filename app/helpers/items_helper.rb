@@ -4,6 +4,7 @@ module ItemsHelper
       [t(default), ""],
       [t("item.type.subscription"), "Item::Subscription"],
       [t("item.type.entry"), "Item::Entry"],
+      [t("item.type.other"), "Item::Other"],
     ]
     options_for_select(types, selected)
   end
@@ -16,6 +17,8 @@ module ItemsHelper
 
   def item_status_menu(selected, default)
     statuses = Item::STATUSES.map { |s| [t("shop.payment.status.#{s}"), s] }
+    statuses.unshift [t("inactive"), "inactive"]
+    statuses.unshift [t("active"), "active"]
     statuses.unshift [t(default), ""]
     options_for_select(statuses, selected)
   end
