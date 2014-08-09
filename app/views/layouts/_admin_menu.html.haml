@@ -8,7 +8,8 @@
   - links += 1 if rfnds   = can?(:index, Refund)
   - links += 1 if perrs   = can?(:index, PaymentError)
   - links += 1 if nfees   = can?(:manage, Fee)
-  - links += 1 if items   = can?(:index, Item)
+  - links += 1 if fails   = can?(:manage, Fee)
+  - links += 1 if items   = can?(:manage, Failure)
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
   - links += 1 if pgns    = can?(:index, Pgn)
@@ -23,6 +24,8 @@
           %li{class: active("admin/carts")}= link_to "Carts", admin_carts_path
         - if bdlgns
           %li{class: active("admin/bad_logins")}= link_to "Bad Logins", admin_bad_logins_path
+        - if fails
+          %li{class: active("admin/failures")}= link_to "Failures", admin_failures_path
         - if nfees
           %li{class: active("admin/fees")}= link_to "Fees", admin_fees_path
         - if pgns

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140727073219) do
+ActiveRecord::Schema.define(version: 20140809093547) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -83,19 +83,19 @@ ActiveRecord::Schema.define(version: 20140727073219) do
   add_index "champions", ["year"], name: "index_champions_on_year", using: :btree
 
   create_table "clubs", force: true do |t|
-    t.string   "county",     limit: 20
     t.string   "name",       limit: 50
-    t.string   "city",       limit: 50
     t.string   "district",   limit: 50
+    t.string   "city",       limit: 50
     t.string   "contact",    limit: 50
     t.string   "email",      limit: 50
     t.string   "phone",      limit: 50
-    t.string   "address",    limit: 100
     t.string   "web",        limit: 100
+    t.string   "address",    limit: 100
     t.string   "meet"
-    t.boolean  "active"
+    t.string   "county",     limit: 20
     t.decimal  "lat",                    precision: 10, scale: 7
     t.decimal  "long",                   precision: 10, scale: 7
+    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -170,6 +170,12 @@ ActiveRecord::Schema.define(version: 20140727073219) do
   add_index "events", ["name"], name: "index_events_on_name", using: :btree
   add_index "events", ["start_date"], name: "index_events_on_start_date", using: :btree
   add_index "events", ["user_id"], name: "index_events_on_user_id", using: :btree
+
+  create_table "failures", force: true do |t|
+    t.string   "name"
+    t.text     "details"
+    t.datetime "created_at"
+  end
 
   create_table "fees", force: true do |t|
     t.string   "type",              limit: 40

@@ -1,0 +1,21 @@
+- content_for :title, "Failures"
+
+= render "utils/search_panel", form: "admin/failures/search_form", title: "Failures", pad: 1
+- if @failures.count > 0
+  .row
+    .col-sm-10.col-sm-offset-1
+      %table{class: "table table-bordered table-striped"}
+        %thead
+          %tr
+            %th Name
+            %th Snippet
+            %th Ago
+        %tbody
+          - @failures.matches.each do |failure|
+            %tr
+              %td= link_to failure.name, [:admin, failure]
+              %td= failure.snippet
+              %td{title: failure.created_at.to_s(:db)}= time_ago_in_words(failure.created_at, include_seconds: true)
+          = render "utils/pagination_links", pager: @failures, columns: 3
+
+= render "utils/index_buttons", klass: Failure, text: "Simulate"
