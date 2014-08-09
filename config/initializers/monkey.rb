@@ -8,6 +8,7 @@ module ActionController
         :format     => request.format.try(:ref),
         :method     => request.method,
         :path       => (request.fullpath rescue "unknown"),
+        # Path these two in for now because append_info_to_payload(payload) doesn't work with exceptions.
         :ip         => (request.remote_ip rescue "unknown"),
         :agent      => (request.env["HTTP_USER_AGENT"] rescue "unknown"),
       }
