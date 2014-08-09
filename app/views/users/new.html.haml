@@ -1,4 +1,7 @@
 - content_for :title, t("user.new")
+- if Rails.env.production?
+  - content_for :includes do
+    = javascript_include_tag "switch_from_tls.js"
 
 .row
   .col-sm-10.col-sm-offset-1

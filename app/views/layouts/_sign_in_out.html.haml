@@ -2,7 +2,7 @@
   - unless active?("sessions")
     %li= link_to t("session.sign_in"), switch_to_tls(:sign_in)
   - unless active?("users")
-    %li= link_to t("user.sign_up"), sign_up_path
+    %li= link_to t("user.sign_up"), switch_to_tls(:sign_up)
 - else
   %li.dropdown
     = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
