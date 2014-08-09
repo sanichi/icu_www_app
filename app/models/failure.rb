@@ -4,6 +4,7 @@ class Failure < ActiveRecord::Base
   IGNORE = %w[ActiveRecord::RecordNotFound ActionController::UnknownFormat]
 
   scope :ordered, -> { order(created_at: :desc) }
+  scope :active, -> { where(active: true) }
 
   before_create :normalize_details
 
@@ -16,6 +17,7 @@ class Failure < ActiveRecord::Base
 
   def self.search(params, path)
     matches = ordered
+    matches = matches.where(active: params[:active] == "true") if params[:active].present?
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("details LIKE ?", "%#{params[:details]}%") if params[:details].present?
     paginate(matches, params, path)

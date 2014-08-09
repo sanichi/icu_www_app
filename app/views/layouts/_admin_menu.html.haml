@@ -14,7 +14,7 @@
   - links += 1 if pages   = can?(:read, Page)
   - links += 1 if pgns    = can?(:index, Pgn)
   - links += 1 if usage   = Rails.env.production? && current_user.admin?
-  - nfails = fails ? Failure.count : 0
+  - nfails = fails ? Failure.active.count : 0
   - if nfails > 0
     %li{class: active("admin/failures")}
       = link_to admin_failures_path do

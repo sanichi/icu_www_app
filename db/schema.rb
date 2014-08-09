@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140809093547) do
+ActiveRecord::Schema.define(version: 20140809145619) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 20140809093547) do
     t.string   "name"
     t.text     "details"
     t.datetime "created_at"
+    t.boolean  "active",     default: true
   end
 
   create_table "fees", force: true do |t|

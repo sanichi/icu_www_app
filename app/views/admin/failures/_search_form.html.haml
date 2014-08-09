@@ -1,4 +1,5 @@
 = form_tag admin_failures_path, method: :get, class: "form-inline", role: "form" do
   = render "utils/inline_text_field", param: :name, text: "Name", size: 12
   = render "utils/inline_text_field", param: :details, text: "Details", size: 12
+  = render "utils/inline_select", param: :active, text: "Active", menu: active_menu(params[:active])
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

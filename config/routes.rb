@@ -61,7 +61,7 @@ IcuWwwApp::Application.routes.draw do
     resources :clubs,           only: [:new, :create, :edit, :update]
     resources :downloads,       only: [:show, :new, :create, :edit, :update, :destroy]
     resources :events,          only: [:new, :create, :edit, :update, :destroy]
-    resources :failures,        only: [:index, :show, :new, :destroy]
+    resources :failures,        only: [:index, :show, :new, :update, :destroy]
     resources :fees do
       get :rollover, :clone, on: :member
     end
