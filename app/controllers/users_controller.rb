@@ -25,7 +25,7 @@ class UsersController < ApplicationController
 
     if @user.sign_up && @user.save
       flash.now[:notice] = I18n.t("user.created")
-      @user.journal(:create, @user, request.ip)
+      @user.journal(:create, @user, request.remote_ip)
       IcuMailer.verify_new_user_email(@user.id).deliver
       render action: "confirm"
     else
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.verified_at.blank? && params[:vp].present? && @user.verification_param == params[:vp]
       @user.update(verified_at: Time.now)
-      @user.journal(:update, @user, request.ip)
+      @user.journal(:update, @user, request.remote_ip)
       flash[:notice] = I18n.t("user.completed_registration")
     end
     redirect_to switch_to_tls(:sign_in)

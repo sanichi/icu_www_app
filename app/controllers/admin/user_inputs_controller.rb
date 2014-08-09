@@ -21,7 +21,7 @@ class Admin::UserInputsController < ApplicationController
     @user_input = UserInput.new(user_input_params(:new_record))
 
     if @user_input.save
-      @user_input.journal(:create, current_user, request.ip)
+      @user_input.journal(:create, current_user, request.remote_ip)
       @user_input.fee.update_column(:amount, nil) if @user_input.subtype == "amount"
       redirect_to admin_user_input_path(@user_input), notice: "User input was successfully created"
     else
@@ -38,7 +38,7 @@ class Admin::UserInputsController < ApplicationController
 
   def update
     if @user_input.update(user_input_params)
-      @user_input.journal(:update, current_user, request.ip)
+      @user_input.journal(:update, current_user, request.remote_ip)
       redirect_to admin_user_input_path(@user_input), notice: "User input was successfully updated"
     else
       flash_first_error(@user_input)
@@ -49,7 +49,7 @@ class Admin::UserInputsController < ApplicationController
 
   def destroy
     fee = @user_input.fee
-    @user_input.journal(:destroy, current_user, request.ip)
+    @user_input.journal(:destroy, current_user, request.remote_ip)
     @user_input.destroy
     redirect_to admin_fee_path(fee), notice: "User input was successfully deleted"
   end

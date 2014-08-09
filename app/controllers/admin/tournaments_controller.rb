@@ -10,7 +10,7 @@ class Admin::TournamentsController < ApplicationController
     @tournament = Tournament.new(tournament_params)
 
     if @tournament.save
-      @tournament.journal(:create, current_user, request.ip)
+      @tournament.journal(:create, current_user, request.remote_ip)
       redirect_to @tournament, notice: "Tournament was successfully created"
     else
       flash_first_error(@tournament, base_only: true)
@@ -21,7 +21,7 @@ class Admin::TournamentsController < ApplicationController
   def update
     normalize_newlines(:tournament, :details)
     if @tournament.update(tournament_params)
-      @tournament.journal(:update, current_user, request.ip)
+      @tournament.journal(:update, current_user, request.remote_ip)
       redirect_to @tournament, notice: "Tournament was successfully updated"
     else
       flash_first_error(@tournament, base_only: true)
@@ -30,7 +30,7 @@ class Admin::TournamentsController < ApplicationController
   end
 
   def destroy
-    @tournament.journal(:destroy, current_user, request.ip)
+    @tournament.journal(:destroy, current_user, request.remote_ip)
     @tournament.destroy
     redirect_to tournaments_path, notice: "Tournament was successfully deleted"
   end

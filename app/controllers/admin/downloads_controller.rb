@@ -16,7 +16,7 @@ class Admin::DownloadsController < ApplicationController
     @download.user_id = current_user.id
 
     if @download.save
-      @download.journal(:create, current_user, request.ip)
+      @download.journal(:create, current_user, request.remote_ip)
       redirect_to [:admin, @download], notice: "Download was successfully created"
     else
       flash_first_error(@download, base_only: true)
@@ -26,7 +26,7 @@ class Admin::DownloadsController < ApplicationController
 
   def update
     if @download.update(download_params)
-      @download.journal(:update, current_user, request.ip)
+      @download.journal(:update, current_user, request.remote_ip)
       redirect_to [:admin, @download], notice: "Download was successfully updated"
     else
       flash_first_error(@download, base_only: true)
@@ -35,7 +35,7 @@ class Admin::DownloadsController < ApplicationController
   end
 
   def destroy
-    @download.journal(:destroy, current_user, request.ip)
+    @download.journal(:destroy, current_user, request.remote_ip)
     @download.destroy
     redirect_to downloads_path, notice: "Download was successfully deleted"
   end

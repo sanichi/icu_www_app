@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   def create
     begin
-      user = User.authenticate!(params[:email], params[:password], request.ip)
+      user = User.authenticate!(params[:email], params[:password], request.remote_ip)
       session[:user_id] = user.id
       session[:old_locale] = session[:locale] || I18n.default_locale
       switch_locale(user.locale)

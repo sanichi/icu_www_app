@@ -11,7 +11,7 @@ class Admin::EventsController < ApplicationController
     @event.user_id = current_user.id
 
     if @event.save
-      @event.journal(:create, current_user, request.ip)
+      @event.journal(:create, current_user, request.remote_ip)
       redirect_to @event, notice: "Event was successfully created"
     else
       flash_first_error(@event, base_only: true)
@@ -21,7 +21,7 @@ class Admin::EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      @event.journal(:update, current_user, request.ip)
+      @event.journal(:update, current_user, request.remote_ip)
       redirect_to @event, notice: "Event was successfully updated"
     else
       flash_first_error(@event, base_only: true)
@@ -30,7 +30,7 @@ class Admin::EventsController < ApplicationController
   end
 
   def destroy
-    @event.journal(:destroy, current_user, request.ip)
+    @event.journal(:destroy, current_user, request.remote_ip)
     @event.destroy
     redirect_to admin_events_path, notice: "Event was successfully deleted"
   end

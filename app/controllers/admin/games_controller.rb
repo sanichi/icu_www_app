@@ -5,7 +5,7 @@ class Admin::GamesController < ApplicationController
   def update
     normalize_newlines(:game, :moves)
     if @game.update(game_params)
-      @game.journal(:update, current_user, request.ip)
+      @game.journal(:update, current_user, request.remote_ip)
       redirect_to @game, notice: "Game was successfully updated"
     else
       flash_first_error(@game, base_only: true)
@@ -14,7 +14,7 @@ class Admin::GamesController < ApplicationController
   end
 
   def destroy
-    @game.journal(:destroy, current_user, request.ip)
+    @game.journal(:destroy, current_user, request.remote_ip)
     @game.destroy
     redirect_to games_path, notice: "Game was successfully deleted"
   end

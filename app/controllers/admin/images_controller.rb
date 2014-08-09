@@ -11,7 +11,7 @@ class Admin::ImagesController < ApplicationController
     @image.user_id = current_user.id
 
     if @image.save
-      @image.journal(:create, current_user, request.ip)
+      @image.journal(:create, current_user, request.remote_ip)
       redirect_to @image, notice: "Image was successfully created"
     else
       flash_first_error(@image, base_only: true)
@@ -21,7 +21,7 @@ class Admin::ImagesController < ApplicationController
 
   def update
     if @image.update(image_params)
-      @image.journal(:update, current_user, request.ip)
+      @image.journal(:update, current_user, request.remote_ip)
       redirect_to @image, notice: "Image was successfully updated"
     else
       flash_first_error(@image, base_only: true)
@@ -30,7 +30,7 @@ class Admin::ImagesController < ApplicationController
   end
 
   def destroy
-    @image.journal(:destroy, current_user, request.ip)
+    @image.journal(:destroy, current_user, request.remote_ip)
     @image.destroy
     redirect_to images_path, notice: "Image was successfully deleted"
   end

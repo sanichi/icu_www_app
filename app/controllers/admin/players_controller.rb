@@ -17,7 +17,7 @@ class Admin::PlayersController < ApplicationController
     @player = Player.new(player_params)
 
     if @player.save
-      @player.journal(:create, current_user, request.ip)
+      @player.journal(:create, current_user, request.remote_ip)
       redirect_to [:admin, @player], notice: "Player was successfully created"
     else
       flash_first_error(@player, base_only: true)
@@ -27,7 +27,7 @@ class Admin::PlayersController < ApplicationController
 
   def update
     if @player.update(player_params)
-      @player.journal(:update, current_user, request.ip)
+      @player.journal(:update, current_user, request.remote_ip)
       redirect_to [:admin, @player], notice: "Player was successfully updated"
     else
       flash_first_error(@player, base_only: true)

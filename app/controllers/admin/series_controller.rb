@@ -10,7 +10,7 @@ class Admin::SeriesController < ApplicationController
     @series = Series.new(series_params)
 
     if @series.save
-      @series.journal(:create, current_user, request.ip)
+      @series.journal(:create, current_user, request.remote_ip)
       update_episodes
       redirect_to @series, notice: "Series was successfully created"
     else
@@ -21,7 +21,7 @@ class Admin::SeriesController < ApplicationController
 
   def update
     if @series.update(series_params)
-      @series.journal(:update, current_user, request.ip)
+      @series.journal(:update, current_user, request.remote_ip)
       update_episodes
       redirect_to @series, notice: "Series was successfully updated"
     else
@@ -31,7 +31,7 @@ class Admin::SeriesController < ApplicationController
   end
 
   def destroy
-    @series.journal(:destroy, current_user, request.ip)
+    @series.journal(:destroy, current_user, request.remote_ip)
     @series.destroy
     redirect_to series_index_path, notice: "Series was successfully deleted"
   end

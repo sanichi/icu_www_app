@@ -40,7 +40,7 @@ class Admin::FeesController < ApplicationController
     @fee = Fee.new(fee_params(:new_record))
 
     if @fee.save
-      @fee.journal(:create, current_user, request.ip)
+      @fee.journal(:create, current_user, request.remote_ip)
       redirect_to admin_fee_path(@fee), notice: "Fee was successfully created"
     else
       flash_first_error(@fee)
@@ -55,7 +55,7 @@ class Admin::FeesController < ApplicationController
 
   def update
     if @fee.update(fee_params)
-      @fee.journal(:update, current_user, request.ip)
+      @fee.journal(:update, current_user, request.remote_ip)
       redirect_to admin_fee_path(@fee), notice: "Fee was successfully updated"
     else
       flash_first_error(@fee)
@@ -66,7 +66,7 @@ class Admin::FeesController < ApplicationController
 
   def destroy
     if @fee.deletable?
-      @fee.journal(:destroy, current_user, request.ip)
+      @fee.journal(:destroy, current_user, request.remote_ip)
       @fee.destroy
       redirect_to admin_fees_path, notice: "Fee was successfully deleted"
     else

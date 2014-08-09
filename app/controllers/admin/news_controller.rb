@@ -12,7 +12,7 @@ class Admin::NewsController < ApplicationController
     @news.user_id = current_user.id
 
     if @news.save
-      @news.journal(:create, current_user, request.ip)
+      @news.journal(:create, current_user, request.remote_ip)
       redirect_to @news, notice: "News was successfully created"
     else
       flash_first_error(@news, base_only: true)
@@ -23,7 +23,7 @@ class Admin::NewsController < ApplicationController
   def update
     normalize_newlines(:news, :summary)
     if @news.update(news_params(false))
-      @news.journal(:update, current_user, request.ip)
+      @news.journal(:update, current_user, request.remote_ip)
       redirect_to @news, notice: "News was successfully updated"
     else
       flash_first_error(@news, base_only: true)
@@ -32,7 +32,7 @@ class Admin::NewsController < ApplicationController
   end
 
   def destroy
-    @news.journal(:destroy, current_user, request.ip)
+    @news.journal(:destroy, current_user, request.remote_ip)
     @news.destroy
     redirect_to news_index_path, notice: "News was successfully deleted"
   end

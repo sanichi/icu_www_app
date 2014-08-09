@@ -19,7 +19,7 @@ class Admin::UsersController < ApplicationController
     @user.verified_at = DateTime.now
 
     if @user.save
-      @user.journal(:create, current_user, request.ip)
+      @user.journal(:create, current_user, request.remote_ip)
       redirect_to [:admin, @user], notice: "User was successfully created"
     else
       @player = Player.find(@user.player_id)
@@ -34,7 +34,7 @@ class Admin::UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      @user.journal(:update, current_user, request.ip)
+      @user.journal(:update, current_user, request.remote_ip)
       redirect_to [:admin, @user], notice: "User was successfully updated"
     else
       render action: "edit"
@@ -46,7 +46,7 @@ class Admin::UsersController < ApplicationController
     if reason = @user.reason_to_not_delete
       redirect_to admin_user_path(@user), alert: "Can't delete #{email} because this user #{reason}"
     else
-      @user.journal(:destroy, current_user, request.ip)
+      @user.journal(:destroy, current_user, request.remote_ip)
       @user.destroy
       redirect_to admin_users_path, notice: "User #{email} was successfully deleted"
     end

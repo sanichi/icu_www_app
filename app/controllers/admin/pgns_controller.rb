@@ -31,7 +31,7 @@ class Admin::PgnsController < ApplicationController
     if @pgn.save
       @pgn.parse(file.tempfile)
       @pgn.save
-      @pgn.journal(:create, current_user, request.ip)
+      @pgn.journal(:create, current_user, request.remote_ip)
       flash_feedback
       redirect_to [:admin, @pgn]
     else
@@ -42,7 +42,7 @@ class Admin::PgnsController < ApplicationController
 
   def update
     if @pgn.update(pgn_params)
-      @pgn.journal(:update, current_user, request.ip)
+      @pgn.journal(:update, current_user, request.remote_ip)
       redirect_to [:admin, @pgn], notice: "PGN data was successfully updated"
     else
       flash_first_error(@pgn, base_only: true)
@@ -51,7 +51,7 @@ class Admin::PgnsController < ApplicationController
   end
 
   def destroy
-    @pgn.journal(:destroy, current_user, request.ip)
+    @pgn.journal(:destroy, current_user, request.remote_ip)
     @pgn.destroy
     redirect_to admin_pgns_path, notice: "PGN data (and any associated games) successfully deleted"
   end

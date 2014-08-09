@@ -11,7 +11,7 @@ class Admin::ArticlesController < ApplicationController
     @article.user_id = current_user.id
 
     if @article.save
-      @article.journal(:create, current_user, request.ip)
+      @article.journal(:create, current_user, request.remote_ip)
       redirect_to @article, notice: "Article was successfully created"
     else
       flash_first_error(@article, base_only: true)
@@ -22,7 +22,7 @@ class Admin::ArticlesController < ApplicationController
   def update
     normalize_newlines(:article, :text)
     if @article.update(article_params)
-      @article.journal(:update, current_user, request.ip)
+      @article.journal(:update, current_user, request.remote_ip)
       redirect_to @article, notice: "Article was successfully updated"
     else
       flash_first_error(@article, base_only: true)
@@ -31,7 +31,7 @@ class Admin::ArticlesController < ApplicationController
   end
 
   def destroy
-    @article.journal(:destroy, current_user, request.ip)
+    @article.journal(:destroy, current_user, request.remote_ip)
     @article.destroy
     redirect_to articles_path, notice: "Article was successfully deleted"
   end
