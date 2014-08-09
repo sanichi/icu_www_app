@@ -83,19 +83,19 @@ ActiveRecord::Schema.define(version: 20140809145619) do
   add_index "champions", ["year"], name: "index_champions_on_year", using: :btree
 
   create_table "clubs", force: true do |t|
+    t.string   "county",     limit: 20
     t.string   "name",       limit: 50
-    t.string   "district",   limit: 50
     t.string   "city",       limit: 50
+    t.string   "district",   limit: 50
     t.string   "contact",    limit: 50
     t.string   "email",      limit: 50
     t.string   "phone",      limit: 50
-    t.string   "web",        limit: 100
     t.string   "address",    limit: 100
+    t.string   "web",        limit: 100
     t.string   "meet"
-    t.string   "county",     limit: 20
+    t.boolean  "active"
     t.decimal  "lat",                    precision: 10, scale: 7
     t.decimal  "long",                   precision: 10, scale: 7
-    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
