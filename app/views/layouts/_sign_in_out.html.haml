@@ -1,7 +1,6 @@
 - if current_user.guest?
-  - unless active?("sessions")
+  - unless active?("sessions", "new") || active?("users", "new")
     %li= link_to t("session.sign_in"), switch_to_tls(:sign_in)
-  - unless active?("users")
     %li= link_to t("user.sign_up"), switch_to_tls(:sign_up)
 - else
   %li.dropdown
