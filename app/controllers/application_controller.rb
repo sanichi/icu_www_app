@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
   before_filter :set_locale
   protect_from_forgery with: :exception
-  helper_method :switch_to_tls, :switch_from_tls, :last_search
+  helper_method :switch_to_tls, :switch_from_tls, :last_search, :failure_details
 
   rescue_from CanCan::AccessDenied do |exception|
     logger.warn "Access denied for #{exception.action} #{exception.subject} by user #{current_user.id} from #{request.ip}"
@@ -101,5 +101,11 @@ class ApplicationController < ActionController::Base
 
   def last_search(key)
     session["last_search_path_#{key}".to_sym]
+  end
+
+  def failure_details(data={})
+    data[:agent] = request.env["HTTP_USER_AGENT"]
+    data[:ip] = request.remote_ip
+    data
   end
 end

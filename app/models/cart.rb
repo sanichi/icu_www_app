@@ -101,7 +101,6 @@ class Cart < ActiveRecord::Base
       date = "%#{params[:date]}%"
       matches = matches.where("created_at LIKE ? OR updated_at LIKE ?", date, date)
     end
-    logger.info matches.to_sql
     paginate(matches, params, path)
   end
 

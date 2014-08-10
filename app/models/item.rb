@@ -44,7 +44,7 @@ class Item < ActiveRecord::Base
         player.save!
         update_column(:player_id, player.id)
       rescue => e
-        logger.error "coundn't create new player record; data: #{player_data}, error: #{e.message}"
+        Failure.log("NewPlayerCreateFailure", exception: e.class.to_s, message: e.message, data: player_data)
       end
     end
   end
@@ -128,7 +128,9 @@ class Item < ActiveRecord::Base
 
   def check_user_inputs
     return unless new_record? && fee
-    logger.error "mismatched number of user inputs (#{fee.user_inputs.map(&:id).join('|')}) and notes #{notes.join('|')}" unless fee.user_inputs.size == notes.size
+    unless fee.user_inputs.size == notes.size
+      Failure.log("MismatchedUserInputsAndNotes", inputs: fee.user_inputs.map(&:id).join('|'), notes: notes.join('|'), fee_id: fee.id)
+    end
     self.notes = notes[0..(fee.user_inputs.size-1)] if fee.user_inputs.size < notes.size
     fee.user_inputs.each_with_index { |input, i| input.check(self, i) }
     self.notes.compact!

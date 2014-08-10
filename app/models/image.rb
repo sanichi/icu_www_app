@@ -142,7 +142,7 @@ class Image < ActiveRecord::Base
       end
     end
   rescue => e
-    logger.error "problem checking image dimensions: #{e.message}"
+    Failure.log("CheckImageDimensions", exception: e.class.to_s, message: e.message, id: id)
     errors.add(:base, "Problem checking image dimensions")
   ensure
     self.dimensions = dimensions unless dimensions.empty?

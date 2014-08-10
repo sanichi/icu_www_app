@@ -5,7 +5,11 @@ module SessionsHelper
     return @current_user if @current_user
     if session[:user_id]
       @current_user = User.include_player.where(id: session[:user_id]).first
-      logger.error("no user found for session user ID #{session[:user_id]}") unless @current_user
+      unless @current_user
+        details = failure_details(message: "the session contained an invalid user ID", user_id: session[:user_id])
+        Failure.log("InvalidSessionUserID", details)
+        session.delete(:user_id)
+      end
     end
     @current_user ||= User::Guest.new
   end
@@ -15,7 +19,8 @@ module SessionsHelper
     if !@current_cart && session[:cart_id]
       @current_cart = Cart.include_items_plus.where(id: session[:cart_id], status: "unpaid").first
       unless @current_cart
-        logger.error("no cart found for session cart ID #{session[:cart_id]}")
+        details = failure_details(message: "the session contained an invalid cart ID", cart_id: session[:cart_id])
+        Failure.log("InvalidSessionCartID", details)
         session.delete(:cart_id)
       end
     end

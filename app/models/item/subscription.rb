@@ -48,11 +48,11 @@ class Item::Subscription < Item
       if new_player
         player = new_player.to_player
         unless player.valid?
-          logger.error("player data (#{player_data}) can't create a valid player (#{player.errors.to_a.join(', ')})")
+          Failure.log("InvalidNewPlayer", player_data: player_data, errors: player.errors.to_a.join(', '))
           errors.add(:base, I18n.t("errors.alerts.application"))
         end
       else
-        logger.error("player data (#{player_data}) is not valid")
+        Failure.log("InvalidPlayerData", player_data: player_data)
         errors.add(:base, I18n.t("errors.alerts.application"))
       end
     end
@@ -63,7 +63,7 @@ class Item::Subscription < Item
     raise t.error if t.error
     t.to_s
   rescue => e
-    logger.error("subscription season ticket error, cart: #{cart.present? && cart.id}, player: #{player.present? && player.id}, end date: #{end_date.present? && end_date.to_s}, error: #{e.message}")
+    Failure.log("SubscriptionSeasonTicket", cart: cart.present? && cart.id, player: player.present? && player.id, end_date: end_date.present? && end_date.to_s, error: e.message, exception: e.class.to_s)
     nil
   end
 end

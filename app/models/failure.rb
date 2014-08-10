@@ -11,7 +11,7 @@ class Failure < ActiveRecord::Base
   def self.examine(payload)
     name = payload[:exception].first
     unless IGNORE.include?(name)
-      Failure.create!(name: name, details: payload.dup)
+      Failure.log(name, payload.dup)
     end
   end
 
@@ -21,6 +21,10 @@ class Failure < ActiveRecord::Base
     matches = matches.where("name LIKE ?", "%#{params[:name]}%") if params[:name].present?
     matches = matches.where("details LIKE ?", "%#{params[:details]}%") if params[:details].present?
     paginate(matches, params, path)
+  end
+
+  def self.log(name, details={})
+    create(name: name, details: details)
   end
 
   def snippet

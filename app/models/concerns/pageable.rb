@@ -11,7 +11,6 @@ module Pageable
       page = 1 + count / per_page if page > 1 && (page - 1) * per_page >= count
       matches = matches.offset(per_page * (page - 1)) if page > 1
       matches = matches.limit(per_page)
-      logger.info("paginate: #{self.class}")
       Pager.new(matches, params, path, per_page, page, count, remote)
     end
   end

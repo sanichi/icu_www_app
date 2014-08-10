@@ -81,7 +81,7 @@ class Download < ActiveRecord::Base
       FileUtils.rm(unobscured, force: true)
     end
   rescue => e
-    logger.error("problem managing unobfuscated file for download #{id} (#{access}): " + e.message)
+    Failure.log("UnobfuscatedDownloadError", exception: e.class.to_s, message: e.message, id: id, access: access)
   end
 
   def remember_directory
@@ -99,7 +99,7 @@ class Download < ActiveRecord::Base
     end
     raise "#{dir_to_remove} still exists" if File.exist?(dir_to_remove)
   rescue => e
-    logger.error("problem cleaning up old directory for download #{id}: " + e.message)
+    Failure.log("CleanupDownloadError", exception: e.class.to_s, message: e.message, id: id)
   end
 
   def correct_plain_text
