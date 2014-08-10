@@ -1,3 +1,8 @@
+# This is a monkey patch of actionpack/lib/action_controller/metal/instrumentation.rb
+# in order to add IP and user agent into the raw payload. If an exception occurs
+# the normal mechanism for customising the payload, append_info_to_payload, doesn't
+# get called. Remove/amend this patch if Rails even fixes this of the method changes.
+
 module ActionController
   module Instrumentation
     def process_action(*args)
