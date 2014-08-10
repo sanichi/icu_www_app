@@ -12,7 +12,7 @@
 $(function() {
   $('a').click(function() {
     var href = $(this).attr('href');
-    if (!href || href.match(/^http/) || !href.match(/^\//)) {
+    if (!href || href.match(/^http/) || !href.match(/^\//) || href.match(/^\/sign_(in|up)$/)) {
       return true;
     } else {
       document.location.href = "http://www.icu.ie" + href;
