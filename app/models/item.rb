@@ -21,7 +21,7 @@ class Item < ActiveRecord::Base
   validate :age_constraints, :rating_constraints, :check_user_inputs
 
   def self.search(params, path)
-    params[:status] = "active" if params[:status].blank?
+    params[:status] = "active" if params[:status].nil?
     matches = includes(:player).references(:players).order(created_at: :desc).includes(:cart)
     matches = matches.where(type: params[:type]) if params[:type].present?
     if STATUSES.include?(params[:status])

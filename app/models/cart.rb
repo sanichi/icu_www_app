@@ -87,7 +87,7 @@ class Cart < ActiveRecord::Base
   end
 
   def self.search(params, path)
-    params[:status] = "active" if params[:status].blank?
+    params[:status] = "active" if params[:status].nil?
     matches = order(updated_at: :desc).include_items
     matches = where(id: params[:id].to_i) if params[:id].to_i > 0
     if STATUSES.include?(params[:status])

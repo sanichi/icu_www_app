@@ -1,0 +1,227 @@
+- content_for :title, t("help.treasurer")
+
+%h2.text-center= t("help.treasurer")
+
+%p
+  This help page is for ICU officers, such as the treasurer, who deal with payments and refunds.
+  It explains how to search for information on previous purchases and how to make refunds.
+  Most of these website features require the user to be logged in as
+  = t("user.role.treasurer")
+  or
+  = succeed(").") do
+    = t("user.role.admin")
+
+%a{name: "payment_status"}
+%h3= t("help.payment_status")
+
+%p
+  Users make online purchases by filling a
+  %strong Cart
+  with one or more
+  %strong Items
+  before paying with their credit card.
+  Offline purchases are similar except that an ICU officer fills in a cart on behalf of a user (see
+  = succeed(").") do
+    = link_to t("help.offline_payments"), help_offline_payments_path
+
+  If the payment is successful, the cart and all its items change status from
+  %strong= t("shop.payment.status.unpaid")
+  to
+  %strong= t("shop.payment.status.paid")
+  and at that point all items become
+  = succeed(".") do
+    %strong= t("active")
+  For example, if one of the items is a subscription then the person subscribed becomes a paid-up member of the ICU.
+%p
+  Carts and items can also have a 3rd status of
+  %strong= t("shop.payment.status.refunded")
+  and carts can have a 4th status of
+  %strong= t("shop.payment.status.part_refunded")
+  (individual items can only be wholly refunded).
+%p
+  %em= t("shop.payment.status.paid")
+  and
+  %em= t("shop.payment.status.part_refunded")
+  are
+  %strong= t("active")
+  statuses while
+  %em= t("shop.payment.status.unpaid")
+  and
+  %em= t("shop.payment.status.refunded")
+  are
+  = succeed(".") do
+    %strong= t("inactive")
+
+%a{name: "make_refund"}
+%h3= t("help.make_refund")
+
+%p
+  An ICU officer can refund one or more items in a cart as follows:
+%ul
+  %li Search carts or items to locate and then view the relevant cart (see below).
+  %li
+    Click the
+    = succeed("...") do
+      %strong= t("shop.payment.refund")
+    button which will bring up a list of items with checkboxes.
+  %li
+    Check all the items to be refunded and click
+    = succeed(".") do
+      %strong= t("shop.payment.refund")
+%p
+  If the original payment was made online then the refund will be made to the payer's
+  credit card automatically, without any further action on the part of the ICU officer.
+  However, if the payment was made offline then the refund must be sent to the payer manually.
+%p
+  The refunded items change status from
+  %strong= t("shop.payment.status.paid")
+  to
+  %strong= t("shop.payment.status.refunded")
+  and become
+  = succeed(".") do
+    %strong= t("inactive")
+  For example, if one of the items is a subscription then
+  the person subscribed immediately ceases to be a paid-up member.
+%p
+  The cart to which the refunded items belong also changes status to either
+  %strong= t("shop.payment.status.refunded")
+  to
+  %strong= t("shop.payment.status.part_refunded")
+  depending on whether there are any remaining items with status
+  = succeed(".") do
+    %em= t("shop.payment.status.paid")
+%p
+  Note that refunds for payments made prior to
+  %strong= t("migration_date")
+  cannot be made via the website. Contact the webmaster if you need to do this.
+
+%a{name: "search_carts"}
+%h3= t("help.search_carts")
+
+%ol
+  %li
+    Login, click the
+    %strong Admin
+    drop-down button on the right of the top navigation bar and then click
+    = succeed(".") do
+      %strong Carts
+    If you don't see either of these options, then your account is not authorised to access them.
+  %li
+    Enter enough information in the search boxes and menus to locate the cart:
+    %ul
+      %li
+        = succeed(":") do
+          %strong Status
+        Note that
+        %em= t("active")
+        means
+        %em= t("shop.payment.status.paid")
+        or
+        %em= t("shop.payment.status.part_refunded")
+        while
+        %em= t("inactive")
+        means
+        %em= t("shop.payment.status.unpaid")
+        or
+        = succeed(".") do
+          %em= t("shop.payment.status.refunded")
+      %li
+        = succeed(":") do
+          %strong Name
+        Some part of all of the payer's name.
+      %li
+        = succeed(":") do
+          %strong Email
+        Some part of all of the payer's email address.
+      %li
+        = succeed(":") do
+          %strong Date
+        When the payment was made.
+      %li
+        = succeed(":") do
+          %strong Cart ID
+        Payer's are sent their cart ID the confirmation email.
+  %li
+    Click
+    = succeed(".") do
+      %strong Search
+  %li
+    For more information about any cart in the search results, click its
+    %strong ID
+    (in the leftmost column).
+%p
+  Carts records are available from
+  = succeed(".") do
+    %strong= t("migration_date")
+  For information on subscriptions before that date search items (see below) or use
+  = succeed(".") do
+    = link_to t("icu.subscribers"), icu_subscribers_path
+
+%a{name: "search_items"}
+%h3= t("help.search_items")
+
+%ol
+  %li
+    Login, click the
+    %strong Admin
+    drop-down button on the right of the top navigation bar and then click
+    = succeed(".") do
+      %strong Items
+    If you don't see either of these options, then your account is not authorised to access them.
+  %li
+    Enter enough information in the search boxes and menus to locate the item:
+    %ul
+      %li
+        = succeed(":") do
+          %strong Type
+        = succeed(",") do
+          %em= t("item.type.subscription")
+        %em= t("item.type.entry")
+        or
+        = succeed(".") do
+          %em= t("item.type.other")
+      %li
+        = succeed(":") do
+          %strong Status
+        Note that
+        %em= t("active")
+        means
+        %em= t("shop.payment.status.paid")
+        while
+        %em= t("inactive")
+        means
+        %em= t("shop.payment.status.unpaid")
+        or
+        = succeed(".") do
+          %em= t("shop.payment.status.refunded")
+        Individual items cannot be
+        = succeed(".") do
+          %em= t("shop.payment.status.part_refunded")
+      %li
+        = succeed(":") do
+          %strong Payment Method
+        How the original payment was made.
+      %li
+        = succeed(",") do
+          %strong ICU ID
+        %strong Last Name
+        or
+        %strong First Name
+        of the member for whom the item was paid.
+  %li
+    Click
+    = succeed(".") do
+      %strong Search
+  %li
+    For more information about any item in the search results, click its
+    %strong cart ID
+    (in the rightmost column).
+%p
+  Additional notes:
+%ul
+  %li
+    The only item records retained from the previous web site are subscriptions and they do not belong to carts.
+  %li
+    Information about subscribers can also be obtained from
+    = succeed(".") do
+      = link_to t("icu.subscribers"), icu_subscribers_path
