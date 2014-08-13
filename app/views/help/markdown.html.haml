@@ -1,5 +1,115 @@
 - content_for :title, t("help.markdown")
 
 %h2.text-center= t("help.markdown")
+%hr
 
-%p TODO
+%p
+  In the previous version of this website, editors had to write HTML in order to create or edit articles and news items.
+  Now, however, it's possible to use
+  %strong Markdown
+  instead which is much easier. See the
+  = link_to "original article", "http://daringfireball.net/projects/markdown/syntax", target: "markdown"
+  and this
+  = succeed(".") do
+    = link_to "Wikipedia article", "http://en.wikipedia.org/wiki/Markdown", target: "markdown"
+%p To illustrate the differences between HTML and Markdown, here is that last paragraph written in Markdown:
+%pre
+  = preserve do
+    In the previous version of this website, editors had to write HTML in order to create or edit articles and news items.
+    Now, however, it's possible to use **Markdown** instead which is much easier.
+    See the [original article](http://daringfireball.net/projects/markdown/syntax) and
+    this [Wikipedia article](http://en.wikipedia.org/wiki/Markdown).
+%p
+  Note the absence of tags for paragraphs (&lt;p&gt;...&lt;/p&gt;), bold text (&lt;b&gt;...&lt;/b&gt;) and links (&lt;a&gt;...&lt;/a&gt;)
+  which would have been required if the same thing was written using HTML.
+%p
+  Markdown has a deliberately limited syntax and isn't capable of producing arbitary HTML.
+  Even such simple things as an anchor tag or a target attribute in a link have no equivalent in Markdown.
+  For this reason, whenever you need something Markdown can't handle, you can always just insert raw HTML.
+  For example, here is a header using Markdown syntax along with an associated anchor tag using HTML.
+%pre
+  = preserve do
+    :escaped
+      <a name="rook_endings"></a>
+      ### Rook Endings
+%p
+  For articles, although not for news items (which are generally much simpler) you can even turn Markdown processing off
+  completely and write entirely in HTML, but this is not recommened unless you really need it.
+%p Below is a quick summary of Markdown syntax.
+
+%h3 Paragraphs
+
+%p Just enter two newlines to start a new paragraph.
+%pre
+  = preserve do
+    :escaped
+      Twas bryllyg, and the slythy toves did gyre and gymble in the wabe.
+
+      All mimsy were the borogoves; and the mome raths outgrabe.
+
+%h3 Headers
+%pre
+  = preserve do
+    :escaped
+      # Title Header (equivalent to <h1>)
+      ## Section Header (<h2>)
+      ### Sub-Section Header (<h3>)
+
+%h3 Text styles
+%pre
+  = preserve do
+    :escaped
+      *This text will be italic*
+      _This will be underlined_
+      **This text will be bold**
+      ~~This will be strikethrough~~
+      *You **can** combine styles*
+
+%h3 Links
+%p Put the link text in square brackets followed by the URL in round brackets. For example:
+%pre [Ratings](http://ratings.icu.com)
+%p
+  See also
+  = link_to t("help.shortcuts"), help_shortcuts_path
+  for several custom shortcuts developed specifically for this website for quickly inserting various kinds of links.
+
+%h3 Unordered lists
+%pre
+  = preserve do
+    :escaped
+      * Item 1
+      * Item 2
+        * Item 2a
+        * Item 2b
+
+%h3 Ordered Lists
+%pre
+  = preserve do
+    :escaped
+      1. Item 1
+      1. Item 2
+         a. Item 2a
+         a. Item 2b
+
+%h3 Inline typewriter text
+%pre
+  = preserve do
+    :escaped
+      I think here the move `Nf3` was called for.
+
+%h3 Blockquotes
+%pre
+  = preserve do
+    :escaped
+      As Emanuel Lasker said:
+
+      > When you see a good move wait:
+      > look for a better one
+
+%h3 Images
+%p
+  Use
+  = link_to "IMG", help_shortcuts_path(anchor: "IMG")
+  or
+  = link_to "IML", help_shortcuts_path(anchor: "IML")
+  shortcuts for images.
