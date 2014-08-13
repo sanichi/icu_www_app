@@ -13,6 +13,7 @@ module Expandable
   }
   SPECIAL = {
     "EMA" => { text: /\S/ },
+    "EXL" => { url: /\A\/\/[^"\s]+\z/, text: /\S/, target: /\A\w+\z/ },
     "FEN" => { align: /\A(center|left|right)\z/, style: Board::VALID_STYLE, comment: /\S/ },
     "RTN" => { text: /\S/ },
   }
@@ -30,20 +31,30 @@ module Expandable
   def expand_each(klass, id, options)
     klass.find(id).expand(options)
   rescue ActiveRecord::RecordNotFound => e
-    if ENV["SYNC_#{klass.to_s.upcase}"] && ENV["SYNC_#{klass.to_s.upcase}"].include?("|#{id}|")
-      "valid" # used in lib/legacy/article.rb as referants may not exist at time article is processed
-    else
-      raise "#{id} is not a valid #{klass.to_s.downcase} ID"
-    end
+    raise "#{id} is not a valid #{klass.to_s.downcase} ID"
   end
 
   def expand_special(type, data, options)
     case type
     when "EMA"
       # see the hack compensate_redcarpet_ema_escaping in concerns/remarkable.rb necessary for this to function
-      raise "#{data} is not a valid email address" unless data.match(/\A[^.@\s][^@\s]*@[^.@\s]+(\.[^@\s]+)+\z/)
+      raise "#{data} is not a valid email address" unless Global.valid_email?(data)
       link = %Q{<a href="mailto:#{data}">#{options[:text] || data}</a>}
       "<script>liame(#{link.obscure})</script>"
+    when "EXL"
+      raise "#{data} is not a valid external link" unless data.match(/\Ahttps?\z/)
+      raise "missing URL for external link" unless url = options[:url]
+      url = data + ":" + url
+      raise "invalid URL for external link" unless Global.valid_url?(url)
+      target = options[:target] || (url.match(/\Ahttps?:\/\/ratings\.icu\.ie/) ? "ratings" : "external")
+      text = options[:text]
+      if text.blank?
+        text = url.dup
+        text.sub!(/\Ahttps?:\/\//, "")
+        text.sub!(/\?.*\z/, "")
+        text.sub!(/\/\z/, "")
+      end
+      %Q{<a href="#{url}" target="#{target}">#{text}</a>}
     when "FEN"
       board = Board.new(data)
       board.expand(options)
@@ -58,17 +69,20 @@ module Expandable
   def options(type, opt)
     hash = {}
     hash[:type] = type
+    allowed = (EXPANDABLE[type] || SPECIAL[type]).reject{ |k,v| k == :class || k == :type }
+    matcher = /\A(#{allowed.keys.join('|')})=(.*)\z/
     opt.to_s.split(/:/).each do |pair|
-      key, val = pair.to_s.split(/=/)
+      if pair.match(matcher)
+        key, val = $1, $2
+      else
+        key, val = nil, pair
+      end
       if key.present?
-        allowed = (EXPANDABLE[type] || SPECIAL[type]).reject{ |k,v| k == :class || k == :type }
         k2s = key.to_sym
-        if val.present?
-          hash[k2s] = val.markoff if allowed[k2s] && val.match(allowed[k2s])
-        else
-          match = allowed.find { |k,v| key.match(v) && !hash.has_key?(k) }
-          hash[match[0]] = key.markoff if match
-        end
+        hash[k2s] = val.markoff if allowed[k2s] && val.match(allowed[k2s])
+      else
+        match = allowed.find { |k,v| val.match(v) && !hash.has_key?(k) }
+        hash[match[0]] = val.markoff if match
       end
     end
     hash

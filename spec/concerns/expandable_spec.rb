@@ -146,6 +146,33 @@ describe Expandable do
     end
   end
 
+  context "external links" do
+    it "default text and target" do
+      expect(d.expand_all("[EXL:https://chess.com/reg?id=1]")).to eq %q{<a href="https://chess.com/reg?id=1" target="external">chess.com/reg</a>}
+    end
+
+    it "explicit text" do
+      expect(d.expand_all("[EXL:http://chess24.com/en:Chess24]")).to eq %q{<a href="http://chess24.com/en" target="external">Chess24</a>}
+    end
+
+    it "explicit target" do
+      expect(d.expand_all("[EXL:http://markorr.net/:target=mark]")).to eq %q{<a href="http://markorr.net/" target="mark">markorr.net</a>}
+      expect(d.expand_all("[EXL:http://ulsterchess.org/:target=provinces]")).to eq %q{<a href="http://ulsterchess.org/" target="provinces">ulsterchess.org</a>}
+    end
+
+    it "explicit text and target" do
+      expect(d.expand_all("[EXL:http://ulsterchess.org/:UCU:target=ulster]")).to eq %q{<a href="http://ulsterchess.org/" target="ulster">UCU</a>}
+    end
+
+    it "special case default target" do
+      expect(d.expand_all("[EXL:http://ratings.icu.ie/icu_ratings:Ratings]")).to eq %q{<a href="http://ratings.icu.ie/icu_ratings" target="ratings">Ratings</a>}
+    end
+
+    it "invalid URL" do
+      expect{d.expand_all("[EXL:rubbish]")}.to raise_error error("external", atr: "link", data: "rubbish")
+    end
+  end
+
   context "games" do
     let(:game) { create(:game) }
     let(:text) { Faker::Lorem.sentence }

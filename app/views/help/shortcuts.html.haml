@@ -100,11 +100,64 @@
   %strong CAL
   and works the same way.
 
+%a{name: "EXL"}
+%h3 EXL: External Links
+
+%p
+  It's good practice to add a
+  %strong target
+  attribute to links that would take the user to an external site. For example:
+%pre &lt;a href="https://chess24.com/en" target="external"&gt;Chess24&lt;/a&gt;
+%p
+  This prevents the page containing the link being replaced and instead causes
+  the browser to open a new window or tab in which to display the new page.
+%p
+  However,
+  = link_to t("help.markdown"), help_markdown_path
+  can only generate simple links and doesn't have the ability to add custom attributes.
+  You could write the link out in full, as it's possible to embed snippets of pure
+  HTML within markdown, or you could use the
+  %strong EXL
+  shortcut. So, for example, the above link could also be produced as follows:
+%pre [EXL:https://chess24.com/en:Chess24]
+%p
+  The colon-separated parts of this shortcut after the 3-letter code
+  %em EXL
+  are in order:
+%ol
+  %li
+    the URL
+    %strong
+    scheme (either
+    %em http
+    or
+    = succeed("),") do
+      %em https
+  %li
+    the
+    %strong rest of the URL
+    (which must begin with 2 forward slashes),
+  %li
+    optional
+    %strong link text
+    (if absent a shortended version of the URL will be used),
+  %li
+    an optional
+    %em target name
+    specified in the form
+    %em target=name
+    (if absent the default value
+    %em external
+    will be used).
+%p Another example:
+%pre [EXL:http://ulsterchess.org/:target=provinces]
+%p would produce:
+%pre &lt;a href="http://ulsterchess.org/" target="provinces"&gt;ulsterchess.org&lt;/a&gt;
+
 %a{name: "FEN"}
 %h3 FEN: Chess Diagram
 
 = Board.new("1K1k4/1P6/8/8/8/8/r7/2R5 w").expand({align: "right", comment: "White to play and win"}).html_safe
-
 %p
   This shortcut (the code for which is
   = succeed(")") do
