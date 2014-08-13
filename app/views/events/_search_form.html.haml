@@ -1,8 +1,8 @@
 = form_tag events_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :name, text: t("event.name"), size: 15
-  = render "utils/inline_text_field", param: :location, text: t("event.location"), size: 15
   = render "utils/inline_select",     param: :year, text: t("year"), menu: event_year_menu(params[:year])
   = render "utils/inline_select",     param: :month, text: t("month.month"), menu: event_month_menu(params[:month])
+  = render "utils/inline_text_field", param: :name, text: t("event.name"), size: 15
+  = render "utils/inline_text_field", param: :location, text: t("event.location"), size: 15
   = render "utils/inline_select",     param: :category, text: t("category"), menu: event_category_menu(params[:category], "event.category.any")
   - if can?(:create, Event)
     = render "utils/inline_select", param: :active, text: t("active"), menu: active_menu(params[:active])
