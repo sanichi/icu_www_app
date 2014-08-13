@@ -6,4 +6,4 @@
 %p.text-center= @failure.created_at.to_s(:db)
 %pre= @failure.details
 
-= render "utils/show_buttons", object: @failure, admin: "search", edit: false
+= render "utils/show_buttons", object: @failure, admin: "search", edit: false, confirm: false

@@ -2,6 +2,7 @@
 - defined?(extras)   || extras = {}
 - defined?(edit)     || edit = true
 - defined?(delete)   || delete = true
+- defined?(confirm)  || confirm = true
 - defined?(last_key) || last_key = object.class.to_s.tableize
 - defined?(template) || template = nil
 
@@ -13,7 +14,8 @@
   - if edit && can?(:update, object)
     = link_to t("edit"), send("edit_admin_#{type}_path", object), class: "btn btn-primary"
   - if delete && can?(:destroy, object)
-    = link_to t("delete"), send("admin_#{type}_path", object), data: { confirm: "Sure you want to delete this #{type}?" }, method: :delete, class: "btn btn-danger"
+    - data = confirm ? { confirm: "Sure you want to delete this #{type}?" } : nil
+    = link_to t("delete"), send("admin_#{type}_path", object), data: data, method: :delete, class: "btn btn-danger"
   - if last_path
     = link_to t("last_search"), last_path, class: "btn btn-default"
   = link_to t("new_search"), new_path, class: "btn btn-default"
