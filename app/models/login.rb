@@ -13,6 +13,7 @@ class Login < ActiveRecord::Base
       matches = matches.where("users.email LIKE ?", "%#{params[:email]}%")
     end
     matches = matches.where("logins.ip LIKE ?", "%#{params[:ip]}%") if params[:ip].present?
+    params[:result] = "Success" if params[:result].nil?
     case params[:result]
       when "Success"      then matches = matches.where(error: nil)
       when "Failure"      then matches = matches.where.not(error: nil)
