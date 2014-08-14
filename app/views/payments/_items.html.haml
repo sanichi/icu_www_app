@@ -2,8 +2,8 @@
 
 .row{id: "cart-#{cart.id}", style: hidden ? "display: none" : ""}
   - if cart.items.any?
-    .col-md-1
-    .col-md-10
+    - all_notes = cart.all_notes
+    .col-md-10.col-md-offset-1
       %table{class: "table table-striped"}
         %thead
           %tr
@@ -12,7 +12,6 @@
             %th.col-sm-2.text-center= t("item.cost")
             %td.col-sm-1
         %tbody
-          - all_notes = cart.all_notes
           - cart.items.each do |item|
             %tr
               %td

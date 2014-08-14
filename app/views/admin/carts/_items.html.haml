@@ -1,7 +1,9 @@
+- all_notes = cart.all_notes
+
 %hr
 %h3.text-center Cart Items
 .row
-  .col-md-12
+  .col-md-10.col-md-offset-1
     %table{class: "table table-striped"}
       %thead
         %tr
@@ -12,10 +14,19 @@
       %tbody
         - cart.items.each do |item|
           %tr
-            %td= item.description
+            %td
+              = item.description
+              - note_references = item.note_references(all_notes)
+              - if note_references.any?
+                %sup= "[#{note_references.join(',')}]"
             %td= item.player.name(id: true) if item.player.present?
             %td= t("shop.payment.status.#{item.status}")
             %td.text-center= euros(item.cost)
         %tr
           %th{colspan: 3}= t("shop.cart.total")
           %th.text-center= euros(cart.total_cost)
+    - if all_notes.any?
+      %hr
+      - all_notes.each do |note, number|
+        %p.small= "[#{number}] #{note}"
+          

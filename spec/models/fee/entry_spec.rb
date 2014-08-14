@@ -72,11 +72,6 @@ describe Fee::Entry do
       expect{Fee::Entry.create!(params.merge(url: "ftp://icu.ie"))}.to raise_error(/invalid/i)
     end
 
-    it "bad URL" do
-      pending "resolution of problem noted in Fee#valid_url"
-      expect{Fee::Entry.create!(params.merge(url: "http://www.icu.ie/no_such_page.html"))}.to raise_error(/bad response/i)
-    end
-
     it "URL OK" do
       expect{Fee::Entry.create!(params.merge(url: "http://www.icu.ie/"))}.to_not raise_error
     end
