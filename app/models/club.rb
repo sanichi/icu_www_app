@@ -7,8 +7,6 @@ class Club < ActiveRecord::Base
 
   has_many :players
 
-  WEB_FORMAT = ['https?:\/\/', '[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+']
-
   default_scope { order(:name) }
 
   before_validation :normalize_attributes
@@ -16,7 +14,7 @@ class Club < ActiveRecord::Base
   validate :has_contact_method
 
   validates :name, presence: true, uniqueness: true
-  validates :web, format: { with: /\A#{WEB_FORMAT[0]}#{WEB_FORMAT[1]}\z/ }, allow_nil: true
+  validates :web, url: true, allow_nil: true
   validates :meet, :address, :district, presence: true, allow_nil: true
   validates :city, presence: true
   validates :county, inclusion: { in: Ireland.counties, message: "invalid county" }
@@ -59,7 +57,7 @@ class Club < ActiveRecord::Base
 
   def normalize_attributes
     normalize_blanks(:name, :web, :meet, :address, :district, :city, :lat, :long, :contact, :email, :phone)
-    if web.present? && web.match(/\A#{WEB_FORMAT[1]}/)
+    if web.present? && web.match(/\A[^.\/\s:]+(\.[^.\/\s:]+){1,}[^\s]+/)
       self.web = "http://#{web}"
     end
   end

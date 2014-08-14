@@ -18,7 +18,8 @@ class Fee < ActiveRecord::Base
   validates :amount, numericality: { greater_than: Cart::MIN_AMOUNT, less_than: Cart::MAX_AMOUNT }, unless: Proc.new { |f| f.amount.blank? }
   validates :amount, presence: true, unless: Proc.new { |f| f.user_amount? }
   validates :days, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
-  validate :valid_days, :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits, :valid_url
+  validates :url, url: true, allow_nil: true
+  validate :valid_days, :valid_dates, :valid_discount, :valid_age_limits, :valid_rating_limits
 
   scope :alphabetic, -> { order(name: :asc) }
   scope :old_to_new, -> { order(end_date: :desc) }
@@ -163,19 +164,5 @@ class Fee < ActiveRecord::Base
     elsif min_rating + 100 > max_rating
       errors[:base] << "Rating limits are too close"
     end
-  end
-
-  def valid_url
-    return if url.blank?
-    uri = URI.parse(url)
-    raise "invalid URL" unless uri.try(:scheme).try(:match, /\Ahttps?\z/) && uri.host.present? && uri.port.present?
-    # The rest of this check disabled in July 2014 during the migration because HEAD requests were failing (getting a 404)
-    # on (the new) www.icu.ie when in maintenance mode (add_more_info in models/fee/subscription.rb was adding the URL).
-    # req = Net::HTTP.new(uri.host, uri.port)
-    # req.read_timeout = 10
-    # res = req.start { |http| http.head(uri.path.blank? ? "/" : uri.path) }
-    # raise "got bad response for this URL" unless res.kind_of?(Net::HTTPSuccess)
-  rescue => e
-    errors.add(:url, e.message)
   end
 end
