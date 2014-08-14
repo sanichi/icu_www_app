@@ -2,10 +2,6 @@ module Global
   # Indicates whether data comes from the legacy database and website (www1) or this one (www2).
   SOURCES = %w[www1 www2]
 
-  # Simple regular expression for email addresses.
-  EMAIL = '[^\s@]+@[^\s@]+'
-  EMAIL_RGX = /\A#{EMAIL}\z/
-
   # The oldest date before which we can be sure the ICU did not exist (used in validating dates and years).
   MIN_YEAR = 1850
 
@@ -33,15 +29,15 @@ module Global
   def self.valid_url?(string)
     url = URI(string)
     url.scheme.match(/\Ahttps?\z/) && url.host.present?
-  rescue => e
+  rescue
     false
   end
 
-  # Validator for email address.
+  # Validator for email addresses.
   def self.valid_email?(string)
     email = Mail::Address.new(string)
     email.local.present? && email.domain.present?
-  rescue => e
+  rescue
     false
   end
 end

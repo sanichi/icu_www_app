@@ -164,6 +164,17 @@ describe Player do
       expect(page).to have_css(field_error, text: "before")
     end
 
+    it "email must be valid if present" do
+      fill_in first_name, with: "Pete"
+      fill_in last_name, with: "Morriss"
+      fill_in dob, with: "1947-07-11"
+      select male, from: gender
+      fill_in email, with: "pete.morriss.nuigalway.ie"
+      click_button save
+
+      expect(page).to have_css(field_error, text: "invalid")
+    end
+
     it "create a guest user" do
       fill_in first_name, with: "Guest"
       fill_in last_name, with: "User"

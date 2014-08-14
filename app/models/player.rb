@@ -36,7 +36,7 @@ class Player < ActiveRecord::Base
   validates :player_title, inclusion: { in: PLAYER_TITLES }, allow_nil:true
   validates :arbiter_title, inclusion: { in: ARBITER_TITLES }, allow_nil:true
   validates :trainer_title, inclusion: { in: TRAINER_TITLES }, allow_nil:true
-  validates :email, format: { with: Global::EMAIL_RGX }, allow_nil: true
+  validates :email, email: true, allow_nil: true
   validates :status, inclusion: { in: STATUSES }
   validates :source, inclusion: { in: SOURCES }
   validates :fed, format: { with: /\A[A-Z]{3}\z/ }, allow_nil: true

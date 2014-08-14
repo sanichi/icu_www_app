@@ -16,7 +16,7 @@ class Officer < ActiveRecord::Base
 
   validates :rank, numericality: { integer_only: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 100 }
   validates :role, inclusion: { in: ROLES }, uniqueness: true
-  validates :emails, format: { with: /\A#{Global::EMAIL}( #{Global::EMAIL})*\z/ }
+  validates :emails, email_list: true
 
   def html_emails
     emails.split(/ /).map do |email|

@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
 
   before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
 
-  validates :email, uniqueness: { case_sensitive: false }, format: { with: Global::EMAIL_RGX }
+  validates :email, uniqueness: { case_sensitive: false }, email: true
   validates :encrypted_password, :expires_on, :status, presence: true
   validates :salt, length: { is: 32 }
   validates :player_id, numericality: { only_integer: true, greater_than: 0 }

@@ -27,7 +27,7 @@ class Event < ActiveRecord::Base
   validates_attachment :flyer, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
   validates :name, :location, presence: true
   validates :source, inclusion: { in: Global::SOURCES }
-  validates :email, format: { with: Global::EMAIL_RGX }, allow_nil: true
+  validates :email, email: true, allow_nil: true
   validates :category, inclusion: { in: CATEGORIES }
   validates :user_id, numericality: { integer_only: true, greater_than: 0 }
   validates :lat,  numericality: { greater_than_or_equal_to: -80.0, less_than_or_equal_to: 80.0, message: "must be between ±80.0" }, allow_nil: true
