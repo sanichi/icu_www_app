@@ -14,7 +14,7 @@ class Download < ActiveRecord::Base
     doc:  "application/msword",
     docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     pdf:  "application/pdf",
-    pgn:  "application/x-chess-pgn",
+    pgn:  ["application/x-chess-pgn", "application/octet-stream"],
     txt:  "text/plain",
     wav:  "audio/x-wav",
     xls:  ["application/vnd.ms-excel", "application/vnd.ms-office"],
