@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   OK = "OK"
   ROLES = %w[admin calendar editor inspector membership translator treasurer]
   MINIMUM_PASSWORD_LENGTH = 6
-  THEMES = %w[Amelia Cerulean Cosmo Cyborg Darkly Flatly Journal Lumen Superhero Readable Simplex Slate Spacelab United Yeti]
+  THEMES = %w[Cerulean Cosmo Cyborg Darkly Flatly Journal Lumen Superhero Paper Readable Sandstone Simplex Slate Spacelab United Yeti]
   DEFAULT_THEME = "Flatly"
   LOCALES = %w[en ga]
   SessionError = Class.new(RuntimeError)
@@ -78,8 +78,9 @@ class User < ActiveRecord::Base
     t.valid? ? t.to_s : t.error
   end
 
+  # Cater for a theme getting removed, as Ameila was in Aug 2014 after Bootswatch announced they were dropping it.
   def preferred_theme
-    theme || DEFAULT_THEME
+    theme.present? && THEMES.include?(theme) ? theme : DEFAULT_THEME
   end
 
   ROLES.each do |role|
