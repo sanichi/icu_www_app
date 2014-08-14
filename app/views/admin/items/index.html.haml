@@ -4,7 +4,7 @@
 
 - if @items.count > 0
   .row
-    .col-md-10.col-md-offset-1
+    .col-md-12
       %table{class: "table table-striped"}
         %thead
           %tr
@@ -12,8 +12,9 @@
             %th= t("player.player")
             %th= t("item.cost")
             %th= t("shop.payment.status.status")
-            %th= t("shop.payment.method.method")
+            %th= t("shop.payment.method.method_short")
             %th= t("date")
+            %th= t("notes")
             %th= t("shop.cart.cart_id")
         %tbody
           - @items.matches.each do |item|
@@ -24,5 +25,6 @@
               %td= t("shop.payment.status.#{item.status}")
               %td= t("shop.payment.method.#{item.payment_method}") if item.payment_method
               %td= to_date(item.created_at)
+              %td= item.abbreviated_notes
               %td.text-center= link_to item.cart_id, [:admin, item.cart] if item.cart
-          = render "utils/pagination_links", pager: @items, columns: 7
+          = render "utils/pagination_links", pager: @items, columns: 8

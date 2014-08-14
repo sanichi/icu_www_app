@@ -8,7 +8,7 @@ class Fee::Entry < Fee
 
   def description(full=false)
     parts = []
-    parts.push "Entry fee for" if full
+    parts.push "Entry for" if full
     parts.push name
     parts.push year || years
     parts.join(" ")

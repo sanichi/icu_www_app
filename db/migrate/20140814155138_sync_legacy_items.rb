@@ -178,13 +178,59 @@ class SyncLegacyItems < ActiveRecord::Migration
       { player_id: 12382, created_at: "2014-06-13 00:52:17", notes: ["Bournemouth Congress Intermediate", "2014-06-14"] },
       { player_id: 13031, created_at: "2014-07-04 14:00:39", notes: ["Saint-Lo Festival", "2014-07-06"] },
       { player_id: 13368, created_at: "2014-07-22 21:11:19", notes: ["British Championships U12", "2014-07-27"] },
-      { player_id: 13408, created_at: "2014-07-22 21:11:19", notes: ["British Championships U14", "2014-07-27"] },      
+      { player_id: 13408, created_at: "2014-07-22 21:11:19", notes: ["British Championships U14", "2014-07-27"] },
     ].each do |ftr|
       Item::Other.create!(default.merge(ftr))
     end
+
+    default = { source: "www1", status: "paid", payment_method: "paypal" }
+    [
+      { player_id:  5983, cost: 50.0, created_at: "2009-04-02 19:11:06", start_date: "2009-04-25", end_date: "2009-04-26", description: "Entry for National Club Championships 2009", notes: ["Galway"] },
+      { player_id:  5160, cost: 50.0, created_at: "2009-04-03 13:37:37", start_date: "2009-04-25", end_date: "2009-04-26", description: "Entry for National Club Championships 2009", notes: ["Dublin University"] },
+      { player_id:    11, cost: 50.0, created_at: "2009-04-03 23:58:40", start_date: "2009-04-25", end_date: "2009-04-26", description: "Entry for National Club Championships 2009", notes: ["Limerick"] },
+      { player_id:   740, cost: 50.0, created_at: "2009-04-21 15:43:20", start_date: "2009-04-25", end_date: "2009-04-26", description: "Entry for National Club Championships 2009", notes: ["Rathmines"] },
+      { player_id:  2831, cost: 60.0, created_at: "2010-04-26 21:29:24", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Bray-Greystones"] },
+      { player_id:   193, cost: 60.0, created_at: "2010-04-28 15:29:11", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Ennis"] },
+      { player_id:   295, cost: 60.0, created_at: "2010-04-30 19:52:58", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Bray-Greystones"] },
+      { player_id:   740, cost: 60.0, created_at: "2010-04-30 21:38:45", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Rathmines"] },
+      { player_id:  1529, cost: 60.0, created_at: "2010-05-01 19:16:53", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Phibsboro"] },
+      { player_id:   456, cost: 60.0, created_at: "2010-05-01 20:53:59", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Dun Laoghaire"] },
+      { player_id:  7244, cost: 60.0, created_at: "2010-05-02 22:31:44", start_date: "2010-05-08", end_date: "2010-05-09", description: "Entry for National Club Championships 2010", notes: ["Dublin"] },
+      { player_id:  1185, cost: 60.0, created_at: "2011-01-26 17:38:18", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Sarsfield"] },
+      { player_id:    11, cost: 60.0, created_at: "2011-02-01 09:39:28", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Adare A"] },
+      { player_id:    11, cost: 60.0, created_at: "2011-02-01 09:53:24", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Adare B"] },
+      { player_id:  5983, cost: 60.0, created_at: "2011-02-02 17:18:58", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Galway"] },
+      { player_id:  4941, cost: 60.0, created_at: "2011-02-02 21:32:27", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Gonzaga"] },
+      { player_id:   193, cost: 60.0, created_at: "2011-02-03 15:22:36", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Ennis"] },
+      { player_id:  6141, cost: 60.0, created_at: "2011-02-03 18:15:25", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Kilkenny"] },
+      { player_id:  3955, cost: 60.0, created_at: "2011-02-03 22:43:35", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Rathmines A"] },
+      { player_id:  3955, cost: 60.0, created_at: "2011-02-03 22:43:35", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Rathmines B"] },
+      { player_id:  7244, cost: 60.0, created_at: "2011-02-04 00:03:27", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Dublin"] },
+      { player_id: 12072, cost: 60.0, created_at: "2011-02-04 14:15:00", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Curragh"] },
+      { player_id:  4563, cost: 60.0, created_at: "2011-02-04 17:28:42", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["St Benildus"] },
+      { player_id:  1398, cost: 60.0, created_at: "2011-02-04 20:05:56", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Elm Mount"] },
+      { player_id:  1430, cost: 60.0, created_at: "2011-02-04 22:35:31", start_date: "2011-02-12", end_date: "2011-02-13", description: "Entry for National Club Championships 2011", notes: ["Bray-Greystones"] },
+      { player_id:  5983, cost: 60.0, created_at: "2012-04-19 17:17:21", start_date: "2012-04-28", end_date: "2012-04-29", description: "Entry for National Club Championships 2012", notes: ["Galway"] },
+      { player_id:   193, cost: 60.0, created_at: "2012-04-22 12:58:07", start_date: "2012-04-28", end_date: "2012-04-29", description: "Entry for National Club Championships 2012", notes: ["Ennis"] },
+      { player_id:    11, cost: 60.0, created_at: "2012-04-22 14:22:02", start_date: "2012-04-28", end_date: "2012-04-29", description: "Entry for National Club Championships 2012", notes: ["Adare"] },
+      { player_id:  4618, cost: 60.0, created_at: "2012-04-22 15:03:44", start_date: "2012-04-28", end_date: "2012-04-29", description: "Entry for National Club Championships 2012", notes: ["Gonzaga"] },
+      { player_id:   141, cost: 60.0, created_at: "2013-04-16 16:59:15", start_date: "2013-04-27", end_date: "2013-04-28", description: "Entry for National Club Championships 2013", notes: ["Phibsboro"] },
+      { player_id:  5601, cost: 60.0, created_at: "2013-04-16 22:54:43", start_date: "2013-04-27", end_date: "2013-04-28", description: "Entry for National Club Championships 2013", notes: ["Adare"] },
+      { player_id:  5983, cost: 60.0, created_at: "2013-04-18 02:22:05", start_date: "2013-04-27", end_date: "2013-04-28", description: "Entry for National Club Championships 2013", notes: ["Galway"] },
+      { player_id:  1430, cost: 60.0, created_at: "2013-04-18 13:03:54", start_date: "2013-04-27", end_date: "2013-04-28", description: "Entry for National Club Championships 2013", notes: ["Bray-Greystones"] },
+      { player_id:  7244, cost: 60.0, created_at: "2013-04-20 00:54:21", start_date: "2013-04-27", end_date: "2013-04-28", description: "Entry for National Club Championships 2013", notes: ["Dublin"] },
+      { player_id:  4941, cost: 75.0, created_at: "2014-04-15 09:41:47", start_date: "2014-04-26", end_date: "2014-04-27", description: "Entry for National Club Championships 2014", notes: ["Gonzaga"] },
+      { player_id:  5983, cost: 75.0, created_at: "2014-04-16 13:34:31", start_date: "2014-04-26", end_date: "2014-04-27", description: "Entry for National Club Championships 2014", notes: ["Galway"] },
+      { player_id:   193, cost: 75.0, created_at: "2014-04-17 16:00:59", start_date: "2014-04-26", end_date: "2014-04-27", description: "Entry for National Club Championships 2014", notes: ["Ennis"] },
+      { player_id:    11, cost: 75.0, created_at: "2014-04-18 21:29:23", start_date: "2014-04-26", end_date: "2014-04-27", description: "Entry for National Club Championships 2014", notes: ["Adare"] },
+      { player_id:   318, cost: 75.0, created_at: "2014-04-19 21:32:57", start_date: "2014-04-26", end_date: "2014-04-27", description: "Entry for National Club Championships 2014", notes: ["Blanchardstown"] },
+    ].each do |ncc|
+      Item::Entry.create!(default.merge(ncc))
+    end
   end
-  
+
   def down
     Item::Other.where(source: "www1").delete_all
+    Item::Entry.where(source: "www1").delete_all
   end
 end

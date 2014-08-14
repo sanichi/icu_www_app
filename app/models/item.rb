@@ -82,6 +82,11 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def abbreviated_notes(max=50)
+    return "" if notes.blank? || notes.empty?
+    notes.join(", ").truncate(max)
+  end
+
   private
 
   def copy_fee

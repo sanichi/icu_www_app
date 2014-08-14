@@ -46,6 +46,7 @@ en:
         cheque: Cheque
         free: Free
         method: Payment method
+        method_short: Method
         paypal: PayPal
         stripe: Stripe
       status:
