@@ -6,4 +6,8 @@ class Item::Other < Item
       false
     end
   end
+
+  def season
+    Season.new(start_date || created_at.to_date)
+  end
 end

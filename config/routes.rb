@@ -67,7 +67,9 @@ IcuWwwApp::Application.routes.draw do
     end
     resources :games,           only: [:edit, :update, :destroy]
     resources :images,          only: [:new, :create, :edit, :update, :destroy]
-    resources :items,           only: [:index]
+    resources :items,           only: [:index] do
+      get :sales_ledger, on: :collection
+    end
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
     resources :news,            only: [:new, :create, :edit, :update, :destroy]

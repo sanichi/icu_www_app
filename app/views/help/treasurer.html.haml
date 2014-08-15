@@ -106,7 +106,7 @@
     drop-down button on the right of the top navigation bar and then click
     = succeed(".") do
       %strong Carts
-    If you don't see either of these options, then your account is not authorised to access them.
+    If you don't see either of these options, then your account is not authorized to access them.
   %li
     Enter enough information in the search boxes and menus to locate the cart:
     %ul
@@ -168,7 +168,7 @@
     drop-down button on the right of the top navigation bar and then click
     = succeed(".") do
       %strong Items
-    If you don't see either of these options, then your account is not authorised to access them.
+    If you don't see either of these options, then your account is not authorized to access them.
   %li
     Enter enough information in the search boxes and menus to locate the item:
     %ul
@@ -226,3 +226,14 @@
     Information about subscribers can also be obtained from
     = succeed(".") do
       = link_to t("icu.subscribers"), icu_subscribers_path
+
+%a{name: "sales_ledger"}
+%h3= t("item.sales_ledger")
+
+%p
+  The
+  = link_to t("item.sales_ledger"), sales_ledger_admin_items_path
+  is accessible by any signed-in member, not just the treasurer, and
+  is a summary of all active items, both online and offline, broken down into seasons
+  (the last 10, but not going back further than 2006-07) and types:
+  subscriptions, entries (e.g. NCC) and other (e.g. foreign rating fees).

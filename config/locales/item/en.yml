@@ -5,6 +5,7 @@ en:
     cost: Cost
     item: Item
     items: Items
+    sales_ledger: Sales Ledger
     error:
       age:
         old: "%{member}'s age on %{date} is over the limit (%{limit})"
@@ -52,3 +53,8 @@ en:
       entry: Entry
       other: Other
       subscription: Subscription
+      plural:
+        entry: Entries
+        other: Others
+        subscription: Subscriptions
+        total: Total

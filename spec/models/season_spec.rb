@@ -75,4 +75,15 @@ describe Season do
       expect(s.end_of_grace_period.month).to eq 12
     end
   end
+
+  context "errors" do
+    it "nil" do
+      s = Season.new(nil)
+      expect(s.error).to be_present
+      expect(s.to_s).to eq ""
+      expect(s.start).to be_nil
+      expect(s.end).to be_nil
+      expect(s.end_of_grace_period).to be_nil
+    end
+  end
 end

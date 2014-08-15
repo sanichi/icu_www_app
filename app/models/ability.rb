@@ -47,5 +47,6 @@ class Ability
 
     can :manage_preferences, User, id: user.id
     can :show, Player, id: user.player_id
+    can :sales_ledger, Item
   end
 end

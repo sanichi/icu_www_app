@@ -10,4 +10,6 @@
       %li= link_to t("icu.officers"), icu_officers_path
       %li= link_to t("icu.subscribers"), icu_subscribers_path
       %li= link_to t("icu.life_members"), icu_life_members_path
+      - if can?(:sales_ledger, Item)
+        %li= link_to t("items.sales_ledger"), sales_ledger_admin_items_path
     %hr

@@ -1,0 +1,25 @@
+- content_for :title, t("item.sales_ledger")
+
+.row
+  .col-lg-8.col-lg-offset-2
+    %h1.text-center= t("item.sales_ledger")
+    %hr
+    %table{class: "table table-bordered table-striped"}
+      %thead
+        %tr
+          %th
+          - SalesLedger::TYPES.each do |type|
+            %th.text-center{colspan: 2}= t("item.type.plural.#{type}")
+      %tbody
+        - @ledger.seasons.each do |season|
+          %tr
+            %th= season
+            - SalesLedger::TYPES.each do |type|
+              %td.text-center= @ledger.stats[type][season].count
+              %td.text-center= euros(@ledger.stats[type][season].total)
+    - if @ledger.unclassified.count > 0
+      %p.small
+        Unclassified:
+        = succeed(",") do
+          = @ledger.unclassified.count
+        = euros(@ledger.unclassified.total)

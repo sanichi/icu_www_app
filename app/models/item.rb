@@ -87,6 +87,10 @@ class Item < ActiveRecord::Base
     notes.join(", ").truncate(max)
   end
 
+  def subtype
+    (type.presence || self.class.to_s).split("::").last.downcase
+  end
+
   private
 
   def copy_fee
