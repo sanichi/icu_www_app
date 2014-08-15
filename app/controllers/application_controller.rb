@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include SessionsHelper
-  before_filter :set_locale
+  before_action :set_locale
+  after_action :set_last_page_before_sign_in
   protect_from_forgery with: :exception
   helper_method :switch_to_tls, :switch_from_tls, :last_search, :failure_details
 
@@ -59,8 +60,26 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_last_page_before_sign_in
+    ok = true
+    ok &&= current_user.guest?
+    ok &&= request.get?
+    ok &&= !request.xhr?
+    ok &&= response.status == 200
+    ok &&= request.fullpath.match(/\A\//)
+    if ok
+      ok = false
+      ok ||= controller_name.match(/\A(pages|icu|help)\z/)
+      ok ||= action_name.match(/\A(index|show)\z/)
+      ok ||= "#{controller_name}##{action_name}".match(/\Apayments#shop\z/)
+      if ok
+        session[:last_page_before_sign_in] = request.fullpath
+      end
+    end
+  end
+
   def admin_path?
-    controller_path.match(/^admin\//)
+    controller_path.match(/\Aadmin\//)
   end
 
   def flash_first_error(model, now: true, base_only: false)
@@ -91,11 +110,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def switch_from_tls(prefix)
-    if Rails.env.production? && request.ssl?
-      send("#{prefix}_url", protocol: "http")
+  def switch_from_tls(prefix_or_path)
+    if prefix_or_path.to_s.match(/\A\//)
+      prefix, path = nil, prefix_or_path
     else
-      send("#{prefix}_path")
+      prefix, path = prefix_or_path, nil
+    end
+    if Rails.env.production? && request.ssl?
+      prefix ? send("#{prefix}_url", protocol: "http") : "http://www.icu.ie#{path}"
+    else
+      prefix ? send("#{prefix}_path") : path
     end
   end
 

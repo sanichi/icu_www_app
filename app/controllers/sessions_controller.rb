@@ -5,7 +5,9 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       session[:old_locale] = session[:locale] || I18n.default_locale
       switch_locale(user.locale)
-      redirect_to switch_from_tls(:home), notice: "#{t('session.signed_in_as')} #{user.email}"
+      goto = session[:last_page_before_sign_in]
+      goto = :home unless goto.present? && goto.match(/\A\//)
+      redirect_to switch_from_tls(goto), notice: "#{t('session.signed_in_as')} #{user.email}"
     rescue User::SessionError => e
       flash.now.alert = t("session.#{e.message}")
       render "new"
