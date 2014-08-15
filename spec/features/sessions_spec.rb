@@ -15,7 +15,6 @@ describe "Sessions" do
   let(:signed_in_as)     { I18n.t("session.signed_in_as") }
   let(:unverified)       { I18n.t("session.unverified_email") }
 
-
   context "signing in" do
     let(:good_password) { "password" }
     let(:bad_password)  { "drowssap" }
@@ -43,6 +42,7 @@ describe "Sessions" do
       expect(Login.count).to eq 1
       expect(user.logins.where(user_id: user.id, ip: ip, roles: nil, error: nil).count).to eq(1)
       click_link sign_out_button
+      click_link sign_in_button
       expect(page).to have_title(sign_in_title)
       expect(page).to have_xpath("//form//input[@name='email']")
     end
@@ -105,19 +105,22 @@ describe "Sessions" do
       fill_in email, with: user.email
       fill_in password, with: good_password
       click_button sign_in_button
-      visit sign_out_path
+      click_link sign_out_button
       user.roles = level1
       user.save
+      click_link sign_in_button
       fill_in email, with: user.email
       fill_in password, with: good_password
       click_button sign_in_button
-      visit sign_out_path
+      click_link sign_out_button
+      click_link sign_in_button
       fill_in email, with: user.email
       fill_in password, with: good_password
       click_button sign_in_button
-      visit sign_out_path
+      click_link sign_out_button
       user.roles = level2
       user.save
+      click_link sign_in_button
       fill_in email, with: user.email
       fill_in password, with: good_password
       click_button sign_in_button

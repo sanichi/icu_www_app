@@ -80,6 +80,7 @@ describe User do;
       expect(new_user.verified?).to be true
 
       click_link sign_out
+      click_link sign_in
       fill_in email, with: my_email
       fill_in password, with: my_password
       click_button sign_in

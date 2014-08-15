@@ -39,6 +39,7 @@ end
 def login(user_or_roles=nil, options={})
   visit sign_out_path
   return if user_or_roles == "guest"
+  visit sign_in_path
   user, roles = user_or_roles.instance_of?(User) ? [user_or_roles, nil] : [nil, user_or_roles]
   user ||= create(:user, roles: roles)
   fill_in I18n.t("email"), with: options[:email] || user.email
