@@ -24,7 +24,7 @@
   which would have been required if the same thing was written using HTML.
 %p
   Markdown has a deliberately limited syntax and isn't capable of producing arbitrary HTML.
-  Even such simple things as an anchor tag or a target attribute in a link have no equivalent in Markdown.
+  Even such simple and common things as an anchor tag or a target attribute in a link have no equivalent in Markdown.
   For this reason, whenever you need something Markdown can't handle, you can always just insert raw HTML.
   For example, here is a header using Markdown syntax along with an associated anchor tag using HTML.
 %pre
@@ -33,8 +33,9 @@
       <a name="rook_endings"></a>
       ### Rook Endings
 %p
-  For articles, although not for news items (which are generally much simpler), you can even turn Markdown processing off
-  completely and write entirely in HTML, but this is not recommended unless you really need it.
+  For articles, although not for news items (which are generally too simple to require any fancey HTML),
+  you can even turn Markdown processing off completely if you really want to and write entirely in HTML,
+  but this is not recommended unless you need it.
 %p
   Below is a quick summary of Markdown syntax. For futher help and inspiration, try looking at what
   other, more experienced editors have done. Although you can't edit the creations of other editors,
@@ -76,7 +77,16 @@
 %p
   See also
   = link_to t("help.shortcuts"), help_shortcuts_path
-  for several custom shortcuts developed specifically for this website for quickly inserting various kinds of links.
+  for several custom shortcuts developed specifically for this website for quickly inserting links to various kinds of resources such as
+  = succeed(",") do
+    = link_to "articles", help_shortcuts_path(anchor: "ART")
+  = link_to "news items", help_shortcuts_path(anchor: "NWS")
+  and
+  = succeed(".") do
+    = link_to "images", help_shortcuts_path(anchor: "IML")
+  There's also a shortcut for a
+  = link_to "link with a target attribute", help_shortcuts_path(anchor: "EXL")
+  (to open a new browser tab) which, as mentioned above, is one of the commonly required things Markdown can't handle.
 
 %h3 Unordered Lists
 %pre
