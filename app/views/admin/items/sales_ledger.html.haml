@@ -8,18 +8,38 @@
       %thead
         %tr
           %th
-          - SalesLedger::TYPES.each do |type|
+          - SalesLedger::ITEM_TYPES.each do |type|
             %th.text-center{colspan: 2}= t("item.type.plural.#{type}")
       %tbody
         - @ledger.seasons.each do |season|
           %tr
             %th= season
-            - SalesLedger::TYPES.each do |type|
-              %td.text-center= @ledger.stats[type][season].count
-              %td.text-center= euros(@ledger.stats[type][season].total)
-    - if @ledger.unclassified.count > 0
+            - SalesLedger::ITEM_TYPES.each do |type|
+              %td.text-center= @ledger.items[type][season].count
+              %td.text-center= euros(@ledger.items[type][season].total)
+    - if @ledger.bad_items.count > 0
       %p.small
         Unclassified:
         = succeed(",") do
-          = @ledger.unclassified.count
-        = euros(@ledger.unclassified.total)
+          = @ledger.bad_items.count
+        = euros(@ledger.bad_items.total)
+    %h1.text-center= t("item.subs_breakdown")
+    %hr
+    %table{class: "table table-bordered table-striped"}
+      %thead
+        %tr
+          %th
+          - SalesLedger::SUB_TYPES.each do |type|
+            - unless type == "Other" && @ledger.other_subs.count == 0
+              %th.text-center= type
+      %tbody
+        - @ledger.seasons.each do |season|
+          %tr
+            %th= season
+            - SalesLedger::SUB_TYPES.each do |type|
+              - unless type == "Other" && @ledger.other_subs.count == 0
+                %td.text-center= @ledger.subs[type][season].count
+    - if @ledger.bad_subs.count > 0
+      %p.small
+        Unclassified:
+        = @ledger.bad_subs.count

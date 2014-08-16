@@ -6,6 +6,7 @@ en:
     item: Item
     items: Items
     sales_ledger: Sales Ledger
+    subs_breakdown: Subscriptions Breakdown
     error:
       age:
         old: "%{member}'s age on %{date} is over the limit (%{limit})"

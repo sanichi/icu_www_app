@@ -30,6 +30,10 @@ class Item::Subscription < Item
     end
   end
 
+  def subscription_type
+    description.sub(/ ICU Subscription \d{4}-\d{2}\z/, "")
+  end
+
   private
 
   def no_duplicates
