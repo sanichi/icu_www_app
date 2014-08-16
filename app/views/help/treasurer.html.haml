@@ -57,7 +57,7 @@
 %h3= t("help.make_refund")
 
 %p
-  An ICU officer can refund one or more items in a cart as follows:
+  An ICU officer can refund one or more items in an active cart as follows:
 %ul
   %li Search carts or items to locate and then view the relevant cart (see below).
   %li
@@ -78,7 +78,7 @@
   %strong= t("shop.payment.status.paid")
   to
   %strong= t("shop.payment.status.refunded")
-  and become
+  and therefore become
   = succeed(".") do
     %strong= t("inactive")
   For example, if one of the items is a subscription then
@@ -232,9 +232,13 @@
 
 %p
   The
-  = link_to t("item.sales_ledger"), sales_ledger_admin_items_path
+  - if can?(:sales_ledger, Item)
+    = link_to t("item.sales_ledger"), sales_ledger_admin_items_path
+  - else
+    %strong= t("item.sales_ledger")
+    = t("unauthorized.sign_in")
   is accessible by any signed-in member, not just the treasurer, and
-  is a summary of all active items, both online and offline, broken down into seasons
+  presents a summary of all active items, both online and offline, broken down into seasons
   (the last 10, but not going back further than 2006-07) and types:
   subscriptions, entries (e.g. NCC) and other (e.g. foreign rating fees).
   There is also a table showing the number of subscriptions for

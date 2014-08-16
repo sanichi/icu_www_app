@@ -1,3 +1,4 @@
 en:
   unauthorized:
-    default: You are not authorized to view this page
+    default: You are not authorized to view that page
+    sign_in: (sign in to activate this link)

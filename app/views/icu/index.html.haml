@@ -10,5 +10,10 @@
       %li= link_to t("icu.officers"), icu_officers_path
       %li= link_to t("icu.subscribers"), icu_subscribers_path
       %li= link_to t("icu.life_members"), icu_life_members_path
-      %li= link_to_if can?(:sales_ledger, Item), t("item.sales_ledger"), sales_ledger_admin_items_path
+      %li
+        - if can?(:sales_ledger, Item)
+          = link_to t("item.sales_ledger"), sales_ledger_admin_items_path
+        - else
+          %strong= t("item.sales_ledger")
+          %span.small= t("unauthorized.sign_in")
     %hr
