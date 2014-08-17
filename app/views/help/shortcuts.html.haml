@@ -111,10 +111,10 @@
 %pre &lt;a href="https://chess24.com/en" target="external"&gt;Chess24&lt;/a&gt;
 %p
   This prevents the page containing the link being replaced and instead causes
-  the browser to open a new window or tab in which to display the new page.
+  the browser to open a new window or tab in which to display the linked page.
 %p
   However,
-  = link_to t("help.markdown"), help_markdown_path
+  = "Markdown", help_markdown_path
   can only generate simple links and doesn't have the ability to add custom attributes.
   You could write the link out in full, as it's possible to embed snippets of pure
   HTML within markdown, or you could use the
