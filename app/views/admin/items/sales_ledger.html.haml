@@ -38,7 +38,8 @@
             %th= season
             - SalesLedger::SUB_TYPES.each do |type|
               - unless type == "Other" && @ledger.other_subs.count == 0
-                %td.text-center= @ledger.subs[type][season].count
+                %td.text-center= "#{@ledger.subs[type][season][0].count}/#{@ledger.subs[type][season][1].count}"
+    %p.small= "* online/offline"
     - if @ledger.bad_subs.count > 0
       %p.small
         Unclassified:

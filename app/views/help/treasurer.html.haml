@@ -238,8 +238,26 @@
     %strong= t("item.sales_ledger")
     = t("unauthorized.sign_in")
   is accessible by any signed-in member, not just the treasurer, and
-  presents a summary of all active items, both online and offline, broken down into seasons
-  (the last 10, but not going back further than 2006-07) and types:
-  subscriptions, entries (e.g. NCC) and other (e.g. foreign rating fees).
-  There is also a table showing the number of subscriptions for
-  each season and each subscription type.
+  presents a summary of all active items, online and offline combined, broken down into
+  %strong seasons
+  (the last 10, but not going back further than 2006-07) and
+  = succeed(":") do
+    %strong types
+  = succeed(",") do
+    %em subscriptions
+  %em entries
+  (e.g. NCC) and
+  %em other
+  (e.g. foreign rating fees).
+%p
+  There is also a table showing the number of subscriptions for each
+  %strong season
+  and each
+  = succeed(".") do
+    %strong subscription type
+  Figures for both
+  %strong online
+  (PayPal or Stripe via the website) and
+  %strong offline
+  (cash or cheque via the treasurer or membership officer)
+  payments are given. For example "895/52" means there were 895 online subscriptions and 52 offline.

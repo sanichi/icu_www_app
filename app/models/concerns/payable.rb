@@ -1,9 +1,13 @@
 module Payable
   extend ActiveSupport::Concern
-  PAYMENT_METHODS = %w[paypal stripe cheque cash free]
+
   INACTIVE = %w[unpaid refunded]
   ACTIVE = %w[paid part_refunded]
   STATUSES = INACTIVE + ACTIVE
+
+  ONLINE = %w[paypal stripe]
+  OFFLINE = %w[cheque cash free]
+  PAYMENT_METHODS = ONLINE + OFFLINE
 
   included do
     validates :status, inclusion: { in: STATUSES }
@@ -22,5 +26,13 @@ module Payable
 
   def inactive?
     INACTIVE.include?(status)
+  end
+
+  def online?
+    ONLINE.include?(payment_method)
+  end
+
+  def offline?
+    OFFLINE.include?(payment_method)
   end
 end

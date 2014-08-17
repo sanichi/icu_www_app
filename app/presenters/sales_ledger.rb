@@ -55,7 +55,7 @@ class SalesLedger
     SUB_TYPES.each do |type|
       @subs[type] = {}
       seasons.each do |season|
-        @subs[type][season] = Counter.new
+        @subs[type][season] = [Counter.new, Counter.new]
       end
     end
     @bad_subs = Counter.new
@@ -64,14 +64,15 @@ class SalesLedger
 
   def process_items
     Item.active.where.not(cost: nil).each do |item|
-      type, season, sub_type = classify(item)
+      type, season, sub_type, online = classify(item)
       if type && season
         if seasons.include?(season)
           items[type][season].add(item)
           items["total"][season].add(item)
           if sub_type
-            subs[sub_type][season].inc
-            subs["Total"][season].inc
+            index = online ? 0 : 1
+            subs[sub_type][season][index].inc
+            subs["Total"][season][index].inc
             other_subs.inc if sub_type == "Other"
           end
         end
@@ -101,6 +102,7 @@ class SalesLedger
     else
       sub_type = nil
     end
-    [type, season, sub_type]
+    online = item.online?
+    [type, season, sub_type, online]
   end
 end
