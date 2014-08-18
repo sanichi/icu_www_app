@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 source 'https://code.stripe.com'
 
-gem "rails", "4.1.4"
+gem "rails", "4.1.5"
 gem "mysql2"
 gem "haml-rails"
 gem "sass-rails", "~> 4.0.3"
