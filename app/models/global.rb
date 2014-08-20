@@ -4,6 +4,10 @@ module Global
 
   # The oldest date before which we can be sure the ICU did not exist (used in validating dates and years).
   MIN_YEAR = 1850
+  
+  # The minimum DOB and join dates for today's players.
+  MIN_DOB = Date.new(1900, 1, 1)
+  MIN_JOINED = Date.new(1960, 1, 1)
 
   # A list of ICU documentation page names (keys), in order, plus optional comments for the index page (values).
   ICU_DOCS = {

@@ -122,7 +122,7 @@ describe News do;
       fill_in date, with: Date.tomorrow.to_s
       click_button save
 
-      expect(page).to have_css(field_error, text: "on or before")
+      expect(page).to have_css(field_error, text: "on or before #{Date.today}")
 
       fill_in date, with: Date.yesterday.to_s
       click_button save

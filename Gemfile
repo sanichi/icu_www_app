@@ -12,8 +12,6 @@ gem "redis"
 gem "therubyracer", platforms: :ruby
 gem "icu_name"
 gem "icu_utils"
-#gem "validates_timeliness", "~> 3.0"
-gem "validates_timeliness", github: "razum2um/validates_timeliness", ref: "b195081f6aeead619430ad38b0f0dfe4d4981252" # See https://github.com/adzap/validates_timeliness/pull/114.
 gem "redcarpet"
 gem "stripe"
 gem "mailgun-ruby", require: "mailgun"

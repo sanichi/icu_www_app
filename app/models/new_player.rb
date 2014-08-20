@@ -9,9 +9,8 @@ class NewPlayer
   validates :gender, inclusion: { in: Player::GENDERS }
   validates :club_id, numericality: { greater_than: 0 }, allow_nil: true
   validates :email, email: true, allow_nil: true
-
-  validates_date :dob, after: "1900-01-01", on_or_before: -> { Date.today }
-  validates_date :joined, after: "2014-01-01", on_or_before: -> { Date.today }
+  validates :dob, date: { on_or_after: Global::MIN_DOB, on_or_before: :today }
+  validates :joined, date: { on_or_after: "2014-01-01", on_or_before: :today }
 
   validate :no_db_duplicates
 

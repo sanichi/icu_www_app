@@ -10,8 +10,8 @@ class News < ActiveRecord::Base
   belongs_to :user
 
   before_validation :normalize_attributes
-  validates :date, :headline, :summary, presence: true
-  validates_date :date, on_or_before: -> { Date.today }
+  validates :headline, :summary, presence: true
+  validates :date, date: { on_or_before: :today }
   validate :expansions
 
   scope :include_player, -> { includes(user: :player) }

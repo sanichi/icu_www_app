@@ -45,9 +45,8 @@ class Player < ActiveRecord::Base
   validates :legacy_rating_type, inclusion: { in: RATING_TYPES }, allow_nil: true
   validates :legacy_games, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validates :privacy, format: { with: /\A(#{PRIVACIES.join('|')})( (#{PRIVACIES.join('|')}))*\z/ }, allow_nil: true
-
-  validates_date :dob, on_or_after: "1900-01-01", on_or_before: -> { Date.today }, allow_nil: true
-  validates_date :joined, on_or_after: "1960-01-01", on_or_before: -> { Date.today }, allow_nil: true
+  validates :dob, date: { on_or_after: Global::MIN_DOB, on_or_before: :today }, allow_nil: true
+  validates :joined, date: { on_or_after: Global::MIN_JOINED, on_or_before: :today }, allow_nil: true
 
   validate :conditional_validations, :dob_and_joined, :duplication, :validate_phones, :validate_legacy_rating
 
