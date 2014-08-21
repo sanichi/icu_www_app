@@ -47,7 +47,7 @@ class Cart < ActiveRecord::Base
       currency: "eur",
       card: token,
       description: ["Cart #{id}", name, email].reject { |d| d.nil? }.join(", "),
-      receipt_email: email,
+      # receipt_email: email, # Stripe's confirmations are particularly helpful
     )
   rescue Stripe::CardError => e
     add_payment_error(e, name, email)
