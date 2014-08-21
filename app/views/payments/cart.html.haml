@@ -1,4 +1,6 @@
 - content_for :title, t("shop.cart.cart")
+- if can?(:create, CashPayment)
+  - add_help("offline_payments")
 
 .row
   .col-md-12.text-center

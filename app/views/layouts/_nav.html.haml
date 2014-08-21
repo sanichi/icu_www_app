@@ -29,8 +29,13 @@
           %li{class: active("players")}= link_to t("player.players"), players_path
           %li= link_to t("player.rating.ratings"), "http://ratings.icu.ie", target: "ratings"
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
-      - if whats_new = Article.where(title: "What's New", user_id: 1).first
-        %li= link_to "WHAT'S NEW", whats_new
+      - if content_for?(:help)
+        %li.dropdown
+          = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
+            = t("help.HELP")
+            %b.caret
+          %ul.dropdown-menu
+            = yield :help
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"
       = render "layouts/admin_menu"

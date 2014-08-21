@@ -1,4 +1,8 @@
 - content_for :title, t("shop.shop")
+- add_help("membership")
+- if can?(:create, CashPayment)
+  - add_help("treasurer")
+  - add_help("offline_payments")
 
 - if current_cart || @completed_carts.present?
   .row

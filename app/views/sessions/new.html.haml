@@ -2,6 +2,7 @@
 - if Rails.env.production?
   - content_for :includes do
     = javascript_include_tag "switch_from_tls.js"
+- add_help("accounts")
 
 .row
   .col-sm-8.col-sm-offset-2

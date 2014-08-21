@@ -74,4 +74,15 @@ module ApplicationHelper
   def irish_enabled?
     Rails.env != "production" || (current_user.translator? && !current_user.admin?)
   end
+
+  # Add an item for the Help dropdown in the top navbar.
+  def add_help(page)
+    key = "help.#{page}"
+    path = "help_#{page}_path"
+    content_for :help do
+      content_tag("li") do
+        link_to t(key), send(path), target: "help"
+      end
+    end
+  end
 end
