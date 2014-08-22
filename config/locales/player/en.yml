@@ -9,6 +9,7 @@ en:
     duplicate: Duplicate
     duplicates: Duplicates
     duplicate_of: Duplicate of
+    edit_profile: Edit Profile
     federation: Federation
     first_name: First name
     foreign: Foreign
@@ -25,6 +26,7 @@ en:
     player: Player
     players: Players
     privacy: Privacy
+    profile: Profile
     some_title: Some title
     yob: Year of birth
     abbrev:

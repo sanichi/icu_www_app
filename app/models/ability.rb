@@ -46,7 +46,7 @@ class Ability
     end
 
     can :manage_preferences, User, id: user.id
-    can :show, Player, id: user.player_id
+    can [:manage_profile, :show], Player, id: user.player_id
     can :sales_ledger, Item
   end
 end

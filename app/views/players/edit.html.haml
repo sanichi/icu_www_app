@@ -1,0 +1,18 @@
+- content_for :title, "Edit Profile"
+
+.row
+  .col-sm-1
+  .col-sm-10
+    = form_for @player, html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        %h3.text-center= @player.name
+        %hr
+        - locals = { form: f, object: @player, col: "sm", pad: 2, width: 4 }
+        = render "utils/select_for", locals.merge(param: :club_id, text: t("club.club"), width: 2, menu: club_menu(@player.club_id, none: true))
+        = render "utils/text_field_for", locals.merge(param: :email, text: t("email"))
+        = render "utils/text_field_for", locals.merge(param: :home_phone, text: t("player.phone.home"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :mobile_phone, text: t("player.phone.mobile"), width: 3)
+        = render "utils/text_field_for", locals.merge(param: :work_phone, text: t("player.phone.work"), width: 3)
+        = render "utils/select_for", locals.merge(param: :privacy, text: t("player.privacy"), menu: player_privacy_menu(@player.privacy), multiple: true, width: 2, size: Player::PRIVACIES.size)
+        = render "utils/text_field_for", locals.merge(param: :address, text: t("address"), width: 8)
+      = render "utils/form_buttons", form: f, object: @player, admin: "show"

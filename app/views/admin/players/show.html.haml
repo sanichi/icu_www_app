@@ -96,6 +96,8 @@
         %tr
           %td{colspan: 2}= @player.note_html
     - extras = {}
+    - if can?(:manage_profile, @player)
+      - extras[t("player.edit_profile")] = edit_player_path(@player)
     - if can?(:manage, User)
       - extras["New user"] = new_admin_user_path(player_id: @player.id)
     = render "utils/show_buttons", object: @player, extras: extras, delete: false

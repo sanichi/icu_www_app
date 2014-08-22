@@ -3,23 +3,168 @@ require 'rails_helper'
 describe Player do
   include_context "features"
 
+  let(:club)            { I18n.t("club.club") }
   let(:deceased)        { I18n.t("player.status.deceased") }
   let(:duplicate)       { I18n.t("player.duplicate") }
+  let(:edit_profile)    { I18n.t("player.edit_profile") }
   let(:fed)             { I18n.t("player.federation") }
   let(:female)          { I18n.t("player.gender.F") }
   let(:gender)          { I18n.t("player.gender.gender") }
   let(:last_name)       { I18n.t("player.last_name") }
   let(:first_name)      { I18n.t("player.first_name") }
   let(:foreign)         { I18n.t("player.status.foreign") }
+  let(:home)            { I18n.t("player.phone.home") }
   let(:id)              { I18n.t("player.id") }
   let(:inactive_status) { I18n.t("player.status.inactive") }
   let(:male)            { I18n.t("player.gender.M") }
+  let(:none)            { I18n.t("player.no_club") }
+  let(:privacy)         { I18n.t("player.privacy") }
+  let(:profile)         { I18n.t("player.profile") }
   let(:status)          { I18n.t("player.status.status") }
   let(:t_arbiter)       { I18n.t("player.title.arbiter") }
   let(:t_trainer)       { I18n.t("player.title.trainer") }
   let(:t_player)        { I18n.t("player.title.player") }
   let(:title)           { I18n.t("player.title.title") }
   let(:yob)             { I18n.t("player.abbrev.yob") }
+  let(:work)            { I18n.t("player.phone.work") }
+
+  context "authorization" do
+    let(:header)  { "h1" }
+    let(:level1)  { %w[admin membership] }
+    let(:level2)  { %w[inspector] }
+    let(:level3)  { [ user ] }
+    let(:level4)  { User::ROLES.reject { |role| level1.include?(role) || level2.include?(role) }.append("guest") }
+    let!(:player) { create(:player) }
+    let!(:user)   { create(:user) }
+
+    it "level 1 can show and edit both" do
+      level1.each do |role|
+        login role
+        [player, user.player].each do |p|
+          visit players_path
+          click_link p.name(reversed: true)
+          expect(page).to have_css(header, text: p.name)
+          click_link edit_profile
+          click_link cancel
+        end
+      end
+    end
+
+    it "level 2 can show both but not edit either" do
+      level2.each do |role|
+        login role
+        [player, user.player].each do |p|
+          visit players_path
+          click_link p.name(reversed: true)
+          expect(page).to have_css(header, text: p.name)
+          expect(page).to_not have_link(edit_profile)
+          visit edit_player_path(p)
+          expect(page).to have_css(failure, text: unauthorized)
+        end
+      end
+    end
+
+    it "level 3 can show and edit only their own player" do
+      level3.each do |role|
+        login role
+        visit players_path
+        click_link user.player.name(reversed: true)
+        expect(page).to have_css(header, text: user.player.name)
+        click_link edit_profile
+        click_link cancel
+        visit players_path
+        expect(page).to_not have_link(player.name)
+        visit admin_player_path(player)
+        expect(page).to have_css(failure, text: unauthorized)
+        visit edit_player_path(player)
+        expect(page).to have_css(failure, text: unauthorized)
+      end
+    end
+
+    it "level 4 can neither show nor edit either player" do
+      level4.each do |role|
+        login role
+        [player, user.player].each do |p|
+          visit players_path
+          expect(page).to_not have_link(p.name)
+          visit admin_player_path(p)
+          expect(page).to have_css(failure, text: unauthorized)
+          visit edit_player_path(p)
+          expect(page).to have_css(failure, text: unauthorized)
+        end
+      end
+    end
+  end
+
+  context "edit" do
+    let(:player) { create(:player) }
+    let(:user)   { create(:user, player: player) }
+    let(:data)   { attributes_for(:player) }
+
+    before(:each) do
+      login(user)
+    end
+
+    it "club" do
+      expect(player.club_id).to be_nil
+      create(:club, name: "Bangor")
+      create(:club, name: "Hollywood")
+      create(:club, name: "Carrickfergus")
+
+      click_link profile
+      click_link edit_profile
+      select "Hollywood", from: club
+      click_button save
+
+      expect(page).to have_css(success, text: updated)
+      player.reload
+      expect(player.club.name).to eq "Hollywood"
+
+      click_link edit_profile
+      select none, from: club
+      click_button save
+      expect(page).to have_css(success, text: updated)
+      player.reload
+      expect(player.club).to be_nil
+      
+      expect(JournalEntry.players.where(action: "update", column: :club_id, by: user.signature, journalable_id: player.id).count).to eq 2
+    end
+
+    it "email" do
+      click_link profile
+      click_link edit_profile
+      fill_in email, with: "rubbish"
+      click_button save
+
+      expect(page).to have_css(field_error, text: "invalid")
+
+      fill_in email, with: data[:email]
+      click_button save
+      expect(page).to have_css(success, text: updated)
+      player.reload
+
+      expect(player.email).to eq data[:email]
+      
+      expect(JournalEntry.players.where(action: "update", column: :email, by: user.signature, journalable_id: player.id).count).to eq 1
+    end
+
+    it "privacy" do
+      expect(player.privacy).to be_nil
+
+      click_link profile
+      click_link edit_profile
+      select home, from: privacy
+      select work, from: privacy
+      click_button save
+      player.reload
+
+      expect(page).to have_css(success, text: updated)
+      expect(page).to have_content(player.formatted_privacy)
+      expect(player.privacy).to eq "home_phone work_phone"
+      
+      expect(JournalEntry.players.where(action: "update", column: :privacy, by: user.signature, journalable_id: player.id).count).to eq 1
+    end
+  end
 
   context "search" do
     let(:result) { "//table[@id='results']/tbody/tr" }

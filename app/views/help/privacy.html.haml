@@ -4,8 +4,10 @@
 %hr
 
 %p.small
-  Below, the term
-  %strong "user(s) with enhanced access"
+  Below, the terms
+  %em "privileged user"
+  or
+  %em "privileged access"
   in the context of this website means certain ICU officers
   (variable, but typically the chairman, secretary, treasurer, rating officer and webmaster)
   and in the context of the ICU ratings website it means the rating officer, webmaster and all
@@ -13,22 +15,26 @@
     = link_to "tournament reporters", "http://ratings.icu.ie/contacts", target: "ratings"
 
 %a{name: "data"}
-%h3 Viewing Data about You
+%h3 Data about You
 
 %p
   A small amount of data (ID, name, gender, YOB, federation, chess title and club) is made
-  publicly available for all player records in the main ICU database in the
+  publicly available for all records in the main ICU database in the
   = succeed(".") do
     = link_to "player list", players_path
-%p
-  To see the full data stored about you, login to this website, find yourself in the player list
-  and click your name. Unless you are a user with enhanced access, you can only view full
-  data about yourself and not other players.
+%p To see the your full profile, login to this website and then either
+%ul
+  %li
+    click your name on the right of the top navigation bar and then click
+    = succeed(", or") do
+      %em= t("player.profile")
+  %li find yourself in the player list and then click your name.
+%p Unless you have privileged access, you can only view your own full profile and not those of other players.
 %p
   In the case of the ratings website, summary data on your tournaments and results is publicly
   available. Detailed calculations relating to your ICU rating are available to any ICU member who
   logs in. Information that can help identify you, such as your DOB (copied to the ratings database
-  from the main ICU database) is available to users with enhanced access.
+  from the main ICU database) is available to privileged users.
 %p
   The names and clubs of members who have paid a subscription for the current and previous
   few seasons are listed publicly in
@@ -38,6 +44,24 @@
   = succeed(",") do
     = link_to t("icu.life_members"), icu_life_members_path
   containing names, titles and clubs.
+  
+%a{name: "edit"}
+%h3 Edit Your Own Data
+
+%p
+  You can add to, edit or delete some of the data we hold about you: current club,
+  contact email address, telephone numbers (and privacy settings, see below) and physical address.
+  To do so, click the
+  %em= t("player.edit_profile")
+  on your profile page, make the changes you want and then click
+  = succeed(".") do
+    %em= t("save")
+%p
+  Unfortunately, for various reasons, we can't let users edit all their own data online.
+  Please get in touch with the ICU (webmaster or membership officer) if you require any
+  changes other than those possible via
+  = succeed(".") do
+    %em= t("player.edit_profile")
 
 %a{name: "dob"}
 %h3 Date of Birth
@@ -49,7 +73,7 @@
   players with them.
 %p
   Only year of births (YOBs) are displayed publicly on the ICU websites but DOBs are available to
-  users with enhanced access. This is a similar policy to the one FIDE operate for their website.
+  users with privileged access. This is a similar policy to the one FIDE operate for their website.
 %p
   You can, if you insist, ask us to remove your DOB from the database after you join but we advise against
   this, especially if you're a junior as it may prevent your selection for international competitions.
@@ -61,7 +85,7 @@
 %p
   If you supply any of your phone numbers (home, mobile or work) we will store them in the ICU database
   and may use them to contact you. They will not be published publicly on the web site but will be made
-  available to users with enhanced access. Those users may pass on your phone number(s) to other people
+  available to privileged users. Those users may pass on your phone number(s) to other people
   involved in chess organisation (for example, tournament controllers) if they need to contact you urgently.
   If you never want the ICU to contact you by phone then don't supply any numbers or delete the numbers
   that are already stored for you.
@@ -72,16 +96,45 @@
   page. If you don't want all (or even any of) your numbers to be displayed there, then there are two solutions.
 %ol
   %li
-    Completely remove from the database any phone numbers you don't want displayed. The drawback of this option
-    is that it hides your numbers from everyone, including ICU officers.
+    On your profile page (see above) click
+    = succeed(",") do
+      %em= t("player.edit_profile")
+    delete any phone numbers you don't want displayed, and then click
+    = succeed(".") do
+      %em= t("save")
+    The drawback of this option is that it hides your numbers from everyone, including ICU officers.
   %li
-    The preferred option is to ask the webmaster to mark some or all of your phone numbers as private.
+    The preferred option is to mark some or all of your phone numbers as private.
+    After clicking
+    = succeed(",") do
+      %em= t("player.edit_profile")
+    select the numbers you want to hide from the
+    %em= t("player.privacy")
+    menu and then click
+    = succeed(".") do
+      %em= t("save")
     In that case, only the remaining, non-private numbers (if any) will be displayed on the contacts page
     while all your numbers will still be available to ICU officers.
 %p As an ICU officer, it's preferable that you make at least one phone number publicly available for ICU members to call you.
 
+%a{name: "email"}
+%h3 Email Address
+
+%p
+  Your contact email address (the one in your profile) is only available to privileged users.
+  Unlike phone numbers, your email won't be published publicly even if you become an ICU officer
+  because personal email addresses are not used to contact officers.
+  Instead the ICU uses a set of addresses ending in
+  %em @icu.ie
+  (such as
+  = succeed(")") do
+    %em secretary@icu.ie
+  each of which relays messages to the current officer without their private address having to
+  be listed on the website.
+
 %a{name: "account"}
 %h3 Login Accounts
 
-Login email addresses are not published publicly. Passwords are stored in encrypted form so
-there is no password reminder service; forgotten passwords must be reset.
+%p
+  Login email addresses are not published publicly. Passwords are stored in encrypted form so
+  there is no password reminder service; forgotten passwords must be reset.

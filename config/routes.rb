@@ -37,7 +37,7 @@ IcuWwwApp::Application.routes.draw do
     get :source, on: :member
   end
   resources :player_ids,  only: [:index]
-  resources :players,     only: [:index]
+  resources :players,     only: [:index, :edit, :update]
   resources :series,      only: [:index, :show]
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
