@@ -84,13 +84,13 @@ describe Series do;
       fill_in article_title, with: articles[0].title + force_submit
       click_link articles[0].title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       find(select_button(2)).click
       fill_in article_title, with: articles[1].title + force_submit
       click_link articles[1].title
 
-      wait_a_second
+      wait_a_second(0.5)
       click_button save
 
       expect(page).to have_css(success, text: created)
@@ -114,13 +114,13 @@ describe Series do;
       fill_in article_title, with: articles[0].title + force_submit
       click_link articles[0].title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       find(select_button(2)).click
       fill_in article_title, with: articles[1].title + force_submit
       click_link articles[1].title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       expect(page).to_not have_css(select_button(3))
       click_link(more)
@@ -129,7 +129,7 @@ describe Series do;
       fill_in article_title, with: articles[2].title + force_submit
       click_link articles[2].title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       expect(page).to_not have_css(select_button(4))
       click_link(more)
@@ -138,7 +138,7 @@ describe Series do;
       fill_in article_title, with: articles[3].title + force_submit
       click_link articles[3].title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       click_button save
 
@@ -196,7 +196,7 @@ describe Series do;
       fill_in article_title, with: article.title + force_submit
       click_link article.title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       click_button save
 
@@ -236,7 +236,7 @@ describe Series do;
       fill_in article_title, with: episodes[0].article.title + force_submit
       click_link episodes[0].article.title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       click_button save
 
@@ -259,7 +259,7 @@ describe Series do;
       fill_in article_title, with: episodes[2].article.title + force_submit
       click_link episodes[2].article.title
 
-      wait_a_second
+      wait_a_second(0.5)
 
       find(number(1, 3)).select(1)
       click_button save
