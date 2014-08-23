@@ -57,7 +57,7 @@
 %h3= t("help.make_refund")
 
 %p
-  An ICU officer can refund one or more items in an active cart as follows:
+  A suitably priviledged user (typically the treasuer or webmaster) can refund one or more items in an active cart as follows:
 %ul
   %li Search carts or items to locate and then view the relevant cart (see below).
   %li
@@ -70,9 +70,14 @@
     = succeed(".") do
       %strong= t("shop.payment.refund")
 %p
-  If the original payment was made online then the refund will be made to the payer's
-  credit card automatically, without any further action on the part of the ICU officer.
-  However, if the payment was made offline then the refund must be sent to the payer manually.
+  If the original payment was made online then the refund to the payer's credit card
+  will be initiated automatically, without any further action required. Depending on
+  details of the payer's bank, the process may take some days to complete and the
+  refund will not neessarily show up in the payer's statement, instead the original
+  payment may simply drop off.
+%p
+  If the payment was made offline then the refund is also offline, in other words
+  arrangements must be made to manually refund the payer.
 %p
   The refunded items change status from
   %strong= t("shop.payment.status.paid")
@@ -92,9 +97,11 @@
   = succeed(".") do
     %em= t("shop.payment.status.paid")
 %p
-  Note that refunds for payments made prior to
+  Note that refunds for online payments made prior to
   %strong= t("migration_date")
-  cannot be made via the website. Contact the webmaster if you need to do this.
+  (i.e. using PayPal and not our current payment processor, Stripe)
+  should be treated the same way as offline payments.
+  Contact the webmaster if in doubt.
 
 %a{name: "search_carts"}
 %h3= t("help.search_carts")
