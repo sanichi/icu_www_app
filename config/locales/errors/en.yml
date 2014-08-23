@@ -1,7 +1,7 @@
 en:
   errors:
     alerts:
-      application: System error — please send screenshot to webmaster@icu.ie
+      application: System error — please contact webmaster@icu.ie
     attributes:
       password:
         length: minimum length is %{minimum}

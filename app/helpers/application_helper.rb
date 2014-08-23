@@ -76,12 +76,12 @@ module ApplicationHelper
   end
 
   # Add an item for the Help dropdown in the top navbar.
-  def add_help(page)
+  def add_help(page, anchor: nil)
     key = "help.#{page}"
     path = "help_#{page}_path"
     content_for :help do
       content_tag("li") do
-        link_to t(key), send(path), target: "help"
+        link_to t(key), send(path, anchor: anchor), target: "help"
       end
     end
   end

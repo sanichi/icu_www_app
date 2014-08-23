@@ -102,25 +102,31 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def switch_to_tls(prefix)
+  def switch_to_tls(prefix_or_path)
+    prefix, path = _split(prefix_or_path)
     if Rails.env.production? && !request.ssl?
-      send("#{prefix}_url", protocol: "https")
+      prefix ? send("#{prefix}_url", protocol: "https") : "https://www.icu.ie#{path}"
     else
-      send("#{prefix}_path")
+      prefix ? send("#{prefix}_path") : path
     end
   end
 
   def switch_from_tls(prefix_or_path)
-    if prefix_or_path.to_s.match(/\A\//)
-      prefix, path = nil, prefix_or_path
-    else
-      prefix, path = prefix_or_path, nil
-    end
+    prefix, path = _split(prefix_or_path)
     if Rails.env.production? && request.ssl?
       prefix ? send("#{prefix}_url", protocol: "http") : "http://www.icu.ie#{path}"
     else
       prefix ? send("#{prefix}_path") : path
     end
+  end
+
+  def _split(prefix_or_path)
+    if prefix_or_path.to_s.match(/\A\//)
+      prefix, path = nil, prefix_or_path
+    else
+      prefix, path = prefix_or_path, nil
+    end
+    [prefix, path]
   end
 
   def last_search(key)

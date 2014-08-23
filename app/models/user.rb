@@ -222,6 +222,32 @@ class User < ActiveRecord::Base
     eval(Rails.application.secrets.crypt["verifier"])
   end
 
+  def change_password(old, new_1, new_2)
+    if valid_password?(old)
+      if new_1.present?
+        if new_1 == new_2
+          self.password = new_1
+          update_password_if_present
+          if errors[:password].empty?
+            save!
+            nil
+          else
+            "#{I18n.t('user.new_password_1')} #{errors[:password].first}"
+          end
+        else
+          I18n.t("user.new_password_mismatch")
+        end
+      else
+        "#{I18n.t('user.new_password_1')} #{I18n.t('errors.messages.blank')}"
+      end
+    else
+      "#{I18n.t('user.old_password')} #{I18n.t('errors.messages.invalid')}"
+    end
+  rescue => e
+    Failure.log("ChangePasswordFailure", exception: e.class.to_s, message: e.message, user_id: id)
+    I18n.t("errors.alerts.application")
+  end
+
   private
 
   def canonicalize_roles

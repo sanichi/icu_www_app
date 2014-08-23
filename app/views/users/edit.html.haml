@@ -1,0 +1,20 @@
+- content_for :title, t("user.change_password")
+- if Rails.env.production?
+  - content_for :includes do
+    = javascript_include_tag "switch_from_tls.js"
+- add_help("accounts", anchor: "change_password")
+
+.row
+  .col-sm-8.col-sm-offset-2
+    %h1.text-center= t("user.change_password")
+    %hr
+    = form_tag @user, method: :patch, class: "form-horizontal", role: "form" do
+      %fieldset
+        - locals = { col: "sm", pad: 4, width: 4 }
+        = render "utils/text_field_tag", locals.merge(param: :old_password, text: t("user.old_password"), type: "password")
+        = render "utils/text_field_tag", locals.merge(param: :new_password_1, text: t("user.new_password_1"), type: "password")
+        = render "utils/text_field_tag", locals.merge(param: :new_password_2, text: t("user.new_password_2"), type: "password")
+      %hr
+      .text-center
+        = submit_tag t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), account_path, class: "btn btn-default"

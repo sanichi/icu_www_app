@@ -12,4 +12,5 @@
       %li= link_to t("session.sign_out"), sign_out_path
       %li{class: active("users", "account")}= link_to t("user.account"), account_path(current_user)
       %li{class: active("users", "preferences")}= link_to t("user.preferences"), preferences_path(current_user)
+      %li{class: active("users", "edit")}= link_to t("user.change_password"), switch_to_tls(edit_user_path(current_user))
       %li{class: active("players", "edit")}= link_to t("player.profile"), admin_player_path(current_user.player)

@@ -41,7 +41,7 @@ IcuWwwApp::Application.routes.draw do
   resources :series,      only: [:index, :show]
   resources :sessions,    only: [:create]
   resources :tournaments, only: [:index, :show]
-  resources :users,       only: [:new, :create] do
+  resources :users,       only: [:new, :create, :edit, :update] do
     get :verify, on: :member
   end
 

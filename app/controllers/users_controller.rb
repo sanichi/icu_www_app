@@ -34,6 +34,19 @@ class UsersController < ApplicationController
     end
   end
 
+  def update
+    error = @user.change_password(params[:old_password], params[:new_password_1], params[:new_password_2])
+    if error
+      flash.now[:alert] = error
+      %i[old_password new_password_1 new_password_2].each { |name| params[name] = "" }
+      render "edit"
+    else
+      @user.journal(:update, current_user, request.remote_ip)
+      flash[:notice] = "Password updated"
+      redirect_to switch_from_tls(:account)
+    end
+  end
+
   def verify
     @user = User.find(params[:id])
     if @user.verified_at.blank? && params[:vp].present? && @user.verification_param == params[:vp]

@@ -11,13 +11,13 @@
   %li
     an ICU ID (from a
     = link_to "subscription", help_membership_path
-    confirmation email)
+    confirmation email),
   %li
     a season ticket (from a
     = link_to "subscription", help_membership_path
-    confirmation email)
-  %li a working email address that you have access to (you choose)
-  %li a password (you choose)
+    confirmation email),
+  %li a working email address that you have access to (you choose),
+  %li a password (you choose, but it must be no less than 6 characters long and include at least one digit).
 %p Then:
 %ul
   %li
@@ -64,8 +64,8 @@
   %strong 24 hours
   before changes on this site are reflected on the other site.
 
-%a{name: "changing_account"}
-%h3 Changing a Login Account
+%a{name: "change_email"}
+%h3 Changing your Account Email
 
 %p
   If you already have a login account but have stopped using the address for sending and receiving emails
@@ -75,3 +75,22 @@
   However, if you would prefer not to have to sign in with your old address then simply create a new login
   account (as described above) and use that instead. The new email address must be a working one as otherwise
   you won't be able to answer the verification message to complete the signup procedure.
+
+%a{name: "change_password"}
+%h3 Changing your Account Password
+
+%p Follow this procedure:
+%ul
+  %li sign in,
+  %li click your name on the right of the top navigation bar,
+  %li
+    click
+    = succeed(",") do
+      %em= t("user.change_password")
+  %li enter your old password and your new password (twice),
+  %li
+    click
+    = succeed(".") do
+      %em= t("save")
+
+%p Your new password must be no less than 6 characters long and include at least one digit.

@@ -3,6 +3,7 @@ en:
     any: Any user
     any_editor: Any editor
     account: User account
+    change_password: Change Password
     complete_registration: To complete the process please click the link in the verification message sent to
     completed_registration: "User account successfully verified, you can login now"
     created: New user account successsfully created
@@ -11,6 +12,10 @@ en:
     incomplete_registration: Already created but waiting for response to verification message
     locale: Language
     new: New user account
+    new_password_1: New password
+    new_password_2: Confirm password
+    new_password_mismatch: New password doesn't match confirmation
+    old_password: Old password
     password: Password
     preferences: Preferences
     status: Status
