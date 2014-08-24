@@ -79,32 +79,35 @@ class Image < ActiveRecord::Base
   end
 
   def expand(opt)
+    lnk = "a"
+    lnk_atrs = %Q{ href="/images/#{id}"}
     if opt[:type] == "IML"
-      %q{<a href="/images/%d">%s</a>} % [id, opt[:text] || "image"]
+      "<#{lnk}#{lnk_atrs}>#{opt[:text] || 'image'}</#{lnk}>"
     elsif opt[:type] == "IMG"
       width, height = resize(opt)
       alt = (opt[:alt] || caption).gsub(/"/, '\"')
       margin = opt[:margin] || "yes"
-      atrs = []
-      atrs.push %Q/src="#{data.url}"/
+      img_atrs = []
+      wrp_atrs = []
+      img_atrs.push %Q/src="#{data.url}"/
       unless opt[:align] == "center" && opt[:responsive] == "true"
-        atrs.push %Q/width="#{width}"/
-        atrs.push %Q/height="#{height}"/
+        img_atrs.push %Q/width="#{width}"/
+        img_atrs.push %Q/height="#{height}"/
       end
-      cl, cr = nil, nil
       if opt[:align] == "left" || opt[:align].blank?
-        atrs.push 'class="float-left%s"' % (margin == "yes" ? " right-margin" : "")
+        wrp = "div"
+        wrp_atrs.push 'class="float-left%s"' % (margin == "yes" ? " right-margin" : "")
+      elsif opt[:align] == "right"
+        wrp = "div"
+        wrp_atrs.push 'class="float-right%s"' % (margin == "yes" ? " left-margin" : "")
+      elsif
+        wrp = "center"
+        img_atrs.push 'class="img-responsive"' if opt[:responsive] == "true"
       end
-      if opt[:align] == "right"
-        atrs.push 'class="float-right%s"' % (margin == "yes" ? " left-margin" : "")
-      end
-      if opt[:align] == "center"
-        atrs.push 'class="img-responsive"' if opt[:responsive] == "true"
-        cl = "<center>"
-        cr = "</center>"
-      end
-      atrs.push %Q/alt="#{alt}"/
-      "#{cl}<img #{atrs.join(" ")}>#{cr}"
+      img_atrs.push %Q/alt="#{alt}"/
+      img_atrs = (img_atrs.any?? " " : "") + img_atrs.join(" ")
+      wrp_atrs = (wrp_atrs.any?? " " : "") + wrp_atrs.join(" ")
+      "<#{wrp}#{wrp_atrs}><#{lnk}#{lnk_atrs}><img#{img_atrs}></#{lnk}><\/#{wrp}>"
     else
       raise "invalid expandable type (#{opt[:type]}) for Image"
     end
