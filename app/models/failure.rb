@@ -1,17 +1,14 @@
 class Failure < ActiveRecord::Base
   include Pageable
 
-  IGNORE = %w[ActiveRecord::RecordNotFound ActionController::UnknownFormat]
-
   scope :ordered, -> { order(created_at: :desc) }
   scope :active, -> { where(active: true) }
 
   before_create :normalize_details
 
   def self.examine(payload)
-    name = payload[:exception].first
-    unless IGNORE.include?(name)
-      Failure.log(name, payload.dup)
+    unless ignore?(payload)
+      Failure.log(payload[:exception].first, payload.dup)
     end
   end
 
@@ -25,6 +22,20 @@ class Failure < ActiveRecord::Base
 
   def self.log(name, details={})
     create(name: name, details: details)
+  end
+
+  def self.ignore?(payload)
+    name = payload[:exception].first
+    action = payload[:action].to_s
+    if %w[ActiveRecord::RecordNotFound ActionController::UnknownFormat].include?(name)
+      # Too common to log.
+      true
+    elsif name == "ActionController::InvalidAuthenticityToken" && action == "not_found"
+      # Spammers POST-ing to non-existant URLs raises this instead of getting a 404.
+      true
+    else
+      false
+    end
   end
 
   def snippet
