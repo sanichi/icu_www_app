@@ -17,7 +17,8 @@ class Article < ActiveRecord::Base
   before_validation :normalize_attributes
 
   validates :category, inclusion: { in: CATEGORIES }
-  validates :text, :title, presence: true
+  validates :text, presence: true
+  validates :title, presence: true, length: { maximum: 100 }
   validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR }
   validate :expansions
 

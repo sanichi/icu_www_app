@@ -14,10 +14,11 @@ describe Expandable do
 
   context "articles" do
     let(:article) { create(:article) }
-    let(:title) { Faker::Lorem.sentence }
+    let(:title) { Faker::Lorem.sentence(4) }
     let(:link)  { '<a href="/articles/%d">%s</a>' }
 
     it "default title" do
+      puts title.length
       expect(d.expand_all("[ART:#{article.id}]")).to eq link % [article.id, article.title]
     end
 

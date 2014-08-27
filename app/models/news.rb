@@ -10,7 +10,8 @@ class News < ActiveRecord::Base
   belongs_to :user
 
   before_validation :normalize_attributes
-  validates :headline, :summary, presence: true
+  validates :headline, presence: true, length: { maximum: 100 }
+  validates :summary, presence: true
   validates :date, date: { on_or_before: :today }
   validate :expansions
 

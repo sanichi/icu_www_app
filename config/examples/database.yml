@@ -6,6 +6,7 @@ development:
   username: root
   password:
   socket: /opt/local/var/run/mysql5/mysqld.sock
+  strict: false
 
 test:
   adapter: mysql2
@@ -15,6 +16,7 @@ test:
   username: root
   password:
   socket: /opt/local/var/run/mysql5/mysqld.sock
+  strict: false
 
 production:
   adapter: mysql2
@@ -24,3 +26,4 @@ production:
   username: root
   password:
   socket: /opt/local/var/run/mysql5/mysqld.sock
+  strict: false

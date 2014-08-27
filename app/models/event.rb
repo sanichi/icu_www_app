@@ -25,7 +25,8 @@ class Event < ActiveRecord::Base
   before_validation :normalize_attributes
 
   validates_attachment :flyer, content_type: { file_name: EXTENSIONS, content_type: CONTENT_TYPES }, size: { in: MIN_SIZE..MAX_SIZE }
-  validates :name, :location, presence: true
+  validates :name, presence: true, length: { maximum: 75 }
+  validates :location, presence: true, length: { maximum: 100 }
   validates :source, inclusion: { in: Global::SOURCES }
   validates :email, email: true, allow_nil: true
   validates :category, inclusion: { in: CATEGORIES }

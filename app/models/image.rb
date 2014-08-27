@@ -100,7 +100,7 @@ class Image < ActiveRecord::Base
       elsif opt[:align] == "right"
         wrp = "div"
         wrp_atrs.push 'class="float-right%s"' % (margin == "yes" ? " left-margin" : "")
-      elsif
+      else
         wrp = "center"
         img_atrs.push 'class="img-responsive"' if opt[:responsive] == "true"
       end
