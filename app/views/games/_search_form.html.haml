@@ -3,6 +3,7 @@
   = render "utils/inline_text_field", param: :white, text: t("game.white")
   = render "utils/inline_text_field", param: :black, text: t("game.black")
   = render "utils/inline_select", param: :result, text: t("game.result"), menu: game_result_menu(params[:result], "game.any_result")
+  .voffset2
   = render "utils/inline_text_field", param: :eco, text: "ECO", size: 3
   = render "utils/inline_text_field", param: :date, text: t("game.date_search_format"), size: 14
   = render "utils/inline_text_field", param: :event, text: t("game.event"), size: 14
