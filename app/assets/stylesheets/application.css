@@ -169,3 +169,8 @@ textarea.insignificant-space {
 a.no-underline {
   text-decoration: none !important;
 }
+
+/* For Google Maps. */
+#map-canvas {
+  height: 600px;
+}

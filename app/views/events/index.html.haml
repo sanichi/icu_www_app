@@ -1,5 +1,15 @@
 - content_for :title, t("event.calendar")
 
+.row
+  .col-md-10.col-md-offset-1
+    .text-center
+      .btn-group
+        .button.btn.btn-default.btn-sm{type: "button", title: "list"}
+          %span.glyphicon.glyphicon-list
+        .button.btn.btn-info.btn-sm{type: "button", title: "map"}
+          = link_to events_map_path do
+            %span.glyphicon.glyphicon-map-marker
+    .voffset3
 = render "utils/search_panel", form: "search_form", title: t("event.events"), col: "md"
 
 - extra = can?(:create, Event)
@@ -20,7 +30,7 @@
             %tr
               %td.no-wrap.text-right= event.dates
               %td= link_to event.name, event
-              %td= event.location
+              %td= link_to_if event.geocodes?, event.location, events_map_path(event)
               - if extra
                 %td.text-center= event.active ? "✔" : "✘"
           = render "utils/pagination_links", pager: @events, columns: 3 + (extra ? 1 : 0)

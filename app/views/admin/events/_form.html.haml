@@ -19,8 +19,8 @@
         = render "utils/text_field_for", locals.merge(param: :phone, text: t("event.phone"), width: 4, mark: "none")
         = render "utils/text_field_for", locals.merge(param: :url, text: t("event.url"), width: 6, mark: "none")
         = render "utils/text_field_for", locals.merge(param: :prize_fund, text: t("event.prize_fund"), width: 2, mark: "none")
-        = render "utils/text_field_for", locals.merge(param: :lat, text: t("event.lat"), width: 3, mark: "none")
-        = render "utils/text_field_for", locals.merge(param: :long, text: t("event.long"), width: 3, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :lat, text: t("latitude"), width: 3, mark: "none")
+        = render "utils/text_field_for", locals.merge(param: :long, text: t("longitude"), width: 3, mark: "none")
         = render "utils/check_box_for",  locals.merge(param: :active, text: t("active"), width: 1)
         = render "utils/text_area_for",  locals.merge(param: :note, text: t("notes"), width: 9, rows: 10)
       = render "utils/form_buttons", form: f, object: @event

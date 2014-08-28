@@ -10,6 +10,7 @@ en:
     lat: Latitude
     location: Location
     long: Longitude
+    map: Forthcoming Events Map
     name: Event name
     start: Start date
     phone: Contact phone

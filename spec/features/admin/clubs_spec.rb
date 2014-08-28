@@ -5,8 +5,6 @@ describe Club do;
 
   let(:county)        { I18n.t("club.county") }
   let(:district)      { I18n.t("club.district") }
-  let(:latitude)      { I18n.t("club.lat") }
-  let(:longitude)     { I18n.t("club.long") }
   let(:meetings)      { I18n.t("club.meet") }
   let(:phone)         { I18n.t("club.phone") }
   let(:website)       { I18n.t("club.web") }

@@ -9,6 +9,9 @@ IcuWwwApp::Application.routes.draw do
   %w[home links].each do |page|
     get page => "pages##{page}"
   end
+  %w[clubs events].each do |page|
+    get "maps/#{page}(/:id)" => "maps##{page}", as: "#{page}_map"
+  end
   %w[shop cart card charge confirm completed].each do |page|
     match page => "payments##{page}", via: page == "charge" ? :post : :get
   end

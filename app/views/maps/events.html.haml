@@ -1,0 +1,26 @@
+- content_for :includes do
+  = javascript_include_tag "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets.google['simple_api_key']}"
+- content_for :javascript do
+  = render "events.js"
+- content_for :title, t("event.map")
+
+.row
+  .col-md-10.col-md-offset-1
+    .text-center
+      .btn-group
+        .button.btn.btn-info.btn-sm{type: "button", title: "list"}
+          = link_to events_path do
+            %span.glyphicon.glyphicon-list
+        .button.btn.btn-default.btn-sm{type: "button", title: "map"}
+          %span.glyphicon.glyphicon-map-marker
+    .voffset3
+
+- if @forthcoming && @forthcoming > @events.size
+  %p.text-center.small
+    = @events.size
+    out of
+    = @forthcoming
+    forthcoming events have supplied their geocodes for a marker below
+
+.row
+  #map-canvas.col-md-6.col-md-offset-3

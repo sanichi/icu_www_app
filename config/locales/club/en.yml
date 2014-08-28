@@ -8,6 +8,7 @@ en:
     lat: Latitude
     location: Location
     long: Longitude
+    map: Clubs Map
     meet: Meetings
     phone: Phone
     province: Province

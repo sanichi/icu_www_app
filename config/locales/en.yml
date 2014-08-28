@@ -27,6 +27,8 @@ en:
   id: ID
   inactive: Inactive
   last_search: Last Search
+  latitude: Latitude
+  longitude: Longitude
   migration_date: 24th July 2014
   member: Member
   more: More

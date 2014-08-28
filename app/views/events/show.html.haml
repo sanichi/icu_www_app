@@ -11,7 +11,7 @@
     %table.table.table-striped
       %tr
         %th= t("event.location")
-        %td= @event.location
+        %td= link_to_if @event.geocodes?, @event.location, events_map_path(@event)
       %tr
         %th= t("event.start")
         %td= @event.start_date

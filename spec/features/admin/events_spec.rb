@@ -7,9 +7,7 @@ describe Event do;
   let(:event_email)   { I18n.t("event.email") }
   let(:end_date)      { I18n.t("event.end") }
   let(:flyer)         { I18n.t("event.flyer") }
-  let(:lat)           { I18n.t("event.lat") }
   let(:location)      { I18n.t("event.location") }
-  let(:long)          { I18n.t("event.long") }
   let(:event_name)    { I18n.t("event.name") }
   let(:phone)         { I18n.t("event.phone") }
   let(:prize_fund)    { I18n.t("event.prize_fund") }
@@ -129,8 +127,8 @@ describe Event do;
       select I18n.t("event.category.#{Event::CATEGORIES[1]}"), from: category
       fill_in contact_name, with: contact_text
       fill_in event_email, with: email_text
-      fill_in lat, with: lat_text
-      fill_in long, with: long_text
+      fill_in latitude, with: lat_text
+      fill_in longitude, with: long_text
       fill_in notes, with: note_text
       fill_in phone, with: phone_text
       fill_in prize_fund, with: fund_text

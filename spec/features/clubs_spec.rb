@@ -114,8 +114,6 @@ describe Club do
         district:  "Marina",
         city:      "Bangor",
         county:    "down",
-        lat:       54.65654,
-        long:      -5.67529,
         contact:   "Mark Orr",
         email:     "mark@bangor.net",
         phone:     "07968 537010",

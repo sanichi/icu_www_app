@@ -28,11 +28,15 @@
         %th= t("club.province")
         %td= t("ireland.prov.#{@club.province}")
       %tr
-        %th= t("club.lat")
-        %td= @club.lat
-      %tr
-        %th= t("club.long")
-        %td= @club.long
+        %th= t("club.location")
+        %td
+          - if @club.geocodes?
+            = link_to clubs_map_path(@club) do
+              = precede("(") do
+                = succeed(",") do
+                  = @club.lat
+              = succeed(")") do
+                = @club.long
       %tr
         %th= t("contact")
         %td= @club.contact

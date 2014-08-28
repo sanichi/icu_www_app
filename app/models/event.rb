@@ -18,6 +18,9 @@ class Event < ActiveRecord::Base
   EXTENSIONS = /\.(#{TYPES.values.join("|")})\z/i
   CONTENT_TYPES = TYPES.values.flatten
 
+  scope :active, -> { where(active: true) }
+  scope :with_geocodes, -> { where.not(lat: nil).where.not(long: nil) }
+
   has_attached_file :flyer, keep_old_files: true
 
   belongs_to :user
@@ -102,6 +105,10 @@ class Event < ActiveRecord::Base
       parts.unshift "#{start_date.mday}"
     end
     parts.join(" ")
+  end
+
+  def geocodes?
+    active && lat.present? && long.present?
   end
 
   private

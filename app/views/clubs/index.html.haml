@@ -1,9 +1,18 @@
 - content_for :title, t("club.clubs")
 
+.row
+  .col-md-10.col-md-offset-1
+    .text-center
+      .btn-group
+        .button.btn.btn-default.btn-sm{type: "button", title: "list"}
+          %span.glyphicon.glyphicon-list
+        .button.btn.btn-info.btn-sm{type: "button", title: "map"}
+          = link_to clubs_map_path do
+            %span.glyphicon.glyphicon-map-marker
+    .voffset3
 = render "utils/search_panel", form: "search_form", title: t("club.clubs"), col: "md"
 .row
   .col-md-10.col-md-offset-1
-    = render "utils/pagination_links", pager: @clubs
     - if @clubs.count > 0
       - @clubs.matches.each do |club|
         %div{class: "panel panel-default", id: "club_#{club.id}"}
@@ -13,13 +22,7 @@
           %ul.list-group
             %li.list-group-item
               %em= "#{t('club.location')}:"
-              - location = []
-              - location << club.address                                        if club.address
-              - location << club.district                                       if club.district
-              - location << club.city                                           if club.city
-              - location << t("club.co") + " " + t("ireland.co.#{club.county}")
-              - location << t("ireland.prov.#{club.province}")
-              = location.join(', ')
+              = link_to_if club.geocodes?, club.location, clubs_map_path(club)
             - if club.meet
               %li.list-group-item
                 %em= "#{t('club.meet')}:"

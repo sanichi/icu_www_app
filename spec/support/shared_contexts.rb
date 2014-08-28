@@ -17,6 +17,8 @@ shared_context "features" do
   let(:file)         { I18n.t("file") }
   let(:inactive)     { I18n.t("inactive") }
   let(:last_search)  { I18n.t("last_search") }
+  let(:latitude)     { I18n.t("latitude") }
+  let(:longitude)    { I18n.t("longitude") }
   let(:member)       { I18n.t("member") }
   let(:new_one)      { I18n.t("new") }
   let(:name)         { I18n.t("name") }

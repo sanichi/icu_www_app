@@ -1,0 +1,23 @@
+function initialize() {
+  var mapOptions = {
+    center: new google.maps.LatLng(<%= @center[0] %>, <%= @center[1] %>),
+    zoom: <%= @zoom %>
+  };
+  var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+  var info = new google.maps.InfoWindow({
+    content: "holding.."
+  });
+  var marker;
+<% @events.each do |event| %>
+  marker = new google.maps.Marker({
+    position: new google.maps.LatLng(<%= event.lat %>,<%= event.long %>),
+    map: map,
+    title: '<%= escape_single_quoted(event.name) %>',
+  });
+  google.maps.event.addListener(marker, 'click', function() {
+    info.setContent('<%= link_to escape_single_quoted(event.name), event_path(event) %>');
+    info.open(map, this);
+  });
+<% end %>
+}
+google.maps.event.addDomListener(window, 'load', initialize);

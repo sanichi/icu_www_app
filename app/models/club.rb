@@ -8,6 +8,8 @@ class Club < ActiveRecord::Base
   has_many :players
 
   default_scope { order(:name) }
+  scope :active, -> { where(active: true) }
+  scope :with_geocodes, -> { where.not(lat: nil).where.not(long: nil) }
 
   before_validation :normalize_attributes
 
@@ -45,6 +47,20 @@ class Club < ActiveRecord::Base
     when "false"     then matches = matches.where(active: false)
     end
     paginate(matches, params, path)
+  end
+
+  def geocodes?
+    active && lat.present? && long.present?
+  end
+
+  def location
+    location = []
+    location << address  if address
+    location << district if district
+    location << city     if city
+    location << I18n.t("club.co") + " " + I18n.t("ireland.co.#{county}")
+    location << I18n.t("ireland.prov.#{province}")
+    location.join(', ')
   end
 
   private
