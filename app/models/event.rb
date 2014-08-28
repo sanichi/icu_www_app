@@ -1,4 +1,5 @@
 class Event < ActiveRecord::Base
+  include Geocodable
   include Journalable
   include Normalizable
   include Pageable
