@@ -1,0 +1,17 @@
+- defined?(map) || map = true
+
+.text-center
+  .btn-group
+    .button.btn.btn-sm{type: "button", title: "list", class: "btn-#{map ? 'info' : 'default'}"}
+      - if map
+        = link_to send("#{resource}_path") do
+          %span.glyphicon.glyphicon-list
+      - else
+        %span.glyphicon.glyphicon-list
+    .button.btn.btn-sm{type: "button", title: "map", class: "btn-#{map ? 'default' : 'info'}"}
+      - if map
+        %span.glyphicon.glyphicon-map-marker
+      - else
+        = link_to send("#{resource}_map_path") do
+          %span.glyphicon.glyphicon-map-marker
+.voffset3

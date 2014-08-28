@@ -1,15 +1,6 @@
 - content_for :title, t("event.calendar")
 
-.row
-  .col-md-10.col-md-offset-1
-    .text-center
-      .btn-group
-        .button.btn.btn-default.btn-sm{type: "button", title: "list"}
-          %span.glyphicon.glyphicon-list
-        .button.btn.btn-info.btn-sm{type: "button", title: "map"}
-          = link_to events_map_path do
-            %span.glyphicon.glyphicon-map-marker
-    .voffset3
+= render "utils/list_map_buttons", resource: "events", map: false
 = render "utils/search_panel", form: "search_form", title: t("event.events"), col: "md"
 
 - extra = can?(:create, Event)

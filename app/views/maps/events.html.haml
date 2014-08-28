@@ -4,16 +4,7 @@
   = render "events.js"
 - content_for :title, t("event.map")
 
-.row
-  .col-md-10.col-md-offset-1
-    .text-center
-      .btn-group
-        .button.btn.btn-info.btn-sm{type: "button", title: "list"}
-          = link_to events_path do
-            %span.glyphicon.glyphicon-list
-        .button.btn.btn-default.btn-sm{type: "button", title: "map"}
-          %span.glyphicon.glyphicon-map-marker
-    .voffset3
+= render "utils/list_map_buttons", resource: "events"
 
 - if @forthcoming && @forthcoming > @events.size
   %p.text-center.small
