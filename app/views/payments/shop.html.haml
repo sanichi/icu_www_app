@@ -16,7 +16,7 @@
           = euros(current_cart.total_cost)
       - if @completed_carts.present?
         = link_to t("shop.cart.completed"), completed_path, class: "btn btn-info btn-md"
-%hr
+  %hr
 - @fees.sort_by{ |k,v| Fee::TYPES.index(k) }.each do |type, fees|
   .row
     .col-sm-3
