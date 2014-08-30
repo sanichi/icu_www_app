@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814155138) do
+ActiveRecord::Schema.define(version: 20140830111229) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -344,6 +344,8 @@ ActiveRecord::Schema.define(version: 20140814155138) do
     t.boolean  "executive",             default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",                default: true
+    t.string   "redirects"
   end
 
   create_table "payment_errors", force: true do |t|

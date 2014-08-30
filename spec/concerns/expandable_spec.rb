@@ -18,7 +18,6 @@ describe Expandable do
     let(:link)  { '<a href="/articles/%d">%s</a>' }
 
     it "default title" do
-      puts title.length
       expect(d.expand_all("[ART:#{article.id}]")).to eq link % [article.id, article.title]
     end
 

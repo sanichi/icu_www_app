@@ -1,0 +1,44 @@
+- content_for :title, t("officer.role.#{@officer.role}")
+
+.text-center
+  .btn-group
+    - if @prev
+      .btn.btn-primary.btn-sm= link_to "☜", [:admin, @prev]
+    .btn.btn-default.btn-sm= link_to "☝︎", admin_officers_path
+    - if @next
+      .btn.btn-primary.btn-sm= link_to "☞", [:admin, @next]
+.voffset3
+
+.row
+  .col-sm-8.col-sm-offset-2
+    %h1.text-center= t("officer.role.#{@officer.role}")
+    %table.table.table-striped
+      %tr
+        %th Active
+        %td= @officer.active ? t("yes") : t("no")
+      %tr
+        %th Rank
+        %td= @officer.rank
+      - @officer.emails_with_redirects.each do |email|
+        %tr
+          %th= t("email")
+          %td= email
+      - if @officer.player.present?
+        %tr
+          %th Incumbent
+          %td
+            = @officer.player.name(id: true)
+            = @officer.player.email
+        - if @users
+          - @users.each do |user|
+            %tr
+              %th Enhanced User
+              %td
+                = user.email
+                = precede("(") do
+                  = succeed(")") do
+                    = user.human_roles
+
+.text-center
+  = link_to t("edit"), edit_admin_officer_path(@officer), class: "btn btn-primary"
+  = link_to "Update Redirects", update_redirects_admin_officer_path(@officer), class: "btn btn-info"

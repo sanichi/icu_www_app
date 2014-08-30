@@ -13,6 +13,7 @@
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
   - links += 1 if pgns    = can?(:index, Pgn)
+  - links += 1 if offs    = can?(:index, Officer)
   - links += 1 if usage   = Rails.env.production? && current_user.admin?
   - nfails = fails ? Failure.active.count : 0
   - if nfails > 0
@@ -45,6 +46,8 @@
           %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
         - if logins
           %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
+        - if offs
+          %li{class: active("admin/officers")}= link_to "Officers", admin_officers_path
         - if perrs
           %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
         - if rfnds

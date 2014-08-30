@@ -1,0 +1,23 @@
+- content_for :title, "Edit Officer"
+- content_for :javascript do
+  = render "player_ids_callback.js"
+
+= render "player_ids/modal", title: "Select Incumbent"
+
+.row
+  .col-sm-1
+  .col-sm-10
+    .h1.text-center= t("officer.role.#{@officer.role}")
+    %hr
+    = form_for [:admin, @officer], html: { class: "form-horizontal", role: "form" } do |f|
+      %fieldset
+        - locals = { form: f, object: @officer, col: "sm", pad: 2, width: 2 }
+        = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.id"))
+        = render "utils/text_field_for", locals.merge(param: :emails, text: "Emails", width: 8)
+        = render "utils/text_field_for", locals.merge(param: :rank, text: "Rank")
+        = render "utils/check_box_for", locals.merge(param: :active, text: t("active"))
+      %hr
+      .text-center
+        = render "player_ids_button"
+        = f.submit t("save"), class: "btn btn-primary"
+        = link_to t("cancel"), [:admin, @officer], class: "btn btn-default"

@@ -27,7 +27,7 @@ module Global
   ICU_PAGES = %w[documents index life_members officers subscribers]
 
   # A list of help page names.
-  HELP_PAGES = %w[accounts index markdown membership offline_payments privacy shortcuts treasurer]
+  HELP_PAGES = %w[accounts downloads index markdown membership offline_payments privacy shortcuts treasurer]
 
   # Validator for full URLs.
   def self.valid_url?(string)

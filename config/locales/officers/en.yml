@@ -6,7 +6,7 @@ en:
     officers: Officers
     role:
       arbitration: Arbitration Officer
-      chair: Chairperson
+      chairperson: Chairperson
       connaught: Connaught Delegate
       development: Development Officer
       fide_ecu: "FIDE & ECU Delegate"
@@ -15,13 +15,13 @@ en:
       membership: Membership Officer
       munster: Munster Delegate
       president: President
-      pro: Public Relations Officer
+      publicrelations: Public Relations Officer
       ratings: Rating Officer
       secretary: Secretary
       selections: Selection Committee Chairperson
       tournaments: Tournament Officer
       treasurer: Treasurer
       ulster: Ulster Delegate
-      vicechair: Vice Chairperson
+      vicechairperson: Vice Chairperson
       webmaster: Webmaster
       women: Women's Officer

@@ -5,7 +5,12 @@ module Util
       result.to_h["is_valid"]
     end
 
-    def self.client(key="private")
+    def self.routes
+      result = client.get "routes"
+      result.to_h["items"]
+    end
+
+    def self.client(key="secret")
       ::Mailgun::Client.new Rails.application.secrets.mailgun[key]
     end
 

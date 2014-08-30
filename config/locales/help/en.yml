@@ -4,7 +4,7 @@ en:
     HELP: HELP
     accounts: Login Accounts for the ICU Websites
     admins: Administrators
-    privacy: Privacy Policy
+    downloads: Uploading Files for Later Download
     index: Help
     make_refund: Make a Refund
     markdown: Markdown for Articles and News Items
@@ -12,6 +12,7 @@ en:
     membership: Annual Subscriptions and Membership of the ICU
     offline_payments: Processing Offline Payments
     payment_status: Payment Status
+    privacy: Privacy Policy
     search_carts: Search Carts
     search_items: Search Items
     shortcuts: Link Shortcuts in Articles and News Items

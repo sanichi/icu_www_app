@@ -1,0 +1,64 @@
+- content_for :title, t("help.downloads")
+
+%h2.text-center= t("help.downloads")
+%hr
+
+%a{name: "what"}
+%h3 What are Downloads?
+
+%p
+  If you, as an editor, have a nicely formatted document in Word or PDF format and you want to
+  make it available on the website then rather than going to the trouble of converting it to
+  Markdown or HTML for an article you should just upload a copy for later download.
+  Users can then access it by clicking on a link that you provide in a news item or article using a
+  = succeed(".") do
+    = link_to "shortcut link", help_shortcuts_path(anchor: "DLD")
+  Alternatively, users can
+  = link_to "search for your file", downloads_path
+  based on a description that you provide.
+%p
+  Other types of files can also be uploaded and made available to users in the same way,
+  including PGN, spread sheets, plain text and audio.
+%p
+  Optionally, you can limit access to a download to members only or editors only.
+
+%a{name: "how"}
+%h3 How to Create a Download
+
+%p Follow these steps:
+%ul
+  %li sign in,
+  %li
+    click
+    %em Downloads
+    (under
+    = succeed("),") do
+      %em More
+  %li
+    scroll to bottom of the page and click
+    = succeed(",") do
+      %em New
+  %li browse for your file,
+  %li enter a description (so it can be found in searches),
+  %li enter a year (which can also be used in searches),
+  %li choose an access level,
+  %li
+    click
+    = succeed(",") do
+      %em Save
+  %li note the ID number of your download.
+%p
+  The download ID can be obtained from the address bar of your browser.
+  For example, if the URL ends like this:
+  %em= "/admin/downloads/123"
+  then the ID number is
+  = succeed(".") do
+    %em 123
+
+%a{name: "then"}
+%h3 How to Link to a Download File
+
+%p
+  Use the
+  = link_to "DLD shortcut", help_shortcuts_path(anchor: "DLD")
+  in an article or news item.

@@ -1,6 +1,6 @@
 class IcuController < ApplicationController
   def officers
-    @officers = Officer.ordered.include_players
+    @officers = Officer.active.ordered.include_players
   end
 
   def subscribers

@@ -76,6 +76,9 @@ IcuWwwApp::Application.routes.draw do
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
     resources :news,            only: [:new, :create, :edit, :update, :destroy]
+    resources :officers,        only: [:index, :show, :edit, :update] do
+      get :update_redirects, on: :member
+    end
     resources :payment_errors,  only: [:index]
     resources :pgns
     resources :players,         only: [:show, :new, :create, :edit, :update]
