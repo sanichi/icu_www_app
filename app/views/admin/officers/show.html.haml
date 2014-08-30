@@ -41,4 +41,4 @@
 
 .text-center
   = link_to t("edit"), edit_admin_officer_path(@officer), class: "btn btn-primary"
-  = link_to "Update Redirects", update_redirects_admin_officer_path(@officer), class: "btn btn-info"
+  = link_to t("officer.refresh_redirects"), update_redirects_admin_officer_path(@officer), class: "btn btn-info"

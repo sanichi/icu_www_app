@@ -5,10 +5,10 @@
     %table{class: "table table-striped"}
       %thead
         %tr
-          %th Role
-          %th Rank
-          %th Email
-          %th Incumbent
+          %th= t("officer.role.role")
+          %th= t("officer.rank")
+          %th= t("email")
+          %th= t("officer.incumbent")
       %tbody
         - @officers.each do |officer|
           %tr

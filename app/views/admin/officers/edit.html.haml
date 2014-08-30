@@ -2,7 +2,7 @@
 - content_for :javascript do
   = render "player_ids_callback.js"
 
-= render "player_ids/modal", title: "Select Incumbent"
+= render "player_ids/modal", title: t("officer.select_incumbent")
 
 .row
   .col-sm-1
@@ -14,7 +14,7 @@
         - locals = { form: f, object: @officer, col: "sm", pad: 2, width: 2 }
         = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.id"))
         = render "utils/text_field_for", locals.merge(param: :emails, text: "Emails", width: 8)
-        = render "utils/text_field_for", locals.merge(param: :rank, text: "Rank")
+        = render "utils/text_field_for", locals.merge(param: :rank, text: t("officer.rank"))
         = render "utils/check_box_for", locals.merge(param: :active, text: t("active"))
       %hr
       .text-center

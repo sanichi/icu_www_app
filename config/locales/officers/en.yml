@@ -1,9 +1,13 @@
 en:
   officer:
     exec: Executive
+    incumbent: Incumbent
     non_exec: Non-Executive
     officer: Officer
     officers: Officers
+    refresh_redirects: Refresh Redirects
+    select_incumbent: Select Incumbent
+    rank: Rank
     role:
       arbitration: Arbitration Officer
       chairperson: Chairperson
@@ -17,6 +21,7 @@ en:
       president: President
       publicrelations: Public Relations Officer
       ratings: Rating Officer
+      role: Role
       secretary: Secretary
       selections: Selection Committee Chairperson
       tournaments: Tournament Officer

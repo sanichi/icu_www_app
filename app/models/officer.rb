@@ -28,7 +28,6 @@ class Officer < ActiveRecord::Base
     r = redirects.to_s.split(" ").map do |id_email|
       id_email.split(/\|/).last
     end
-    logger.info "emails #{e.size} redirects #{r.size} | #{redirects}"
     r.size == e.size ? e.zip(r).map{ |pair| pair.join(" → ")} : e
   end
 
