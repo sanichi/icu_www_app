@@ -20,6 +20,7 @@ class Champion < ActiveRecord::Base
   validates :winners, format: { with: WINNERS }, length: { maximum: 140 }
   validates :notes, length: { maximum: 256 }, allow_nil: true
   validates :year, numericality: { integer_only: true, greater_than_or_equal_to: Global::MIN_YEAR, less_than_or_equal_to: Date.today.year }
+  validate :expansions
 
   def self.search(params, path)
     matches = ordered
@@ -48,6 +49,16 @@ class Champion < ActiveRecord::Base
       winners.gsub!(/\b([A-Z])\s+(?!\.)/, '\1. ')
       winners.gsub!(/\b([A-Z]{2,}|[a-z]{2,})\b/) { $1.capitalize }
       winners.trim!
+    end
+  end
+
+  def expansions
+    if notes.present?
+      begin
+        expand_all(notes, true)
+      rescue => e
+        errors.add(:base, e.message)
+      end
     end
   end
 end

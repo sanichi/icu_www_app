@@ -30,7 +30,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[ART:#{bad_id}]")}.to raise_error error("article")
+      expect{d.expand_all("[ART:#{bad_id}]", true)}.to raise_error error("article")
     end
   end
 
@@ -78,7 +78,7 @@ describe Expandable do
     end
 
     it "invalid FEN" do
-      expect{d.expand_all("[FEN:rubbish]")}.to raise_error error("invalid board position", data: nil)
+      expect{d.expand_all("[FEN:rubbish]", true)}.to raise_error error("invalid board position", data: nil)
     end
   end
 
@@ -100,7 +100,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[DLD:#{bad_id}]")}.to raise_error error("download")
+      expect{d.expand_all("[DLD:#{bad_id}]", true)}.to raise_error error("download")
     end
   end
 
@@ -114,7 +114,7 @@ describe Expandable do
     end
 
     it "invalid email" do
-      expect{d.expand_all("[EMA:chairman.icu.ie]")}.to raise_error error("email", atr: "address", data: "chairman.icu.ie")
+      expect{d.expand_all("[EMA:chairman.icu.ie]", true)}.to raise_error error("email", atr: "address", data: "chairman.icu.ie")
     end
   end
 
@@ -141,7 +141,7 @@ describe Expandable do
       end
 
       it "invalid ID" do
-        expect{d.expand_all("[#{type}:#{bad_id}]")}.to raise_error error("event")
+        expect{d.expand_all("[#{type}:#{bad_id}]", true)}.to raise_error error("event")
       end
     end
   end
@@ -169,7 +169,7 @@ describe Expandable do
     end
 
     it "invalid URL" do
-      expect{d.expand_all("[EXL:rubbish]")}.to raise_error error("external", atr: "link", data: "rubbish")
+      expect{d.expand_all("[EXL:rubbish]", true)}.to raise_error error("external", atr: "link", data: "rubbish")
     end
   end
 
@@ -201,7 +201,7 @@ describe Expandable do
         end
 
         it "invalid ID" do
-          expect{d.expand_all("[#{type}:#{bad_id}]")}.to raise_error error("game")
+          expect{d.expand_all("[#{type}:#{bad_id}]", true)}.to raise_error error("game")
         end
       end
     end
@@ -225,7 +225,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[IML:#{bad_id}]")}.to raise_error error("image")
+      expect{d.expand_all("[IML:#{bad_id}]", true)}.to raise_error error("image")
     end
   end
 
@@ -344,7 +344,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[IML:#{bad_id}]")}.to raise_error error("image")
+      expect{d.expand_all("[IML:#{bad_id}]", true)}.to raise_error error("image")
     end
   end
 
@@ -366,7 +366,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[NWS:#{bad_id}]")}.to raise_error error("news")
+      expect{d.expand_all("[NWS:#{bad_id}]", true)}.to raise_error error("news")
     end
   end
 
@@ -388,7 +388,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[RTN:rubbish]")}.to raise_error error("rated tournament", data: "rubbish")
+      expect{d.expand_all("[RTN:rubbish]", true)}.to raise_error error("rated tournament", data: "rubbish")
     end
   end
 
@@ -414,7 +414,7 @@ describe Expandable do
     end
 
     it "invalid ID" do
-      expect{d.expand_all("[TRN:#{bad_id}]")}.to raise_error error("tournament")
+      expect{d.expand_all("[TRN:#{bad_id}]", true)}.to raise_error error("tournament")
     end
   end
 

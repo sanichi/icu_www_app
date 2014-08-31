@@ -71,7 +71,7 @@ class Article < ActiveRecord::Base
   def expansions
     if text.present?
       begin
-        expand_all(text)
+        expand_all(text, true)
       rescue => e
         errors.add(:base, e.message)
       end

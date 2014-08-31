@@ -96,6 +96,23 @@ describe News do;
       expect(News.count).to eq 0
       expect(JournalEntry.count).to eq 0
     end
+
+    it "subsequently invalid expansion" do
+      article = create(:article)
+      fill_in headline, with: data.headline
+      fill_in summary, with: data.summary + "\n\n[ART:#{article.id}:Further details].\n"
+      click_button save
+
+      expect(page).to_not have_css(failure)
+      expect(News.count).to eq 1
+      expect(JournalEntry.count).to eq 1
+      
+      article.destroy
+      
+      news = News.first
+      visit news_path(news)
+      expect(page).to have_content("(editor shortcut error:")
+    end
   end
 
   context "edit" do

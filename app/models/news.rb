@@ -53,7 +53,7 @@ class News < ActiveRecord::Base
   def expansions
     if summary.present?
       begin
-        expand_all(summary)
+        expand_all(summary, true)
       rescue => e
         errors.add(:base, e.message)
       end

@@ -18,11 +18,19 @@ module Expandable
     "RTN" => { text: /\S/ },
   }
 
-  def expand_all(text)
+  def expand_all(text, raise_exceptions=false)
     text.to_s.gsub(/\[(#{EXPANDABLE.keys.join('|')}):([1-9]\d*)(:[^\]]+)?\]/) do
-      expand_each(EXPANDABLE[$1][:class], $2.to_i, options($1, $3))
+      begin
+        expand_each(EXPANDABLE[$1][:class], $2.to_i, options($1, $3))
+      rescue => e
+        raise_exceptions ? raise : "(editor shortcut error: #{e.message})"
+      end
     end.gsub(/\[(#{SPECIAL.keys.join('|')}):([^:\]]+)(:[^\]]+)?\]/) do
-      expand_special($1, $2, options($1, $3))
+      begin
+        expand_special($1, $2, options($1, $3))
+      rescue
+        raise_exceptions ? raise : "(editor shortcut error: #{e.message})"
+      end
     end
   end
 

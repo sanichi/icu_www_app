@@ -148,11 +148,11 @@ describe Article do;
       expect(JournalEntry.articles.where(action: "create", by: user.signature, journalable_id: article.id).count).to eq 1
     end
 
-    it "invalid expansion" do
+    it "invalid expansions" do
       fill_in title, with: data.title
       fill_in year, with: data.year
       fill_in author, with: data.author
-      fill_in text, with: data.text + "\n\nSee also [ART:99].\n"
+      fill_in text, with: data.text + "\n\nSee also [ART:99], [DLD:99].\n"
       select I18n.t("article.category.#{data.category}"), from: category
       select I18n.t("access.#{data.access}"), from: access
       check active

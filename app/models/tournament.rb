@@ -19,6 +19,7 @@ class Tournament < ActiveRecord::Base
   validates :format, inclusion: { in: FORMATS }
   validates :name, presence: true, uniqueness: { scope: :year, message: "should happen once per year" }
   validates :year, numericality: { integer_only: true, greater_than_or_equal: Global::MIN_YEAR }
+  validate :expansions
 
   validate :no_markup_in_details
 
@@ -52,6 +53,16 @@ class Tournament < ActiveRecord::Base
   def no_markup_in_details
     if details.present? && details.match(/</)
       errors.add(:base, "No makup allowed in details (use ICU markup)")
+    end
+  end
+
+  def expansions
+    if details.present?
+      begin
+        expand_all(details, true)
+      rescue => e
+        errors.add(:base, e.message)
+      end
     end
   end
 end
