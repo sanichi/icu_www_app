@@ -3,7 +3,7 @@ en:
     article: Article
     articles: Articles
     author: Author(s)
-    inaccessible: This article is inaccessible to the current user
+    inaccessible: "Sorry, this article is inaccessible to the current user"
     text: Text
     title: Article Title
     category:
