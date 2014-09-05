@@ -1,0 +1,19 @@
+- content_for :title, "ICU Officers"
+
+.row
+  .col-sm-10.col-sm-offset-1
+    %table{class: "table table-striped"}
+      %thead
+        %tr
+          %th= t("relay.from")
+          %th= t("relay.to")
+          %th= t("officer.officer")
+      %tbody
+        - @relays.each do |relay|
+          %tr
+            %td= link_to relay.from, [:admin, relay]
+            %td= relay.to
+            %td= link_to t("officer.role.#{relay.officer.role}"), [:admin, relay.officer]
+    .text-center
+      = link_to t("new"), new_admin_relay_path, class: "btn btn-info"
+      = link_to t("relay.refresh"), refresh_admin_relays_path, class: "btn btn-info"

@@ -19,10 +19,10 @@
       %tr
         %th Rank
         %td= @officer.rank
-      - @officer.emails_with_redirects.each do |email|
+      - @officer.relays.each do |relay|
         %tr
           %th= t("email")
-          %td= email
+          %td= "#{relay.from} → #{relay.to}"
       - if @officer.player.present?
         %tr
           %th Incumbent
@@ -41,4 +41,3 @@
 
 .text-center
   = link_to t("edit"), edit_admin_officer_path(@officer), class: "btn btn-primary"
-  = link_to t("officer.refresh_redirects"), update_redirects_admin_officer_path(@officer), class: "btn btn-info"

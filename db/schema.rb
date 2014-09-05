@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140830111229) do
+ActiveRecord::Schema.define(version: 20140905102230) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -338,14 +338,12 @@ ActiveRecord::Schema.define(version: 20140830111229) do
 
   create_table "officers", force: true do |t|
     t.string   "role",       limit: 20
-    t.string   "emails"
     t.integer  "player_id"
     t.integer  "rank",       limit: 1
     t.boolean  "executive",             default: true
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active",                default: true
-    t.string   "redirects"
   end
 
   create_table "payment_errors", force: true do |t|
@@ -431,6 +429,15 @@ ActiveRecord::Schema.define(version: 20140830111229) do
   add_index "refunds", ["cart_id"], name: "index_refunds_on_cart_id", using: :btree
   add_index "refunds", ["created_at"], name: "index_refunds_on_created_at", using: :btree
   add_index "refunds", ["user_id"], name: "index_refunds_on_user_id", using: :btree
+
+  create_table "relays", force: true do |t|
+    t.string   "from",        limit: 50
+    t.string   "to",          limit: 50
+    t.string   "provider_id", limit: 50
+    t.integer  "officer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "series", force: true do |t|
     t.string   "title",      limit: 100

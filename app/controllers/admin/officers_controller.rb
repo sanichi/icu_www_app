@@ -29,15 +29,6 @@ class Admin::OfficersController < ApplicationController
     end
   end
 
-  def update_redirects
-    if Officer.update_redirects
-      flash[:notice] = "Redirects were successfully updated"
-    else
-      flash[:alert] = "There was a problem updating redirects"
-    end
-    redirect_to [:admin, @officer]
-  end
-
   private
 
   def set_officer

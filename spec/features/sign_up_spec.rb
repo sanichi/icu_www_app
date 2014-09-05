@@ -21,7 +21,6 @@ describe "Sign up" do
   let(:ticket)      { I18n.t("user.ticket") }
   let(:unverified)  { I18n.t("session.unverified_email") }
 
-
   let(:player) { create(:player) }
   let(:data)   { build(:user, player: player) }
 
@@ -204,7 +203,7 @@ describe "Sign up" do
 
     it "expired season ticket" do
       fill_in icu_id, with: player.id
-      fill_in ticket, with: SeasonTicket.new(player.id, data.expires_on.years_ago(3))
+      fill_in ticket, with: SeasonTicket.new(player.id, Date.yesterday)
       click_button save
       expect(page.title).to eq new_account
       expect(page).to have_xpath(field_err(:user_ticket), text: expired)

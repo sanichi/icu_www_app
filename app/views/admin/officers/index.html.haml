@@ -14,5 +14,5 @@
           %tr
             %td= link_to t("officer.role.#{officer.role}"), [:admin, officer]
             %td{class: officer.active ? nil : "text-done"}= officer.rank
-            %td= officer.emails
+            %td= officer.emails.join(", ")
             %td= officer.player.name(id: true) if officer.player.present?

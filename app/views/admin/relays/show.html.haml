@@ -1,0 +1,26 @@
+- content_for :title, t("relay.relay")
+
+.text-center
+  .btn-group
+    - if @prev
+      .btn.btn-primary.btn-sm= link_to "☜", [:admin, @prev]
+    .btn.btn-default.btn-sm= link_to "☝︎", admin_relays_path
+    - if @next
+      .btn.btn-primary.btn-sm= link_to "☞", [:admin, @next]
+.voffset3
+
+.row
+  .col-sm-8.col-sm-offset-2
+    %h1.text-center= @relay.from
+    %table.table.table-striped
+      %tr
+        %th= t("officer.officer")
+        %td= t("officer.role.#{@relay.officer.role}")
+      %tr
+        %th= t("relay.to")
+        %td= @relay.to
+      %tr
+        %th= t("relay.provider_id")
+        %td= @relay.provider_id
+      = render "utils/timestamps", object: @relay, ability: :manage
+    = render "utils/show_buttons", object: @relay, admin: "search", new_search: t("relay.relays")

@@ -192,7 +192,7 @@ class User < ActiveRecord::Base
     if player
       if t.valid?
         if t.valid?(player.id)
-          if t.valid?(player.id, Season.new.end_of_grace_period)
+          if t.valid?(player.id, Date.today)
             if player.users.where(email: email, verified_at: nil).empty?
               if password.present?
                 self.expires_on = t.expires_on
