@@ -13,7 +13,6 @@
       %fieldset
         - locals = { form: f, object: @officer, col: "sm", pad: 2, width: 2 }
         = render "utils/text_field_for", locals.merge(param: :player_id, text: t("player.id"))
-        = render "utils/text_field_for", locals.merge(param: :emails, text: "Emails", width: 8)
         = render "utils/text_field_for", locals.merge(param: :rank, text: t("officer.rank"))
         = render "utils/check_box_for", locals.merge(param: :active, text: t("active"))
       %hr

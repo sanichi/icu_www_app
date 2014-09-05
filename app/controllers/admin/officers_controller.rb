@@ -1,5 +1,5 @@
 class Admin::OfficersController < ApplicationController
-  before_action :set_officer, only: [:edit, :update, :update_redirects]
+  before_action :set_officer, only: [:edit, :update]
   authorize_resource
 
   def index
@@ -36,6 +36,6 @@ class Admin::OfficersController < ApplicationController
   end
 
   def officer_params
-    params[:officer].permit(:player_id, :emails, :rank, :active)
+    params[:officer].permit(:player_id, :rank, :active)
   end
 end

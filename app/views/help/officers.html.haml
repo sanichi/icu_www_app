@@ -1,0 +1,116 @@
+- content_for :title, t("help.officers")
+
+%h2.text-center= t("help.officers")
+%hr
+
+%a{name: "what"}
+%h3 What does Managing Officers Involve?
+
+%p There are two main tasks:
+%ol
+  %li
+    linking each officer to the member who currently holds that position
+    so that the correct name and phone numbers are displayed on the
+    = succeed(",") do
+      = link_to "contacts page", icu_officers_path
+  %li
+    keeping the targets of the ICU's email relays (which all end in
+    = succeed(")") do
+      %em @icu.ie
+    in sync with the personal emails of the current office holders.
+%p
+  The former is managed on this website while relays are managed using
+  facilities provided by our email provider (Mailgun).
+%p
+  For example, in 2014 the webmaster was Mark Orr, so his player record
+  was linked to the webmaster officer's record via his ICU number and
+  his personal email was registered as the target of the
+  %em webmaster@icu.ie
+  relay.
+
+%a{name: "who"}
+%h3 Who can Manage Officers?
+
+At the moment only the webmaster can manage officers, so to complete
+any of the tasks below the webmaster must first login to this website or,
+if appropriate, Mailgun's website.
+
+%a{name: "link"}
+%h3 Change an Incumbent Officer
+
+%p To link the officer with a different member:
+%ul
+  %li
+    click
+    %em= t("relay.relays")
+    from the top navigation bar
+  %li find and click the role (officer) you want to change,
+  %li
+    do one of two things:
+    %ul
+      %li if you know the new incumbent's ICU ID, enter it in the box provided, or
+      %li
+        if you don't know their ID, search for it using
+        %em= t("officer.select_incumbent")
+        and click their ID when you've found it,
+  %li
+    click
+    = succeed(".") do
+      %em= t("save")
+%p To update the email relay:
+%ul
+  %li login to the ICU's Mailgun control panel,
+  %li
+    click
+    = succeed(",") do
+      %em Routes
+  %li
+    find and click the
+    %em filter expression
+    corresponding to the officer's ICU email,
+  %li
+    update the first
+    %em action
+    (the
+    %em forwarding
+    action) for the new incumbent's personal email address,
+  %li
+    click
+    = succeed(".") do
+      Save
+
+%a{name: "blank"}
+%h3 When an Role is Unfilled
+
+%p
+  It sometimes happens that an officer role is not filled for a while.
+  In this case we want:
+%ul
+  %li
+    the role still to be displayed on the
+    = link_to "contacts page", icu_officers_path
+    but with blanks where the incumbents's name and telephone numbers would normally go,
+  %li
+    emails sent to the officer's standard ICU email address to
+    be relayed to someone else (usually the secretary).
+%p
+  To achieve this, follow the instructions above for changing an incumbent
+  but with the following modifications:
+%ul
+  %li enter a blank ICU ID when you edit the officer on this website,
+  %li use the secretary's personal email for the forwarding action when you edit the Mailgun route.
+
+%a{name: "phones"}
+%h3 Adjusting the Phone Numbers Displayed for an Officer
+
+%p
+  By default, the
+  = link_to "contacts page", icu_officers_path
+  lists all the personal telephone numbers of each incumbent,
+  which sometimes an incumbent doesn't want.
+%p
+  Configuring which numbers are displayed is something the incumbent can
+  manage themselves, it doesn't require the webmaster. See
+  = succeed(".") do
+    = link_to t("help.privacy"), help_privacy_path(anchor: "phone_numbers")
+  
