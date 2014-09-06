@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140905102230) do
+ActiveRecord::Schema.define(version: 20140906193241) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -432,7 +432,7 @@ ActiveRecord::Schema.define(version: 20140905102230) do
 
   create_table "relays", force: true do |t|
     t.string   "from",        limit: 50
-    t.string   "to",          limit: 50
+    t.string   "to"
     t.string   "provider_id", limit: 50
     t.integer  "officer_id"
     t.datetime "created_at"

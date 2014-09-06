@@ -7,7 +7,7 @@ class Relay < ActiveRecord::Base
   before_validation :complete_from
 
   validates :from, email: true, length: { maximum: 50 }, format: { with: /@icu\.ie\z/ }, uniqueness: true
-  validates :from, :to, email: true, length: { maximum: 50 }, allow_nil: true
+  validates :to, email_list: true, length: { maximum: 255 }, allow_nil: true
   validates :officer_id, presence: true
 
   private
@@ -43,16 +43,25 @@ class Relay < ActiveRecord::Base
       else
         raise "couldn't parse expression in #{route}"
       end
-      if route["actions"].is_a?(Array) && route["actions"].first.to_s.match(/\Aforward\(["']([^"'\s]+)["']\)\z/)
-        to = $1
+      to = []
+      if route["actions"].is_a?(Array)
+        route["actions"].each do |action|
+          next if action.match(/\Astop\(\)\z/)
+          if action.match(/\Aforward\(["']([^"'\s]+)["']\)\z/)
+            to.push($1)
+          else
+            raise "unrecognised action in #{route}"
+          end
+        end
       else
-        raise "couldn't parse first action in #{route}"
+        raise "expected array of actions in #{route}"
       end
       if route["id"].present?
         id = route["id"]
       else
-        raise "couldn't parse ID in #{route}"
+        raise "couldn't get ID for #{route}"
       end
+      to = to.empty?? nil : to.join(", ")
       hash[from] = { id: id, to: to }
     end
   end
