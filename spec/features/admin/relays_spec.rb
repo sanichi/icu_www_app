@@ -43,14 +43,14 @@ describe Relay do
   end
   
   context "create" do
-    let!(:webmaster) { create(:officer, role: "webmaster", rank: 1, executive: false) }
-    let!(:ratings)   { create(:officer, role: "ratings", rank: 2) }
+    let!(:ratings)  { create(:officer, role: "ratings", rank: 1, executive: false) }
+    let!(:fide_ecu) { create(:officer, role: "fide_ecu", rank: 2) }
     
     let(:from)    { I18n.t("relay.from") }
     let(:officer) { I18n.t("officer.officer") }
 
-    let(:roles)  { %w[ratings webmaster].map { |r| I18n.t("officer.role.#{r}") } }
-    let(:emails) { %w[ratings webmaster].map { |r| "#{r}@icu.ie" } }
+    let(:roles)  { %w[ratings fide_ecu].map { |r| I18n.t("officer.role.#{r}") } }
+    let(:emails) { %w[ratings fide ecu].map { |r| "#{r}@icu.ie" } }
     
     before(:each) do
       login("admin")
@@ -73,7 +73,7 @@ describe Relay do
       visit admin_relays_path
       click_link new_one
       
-      fill_in from, with: emails[0]
+      fill_in from, with: emails[1]
       select roles[1], from: officer
       click_button save
       expect(page).to have_css(success)
@@ -81,14 +81,14 @@ describe Relay do
       visit admin_relays_path
       click_link new_one
 
-      fill_in from, with: emails[1]
+      fill_in from, with: emails[2]
       select roles[1], from: officer
       click_button save
       expect(page).to have_css(success)
 
-      expect(webmaster.emails.size).to eq 2
-      expect(webmaster.emails.first).to eq emails[0]
-      expect(webmaster.emails.last).to eq emails[1]
+      expect(fide_ecu.emails.size).to eq 2
+      expect(fide_ecu.emails.first).to eq emails[2]
+      expect(fide_ecu.emails.last).to eq emails[1]
     end
   end
 end
