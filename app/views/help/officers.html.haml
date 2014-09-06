@@ -22,11 +22,11 @@
   The former is managed on this website while relays are managed using
   facilities provided by our email provider (Mailgun).
 %p
-  For example, in 2014 the webmaster was Mark Orr, so his player record
-  was linked to the webmaster officer's record via his ICU number and
-  his personal email was registered as the target of the
+  For example, the webmaster's record in the table of players in the ICU database
+  should be linked to the webmaster record in the table of officers and his or her
+  personal email address should be registered as the forwarding action of the
   %em webmaster@icu.ie
-  relay.
+  Mailgun route.
 
 %a{name: "who"}
 %h3 Who can Manage Officers?
@@ -38,7 +38,7 @@ if appropriate, Mailgun's website.
 %a{name: "link"}
 %h3 Change an Incumbent Officer
 
-%p To link the officer with a different member:
+%p To link an officer with a new member:
 %ul
   %li
     click
@@ -78,13 +78,15 @@ if appropriate, Mailgun's website.
     click
     = succeed(".") do
       Save
+%p
+  While it's usual to have only one forwarding action, forwarding to multiple
+  addresses is possible and might be appropriate in certain circumstances such
+  as when a role shared between two people.
 
 %a{name: "blank"}
 %h3 When an Role is Unfilled
 
-%p
-  It sometimes happens that an officer role is not filled for a while.
-  In this case we want:
+%p It sometimes happens that a position is unfilled. In this case we want:
 %ul
   %li
     the role still to be displayed on the
@@ -106,11 +108,10 @@ if appropriate, Mailgun's website.
 %p
   By default, the
   = link_to "contacts page", icu_officers_path
-  lists all the personal telephone numbers of each incumbent,
-  which sometimes an incumbent doesn't want.
+  lists all the telephone numbers of each officer,
+  but some officers may not want this.
 %p
-  Configuring which numbers are displayed is something the incumbent can
-  manage themselves, it doesn't require the webmaster. See
+  Configuring which numbers are displayed and which remain hidden is something each
+  officer can manage for themselves, it doesn't require the webmaster. See
   = succeed(".") do
     = link_to t("help.privacy"), help_privacy_path(anchor: "phone_numbers")
-  
