@@ -33,6 +33,9 @@ class Failure < ActiveRecord::Base
     elsif name == "ActionController::InvalidAuthenticityToken" && action == "not_found"
       # Spammers POST-ing to non-existant URLs raises this instead of getting a 404.
       true
+    elsif name == "ActionController::InvalidCrossOriginRequest" && action == "control"
+      # Bots trying to follow the banner control button get this.
+      true
     else
       false
     end
