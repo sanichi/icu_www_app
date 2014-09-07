@@ -4,8 +4,8 @@
 %hr
 
 %p
-  The banner header at the top of the ICU's web pages can consume rather
-  a lot of vertical space, especially when viewing the site on a small device.
+  The banner header at the top of the ICU's web pages uses up a portion
+  of the space available for other content, more so on small devices.
   If you're doing some serious work on the website, for example as an editor or
   administrator, you may find it convenient to temporarily hide the header to
   be able to see more of the content below.
@@ -14,23 +14,23 @@
 %h3 Hide the Header
 
 %p
-  Look for a small upwards pointing arrow
+  Click the small upwards pointing arrow
   = precede("(") do
     = succeed(")") do
       %strong= t("symbol.hide")
-  near the top right corner of the page and click it.
-  This will hide the header and keep it hidden as you navigate round the site
-  until you decide to show it again (see below).
+  near the top right corner of the page.
+  This will hide the header and keep it hidden as you navigate
+  round the site until you decide to show it again (see below).
 
 %a{name: "show"}
 %h3 Show the Header
 
 %p
-  If you've previously hidden the header and want to display it again,
-  look for a small downwards pointing arrow
+  If you've previously hidden the header and want to redisplay it,
+  click the small downwards pointing arrow
   = precede("(") do
     = succeed(")") do
       %strong= t("symbol.show")
-  near the top right corner of the page and click it.
-  This will show the header again which will continue to be visible as you
-  navigate round the site until you hide it again (see above).
+  near the top right corner of the page.
+  This will show the header and keep it visible as you navigate
+  round the site until you want to hide it again (see above).
