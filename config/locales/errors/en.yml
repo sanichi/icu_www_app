@@ -1,5 +1,6 @@
 en:
   errors:
+    error: Error
     alerts:
       application: System error — please contact webmaster@icu.ie
     attributes:

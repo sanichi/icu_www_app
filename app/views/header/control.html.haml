@@ -1,0 +1,18 @@
+- content_for :title, t("errors.error")
+
+.row
+  .col-md-8.col-md-offset-2
+    %h1.text-center= t("errors.error")
+    %hr
+    %p
+      If you just clicked the arrow controlling whether the banner header is
+      displayed at the top of ICU web pages then either your browser has
+      JavaScript disabled or is out-of-date.
+    %p
+      Please either
+      %strong enable JavaScript
+      or
+      = succeed(".") do
+        %strong upgrade your browser
+      If you use Internet Explorer, version 10 or later is recommended.
+    %hr
