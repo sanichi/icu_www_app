@@ -1,0 +1,36 @@
+- content_for :title, t("help.header")
+
+%h2.text-center= t("help.header")
+%hr
+
+%p
+  The banner header at the top of the ICU's web pages can consume rather
+  a lot of vertical space, especially when viewing the site on a small device.
+  If you're doing some serious work on the website, for example as an editor or
+  administrator, you may find it convenient to temporarily hide the header to
+  be able to see more of the content below.
+
+%a{name: "hide"}
+%h3 Hide the Header
+
+%p
+  Look for a small upwards pointing arrow
+  = precede("(") do
+    = succeed(")") do
+      %strong= t("symbol.hide")
+  in the top right corner of the page and click it.
+  This will hide the header and keep it hidden as you navigate round the site
+  until you decide to show it again (see below).
+
+%a{name: "show"}
+%h3 Show the Header
+
+%p
+  If you've previously hidden the header and want to display it again,
+  look for a small downwards pointing arrow
+  = precede("(") do
+    = succeed(")") do
+      %strong= t("symbol.show")
+  in the top right corner of the page and click it.
+  This will show the header again which will continue to be visible as you
+  navigate round the site until you hide it again (see above).

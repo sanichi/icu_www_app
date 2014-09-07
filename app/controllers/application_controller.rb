@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
   after_action :set_last_page_before_sign_in
   protect_from_forgery with: :exception
-  helper_method :switch_to_tls, :switch_from_tls, :last_search, :failure_details
+  helper_method :switch_to_tls, :switch_from_tls, :last_search, :failure_details, :show_header?, :toggle_header
 
   rescue_from CanCan::AccessDenied do |exception|
     logger.warn "Access denied for #{exception.action} #{exception.subject} by user #{current_user.id} from #{request.ip}"
@@ -137,5 +137,17 @@ class ApplicationController < ActionController::Base
     data[:agent] = request.env["HTTP_USER_AGENT"]
     data[:ip] = request.remote_ip
     data
+  end
+
+  def show_header?
+    session[:hide_header] ? false : true
+  end
+
+  def toggle_header
+    if show_header?
+      session[:hide_header] = true
+    else
+      session.delete(:hide_header)
+    end
   end
 end

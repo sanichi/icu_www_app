@@ -16,10 +16,11 @@
   %body
     - if Rails.root.join("public", "system", "maintenance.html").exist?
       #maintenance Maintenance Mode
-    .jumbotron
-      .container
-        = render "layouts/header"
+    = render "layouts/header_control"
+    #header.jumbotron{style: "display: #{show_header?? 'block' : 'none'}"}
+      .container= render "layouts/header"
     .container
+      = render "layouts/spacer"
       = render "layouts/nav"
       = render "layouts/spinner"
       = render "layouts/flash"

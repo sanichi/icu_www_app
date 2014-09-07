@@ -85,4 +85,9 @@ module ApplicationHelper
       end
     end
   end
+  
+  # The symbol used for the header control button.
+  def header_control_button
+    t("symbol.#{show_header?? 'hide' : 'show'}")
+  end
 end

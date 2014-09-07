@@ -28,7 +28,7 @@ module Global
 
   # A list of help page names.
   HELP_PAGES = %w[
-    accounts index membership privacy
+    accounts header index membership privacy
     downloads markdown officers offline_payments shortcuts treasurer
   ]
 

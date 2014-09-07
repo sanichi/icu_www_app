@@ -1,0 +1,11 @@
+<% show, hide = Rails.env.test?? ['show', 'hide'] : ['slideDown', 'slideUp'] %>
+
+<% if show_header? %>
+$('#header').<%= show %>();
+$('#spacer').<%= hide %>();
+<% else %>
+$('#header').<%= hide %>();
+$('#spacer').<%= show %>();
+<% end %>
+
+$('#header_control a').text('<%= header_control_button %>');

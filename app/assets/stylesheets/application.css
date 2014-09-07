@@ -29,6 +29,16 @@
   border-top: 0;
 }
 
+/* Button for header control. */
+#header_control {
+  position: fixed;
+  top: 0;
+  right: 1em;
+  padding: 0;
+  border: 0;
+  z-index: 50;
+}
+
 /* Vertical offsets and centering. */
 .voffset1 { margin-top: 10px; }
 .voffset2 { margin-top: 15px; }

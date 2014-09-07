@@ -5,6 +5,7 @@ IcuWwwApp::Application.routes.draw do
   get  "sign_out" => "sessions#destroy"
   get  "sign_up"  => "users#new"
   get  "redirect" => "redirects#redirect"
+  get  "header"   => "header#control"
 
   %w[home links].each do |page|
     get page => "pages##{page}"
