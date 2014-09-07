@@ -8,6 +8,7 @@
 - if Rails.env.production?
   - content_for :includes do
     = javascript_include_tag "switch_from_tls.js"
+- add_help("privacy", anchor: "payments")
 
 = form_tag charge_path(format: "js"), id: "icu_form", remote: true do
   = hidden_field_tag :stripe_token
@@ -38,7 +39,13 @@
       = button_tag t("shop.payment.card.pay"), type: "submit", class: "btn btn-success btn-md"
       = link_to t("cancel"), cart_path, class: "btn btn-info btn-md", id: "cancel_button"
   %hr
-  #payment_error.row{style: "display: none"}
+  .row
+    .col-sm-5
+    .col-sm-7
+      = link_to "https://stripe.com/ie", target: "stripe" do
+        = image_tag "misc/stripe.png", alt: "Stripe", title: "Stripe", size: "119x26"
+
+  #payment_error.voffset3.row{style: "display: none"}
     .col-sm-12
       .text-center{class: "alert alert-danger"}
         %button.close{"type" => "button", "data-dismiss" => "alert"} ×

@@ -138,3 +138,26 @@
 %p
   Login email addresses are not published publicly. Passwords are stored in encrypted form so
   there is no password reminder service; forgotten passwords must be reset.
+
+%a{name: "payments"}
+%h3 Online Payments
+
+%p
+  Our payment processor is
+  = succeed(".") do
+    = link_to "Stripe", "https://stripe.com/ie", target: "stripe"
+  When you enter your details and click the
+  %em Pay
+  button, the sensitive data (card number, expiry date and security code)
+  is sent straight to Stripe. Only your name, email and the details of what
+  you purchased are stored in the ICU database. More information about Stripe:
+%ul
+  %li
+    = succeed(",") do
+      = link_to "Wikipedia article", "http://en.wikipedia.org/wiki/Stripe_(company)", target: "stripe"
+  %li
+    = succeed(",") do
+      = link_to "Stripe security", "https://stripe.com/help/security", target: "stripe"
+  %li
+    = succeed(".") do
+      = link_to "3D Secure", "https://support.stripe.com/questions/does-stripe-support-3d-secure-verified-by-visa-mastercard-securecode", target: "stripe"
