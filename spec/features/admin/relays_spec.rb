@@ -40,13 +40,15 @@ describe Relay do
   context "edit" do
     let!(:ratings)  { create(:officer, role: "ratings", rank: 1, executive: false) }
     let!(:fide_ecu) { create(:officer, role: "fide_ecu", rank: 2) }
+    let!(:ecu)      { create(:officer, role: "ecu", rank: 2, active: false) }
+    let!(:fide)     { create(:officer, role: "fide", rank: 2, active: false) }
 
-    let!(:ecu)  { create(:relay, from: "ecu@icu.ie", officer: nil) }
-    let!(:fide) { create(:relay, from: "fide@icu.ie", officer: nil) }
-    let!(:rat)  { create(:relay, from: "ratings@icu.ie", officer: nil) }
+    let!(:relay) { %i[ecu fide ratings].each_with_object({}){ |r, h| h[r] = create(:relay, from: "#{r}@icu.ie", officer: nil) } }
 
-    let(:roles) { %w[ratings fide_ecu].map { |r| I18n.t("officer.role.#{r}") } }
-    let(:officer) { I18n.t("officer.officer") }
+    let(:officer)  { I18n.t("officer.officer") }
+    let(:officers) { I18n.t("officer.officers") }
+    let(:relays)   { I18n.t("relay.relays") }
+    let(:role)     { %i[ratings fide_ecu fide ecu].each_with_object({}){ |r, h| h[r] = I18n.t("officer.role.#{r}") } }
 
     before(:each) do
       login("admin")
@@ -56,16 +58,16 @@ describe Relay do
       expect(ratings.emails.size).to eq 0
 
       visit admin_relays_path
-      click_link rat.from
+      click_link relay[:ratings].from
       click_link edit
 
-      select roles[0], from: officer
+      select role[:ratings], from: officer
       click_button save
       expect(page).to have_css(success)
 
       ratings.reload
       expect(ratings.emails.size).to eq 1
-      expect(ratings.emails.first).to eq rat.from
+      expect(ratings.emails.first).to eq relay[:ratings].from
 
       click_link edit
 
@@ -81,25 +83,78 @@ describe Relay do
       expect(fide_ecu.emails.size).to eq 0
 
       visit admin_relays_path
-      click_link fide.from
+      click_link relay[:fide].from
       click_link edit
 
-      select roles[1], from: officer
+      select role[:fide_ecu], from: officer
       click_button save
       expect(page).to have_css(success)
 
       visit admin_relays_path
-      click_link ecu.from
+      click_link relay[:ecu].from
       click_link edit
 
-      select roles[1], from: officer
+      select role[:fide_ecu], from: officer
       click_button save
       expect(page).to have_css(success)
 
       fide_ecu.reload
       expect(fide_ecu.emails.size).to eq 2
-      expect(fide_ecu.emails.first).to eq ecu.from
-      expect(fide_ecu.emails.last).to eq fide.from
+      expect(fide_ecu.emails.first).to eq relay[:ecu].from
+      expect(fide_ecu.emails.last).to eq relay[:fide].from
+    end
+
+    it "split one officer into two" do
+      expect(ecu.active).to eq false
+      expect(fide.active).to eq false
+      expect(fide_ecu.active).to eq true
+
+      click_link officers
+      click_link role[:fide_ecu]
+      click_link edit
+      uncheck active
+      click_button save
+
+      click_link officers
+      click_link role[:ecu]
+      click_link edit
+      check active
+      click_button save
+
+      click_link officers
+      click_link role[:fide]
+      click_link edit
+      check active
+      click_button save
+
+      visit admin_relays_path
+      click_link relay[:fide].from
+      click_link edit
+      select role[:fide], from: officer
+      click_button save
+      expect(page).to have_css(success)
+
+      visit admin_relays_path
+      click_link relay[:ecu].from
+      click_link edit
+      select role[:ecu], from: officer
+      click_button save
+      expect(page).to have_css(success)
+
+      ecu.reload
+      fide.reload
+      fide_ecu.reload
+
+      expect(ecu.active).to eq true
+      expect(fide.active).to eq true
+      expect(fide_ecu.active).to eq false
+
+      expect(ecu.emails.size).to eq 1
+      expect(fide.emails.size).to eq 1
+      expect(fide_ecu.emails).to be_empty
+
+      expect(ecu.emails.first).to eq relay[:ecu].from
+      expect(fide.emails.first).to eq relay[:fide].from
     end
   end
 end
