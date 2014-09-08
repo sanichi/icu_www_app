@@ -7,8 +7,9 @@ class Relay < ActiveRecord::Base
   before_validation :complete_from
 
   validates :from, email: true, length: { maximum: 50 }, format: { with: /@icu\.ie\z/ }, uniqueness: true
-  validates :to, email_list: true, length: { maximum: 255 }, allow_nil: true
-  validates :officer_id, presence: true
+  validates :to, email_list: true, length: { maximum: 255 }
+  validates :provider_id, presence: true, length: { maximum: 255 }, uniqueness: true
+  validates :officer_id, numericality: { integer_only: true, greater_than: 0 }, allow_nil: true
 
   private
 
@@ -20,13 +21,19 @@ class Relay < ActiveRecord::Base
 
   def self.refresh
     actuals = get_provider_relays
-    Relay.all.each do |relay|
-      if actual = actuals[relay.from]
-        relay.update_column(:provider_id, actual[:id]) unless actual[:id] == relay.provider_id
-        relay.update_column(:to, actual[:to])          unless actual[:to] == relay.to
+    current = get_database_relays
+    actuals.each do |from, route|
+      if relay = current[from]
+        relay.to = route[:to]
+        relay.provider_id = route[:id]
+        relay.save! if relay.changed?
       else
-        relay.update_column(:provider_id, nil) unless relay.provider_id.nil?
-        relay.update_column(:to, nil)          unless relay.to.nil?
+        Relay.create!(from: from, to: route[:to], provider_id: route[:id])
+      end
+    end
+    current.each do |from, relay|
+      unless actuals[from]
+        relay.destroy
       end
     end
     true
@@ -35,8 +42,9 @@ class Relay < ActiveRecord::Base
     false
   end
 
+  # The actual relays are what the provider defines.
   def self.get_provider_relays
-    Util::Mailgun.routes.each_with_object({}) do |route, hash|
+    routes = Util::Mailgun.routes.each_with_object({}) do |route, hash|
       next if route["expression"].match(/\Acatch_all/)
       if route["expression"].to_s.match(/\Amatch_recipient\(["'](\w+@icu\.ie)["']\)\z/)
         from = $1
@@ -61,10 +69,19 @@ class Relay < ActiveRecord::Base
       else
         raise "couldn't get ID for #{route}"
       end
-      to = to.empty?? nil : to.join(", ")
+      to = to.empty?? nil : to.sort.join(", ")
       hash[from] = { id: id, to: to }
+    end
+    raise "unexpectedly low number of routes" unless routes.size > 20
+    routes
+  end
+
+  # These are the relays currently in the ICU database which might be out of sync with the provider's.
+  def self.get_database_relays
+    Relay.all.each_with_object({}) do |relay, hash|
+      hash[relay.from] = relay
     end
   end
 
-  private_class_method :get_provider_relays
+  private_class_method :get_provider_relays, :get_database_relays
 end

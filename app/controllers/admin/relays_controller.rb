@@ -1,9 +1,10 @@
 class Admin::RelaysController < ApplicationController
-  before_action :set_relay, only: [:edit, :update, :destroy]
+  before_action :set_relay, only: [:edit, :update]
   authorize_resource
 
   def index
-    @relays = Relay.all
+    @order = params[:order] == "to" ? :to : :from
+    @relays = Relay.unscoped.order(@order).all
   end
 
   def refresh
@@ -25,21 +26,6 @@ class Admin::RelaysController < ApplicationController
     end
   end
 
-  def new
-    @relay = Relay.new
-  end
-
-  def create
-    @relay = Relay.new(relay_params)
-
-    if @relay.save
-      redirect_to [:admin, @relay], notice: "Relay was successfully created"
-    else
-      flash_first_error(@relay, base_only: true)
-      render action: "new"
-    end
-  end
-
   def update
     if @relay.update(relay_params)
       redirect_to [:admin, @relay], notice: "Relay was successfully updated"
@@ -49,11 +35,6 @@ class Admin::RelaysController < ApplicationController
     end
   end
 
-  def destroy
-    @relay.destroy
-    redirect_to admin_relays_path, notice: "Relay was successfully deleted"
-  end
-
   private
 
   def set_relay
@@ -61,6 +42,6 @@ class Admin::RelaysController < ApplicationController
   end
 
   def relay_params
-    params[:relay].permit(:from, :officer_id)
+    params[:relay].permit(:officer_id)
   end
 end

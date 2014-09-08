@@ -1,19 +1,25 @@
-- content_for :title, "ICU Officers"
+- content_for :title, t("relay.relays")
+- add_help("officers")
 
 .row
   .col-sm-10.col-sm-offset-1
+    %h1.text-center= t("relay.relays")
+    %hr
     %table{class: "table table-striped"}
       %thead
         %tr
-          %th= t("relay.from")
-          %th= t("relay.to")
+          %th
+            = t("relay.from")
+            = link_to "▾", admin_relays_path(order: "from") if @order == :to
+          %th
+            = t("relay.to")
+            = link_to "▾", admin_relays_path(order: "to") if @order == :from
           %th= t("officer.officer")
       %tbody
         - @relays.each do |relay|
           %tr
             %td= link_to relay.from, [:admin, relay]
             %td= relay.to
-            %td= link_to t("officer.role.#{relay.officer.role}"), [:admin, relay.officer]
+            %td= link_to t("officer.role.#{relay.officer.role}"), [:admin, relay.officer] if relay.officer
     .text-center
-      = link_to t("new"), new_admin_relay_path, class: "btn btn-info"
       = link_to t("relay.refresh"), refresh_admin_relays_path, class: "btn btn-info"

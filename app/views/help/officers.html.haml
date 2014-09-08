@@ -4,7 +4,7 @@
 %hr
 
 %a{name: "what"}
-%h3 What does Managing Officers Involve?
+%h3 What does this Involve?
 
 %p There are two main tasks:
 %ol
@@ -19,8 +19,8 @@
       %em @icu.ie
     in sync with the personal emails of the current office holders.
 %p
-  The former is managed on this website while relays are managed using
-  facilities provided by our email provider (Mailgun).
+  The former is managed on this website while relays are
+  managed on the website of our email provider (Mailgun).
 %p
   For example, the webmaster's record in the table of players in the ICU database
   should be linked to the webmaster record in the table of officers and his or her
@@ -29,20 +29,22 @@
   Mailgun route.
 
 %a{name: "who"}
-%h3 Who can Manage Officers?
+%h3 Who can Manage Officers and Relays?
 
-At the moment only the webmaster can manage officers, so to complete
+At the moment only the webmaster can do this, so to complete
 any of the tasks below the webmaster must first login to this website or,
 if appropriate, Mailgun's website.
 
 %a{name: "link"}
 %h3 Change an Incumbent Officer
 
-%p To link an officer with a new member:
+%p
+  This is a type of task which will often need to be done when a new executive is voted in.
+  To link an officer with a new member:
 %ul
   %li
     click
-    %em= t("relay.relays")
+    %em= t("officer.officers")
     from the top navigation bar
   %li find and click the role (officer) you want to change,
   %li
@@ -67,21 +69,21 @@ if appropriate, Mailgun's website.
   %li
     find and click the
     %em filter expression
-    corresponding to the officer's ICU email,
+    corresponding to the officer's ICU email address,
   %li
     update the first
-    %em action
-    (the
-    %em forwarding
-    action) for the new incumbent's personal email address,
+    %em forwarding action
+    for the new incumbent's personal email address,
   %li
     click
     = succeed(".") do
       Save
 %p
-  While it's usual to have only one forwarding action, forwarding to multiple
-  addresses is possible and might be appropriate in certain circumstances such
-  as when a role shared between two people.
+  When edits on Mailgun's site are complete, return to this website, click
+  %em= t("relay.relays")
+  from the top navigation bar, scroll to the bottom and click
+  %em= t("relay.refresh")
+  to update the relay records in the ICU database (which mirror Mailgun's routes).
 
 %a{name: "blank"}
 %h3 When an Role is Unfilled

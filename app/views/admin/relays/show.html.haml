@@ -14,13 +14,13 @@
     %h1.text-center= @relay.from
     %table.table.table-striped
       %tr
-        %th= t("officer.officer")
-        %td= t("officer.role.#{@relay.officer.role}")
-      %tr
         %th= t("relay.to")
         %td= @relay.to
       %tr
         %th= t("relay.provider_id")
         %td= @relay.provider_id
+      %tr
+        %th= t("officer.officer")
+        %td= t("officer.role.#{@relay.officer.role}") if @relay.officer
       = render "utils/timestamps", object: @relay, ability: :manage
     = render "utils/show_buttons", object: @relay, admin: "search", new_search: t("relay.relays")

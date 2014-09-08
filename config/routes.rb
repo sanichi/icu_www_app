@@ -82,7 +82,7 @@ IcuWwwApp::Application.routes.draw do
     resources :pgns
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
-    resources :relays do
+    resources :relays,          only: [:index, :show, :edit, :update] do
       get :refresh, on: :collection
     end
     resources :series,          only: [:new, :create, :edit, :update, :destroy]
