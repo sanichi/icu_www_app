@@ -60,6 +60,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def switch_header(hide_header)
+    toggle_header if hide_header ^ !show_header?
+  end
+
   def set_last_page_before_sign_in
     ok = true
     ok &&= current_user.guest?

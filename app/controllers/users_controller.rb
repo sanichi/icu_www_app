@@ -9,9 +9,8 @@ class UsersController < ApplicationController
 
   def update_preferences
     if @user.update(user_params)
-      if @user.previous_changes[:locale]
-        switch_locale(@user.locale)
-      end
+      switch_locale(@user.locale)      if @user.previous_changes[:locale]
+      switch_header(@user.hide_header) if @user.previous_changes[:hide_header]
     end
     redirect_to preferences_path
   end
@@ -65,7 +64,7 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.required(:user).permit(:theme, :locale)
+    params.required(:user).permit(:theme, :locale, :hide_header)
   end
 
   def new_user_params

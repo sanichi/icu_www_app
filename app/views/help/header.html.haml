@@ -34,3 +34,20 @@
   near the top right corner of the page.
   This will show the header and keep it visible as you navigate
   round the site until you decide to hide it again (see above).
+
+%a{name: "preference"}
+%h3 Automatically Hide the Header after Sign In
+
+%p If you want the header to be automatically hidden after you sign in:
+%ul
+  %li sign in,
+  %li click your name on the right of the top navigation bar,
+  %li
+    click
+    = succeed(",") do
+      %em= t("user.preferences")
+  %li
+    check the box labelled
+    = succeed(".") do
+      %em= t("user.hide_header")
+%p Uncheck the same box if you change your mind and want the header to be visible after you sign in.

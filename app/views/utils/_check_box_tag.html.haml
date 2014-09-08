@@ -1,0 +1,8 @@
+- defined?(auto) || auto = false
+- defined?(on)   || on = 1
+- defined?(off)  || off = 0
+
+.form-group
+  = hidden_field_tag param, off
+  = label_tag param, text, class: "control-label col-#{col}-#{pad}"
+  %div{class: "col-#{col}-#{width}"}= check_box_tag param, on, checked, class: auto_submit("form-control", auto)
