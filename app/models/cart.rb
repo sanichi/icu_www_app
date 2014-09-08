@@ -150,7 +150,9 @@ class Cart < ActiveRecord::Base
   def add_payment_error(error, name, email, message=nil)
     message ||= error.message || "Unknown error"
     details = error.try(:json_body)
-    unless details.nil?
+    if details.nil?
+      details = ""
+    else
       details = details.fetch(:error) { details } if details.is_a?(Hash)
       details.delete(:message) if details.is_a?(Hash) && details[:message] == message
       details = details.to_s
