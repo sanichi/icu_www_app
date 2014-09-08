@@ -14,19 +14,42 @@
     = succeed(",") do
       = link_to "contacts page", icu_officers_path
   %li
-    keeping the targets of the ICU's email relays (which all end in
-    = succeed(")") do
-      %em @icu.ie
+    keeping the forwarding addresses of the ICU's mail relays
     in sync with the personal emails of the current office holders.
 %p
   The former is managed on this website while relays are
-  managed on the website of our email provider (Mailgun).
+  mainly managed on the website of our email provider (Mailgun).
 %p
-  For example, the webmaster's record in the table of players in the ICU database
-  should be linked to the webmaster record in the table of officers and his or her
-  personal email address should be registered as the forwarding action of the
-  %em webmaster@icu.ie
-  Mailgun route.
+  Each relay has a
+  %strong ICU
+  address (ending in
+  = succeed(")") do
+    %em @icu.ie
+  and one or more
+  %strong forwarding
+  addresses (personal emails).
+%p
+  There are 3 relevant database tables:
+  = succeed(",") do
+    %strong officers
+  = succeed(",") do
+    %strong players
+  and
+  = succeed(".") do
+    %strong relays
+%p If an officer is linked to:
+%ul
+  %li no player — then no name or phone numbers are listed for that position (it's unfilled),
+  %li a player — then that player's name and phone numbers will be listed for that officer on the contacts page.
+%p
+  If an officer is linked to:
+%ul
+  %li no relays (rare, if ever) — then no email address will appear on the contacts page for that officer,
+  %li one relay (the usual case) — then the ICU address of the relay will be listed for that officer,
+  %li
+    more than one relay (rare, but see the
+    %em= t("officer.role.fide_ecu")
+    example below) — then the ICU addresses of the relays will all be listed for that officer.
 
 %a{name: "who"}
 %h3 Who can Manage Officers and Relays?
@@ -35,8 +58,8 @@ At the moment only the webmaster can do this, so to complete
 any of the tasks below the webmaster must first login to this website or,
 if appropriate, Mailgun's website.
 
-%a{name: "link"}
-%h3 Change an Incumbent Officer
+%a{name: "relink"}
+%h3 How to Change an Incumbent Officer
 
 %p
   This is a type of task which will often need to be done when a new executive is voted in.
@@ -46,7 +69,7 @@ if appropriate, Mailgun's website.
     click
     %em= t("officer.officers")
     from the top navigation bar
-  %li find and click the role (officer) you want to change,
+  %li find and click the officer you want to change,
   %li
     do one of two things:
     %ul
@@ -91,7 +114,7 @@ if appropriate, Mailgun's website.
 %p It sometimes happens that a position is unfilled. In this case we want:
 %ul
   %li
-    the role still to be displayed on the
+    the officer still to be displayed on the
     = link_to "contacts page", icu_officers_path
     but with blanks where the incumbents's name and telephone numbers would normally go,
   %li
@@ -103,6 +126,50 @@ if appropriate, Mailgun's website.
 %ul
   %li enter a blank ICU ID when you edit the officer on this website,
   %li use the secretary's personal email for the forwarding action when you edit the Mailgun route.
+
+%a{name: "relays"}
+%h3 Creating, Deleting and Updating Officers
+
+%p
+  Officers change so rarely that there is no website function to create new positions or delete positions no longer required
+  (a small amount of programming effort would be required to achieve either of these).
+  However, officers can be edited in the following ways:
+%ul
+  %li as already discussed, they can be linked to different players,
+  %li
+    their
+    %em rank
+    can be altered to change the order in which they are listed (the lower the rank the higher up they appear),
+  %li their status can be set to inactive, in which case they won't be listed at all (soft delete).
+
+%a{name: "relays"}
+%h3 Creating, Deleting and Updating Relays
+
+%p
+  Relays are mostly managed on the website of our provider (Mailgun) and synced to the
+  %em relays
+  database table by clicking the
+  %em= t("relay.refresh")
+  button at the bottom of the list of relays.
+  So whenever you make changes on Mailgun, remember to click that button.
+%p
+  One aspect of relays which is managed exclusively on this website is which officer (if any) each links to.
+  It's fairly rare that one would need to change the links between officers and relays because, for the
+  most part, one relay has been created for each officer and has already been linked, however, see the
+  %em= t("officer.role.fide_ecu")
+  example below for an exception.
+
+%a{name: "relay_officer"}
+%h3 Not all Relays are Linked to an Officer
+
+%p
+  There are more relays than officers and in most cases each officer has only one relay
+  which means there must be some relays not linked to any officer. This is normal and
+  there are good reasons why not all relays should appear on the contacts page.
+  For example, some, which forward to the webmaster's personal address, are for emails
+  registered with our internet providers (for hosting, domain or payment services) and
+  which members don't need to be informed of. Others, forwarding to the secretary, are
+  for officers that no longer exist (e.g. ICJ editor, IUCA delegate).
 
 %a{name: "phones"}
 %h3 Adjusting the Phone Numbers Displayed for an Officer
@@ -117,3 +184,77 @@ if appropriate, Mailgun's website.
   officer can manage for themselves, it doesn't require the webmaster. See
   = succeed(".") do
     = link_to t("help.privacy"), help_privacy_path(anchor: "phone_numbers")
+
+%a{name: "fide_ecu"}
+%h3
+  Extended Example:
+  %em= t("officer.role.fide_ecu")
+
+%p This officer is a special case for two reasons:
+%ol
+  %li
+    there are two corresponding relays
+    = precede("(") do
+      %em fide@icu.ie
+    and
+    = succeed(")") do
+      %em ecu@icu.ie
+    instead of the usual one,
+  %li
+    it's theoretically possible that the position will be split in two
+    = precede("(") do
+      %em= t("officer.role.fide")
+    and
+    = succeed(")") do
+      %em= t("officer.role.ecu")
+    in the future.
+%p At the time this documentation was written:
+%ul
+  %li
+    the
+    %em= t("officer.role.fide_ecu")
+    officer was active, linked to a player and linked to both relays (which forwarded to personal emails of that player),
+  %li
+    the
+    %em= t("officer.role.fide")
+    and
+    %em= t("officer.role.ecu")
+    officers were both inactive (so not listed) and not linked to any players or relays.
+%p If the position were to be split between two different players (A and B) here is how that would be managed:
+%ol
+  %li
+    make the
+    %em= t("officer.role.fide")
+    and
+    %em= t("officer.role.ecu")
+    roles active and link them to players A and B respectively,
+  %li
+    edit the
+    %em fide@icu.ie
+    relay on this website and link it to the
+    %em= t("officer.role.fide")
+    officer instead of
+    = succeed(",") do
+      %em= t("officer.role.fide_ecu")
+  %li
+    edit the
+    %em ecu@icu.ie
+    relay on this website and link it to the
+    %em= t("officer.role.ecu")
+    officer instead of
+    = succeed(",") do
+      %em= t("officer.role.fide_ecu")
+  %li
+    make the
+    %em= t("officer.role.fide_ecu")
+    officer inactive,
+  %li
+    login to Mailgun and edit the routes so that
+    %em fide@icu.ie
+    forwards to A's personal email and
+    %em ecu@icu.ie
+    forwards to B's,
+  %li
+    back on this website, sync the Mailgun changes by clicking
+    %em= t("relay.refresh")
+    button at the bottom of the list of relays.
