@@ -49,6 +49,13 @@ en:
         method_short: Method
         paypal: PayPal
         stripe: Stripe
+      offline:
+        email: "Payer's email"
+        first_name: "Payer's first name"
+        header: Payment received
+        last_name: "Payer's last name"
+        method: Payment method
+        received: Amount received
       status:
         any: Any status
         paid: Paid

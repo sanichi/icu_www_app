@@ -22,6 +22,10 @@ describe "Pay", js: true do
   let(:last_name)             { I18n.t("player.last_name") }
   let(:new_member)            { I18n.t("item.member.new") }
   let(:pay)                   { I18n.t("shop.payment.card.pay") }
+  let(:payer_email)           { I18n.t("shop.payment.offline.email") }
+  let(:payer_first_name)      { I18n.t("shop.payment.offline.first_name") }
+  let(:payer_last_name)       { I18n.t("shop.payment.offline.last_name") }
+  let(:payer_method)          { I18n.t("shop.payment.offline.method") }
   let(:payment_received)      { I18n.t("shop.payment.received") }
   let(:payment_registered)    { I18n.t("shop.payment.registered") }
   let(:payment_time)          { I18n.t("shop.payment.time") }
@@ -239,11 +243,6 @@ describe "Pay", js: true do
   end
 
   context "with cash" do
-    let(:payer_first_name) { "Payer's first name" }
-    let(:payer_email)      { "Payer's email" }
-    let(:payer_last_name)  { "Payer's last name" }
-    let(:payer_method)     { "Payment method" }
-
     before(:each) do
       add_something_to_cart
     end
@@ -373,6 +372,56 @@ describe "Pay", js: true do
       expect(text).to include(new_player.name(id: true))
       expect(text).to include("%.2f" % subscription.cost)
       expect(text).to include("#{season_ticket}: #{SeasonTicket.new(new_player.id, subscription.end_date.at_end_of_year).to_s}")
+    end
+  end
+
+  context "user updates" do
+    let!(:old_user) { create(:user, expires_on: Season.new.last.end_of_grace_period, player: player) }
+
+    before(:each) do
+      login("membership")
+      visit shop_path
+      click_link subscription_fee.description
+      click_button select_member
+      fill_in last_name, with: player.last_name + force_submit
+      fill_in first_name, with: player.first_name + force_submit
+      click_link player.id
+      click_button add_to_cart
+    end
+
+    it "card" do
+      click_link checkout
+      fill_in_all_and_click_pay
+
+      expect(page).to have_css(title, text: completed)
+
+      expect(Item::Subscription.count).to eq 1
+      subscription = Item::Subscription.first
+      expect(subscription).to be_paid
+      expect(subscription.player_id).to eq player.id
+
+      old_user.reload
+      expect(old_user.expires_on).to eq Season.new.end_of_grace_period
+    end
+
+    it "cash" do
+      click_link payment_received
+
+      fill_in payer_first_name, with: player.first_name
+      fill_in payer_last_name, with: player.last_name
+      select cheque, from: payer_method
+      fill_in payer_email, with: player.email
+      click_button confirm
+
+      expect(page).to have_css(success, text: payment_registered)
+
+      expect(Item::Subscription.count).to eq 1
+      subscription = Item::Subscription.first
+      expect(subscription).to be_paid
+      expect(subscription.player_id).to eq player.id
+
+      old_user.reload
+      expect(old_user.expires_on).to eq Season.new.end_of_grace_period
     end
   end
 end

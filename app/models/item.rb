@@ -38,13 +38,24 @@ class Item < ActiveRecord::Base
 
   def complete(payment_method)
     update_columns(payment_method: payment_method, status: "paid")
-    if player_id.blank? && player_data.present?
-      begin
-        player = new_player.to_player
-        player.save!
-        update_column(:player_id, player.id)
-      rescue => e
-        Failure.log("NewPlayerCreateFailure", exception: e.class.to_s, message: e.message, data: player_data)
+    if fee.present? && fee.subtype == "subscription"
+      if player_id.present?
+        begin
+          season = Season.new(fee.years)
+          player.users.each do |user|
+            user.update_column(:expires_on, season.end_of_grace_period)
+          end
+        rescue => e
+          Failure.log("UpdateUsersAfterSubscriptionFailure", exception: e.class.to_s, message: e.message)
+        end
+      elsif player_data.present?
+        begin
+          player = new_player.to_player
+          player.save!
+          update_column(:player_id, player.id)
+        rescue => e
+          Failure.log("NewPlayerCreateFailure", exception: e.class.to_s, message: e.message, data: player_data)
+        end
       end
     end
   end
