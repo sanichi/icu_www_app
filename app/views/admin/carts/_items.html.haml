@@ -19,7 +19,8 @@
               - note_references = item.note_references(all_notes)
               - if note_references.any?
                 %sup= "[#{note_references.join(',')}]"
-            %td= item.player.name(id: true) if item.player.present?
+            - player = item.player
+            %td= link_to_if can?(:show, player), player.name(id: true), [:admin, player] if player.present?
             %td= t("shop.payment.status.#{item.status}")
             %td.text-center= euros(item.cost)
         %tr
@@ -29,4 +30,3 @@
       %hr
       - all_notes.each do |note, number|
         %p.small= "[#{number}] #{note}"
-          
