@@ -7,20 +7,20 @@
 %h3 Profile Data
 
 %p
-  The ICU keeps profile data about Irish chess players in it's database.
-  Some of this data is publicly available (on the websites) and some is
-  only for users with privileged access
+  The ICU stores information about chess players. The data on each player is called a profile.
+  Some profile data (such as name and club) is publicly available on our websites while other data
+  (such as date of birth and contact details) is only for users with privileged access
   (see
   = link_to t("help.privacy"), help_privacy_path
-  for details). Some of the data can be updated by players themselves if they have a login account
-  while for other changes players need to contact us.
+  for details). Some profile data can be updated by players themselves if they have a login account.
 %p
-  For various reasons we can't allow players to control all of the data we have about them.
-  For example, we need to be contacted about corrections to DOB, gender or federation as
-  such corrections would have to be passed on to FIDE.
+  For various reasons, we can't allow players to directly control their entire profile.
+  For example, we would need to be contacted about corrections to date of birth, gender
+  or federation as such changes would have to be passed on to FIDE. Another example
+  would be that the temptation to award themselves the GM title might be too much for some!
 
 %a{name: "what"}
-%h3 What Things can I Update Myself?
+%h3 What Parts of my Profile can I Update Myself?
 
 %p You can update the following data yourself:
 %ul
@@ -48,7 +48,7 @@
   for details). Then:
 %ul
   %li sign in,
-  %li click your name (it appears at the right hand end of the top navigation bar),
+  %li click your name (on the right side of the top navigation bar),
   %li
     click
     = succeed(",") do
