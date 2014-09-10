@@ -44,24 +44,10 @@
   = succeed(",") do
     = link_to t("icu.life_members"), icu_life_members_path
   containing names, titles and clubs.
-  
-%a{name: "edit"}
-%h3 Edit Your Own Data
-
 %p
-  You can add to, edit or delete some of the data we hold about you: current club,
-  contact email address, telephone numbers (and privacy settings, see below) and physical address.
-  To do so, click the
-  %em= t("player.edit_profile")
-  on your profile page, make the changes you want and then click
-  = succeed(".") do
-    %em= t("save")
-%p
-  Unfortunately, for various reasons, we can't let users edit all their own data online.
-  Please get in touch with the ICU (webmaster or membership officer) if you require any
-  changes other than those possible via
-  = succeed(".") do
-    %em= t("player.edit_profile")
+  You can update some of the data we store about if you have a login account. See
+  = link_to t("help.profile"), help_profile_path
+  for further information.
 
 %a{name: "dob"}
 %h3 Date of Birth

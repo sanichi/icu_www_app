@@ -4,7 +4,7 @@ module Global
 
   # The oldest date before which we can be sure the ICU did not exist (used in validating dates and years).
   MIN_YEAR = 1850
-  
+
   # The minimum DOB and join dates for today's players.
   MIN_DOB = Date.new(1900, 1, 1)
   MIN_JOINED = Date.new(1960, 1, 1)
@@ -28,7 +28,7 @@ module Global
 
   # A list of help page names.
   HELP_PAGES = %w[
-    accounts header index membership privacy
+    accounts header index membership privacy profile
     downloads markdown officers offline_payments shortcuts treasurer
   ]
 

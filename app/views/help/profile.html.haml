@@ -1,0 +1,64 @@
+- content_for :title, t("help.profile")
+
+%h2.text-center= t("help.profile")
+%hr
+
+%a{name: "data"}
+%h3 Profile Data
+
+%p
+  The ICU keeps profile data about Irish chess players in it's database.
+  Some of this data is publically available (on the websites) and some is
+  only for users with restricted access
+  (see
+  = link_to t("help.privacy"), help_privacy_path
+  for details). Some of the data can be updated by players themselves if they have a login account
+  while for other changes players need to contact us.
+%p
+  For various reasons we can't allow players to control all of the data we have about them.
+  For example, we need to be contacted about corrections to DOB, gender or federation as
+  such corrections would have to be passed on to FIDE.
+
+%a{name: "what"}
+%h3 What Things can I Update Myself?
+
+%p You can update the following data yourself:
+%ul
+  %li
+    = succeed(",") do
+      %strong club
+  %li
+    contact
+    %strong email address
+    (not necessarily the same as the email you use to sign in),
+  %li
+    home, mobile and work
+    = succeed(",") do
+      %strong telephone numbers
+  %li
+    = succeed(".") do
+      %strong postal address
+
+%a{name: "how"}
+%h3 How do I Update my Profile?
+
+%p
+  First, you need a login account (see
+  = link_to t("help.accounts"), help_privacy_path
+  for details). Then:
+%ul
+  %li sign in,
+  %li click your name (it appears at the right hand end of the top navigation bar),
+  %li
+    click
+    = succeed(",") do
+      %em= t("player.profile")
+  %li
+    click
+    = succeed(".") do
+      %em= t("player.edit_profile")
+  %li make whatever changes you want,
+  %li
+    click
+    = succeed(".") do
+      %em= t("save")
