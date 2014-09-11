@@ -4,3 +4,9 @@ en:
     type: File type
     download: Download
     downloads: Downloads
+    order:
+      created: By date created
+      description: By description
+      order: order
+      updated: By last updated
+      year: By year

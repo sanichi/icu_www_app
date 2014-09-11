@@ -46,7 +46,17 @@ class Download < ActiveRecord::Base
   scope :ordered, -> { order(year: :desc, description: :asc) }
 
   def self.search(params, path, user)
-    matches = ordered.include_player
+    matches = include_player
+    case params[:order]
+    when "year"
+      matches = matches.order(:year, :description)
+    when "description"
+      matches = matches.order(:description)
+    when "created_at"
+      matches = matches.order(created_at: :desc)
+    else
+      matches = matches.order(updated_at: :desc)
+    end
     matches = matches.where("description LIKE ?", "%#{params[:description]}%") if params[:description].present?
     matches = matches.where(year: params[:year].to_i) if params[:year].to_i > 0
     matches = matches.where(data_content_type: TYPES[params[:type].to_sym]) if params[:type].present? && TYPES.include?(params[:type].to_sym)

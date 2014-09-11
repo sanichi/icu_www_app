@@ -7,4 +7,5 @@
   - else
     - menu = access_menu(params[:access], Download.accessibilities_for(current_user), "access.any")
     = render "utils/inline_select", param: :access, text: t("access.access"), menu: menu
+  = render "utils/inline_select", param: :order, text: t("download.order.order"), menu: download_order_menu(params[:order])
   = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"
