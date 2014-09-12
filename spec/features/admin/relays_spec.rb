@@ -48,6 +48,7 @@ describe Relay do
     let(:officer)  { I18n.t("officer.officer") }
     let(:officers) { I18n.t("officer.officers") }
     let(:relays)   { I18n.t("relay.relays") }
+    let(:to)       { I18n.t("relay.to") }
     let(:role)     { %i[ratings fide_ecu fide ecu].each_with_object({}){ |r, h| h[r] = I18n.t("officer.role.#{r}") } }
 
     before(:each) do
@@ -155,6 +156,18 @@ describe Relay do
 
       expect(ecu.emails.first).to eq relay[:ecu].from
       expect(fide.emails.first).to eq relay[:fide].from
+    end
+
+    it "forwards" do
+      visit admin_relays_path
+      click_link relay[:ratings].from
+      click_link edit
+      fill_in to, with: " \t joe@joebloggs.com ,  me@example.ie  "
+      click_button save
+      expect(page).to have_css(success)
+
+      relay[:ratings].reload
+      expect(relay[:ratings].to).to eq "joe@joebloggs.com, me@example.ie"
     end
   end
 end

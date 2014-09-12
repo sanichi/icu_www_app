@@ -8,10 +8,10 @@ class Admin::RelaysController < ApplicationController
   end
 
   def refresh
-    if Relay.refresh
-      flash[:notice] = "Relays were successfully refreshed from provider"
+    if stats = Relay.refresh
+      flash[:notice] = "Relays refreshed (#{stats})"
     else
-      flash[:alert] = "There was a problem refreshing relays from provider"
+      flash[:alert] = "There was a problem refreshing relays from the provider"
     end
     redirect_to admin_relays_path
   end
@@ -28,7 +28,17 @@ class Admin::RelaysController < ApplicationController
 
   def update
     if @relay.update(relay_params)
-      redirect_to [:admin, @relay], notice: "Relay was successfully updated"
+      feedback = { notice: "Relay was successfully updated" }
+      if @relay.provider_id.present? && @relay.previous_changes.keys.include?("to")
+        if Rails.env.production? || (Rails.env.development? && @relay.from == "route_test@icu.ie")
+          if @relay.update_route?
+            feedback[:notice] = "Relay and route were both successfully updated"
+          else
+            feedback = { alert: "Relay was updated but route update failed" }
+          end
+        end
+      end
+      redirect_to [:admin, @relay], feedback
     else
       flash_first_error(@relay, base_only: true)
       render action: "edit"
@@ -42,6 +52,6 @@ class Admin::RelaysController < ApplicationController
   end
 
   def relay_params
-    params[:relay].permit(:officer_id)
+    params[:relay].permit(:officer_id, :to)
   end
 end

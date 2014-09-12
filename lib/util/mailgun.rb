@@ -10,6 +10,13 @@ module Util
       result.to_h["items"]
     end
 
+    def self.update_route(id, forwards)
+      mm = Multimap.new
+      forwards.each { |email| mm["action"] = "forward('#{email}')" }
+      mm["action"] = "stop()"
+      client.put "routes/#{id}", mm
+    end
+
     def self.client(key="secret")
       ::Mailgun::Client.new Rails.application.secrets.mailgun[key]
     end

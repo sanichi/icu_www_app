@@ -6,4 +6,5 @@
         = render "utils/form_header", object: @relay, atr: :from
         - locals = { form: f, object: @relay, col: "sm", pad: 3, width: 4 }
         = render "utils/select_for", locals.merge(param: :officer_id, text: t("officer.officer"), menu: officer_menu(@relay.officer_id))
+        = render "utils/text_field_for", locals.merge(param: :to, text: t("relay.to"), width: 6)
       = render "utils/form_buttons", form: f, object: @relay, admin: "index show"
