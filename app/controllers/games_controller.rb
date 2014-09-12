@@ -8,6 +8,6 @@ class GamesController < ApplicationController
   def show
     @game = Game.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Game, params[:id])
-    @entries = @game.journal_entries if can?(:update, Game)
+    @entries = @game.journal_search if can?(:update, Game)
   end
 end

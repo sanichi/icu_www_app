@@ -9,6 +9,6 @@ class TournamentsController < ApplicationController
   def show
     @tournament = Tournament.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Tournament, params[:id])
-    @entries = @tournament.journal_entries if can?(:create, Tournament)
+    @entries = @tournament.journal_search if can?(:create, Tournament)
   end
 end

@@ -8,6 +8,6 @@ class SeriesController < ApplicationController
   def show
     @series = Series.include_articles.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Series, params[:id])
-    @entries = @series.journal_entries if can?(:create, Series)
+    @entries = @series.journal_search if can?(:create, Series)
   end
 end

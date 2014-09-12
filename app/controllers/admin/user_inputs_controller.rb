@@ -3,7 +3,7 @@ class Admin::UserInputsController < ApplicationController
   authorize_resource
 
   def show
-    @entries = @user_input.journal_entries if can?(:create, UserInput)
+    @entries = @user_input.journal_search if can?(:create, UserInput)
   end
 
   def new

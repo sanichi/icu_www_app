@@ -1,9 +1,13 @@
 class Admin::JournalEntriesController < ApplicationController
   def index
     authorize! :index, JournalEntry
-    @entries = JournalEntry.search(params, admin_journal_entries_path)
-    flash.now[:warning] = t("no_matches") if @entries.count == 0
-    save_last_search(@entries, :journal_entries)
+    @entries = JournalEntry.search(params, admin_journal_entries_path, remote: request.xhr?)
+    if request.xhr?
+      render "changes.js"
+    else
+      flash.now[:warning] = t("no_matches") if @entries.count == 0
+      save_last_search(@entries, :journal_entries)
+    end
   end
 
   def show

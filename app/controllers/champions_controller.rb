@@ -8,6 +8,6 @@ class ChampionsController < ApplicationController
   def show
     @champion = Champion.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Champion, params[:id])
-    @entries = @champion.journal_entries if can?(:create, Champion)
+    @entries = @champion.journal_search if can?(:create, Champion)
   end
 end

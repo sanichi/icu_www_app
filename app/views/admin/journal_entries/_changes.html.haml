@@ -1,4 +1,4 @@
-- if entries.present? && entries.any? && can?(:show, entries.first)
+- if entries.present? && entries.matches.any? && can?(:show, entries.matches.first)
   .voffset2
   .row
     .col-sm-12
@@ -6,6 +6,5 @@
       %table{class: "table table-bordered table-striped", id: "changes"}
         %thead
           = render "admin/journal_entries/journal_header", full: false
-        %tbody
-          - entries.each do |entry|
-            = render "admin/journal_entries/journal_entry", entry: entry, full: false
+        %tbody{id: "change_rows"}
+          = render "admin/journal_entries/change_rows", entries: entries

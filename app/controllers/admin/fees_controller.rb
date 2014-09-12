@@ -97,7 +97,7 @@ class Admin::FeesController < ApplicationController
   end
 
   def stuff_for_show
-    @entries = @fee.journal_entries if can?(:create, Fee)
+    @entries = @fee.journal_search if can?(:create, Fee)
     @inputs = @fee.user_inputs
   end
 end

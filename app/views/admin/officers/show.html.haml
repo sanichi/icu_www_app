@@ -41,3 +41,6 @@
 
 .text-center
   = link_to t("edit"), edit_admin_officer_path(@officer), class: "btn btn-primary"
+
+= render "admin/journal_entries/changes", entries: @entries
+

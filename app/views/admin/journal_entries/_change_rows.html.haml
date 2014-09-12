@@ -1,0 +1,3 @@
+- entries.matches.each do |entry|
+  = render "admin/journal_entries/journal_entry", entry: entry, full: false
+= render "utils/pagination_links", pager: entries, columns: 6

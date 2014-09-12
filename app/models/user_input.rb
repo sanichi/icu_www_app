@@ -1,4 +1,5 @@
 class UserInput < ActiveRecord::Base
+  include Pageable # for journal entries, not UserInputs
   include Journalable
 
   journalize %w[label type], "/admin/user_inputs/%d"

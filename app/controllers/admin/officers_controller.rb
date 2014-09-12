@@ -17,6 +17,7 @@ class Admin::OfficersController < ApplicationController
       @next = officers[index + 1]
       @prev = officers[index - 1] if index > 0
     end
+    @entries = @officer.journal_search if can?(:update, Officer)
   end
 
   def update

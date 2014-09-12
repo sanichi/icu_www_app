@@ -1,4 +1,5 @@
 class Officer < ActiveRecord::Base
+  include Pageable # for journal items, not officers
   include Journalable
   journalize %w[executive player_id rank role], "/admin/officers/%d"
 

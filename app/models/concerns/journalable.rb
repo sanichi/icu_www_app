@@ -1,8 +1,12 @@
 module Journalable
   extend ActiveSupport::Concern
 
-  included do
+  included do |base|
     has_many :journal_entries, as: :journalable
+
+    define_method(:journal_search) do
+      self.class.paginate(journal_entries, {type: base.to_s, id: id}, "/admin/journal_entries", remote: true)
+    end
   end
 
   def journal(action, by, ip)

@@ -8,6 +8,6 @@ class ImagesController < ApplicationController
   def show
     @image = Image.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Image, params[:id])
-    @entries = @image.journal_entries if can?(:create, Image)
+    @entries = @image.journal_search if can?(:create, Image)
   end
 end

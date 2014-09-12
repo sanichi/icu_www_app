@@ -9,7 +9,7 @@ class NewsController < ApplicationController
   def show
     @news = News.include_player.find(params[:id])
     @prev_next = Util::PrevNext.new(session, News, params[:id])
-    @entries = @news.journal_entries if can?(:create, News)
+    @entries = @news.journal_search if can?(:create, News)
   end
 
   def source
