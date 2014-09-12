@@ -2,5 +2,7 @@
 .well.well-sm.text-center.small
     = "© 2004-#{Date.today.year}"
     = t("icu.icu")
-    = "●"
+    = t("symbol.divider")
     = link_to t("icu.contact_us"), icu_officers_path
+    = t("symbol.divider")
+    = link_to t("help.privacy"), help_privacy_path
