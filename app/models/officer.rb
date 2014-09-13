@@ -19,7 +19,13 @@ class Officer < ActiveRecord::Base
   validates :role, inclusion: { in: ROLES }, uniqueness: true
 
   def emails
-    relays.map(&:from)
+    relays.map do |relay|
+      if relay.enabled
+        relay.from
+      else
+        relay.forwards
+      end
+    end.flatten.uniq.sort
   end
 
   def html_emails

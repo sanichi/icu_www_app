@@ -149,7 +149,7 @@ if appropriate, Mailgun's website.
   %li enter a blank ICU ID when editing the officer,
   %li use the secretary's personal email for the forwarding address when editing the relay.
 
-%a{name: "relays"}
+%a{name: "officers"}
 %h3 Creating, Deleting and Updating Officers
 
 %p
@@ -178,6 +178,31 @@ if appropriate, Mailgun's website.
   The
   %em= t("officer.role.fide_ecu")
   example below describes a scenario where some relinking of officers and relays would be required.
+
+%a{name: "disable"}
+%h3 Disabling Relays
+
+%p
+  In normal circumstances
+  = succeed(".") do
+    %strong all relays should be enabled
+  However, in exceptional circumstances, such as Mailgun's service being down or a problem with our Mailgun account,
+  then some or all relays can be disabled.
+%p There are two consequences of a relay being disabled:
+%ul
+  %li if the relay is linked to an officer, the incumbent's personal email will be listed on the contacts page instead of the generic ICU address,
+  %li any emails sent to the ICU address will be stopped at Mailgun and not be delivered.
+%p
+  As mentioned in the
+  = succeed(",") do
+    = link_to t("help.privacy"), help_privacy_path(anchor: "emails")
+  this is the only circumstance where persoanl emails would be publically available on the site.
+%p
+  To disable a relay, edit the relay, untick the
+  %em= t("relay.enabled")
+  button and click
+  = succeed(".") do
+    %em= t("save")
 
 %a{name: "relay_officer"}
 %h3 Not all Relays will be Linked to an Officer
