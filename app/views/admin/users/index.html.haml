@@ -19,7 +19,7 @@
               %td= link_to user.email, [:admin, user]
               %td= link_to user.name, [:admin, user.player] if user.player
               %td{class: "text-center"}= user.expires_on.year
-              %td{class: "text-center"}= user.status_ok? ? "✔" : "✘"
-              %td{class: "text-center"}= user.verified? ? "✔" : "✘"
+              %td{class: "text-center"}= ok_ko(user.status_ok?)
+              %td{class: "text-center"}= ok_ko(user.verified?)
               %td= user.human_roles
           = render "utils/pagination_links", pager: @users, columns: 6

@@ -22,7 +22,7 @@
               %td= item.player_name
               %td.text-center= euros(item.cost)
               - if cart.unpaid?
-                %td.text-center= link_to "✘", item.becomes(Item), data: { confirm: t("item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
+                %td.text-center= link_to t("symbol.delete"), item.becomes(Item), data: { confirm: t("item.confirm_delete") }, method: :delete, class: "btn btn-danger btn-xs"
           %tr
             %th{colspan: 2}= t("shop.cart.total")
             %th.text-center= euros(cart.total_cost)

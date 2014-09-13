@@ -15,11 +15,13 @@
             = t("relay.to")
             = link_to "▾", admin_relays_path(order: "to") if @order == :from
           %th= t("officer.officer")
+          %th= t("relay.enabled")
       %tbody
         - @relays.each do |relay|
           %tr
             %td= link_to relay.from, [:admin, relay]
             %td= relay.to
             %td= link_to t("officer.role.#{relay.officer.role}"), [:admin, relay.officer] if relay.officer
+            %td.text-center= ok_ko(relay.enabled)
     .text-center
       = link_to t("relay.refresh"), refresh_admin_relays_path, class: "btn btn-info"

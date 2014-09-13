@@ -29,7 +29,7 @@ class Admin::RelaysController < ApplicationController
   def update
     if @relay.update(relay_params)
       feedback = { notice: "Relay was successfully updated" }
-      if @relay.provider_id.present? && @relay.previous_changes.keys.include?("to")
+      if @relay.provider_id.present? && @relay.previous_changes.keys.select{ |k| k.match(/\A(to|enabled)\z/) }.any?
         if Rails.env.production? || (Rails.env.development? && @relay.from == "route_test@icu.ie")
           if @relay.update_route?
             feedback[:notice] = "Relay and route were both successfully updated"
@@ -52,6 +52,6 @@ class Admin::RelaysController < ApplicationController
   end
 
   def relay_params
-    params[:relay].permit(:officer_id, :to)
+    params[:relay].permit(:officer_id, :to, :enabled)
   end
 end

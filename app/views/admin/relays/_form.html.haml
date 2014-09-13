@@ -7,4 +7,5 @@
         - locals = { form: f, object: @relay, col: "sm", pad: 3, width: 4 }
         = render "utils/select_for", locals.merge(param: :officer_id, text: t("officer.officer"), menu: officer_menu(@relay.officer_id))
         = render "utils/text_field_for", locals.merge(param: :to, text: t("relay.to"), width: 6)
+        = render "utils/check_box_for", locals.merge(param: :enabled, text: t("relay.enabled"), width: 2)
       = render "utils/form_buttons", form: f, object: @relay, admin: "index show"

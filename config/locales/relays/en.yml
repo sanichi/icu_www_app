@@ -1,5 +1,6 @@
 en:
   relay:
+    enabled: Enabled
     from: From
     provider_id: Mailgun ID
     refresh: Refresh from Provider

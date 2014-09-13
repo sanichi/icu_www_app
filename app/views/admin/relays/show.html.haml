@@ -22,5 +22,8 @@
       %tr
         %th= t("officer.officer")
         %td= t("officer.role.#{@relay.officer.role}") if @relay.officer
+      %tr
+        %th= t("relay.enabled")
+        %td= t(@relay.enabled ? "yes" : "no")
       = render "utils/timestamps", object: @relay, ability: :manage
     = render "utils/show_buttons", object: @relay, admin: "search", new_search: t("relay.relays"), delete: false

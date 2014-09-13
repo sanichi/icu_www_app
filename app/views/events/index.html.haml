@@ -23,6 +23,6 @@
               %td= link_to event.name, event
               %td= link_to_if event.geocodes?, event.location, events_map_path(event)
               - if extra
-                %td.text-center= event.active ? "✔" : "✘"
+                %td.text-center= ok_ko(event.active)
           = render "utils/pagination_links", pager: @events, columns: 3 + (extra ? 1 : 0)
     = render "utils/index_buttons", klass: Event

@@ -11,8 +11,12 @@ class Relay < ActiveRecord::Base
   validates :provider_id, presence: true, length: { maximum: 255 }, uniqueness: true
   validates :officer_id, numericality: { integer_only: true, greater_than: 0 }, allow_nil: true
 
+  def forwards
+    to.split(/\s*,\s*/)
+  end
+
   def update_route?
-    Util::Mailgun.update_route(provider_id, to.split(/\s*,\s*/))
+    Util::Mailgun.update_route(provider_id, forwards, enabled)
     true
   rescue => e
     Failure.log("UpdateMailProviderRoute", exception: e.class.to_s, message: e.message, provider_id: provider_id, from: from, to: to)
@@ -24,9 +28,13 @@ class Relay < ActiveRecord::Base
     current = get_database_relays
     stats = Hash.new(0)
     actuals.each do |from, route|
+      to = route[:forwards].empty?? nil : route[:forwards].sort.join(", ")
+      provider_id = route[:id]
+      enabled = route[:enabled]
       if relay = current[from]
-        relay.to = route[:to]
-        relay.provider_id = route[:id]
+        relay.to = to
+        relay.provider_id = provider_id
+        relay.enabled = enabled
         if relay.changed?
           relay.save!
           stats["updated"] += 1
@@ -34,8 +42,8 @@ class Relay < ActiveRecord::Base
           stats["unchanged"] += 1
         end
       else
-        Relay.create!(from: from, to: route[:to], provider_id: route[:id])
-        stats["unchanged"] += 1
+        Relay.create!(from: from, to: to, provider_id: provider_id, enabled: enabled)
+        stats["created"] += 1
       end
     end
     current.each do |from, relay|
@@ -60,34 +68,7 @@ class Relay < ActiveRecord::Base
 
   # The actual relays are what the provider defines.
   def self.get_provider_relays
-    routes = Util::Mailgun.routes.each_with_object({}) do |route, hash|
-      next if route["expression"].match(/\Acatch_all/)
-      if route["expression"].to_s.match(/\Amatch_recipient\(["'](\w+@icu\.ie)["']\)\z/)
-        from = $1
-      else
-        raise "couldn't parse expression in #{route}"
-      end
-      to = []
-      if route["actions"].is_a?(Array)
-        route["actions"].each do |action|
-          next if action.match(/\Astop\(\)\z/)
-          if action.match(/\Aforward\(["']([^"'\s]+)["']\)\z/)
-            to.push($1)
-          else
-            raise "unrecognised action in #{route}"
-          end
-        end
-      else
-        raise "expected array of actions in #{route}"
-      end
-      if route["id"].present?
-        id = route["id"]
-      else
-        raise "couldn't get ID for #{route}"
-      end
-      to = to.empty?? nil : to.sort.join(", ")
-      hash[from] = { id: id, to: to }
-    end
+    routes = Util::Mailgun.routes
     raise "unexpectedly low number of routes" unless routes.size > 20
     routes
   end

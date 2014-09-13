@@ -17,8 +17,8 @@
             %tr
               %td= link_to fee.description(:full), admin_fee_path(fee)
               %td.text-center= euros(fee.amount)
-              %td.text-center= fee.active ? "✔" : "✘"
-              %td.text-center= fee.within_sale_dates? ? "✔" : "✘"
-              %td.text-center= fee.active && fee.within_sale_dates? ? "✔" : "✘"
+              %td.text-center= ok_ko(fee.active)
+              %td.text-center= ok_ko(fee.within_sale_dates?)
+              %td.text-center= ok_ko(fee.active && fee.within_sale_dates?)
           = render "utils/pagination_links", pager: @fees, columns: 5
     = render "utils/index_buttons", klass: Fee
