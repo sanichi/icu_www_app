@@ -4,6 +4,8 @@ class IcuMailer < ActionMailer::Base
   FROM = "NO-REPLY@icu.ie"
   CONFIRMATION = "Confirmation of your Payment to the ICU"
   VERIFICATION = "Please verify your ICU login account email address"
+  MAIL_STATS = "ICU mail statistics at %s"
+  WEBMASTER = "webmaster@icu.ie"
 
   default from: FROM
 
@@ -22,6 +24,11 @@ class IcuMailer < ActionMailer::Base
   def verify_new_user_email(user_id)
     @user = User.include_player.find(user_id)
     mail(to: @user.email, subject: VERIFICATION)
+  end
+
+  def mail_stats(stats)
+    @stats = stats
+    mail(to: WEBMASTER, subject: MAIL_STATS % Time.now.to_s(:db))
   end
 
   private

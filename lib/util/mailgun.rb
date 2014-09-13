@@ -2,6 +2,7 @@ module Util
   class Mailgun
     STOP = "stop()"
     CATCH_ALL = "catch_all()"
+    CHARGEABLE = %w[received delivered dropped]
 
     def self.validate(address)
       result = client("public").get "address/validate", { address: address }
@@ -48,10 +49,45 @@ module Util
       client.put "routes/#{id}", mm
     end
 
+    def self.stats(start_date)
+      stats = Hash.new { |h, k| h[k] = Hash.new(0) }
+      client.get("icu.ie/stats", "start-date" => start_date.to_s, "limit" => 200).to_h["items"].each do |item|
+        date = get_date(item)
+        event = get_event(item)
+        count = get_count(item)
+        stats[date][event] = count
+      end
+      stats
+    end
+
+    def self.charge_reset(date)
+      date.to_s.match(/-24\z/)
+    end
+
+    private
+
     def self.client(key="secret")
       ::Mailgun::Client.new Rails.application.secrets.mailgun[key]
     end
 
-    private_class_method :client
+    def self.get_count(item)
+      count = item["total_count"]
+      raise "no valid count found in #{item}" unless count.is_a?(Fixnum) || count.match(/\A(0|[1-9]\d*)\z/)
+      count.to_i
+    end
+
+    def self.get_date(item)
+      Date.parse(item["created_at"]).days_ago(1).to_s
+    rescue
+      raise "no valid date found in #{item}"
+    end
+
+    def self.get_event(item)
+      event = item["event"]
+      raise "no event found in #{item}" unless event
+      event
+    end
+
+    private_class_method :client, :get_count, :get_date, :get_event
   end
 end

@@ -8,3 +8,7 @@ end
 every :day, at: "3:45am" do
   rake "cleanup:unpaid[f]"
 end
+
+every :day, at: "4:15am" do
+  rake "mail:stats"
+end
