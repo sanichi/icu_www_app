@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Event do;
+describe Event do
   include_context "features"
 
   let(:contact_name)  { I18n.t("event.contact") }

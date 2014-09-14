@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Download do;
+describe Download do
   include_context "features"
 
   let(:access)        { I18n.t("access.access") }

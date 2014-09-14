@@ -1,0 +1,3 @@
+= form_tag admin_mail_events_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :date, text: "YYYY(-MM(-DD))", size: 14
+  = button_tag t("search"), type: "submit", class: "btn btn-default pull-right"

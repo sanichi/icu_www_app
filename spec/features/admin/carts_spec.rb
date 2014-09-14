@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Cart do;
+describe Cart do
   include_context "features"
 
   context "authorization" do

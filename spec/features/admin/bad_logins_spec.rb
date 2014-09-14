@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe BadLogin do;
+describe BadLogin do
   include_context "features"
 
   context "authorization" do

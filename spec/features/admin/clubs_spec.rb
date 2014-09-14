@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Club do;
+describe Club do
   include_context "features"
 
   let(:county)        { I18n.t("club.county") }

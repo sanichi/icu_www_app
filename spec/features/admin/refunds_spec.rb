@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Refund do;
+describe Refund do
   include_context "features"
 
   let(:add_to_cart)           { I18n.t("item.add") }

@@ -76,6 +76,7 @@ IcuWwwApp::Application.routes.draw do
     end
     resources :journal_entries, only: [:index, :show]
     resources :logins,          only: [:index, :show]
+    resources :mail_events,     only: [:index]
     resources :news,            only: [:new, :create, :edit, :update, :destroy]
     resources :officers,        only: [:index, :show, :edit, :update]
     resources :payment_errors,  only: [:index]

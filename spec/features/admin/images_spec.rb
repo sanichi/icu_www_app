@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Image do;
+describe Image do
   include_context "features"
 
   let(:caption)      { I18n.t("image.caption") }

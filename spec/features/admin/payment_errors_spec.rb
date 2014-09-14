@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PaymentError do;
+describe PaymentError do
   include_context "features"
 
   context "authorisation" do

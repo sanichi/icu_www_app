@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140913094305) do
+ActiveRecord::Schema.define(version: 20140914115717) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -320,6 +320,28 @@ ActiveRecord::Schema.define(version: 20140913094305) do
   add_index "logins", ["error"], name: "index_logins_on_error", using: :btree
   add_index "logins", ["ip"], name: "index_logins_on_ip", using: :btree
   add_index "logins", ["user_id"], name: "index_logins_on_user_id", using: :btree
+
+  create_table "mail_events", force: true do |t|
+    t.integer  "accepted",               default: 0
+    t.integer  "rejected",               default: 0
+    t.integer  "delivered",              default: 0
+    t.integer  "failed",                 default: 0
+    t.integer  "opened",                 default: 0
+    t.integer  "clicked",                default: 0
+    t.integer  "unsubscribed",           default: 0
+    t.integer  "complained",             default: 0
+    t.integer  "stored",                 default: 0
+    t.integer  "total",                  default: 0
+    t.integer  "other",                  default: 0
+    t.integer  "page",         limit: 1
+    t.date     "date"
+    t.datetime "first_time"
+    t.datetime "last_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mail_events", ["date"], name: "index_mail_events_on_date", using: :btree
 
   create_table "news", force: true do |t|
     t.boolean  "active"

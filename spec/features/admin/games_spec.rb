@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Game do;
+describe Game do
   include_context "features"
 
   let(:para) { "p" }

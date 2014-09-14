@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Pgn do;
+describe Pgn do
   include_context "features"
 
   let(:import)  { "Import?" }

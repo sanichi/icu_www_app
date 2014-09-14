@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Translation do;
+describe Translation do
   include_context "features"
 
   context "authorization" do

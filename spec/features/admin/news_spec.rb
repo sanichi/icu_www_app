@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe News do;
+describe News do
   include_context "features"
 
   let(:headline) { I18n.t("news.headline") }
@@ -106,9 +106,9 @@ describe News do;
       expect(page).to_not have_css(failure)
       expect(News.count).to eq 1
       expect(JournalEntry.count).to eq 1
-      
+
       article.destroy
-      
+
       news = News.first
       visit news_path(news)
       expect(page).to have_content("(editor shortcut error:")

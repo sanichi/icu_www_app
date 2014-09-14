@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Tournament do;
+describe Tournament do
   include_context "features"
 
   let(:format)   { I18n.t("tournament.format.format") }

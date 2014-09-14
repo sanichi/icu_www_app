@@ -10,6 +10,7 @@
   - links += 1 if perrs   = can?(:index, PaymentError)
   - links += 1 if fees    = can?(:manage, Fee)
   - links += 1 if fails   = can?(:index, Failure)
+  - links += 1 if mevnts  = can?(:index, MailEvent)
   - links += 1 if items   = can?(:index, Item)
   - links += 1 if trans   = can?(:manage, Translation)
   - links += 1 if pages   = can?(:read, Page)
@@ -47,6 +48,8 @@
           %li{class: active("admin/journal_entries")}= link_to "Journal", admin_journal_entries_path
         - if logins
           %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
+        - if mevnts
+          %li{class: active("admin/mail_events")}= link_to "Mail Events", admin_mail_events_path
         - if offs
           %li{class: active("admin/officers")}= link_to "Officers", admin_officers_path
         - if perrs

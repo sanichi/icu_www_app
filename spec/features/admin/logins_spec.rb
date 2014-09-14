@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Login do;
+describe Login do
   include_context "features"
 
   context "authorization" do

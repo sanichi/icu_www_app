@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe JournalEntry do;
+describe JournalEntry do
   include_context "features"
 
   def create_club

@@ -3,6 +3,8 @@ module Util
     STOP = "stop()"
     CATCH_ALL = "catch_all()"
     CHARGEABLE = %w[received delivered dropped]
+    MAX_EVENTS_PAGES = 10
+    MAX_EVENTS_PER_PAGE = 300
 
     def self.validate(address)
       result = client("public").get "address/validate", { address: address }
@@ -60,6 +62,49 @@ module Util
       stats
     end
 
+    def self.events(date)
+      btime = Time.new(date.year, date.month, date.day, 0, 0, 0, "+00:00").rfc2822
+      etime = Time.new(date.year, date.month, date.day, 24, 0, 0, "+00:00").rfc2822
+      events = []
+      next_page = nil
+
+      (1..MAX_EVENTS_PAGES).each do |page_number|
+        if next_page
+          response = client.get("icu.ie/events/#{next_page}").to_h
+        else
+          response = client.get("icu.ie/events", begin: btime, end: etime, limit: MAX_EVENTS_PER_PAGE).to_h
+        end
+
+        page = Hash.new(0)
+        first_time, last_time = nil, nil
+        total = 0
+
+        response["items"].each do |item|
+          timestamp = item["timestamp"]
+          last_time = Time.at(timestamp).utc if timestamp
+          first_time = last_time if first_time.nil?
+          event = item["event"]
+          if event
+            page[event] += 1
+            total += 1
+          end
+        end
+
+        page["total"] = total
+        page["first_time"] = first_time
+        page["last_time"] = last_time
+        page["page"] = page_number
+
+        events.push page
+
+        break if total < MAX_EVENTS_PER_PAGE
+
+        next_page = get_next_events_page(response)
+      end
+
+      events
+    end
+
     def self.charge_reset(date)
       date.to_s.match(/-24\z/)
     end
@@ -77,7 +122,7 @@ module Util
     end
 
     def self.get_date(item)
-      Date.parse(item["created_at"]).days_ago(1).to_s
+      Date.parse(item["created_at"]).to_s
     rescue
       raise "no valid date found in #{item}"
     end
@@ -88,6 +133,14 @@ module Util
       event
     end
 
-    private_class_method :client, :get_count, :get_date, :get_event
+    def self.get_next_events_page(data)
+      raise "no 'paging' hash found" unless data["paging"].is_a?(Hash)
+      raise "no 'next' found in #{data['paging']}" unless data["paging"]["next"].present?
+      m = data["paging"]["next"].match(/\Ahttps:\/\/api\.mailgun\.net\/v2\/icu\.ie\/events\/([^\s\/]+)/)
+      raise "can't extract next page ID from #{data["paging"]["next"]}" unless m
+      m[1]
+    end
+
+    private_class_method :client, :get_count, :get_date, :get_event, :get_next_events_page
   end
 end

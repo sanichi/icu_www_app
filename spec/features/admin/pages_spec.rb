@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Page do;
+describe Page do
   include_context "features"
 
   context "authorization" do

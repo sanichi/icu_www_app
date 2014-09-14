@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Series do;
+describe Series do
   include_context "features"
 
   let(:article_title) { I18n.t("article.title") }

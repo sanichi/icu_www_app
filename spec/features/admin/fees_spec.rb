@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Fee do;
+describe Fee do
   include_context "features"
 
   context "authorization" do

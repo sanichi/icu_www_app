@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe User do;
+describe User do
   include_context "features"
 
   let(:administrator)  { I18n.t("user.role.admin") }
