@@ -137,6 +137,25 @@ class Game < ActiveRecord::Base
     %q{<a href="/games/%d">%s</a>} % [id, text]
   end
 
+  def to_pgn
+    lines = []
+    lines << "[Event \"#{event}\"]"
+    lines << "[Site \"#{site}\"]"
+    lines << "[Date \"#{date}\"]"
+    lines << "[Round \"#{round}\"]"
+    lines << "[White \"#{white}\"]"
+    lines << "[WhiteElo \"#{white_elo}\"]" if white_elo.present?
+    lines << "[Black \"#{black}\"]"
+    lines << "[BlackElo \"#{black_elo}\"]" if black_elo.present?
+    lines << "[Result \"#{result}\"]"
+    lines << "[ECO \"#{eco}\"]" if eco.present?
+    lines << "[Annotator \"#{annotator}\"]" if annotator.present?
+    lines << "[FEN \"#{fen}\"]" if fen.present?
+    lines << ''
+    lines << moves
+
+    lines.join("\n")
+  end
   private
 
   def normalize_attributes

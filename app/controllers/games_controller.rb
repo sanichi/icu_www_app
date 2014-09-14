@@ -9,5 +9,9 @@ class GamesController < ApplicationController
     @game = Game.find(params[:id])
     @prev_next = Util::PrevNext.new(session, Game, params[:id])
     @entries = @game.journal_entries if can?(:update, Game)
+    respond_to do |format|
+      format.html
+      format.pgn { send_data @game.to_pgn }
+    end
   end
 end

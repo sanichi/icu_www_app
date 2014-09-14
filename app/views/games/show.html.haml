@@ -14,6 +14,9 @@
   %p.text-center= "#{t('game.annotator')}: #{@game.annotator}"
 %pre= @game.moves
 
+%p.text-center
+  = link_to(t("game.pgn.download"), game_path(@game, format: 'pgn'), class: "btn btn-default")
+
 = render "utils/show_buttons", object: @game
 
 = render "admin/journal_entries/changes", entries: @entries
