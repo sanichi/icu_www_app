@@ -24,4 +24,6 @@
               %td.text-center= game.date
               %td= game.event
           = render "utils/pagination_links", pager: @games, columns: 6
+    %p.text-center
+      = link_to(t("game.pgn.download"), last_search("games") + "&format=pgn", class: "btn btn-default")
     = render "utils/index_buttons", klass: Pgn

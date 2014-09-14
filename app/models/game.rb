@@ -27,6 +27,11 @@ class Game < ActiveRecord::Base
   scope :ordered, -> { order(date: :desc) }
 
   def self.search(params, path)
+    matches = search_unpaged(params, path)
+    paginate(matches, params, path)
+  end
+
+  def self.search_unpaged(params, path)
     matches = ordered
     if params[:date].present?
       if params[:date].match(/\A\s*(\d{4})(?:\D+(0[1-9]|1[012]|[1-9])(?:\D+(0[1-9]|[12][0-9]|3[01]|[1-9]))?)?/)
@@ -67,7 +72,7 @@ class Game < ActiveRecord::Base
     matches = matches.where(result: params[:result]) if RESULTS.include?(params[:result])
     matches = matches.where("event LIKE ?", "%#{params[:event]}%") if params[:event].present?
     matches = matches.where(pgn_id: params[:pgn_id].to_i) if params[:pgn_id].to_i > 0
-    paginate(matches, params, path)
+    matches
   end
 
   def add_tag(name, value)
@@ -139,15 +144,15 @@ class Game < ActiveRecord::Base
 
   def to_pgn
     lines = []
-    lines << "[Event \"#{event}\"]"
-    lines << "[Site \"#{site}\"]"
+    add_pgn_tag(lines, 'Event', event)
+    add_pgn_tag(lines, 'Site', site)
     lines << "[Date \"#{date}\"]"
     lines << "[Round \"#{round}\"]"
     lines << "[White \"#{white}\"]"
-    lines << "[WhiteElo \"#{white_elo}\"]" if white_elo.present?
     lines << "[Black \"#{black}\"]"
-    lines << "[BlackElo \"#{black_elo}\"]" if black_elo.present?
     lines << "[Result \"#{result}\"]"
+    lines << "[WhiteElo \"#{white_elo}\"]" if white_elo.present?
+    lines << "[BlackElo \"#{black_elo}\"]" if black_elo.present?
     lines << "[ECO \"#{eco}\"]" if eco.present?
     lines << "[Annotator \"#{annotator}\"]" if annotator.present?
     lines << "[FEN \"#{fen}\"]" if fen.present?
@@ -157,6 +162,14 @@ class Game < ActiveRecord::Base
     lines.join("\n")
   end
   private
+
+  def add_pgn_tag(lines, tag, value)
+    lines << "[#{tag} \"#{value.present? ? value : '?'}\"]"
+  end
+
+  def add_optional_pgn_tag(lines, tag, value)
+    lines << "[#{tag} \"#{value}\"]" if value.present?
+  end
 
   def normalize_attributes
     normalize_newlines(:moves)
