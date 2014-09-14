@@ -1,7 +1,5 @@
 - content_for :title, "Mail Events"
 
-- abbreviations = { "AC" => "accepted", "CL" => "clicked", "CM" => "complained", "DL" => "delivered", "FL" => "failed", "OP" => "opened", "OT" => "other", "RJ" => "rejected", "ST" => "stored", "US" => "unsubscribed" }
-
 = render "utils/search_panel", form: "admin/mail_events/search_form", title: "Mail Events"
 - if @events.count > 0
   .row
@@ -11,9 +9,8 @@
           %tr
             %th.text-center Date
             %th.text-center Page
-            - abbreviations.keys.each do |key|
-              - logger.info "#{key}"
-              %th.text-center= key
+            - MailEvent::CODES.values.each do |code|
+              %th.text-center= code
             %th.text-center Total
             %th.text-center First
             %th.text-center Last
@@ -24,8 +21,7 @@
             %tr
               %td.text-center= event.date
               %td.text-center= event.page
-              - abbreviations.values.each do |atr|
-                - logger.info "#{atr} => #{event.send(atr)}"
+              - MailEvent::CODES.keys.each do |atr|
                 %td.text-center= event.send(atr)
               %td.text-center= event.total
               %td.text-center= event.first_time.strftime("%H:%M") if event.first_time.present?
@@ -35,4 +31,4 @@
           = render "utils/pagination_links", pager: @events, columns: 3
 
 %hr
-%p.small= "* #{abbreviations.map { |k,v| "#{k}: #{v}" }.join(', ')}"
+%p.small= "* #{MailEvent::CODES.map { |atr,code| "#{code}: #{atr}" }.join(', ')}"

@@ -10,7 +10,8 @@ module ICU
           page = data.delete("page")
           event = ::MailEvent.where(date: date, page: page).first
           if event
-            data.each { |k,v| event.send("#{k}=", v) }
+            ::MailEvent::CODES.keys.each { |atr| data[atr.to_s] = 0 unless data.has_key?(atr.to_s) }
+            data.each { |atr,val| event.send("#{atr}=", val) }
             event.save! if event.changed?
           else
             data["date"] = date
@@ -23,7 +24,7 @@ module ICU
       if print
         puts e.inspect
       else
-        ::Failure.log("MailEventsReport", exception: e.class.to_s, message: e.message, date: date.to_s, details: e.backtrace[0..2].join('; '))
+        ::Failure.log("MailEventsReport", exception: e.class.to_s, message: e.message, date: date.to_s, details: e.backtrace[0..5].join("\n"))
       end
     end
   end

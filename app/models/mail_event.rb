@@ -1,6 +1,19 @@
 class MailEvent < ActiveRecord::Base
   include Pageable
 
+  CODES = {
+    accepted:     :AC,
+    clicked:      :CL,
+    complained:   :CM,
+    delivered:    :DL,
+    failed:       :FL,
+    opened:       :OP,
+    other:        :OT,
+    rejected:     :RJ,
+    stored:       :ST,
+    unsubscribed: :US,
+  }
+
   scope :ordered, -> { order(date: :desc, page: :asc) }
 
   validates :date, presence: true

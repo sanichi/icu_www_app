@@ -68,38 +68,42 @@ module Util
       events = []
       next_page = nil
 
-      (1..MAX_EVENTS_PAGES).each do |page_number|
+      (1..MAX_EVENTS_PAGES).each do |number|
         if next_page
           response = client.get("icu.ie/events/#{next_page}").to_h
         else
           response = client.get("icu.ie/events", begin: btime, end: etime, limit: MAX_EVENTS_PER_PAGE).to_h
         end
 
+        raise "no 'items' array found for page #{number}" unless response["items"].is_a?(Array)
+
         page = Hash.new(0)
         first_time, last_time = nil, nil
         total = 0
 
         response["items"].each do |item|
-          timestamp = item["timestamp"]
-          last_time = Time.at(timestamp).utc if timestamp
+          last_time = item["timestamp"]
           first_time = last_time if first_time.nil?
           event = item["event"]
           if event
-            page[event] += 1
+            if ::MailEvent::CODES[event.to_sym]
+              page[event] += 1
+            else
+              page["other"] += 1
+            end
             total += 1
           end
         end
 
         page["total"] = total
-        page["first_time"] = first_time
-        page["last_time"] = last_time
-        page["page"] = page_number
-
+        page["first_time"] = Time.at(first_time.to_i).utc if first_time
+        page["last_time"] = Time.at(last_time.to_i).utc if last_time
+        page["page"] = number
         events.push page
 
         break if total < MAX_EVENTS_PER_PAGE
 
-        next_page = get_next_events_page(response)
+        next_page = get_next_events_page(response, number)
       end
 
       events
@@ -133,11 +137,11 @@ module Util
       event
     end
 
-    def self.get_next_events_page(data)
-      raise "no 'paging' hash found" unless data["paging"].is_a?(Hash)
-      raise "no 'next' found in #{data['paging']}" unless data["paging"]["next"].present?
+    def self.get_next_events_page(data, number)
+      raise "no 'paging' hash found for page #{number}" unless data["paging"].is_a?(Hash)
+      raise "no 'next' found in #{data['paging']} for page #{number}" unless data["paging"]["next"].present?
       m = data["paging"]["next"].match(/\Ahttps:\/\/api\.mailgun\.net\/v2\/icu\.ie\/events\/([^\s\/]+)/)
-      raise "can't extract next page ID from #{data["paging"]["next"]}" unless m
+      raise "can't extract next page ID from #{data["paging"]["next"]} for page #{number}" unless m
       m[1]
     end
 
