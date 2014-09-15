@@ -1,7 +1,10 @@
 en:
   relay:
+    disable_all: Disable All
+    enable_all: Enable All
     enabled: Enabled
     from: From
+    provider: Mailgun
     provider_id: Mailgun ID
     refresh: Refresh from Provider
     relay: Relay

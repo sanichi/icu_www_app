@@ -15,6 +15,17 @@ class Relay < ActiveRecord::Base
     to.split(/\s*,\s*/)
   end
 
+  def route_updateable?
+    return false unless self.class.route_update_allowed?(from)
+    return false unless provider_id.present?
+    return false unless previous_changes.keys.select{ |k| k.match(/\A(to|enabled)\z/) }.any?
+    true
+  end
+
+  def self.route_update_allowed?(from)
+    Rails.env.production? || (Rails.env.development? && from == "route_test@icu.ie")
+  end
+
   def update_route?
     Util::Mailgun.update_route(provider_id, forwards, enabled)
     true
@@ -23,9 +34,9 @@ class Relay < ActiveRecord::Base
     false
   end
 
-  def self.refresh
-    actuals = get_provider_relays
-    current = get_database_relays
+  def self.refresh(actuals=nil)
+    actuals ||= Util::Mailgun.routes
+    current = Relay.all.each_with_object({}) { |relay, hash| hash[relay.from] = relay }
     stats = Hash.new(0)
     actuals.each do |from, route|
       to = route[:forwards].empty?? nil : route[:forwards].sort.join(", ")
@@ -54,7 +65,16 @@ class Relay < ActiveRecord::Base
     end
     stats.empty?? "none found" : stats.map{ |k,v| "#{k}: #{v}" }.join(", ")
   rescue => e
-    Failure.log("UpdateOfficerRedirects", exception: e.class.to_s, message: e.message)
+    Failure.log("UpdateOfficerRelays", exception: e.class.to_s, message: e.message)
+    false
+  end
+
+  def self.toggle_all(on_or_off)
+    routes = Util::Mailgun.toggle_all(on_or_off)
+    refresh(routes)
+    true
+  rescue => e
+    Failure.log("ToggleAllRelays#{on_or_off ? 'On' : 'Off'}", exception: e.class.to_s, message: e.message)
     false
   end
 
@@ -65,20 +85,4 @@ class Relay < ActiveRecord::Base
       self.to = to.trim.gsub(/[\s,]+/, ", ")
     end
   end
-
-  # The actual relays are what the provider defines.
-  def self.get_provider_relays
-    routes = Util::Mailgun.routes
-    raise "unexpectedly low number of routes" unless routes.size > 20
-    routes
-  end
-
-  # These are the relays currently in the ICU database which might be out of sync with the provider's.
-  def self.get_database_relays
-    Relay.all.each_with_object({}) do |relay, hash|
-      hash[relay.from] = relay
-    end
-  end
-
-  private_class_method :get_provider_relays, :get_database_relays
 end

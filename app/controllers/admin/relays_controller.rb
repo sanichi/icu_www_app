@@ -4,14 +4,34 @@ class Admin::RelaysController < ApplicationController
 
   def index
     @order = params[:order] == "to" ? :to : :from
-    @relays = Relay.unscoped.order(@order).all
+    @relays = Relay.unscoped.order(@order).include_officer.all
+    @enable_all_button  = @relays.reject(&:enabled).any?
+    @disable_all_button = @relays.select(&:enabled).any?
   end
 
   def refresh
     if stats = Relay.refresh
       flash[:notice] = "Relays refreshed (#{stats})"
     else
-      flash[:alert] = "There was a problem refreshing relays from the provider"
+      flash[:alert] = "There was a problem refreshing #{t("relay.provider")} relays"
+    end
+    redirect_to admin_relays_path
+  end
+
+  def enable_all
+    if Relay.toggle_all(true)
+      flash[:notice] = "All #{t("relay.provider")} relays enabled"
+    else
+      flash[:alert] = "There was a problem enabling all #{t("relay.provider")} relays"
+    end
+    redirect_to admin_relays_path
+  end
+
+  def disable_all
+    if Relay.toggle_all(false)
+      flash[:notice] = "All #{t("relay.provider")} relays disabled"
+    else
+      flash[:alert] = "There was a problem disabling all #{t("relay.provider")} relays"
     end
     redirect_to admin_relays_path
   end
@@ -29,13 +49,11 @@ class Admin::RelaysController < ApplicationController
   def update
     if @relay.update(relay_params)
       feedback = { notice: "Relay was successfully updated" }
-      if @relay.provider_id.present? && @relay.previous_changes.keys.select{ |k| k.match(/\A(to|enabled)\z/) }.any?
-        if Rails.env.production? || (Rails.env.development? && @relay.from == "route_test@icu.ie")
-          if @relay.update_route?
-            feedback[:notice] = "Relay and route were both successfully updated"
-          else
-            feedback = { alert: "Relay was updated but route update failed" }
-          end
+      if @relay.route_updateable?
+        if @relay.update_route?
+          feedback[:notice] = "Relay and route were both successfully updated"
+        else
+          feedback = { alert: "Relay was updated but route update failed" }
         end
       end
       redirect_to [:admin, @relay], feedback

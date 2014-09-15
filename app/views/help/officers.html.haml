@@ -18,7 +18,9 @@
     in sync with the personal emails of the current office holders.
 %p
   The former is managed on this website while relays are managed partly
-  on this website and partly on that of our email provider (Mailgun).
+  on this website and partly on the website of our email service provider,
+  = succeed(".") do
+    %em= t("relay.provider")
 %p
   Each relay has a
   %strong ICU
@@ -54,9 +56,8 @@
 %a{name: "who"}
 %h3 Who can Manage Officers and Relays?
 
-At the moment only the webmaster can do this, so to complete
-any of the tasks below the webmaster must first login to this website or,
-if appropriate, Mailgun's website.
+At the moment only the webmaster can do this, so to complete any of the tasks below the
+webmaster must first login to this or the service provider's website.
 
 %a{name: "relink"}
 %h3 How to Change an Incumbent Officer
@@ -104,9 +105,12 @@ if appropriate, Mailgun's website.
     click
     = succeed(".") do
       %em= t("save")
-%p Alternatively, the changes can be made via Mailgun and synced back to the ICU database:
+%p Alternatively, the changes can be made via the service provider and synced back to the ICU database:
 %ul
-  %li login to the ICU's Mailgun control panel,
+  %li
+    login to the ICU's
+    = t("relay.provider")
+    control panel,
   %li
     click
     = succeed(",") do
@@ -128,7 +132,7 @@ if appropriate, Mailgun's website.
     %em= t("relay.relays")
     from the top navigation bar, scroll to the bottom and click
     %em= t("relay.refresh")
-    which ensures all ICU relays are up-to-date with any changes made on Mailgun.
+    which ensures all ICU relays are up-to-date with any changes made via the service provider.
 
 %a{name: "blank"}
 %h3 When an Role is Unfilled
@@ -168,8 +172,12 @@ if appropriate, Mailgun's website.
 %h3 Creating, Deleting and Updating Relays
 
 %p
-  Relays can only be created or destroyed on Mailgun. Their forwarding addresses can be
-  changed on Mailgun or, for convenience and because it's a common operation, from
+  Relays can only be created or destroyed via
+  = succeed(".") do
+    = t("relay.provider")
+  Relay forwarding addresses can be edited on
+  = t("relay.provider")
+  or, for convenience and because it's so common, on
   this website as well (see above).
 %p
   One aspect of relays which is managed exclusively on this website is which officer (if any) each links to.
@@ -186,12 +194,12 @@ if appropriate, Mailgun's website.
   In normal circumstances
   = succeed(".") do
     %strong all relays should be enabled
-  However, in exceptional circumstances, such as Mailgun's service being down or a problem with our Mailgun account,
+  However, in exceptional circumstances, such as the provider's service being down or a problem with our account,
   then some or all relays can be disabled.
 %p There are two consequences of a relay being disabled:
 %ul
   %li if the relay is linked to an officer, the incumbent's personal email will be listed on the contacts page instead of the generic ICU address,
-  %li any emails sent to the ICU address will be stopped at Mailgun and not be delivered.
+  %li any emails sent to the ICU address will be stopped by the service provider and not be delivered.
 %p
   As mentioned in the
   = succeed(",") do

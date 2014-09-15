@@ -84,7 +84,7 @@ IcuWwwApp::Application.routes.draw do
     resources :players,         only: [:show, :new, :create, :edit, :update]
     resources :refunds,         only: [:index]
     resources :relays,          only: [:index, :show, :edit, :update] do
-      get :refresh, on: :collection
+      get :refresh, :enable_all, :disable_all, on: :collection
     end
     resources :series,          only: [:new, :create, :edit, :update, :destroy]
     resources :tournaments,     only: [:new, :create, :edit, :update, :destroy]

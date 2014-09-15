@@ -9,26 +9,27 @@
           %tr
             %th.text-center Date
             %th.text-center Page
-            - MailEvent::CODES.values.each do |code|
-              %th.text-center= code
-            %th.text-center Total
             %th.text-center First
             %th.text-center Last
-            %th.text-center= t("created_at")
+            - MailEvent::CODES.values.each do |code|
+              %th.text-center
+                = succeed(code == :AC ? "*" : "") do
+                  = code
+            %th.text-center Total
             %th.text-center= t("updated_at")
         %tbody
           - @events.matches.each do |event|
             %tr
               %td.text-center= event.date
               %td.text-center= event.page
+              %td.text-center= event.first_time.strftime("%H:%M") if event.first_time.present?
+              %td.text-center= event.last_time.strftime("%H:%M") if event.first_time.present?
               - MailEvent::CODES.keys.each do |atr|
                 %td.text-center= event.send(atr)
               %td.text-center= event.total
-              %td.text-center= event.first_time.strftime("%H:%M") if event.first_time.present?
-              %td.text-center= event.last_time.strftime("%H:%M") if event.first_time.present?
-              %td.text-center= event.created_at.to_s(:nosec)
               %td.text-center= event.updated_at.to_s(:nosec)
           = render "utils/pagination_links", pager: @events, columns: 3
 
 %hr
-%p.small= "* #{MailEvent::CODES.map { |atr,code| "#{code}: #{atr}" }.join(', ')}"
+%p.small= "#{MailEvent::CODES.map { |atr,code| "#{code}: #{atr}" }.join(', ')}"
+%p.small= "* chargeable"

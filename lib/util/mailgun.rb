@@ -1,7 +1,7 @@
 module Util
   class Mailgun
     STOP = "stop()"
-    CATCH_ALL = "catch_all()"
+    NOT_APPLICABLE = /\A(catch_all|match_header)/
     CHARGEABLE = %w[received delivered dropped]
     MAX_EVENTS_PAGES = 10
     MAX_EVENTS_PER_PAGE = 300
@@ -11,10 +11,11 @@ module Util
       result.to_h["is_valid"]
     end
 
-    def self.routes
-      client.get("routes").to_h["items"].each_with_object({}) do |route, hash|
-        next if route["expression"] == CATCH_ALL
-        if route["expression"].to_s.match(/\Amatch_recipient\(["'](\w+@icu\.ie)["']\)\z/)
+    def self.routes(min_expected=20)
+      routes = client.get("routes").to_h["items"].each_with_object({}) do |route, hash|
+        raise "no expression found in #{route}" unless route["expression"].present?
+        next if route["expression"].match(NOT_APPLICABLE)
+        if route["expression"].match(/\Amatch_recipient\(["'](\w+@icu\.ie)["']\)\z/)
           from = $1
         else
           raise "couldn't parse expression in #{route}"
@@ -41,6 +42,8 @@ module Util
         end
         hash[from] = { id: id, forwards: forwards, enabled: enabled }
       end
+      raise "unexpectedly low number of routes" unless routes.size >= min_expected
+      routes
     end
 
     def self.update_route(id, forwards, enabled)
@@ -49,6 +52,23 @@ module Util
       forwards.each { |email| mm["action"] = "forward('#{email}')" }
       mm["action"] = STOP
       client.put "routes/#{id}", mm
+    end
+
+    def self.toggle_all(on_or_off)
+      # First, get all the live routes.
+      routes = self.routes
+
+      # Loop over them and update any that need it, if it's allowed from the current environment.
+      routes.each do |from, data|
+        id, forwards, enabled = %i[id forwards enabled].map { |key| data[key] }
+        if on_or_off ^ enabled && ::Relay.route_update_allowed?(from)
+          update_route(id, forwards, on_or_off)
+          data[:enabled] = on_or_off
+        end
+      end
+
+      # Finally, return the altered routes so the database can be updated.
+      routes
     end
 
     def self.stats(start_date)
