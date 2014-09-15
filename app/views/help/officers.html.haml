@@ -194,8 +194,8 @@ webmaster must first login to this or the service provider's website.
   In normal circumstances
   = succeed(".") do
     %strong all relays should be enabled
-  However, in exceptional circumstances, such as the provider's service being down or a problem with our account,
-  then some or all relays can be disabled.
+  However, in exceptional circumstances, such as the provider's service being down or
+  a problem with our account, then some or all relays can be disabled.
 %p There are two consequences of a relay being disabled:
 %ul
   %li if the relay is linked to an officer, the incumbent's personal email will be listed on the contacts page instead of the generic ICU address,
@@ -205,12 +205,28 @@ webmaster must first login to this or the service provider's website.
   = succeed(",") do
     = link_to t("help.privacy"), help_privacy_path(anchor: "emails")
   this is the only circumstance where persoanl emails would be publically available on the site.
-%p
-  To disable a relay, edit the relay, untick the
-  %em= t("relay.enabled")
-  button and click
-  = succeed(".") do
-    %em= t("save")
+%p In order to:
+%ul
+  %li
+    disable a single relay: edit the relay, untick the
+    %em= t("relay.enabled")
+    checkbox and click
+    = succeed(",") do
+      %em= t("save")
+  %li
+    enable a single relay: edit the relay, tick the
+    %em= t("relay.enabled")
+    checkbox and click
+    = succeed(",") do
+      %em= t("save")
+  %li
+    disable all relays: click the
+    %em= t("relay.disable_all")
+    button if it's present (it will be if there's at least one enabled route),
+  %li
+    enable all relays: click the
+    %em= t("relay.enable_all")
+    button if it's present (it will be if there's at least one disabled route).
 
 %a{name: "relay_officer"}
 %h3 Not all Relays will be Linked to an Officer
