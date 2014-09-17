@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140914115717) do
+ActiveRecord::Schema.define(version: 20140917164938) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -333,12 +333,10 @@ ActiveRecord::Schema.define(version: 20140914115717) do
     t.integer  "stored",                 default: 0
     t.integer  "total",                  default: 0
     t.integer  "other",                  default: 0
-    t.integer  "page",         limit: 1
     t.date     "date"
-    t.datetime "first_time"
-    t.datetime "last_time"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "pages",        limit: 1
   end
 
   add_index "mail_events", ["date"], name: "index_mail_events_on_date", using: :btree

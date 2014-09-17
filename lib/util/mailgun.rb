@@ -85,8 +85,8 @@ module Util
     def self.events(date)
       btime = Time.new(date.year, date.month, date.day, 0, 0, 0, "+00:00").rfc2822
       etime = Time.new(date.year, date.month, date.day, 24, 0, 0, "+00:00").rfc2822
-      events = []
-      next_page = nil
+      events = Hash.new(0)
+      next_page, pages, total = nil, 0, 0
 
       (1..MAX_EVENTS_PAGES).each do |number|
         if next_page
@@ -97,35 +97,30 @@ module Util
 
         raise "no 'items' array found for page #{number}" unless response["items"].is_a?(Array)
 
-        page = Hash.new(0)
-        first_time, last_time = nil, nil
-        total = 0
-
+        page_total = 0
         response["items"].each do |item|
-          last_time = item["timestamp"]
-          first_time = last_time if first_time.nil?
           event = item["event"]
-          if event
+          if event.present?
             if ::MailEvent::CODES[event.to_sym]
-              page[event] += 1
+              events[event] += 1
             else
-              page["other"] += 1
+              events["other"] += 1
             end
-            total += 1
+            page_total += 1
+          else
+            raise "no 'event' found in item #{item}"
           end
         end
 
-        page["total"] = total
-        page["first_time"] = Time.at(first_time.to_i).utc if first_time
-        page["last_time"] = Time.at(last_time.to_i).utc if last_time
-        page["page"] = number
-        events.push page
-
-        break if total < MAX_EVENTS_PER_PAGE
+        pages += 1
+        total += page_total
+        break if page_total < MAX_EVENTS_PER_PAGE
 
         next_page = get_next_events_page(response, number)
       end
 
+      events[:pages] = pages
+      events[:total] = total
       events
     end
 

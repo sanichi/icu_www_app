@@ -8,27 +8,23 @@
         %thead
           %tr
             %th.text-center Date
-            %th.text-center Page
-            %th.text-center First
-            %th.text-center Last
             - MailEvent::CODES.values.each do |code|
               %th.text-center
                 = succeed(code == :AC ? "*" : "") do
                   = code
             %th.text-center Total
+            %th.text-center Pages
             %th.text-center= t("updated_at")
         %tbody
           - @events.matches.each do |event|
-            %tr
+            %tr{class: event.chargeable > 660 ? "danger" : (event.chargeable > 330 ? "warning" : "success")}
               %td.text-center= event.date
-              %td.text-center= event.page
-              %td.text-center= event.first_time.strftime("%H:%M") if event.first_time.present?
-              %td.text-center= event.last_time.strftime("%H:%M") if event.first_time.present?
               - MailEvent::CODES.keys.each do |atr|
                 %td.text-center= event.send(atr)
               %td.text-center= event.total
+              %td.text-center= event.pages
               %td.text-center= event.updated_at.to_s(:nosec)
-          = render "utils/pagination_links", pager: @events, columns: 3
+          = render "utils/pagination_links", pager: @events, columns: 16
 
 %hr
 %p.small= "#{MailEvent::CODES.map { |atr,code| "#{code}: #{atr}" }.join(', ')}"

@@ -2,22 +2,18 @@ module ICU
   class MailEvents
     def save(print=false)
       date = ::Date.today.yesterday
-      events = ::Util::Mailgun.events(date)
+      data = ::Util::Mailgun.events(date)
       if print
-        puts events.inspect
+        puts data.inspect
       else
-        events.each do |data|
-          page = data.delete("page")
-          event = ::MailEvent.where(date: date, page: page).first
-          if event
-            ::MailEvent::CODES.keys.each { |atr| data[atr.to_s] = 0 unless data.has_key?(atr.to_s) }
-            data.each { |atr,val| event.send("#{atr}=", val) }
-            event.save! if event.changed?
-          else
-            data["date"] = date
-            data["page"] = page
-            ::MailEvent.create!(data)
-          end
+        event = ::MailEvent.where(date: date).first
+        if event
+          ::MailEvent::CODES.keys.each { |atr| data[atr.to_s] = 0 unless data.has_key?(atr.to_s) }
+          data.each { |atr,val| event.send("#{atr}=", val) }
+          event.save! if event.changed?
+        else
+          data["date"] = date
+          ::MailEvent.create!(data)
         end
       end
     rescue => e
