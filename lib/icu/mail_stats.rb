@@ -4,7 +4,8 @@ module ICU
       begin
         start_date = ::Date.today.days_ago(32)
         stats = ::Util::Mailgun.stats(start_date)
-        text = text(stats)
+        month = ::Util::ChargeMonth.new(::Util::Mailgun::MONTH_START, today: ::Date.today)
+        text = text(stats, month)
       rescue => e
         text = "ERROR: #{e.class}, #{e.message}"
       end
@@ -17,9 +18,9 @@ module ICU
 
     private
 
-    def text(stats)
+    def text(stats, month)
       events = stats.values.map(&:keys).flatten.uniq.sort
-      augment(events, stats)
+      augment(events, stats, month)
       header, format = format(events)
       text = []
       text.push header
@@ -29,6 +30,12 @@ module ICU
         values.unshift date
         text.push format % values
       end
+      text.unshift ""
+      text.unshift "cost ...... #{month.predicted_cost}"
+      text.unshift "counts .... #{month.predicted_count}"
+      text.unshift "--------------------------"
+      text.unshift "predictions for #{month.end_date}"
+      text.unshift ""
       text.join("\n")
     end
 
@@ -47,22 +54,17 @@ module ICU
       [headers.join("  "), formats.join("  ")]
     end
 
-    def augment(events, stats)
+    def augment(events, stats, month)
       events.push "chargeable"
       events.push "cumulative"
-      started = false
       cumulative = 0
       stats.keys.sort.each do |date|
         numbers = stats[date]
         numbers["chargeable"] = ::Util::Mailgun::CHARGEABLE.map{ |event| numbers[event] }.reduce(&:+)
-        if ::Util::Mailgun.charge_reset(date)
-          if started
-            cumulative = 0
-          else
-            started = true
-          end
+        if month.includes?(date)
+          cumulative += numbers["chargeable"]
+          month.add_data(date, numbers["chargeable"])
         end
-        cumulative += numbers["chargeable"] if started
         numbers["cumulative"] = cumulative
       end
     end
