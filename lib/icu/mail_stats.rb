@@ -31,8 +31,8 @@ module ICU
         text.push format % values
       end
       text.unshift ""
-      text.unshift "cost ...... #{month.predicted_cost}"
-      text.unshift "counts .... #{month.predicted_count}"
+      text.unshift "cost (%s) %15.2f" % [month.currency, month.predicted_cost]
+      text.unshift "counts %19d" % month.predicted_count
       text.unshift "--------------------------"
       text.unshift "predictions for #{month.end_date}"
       text.unshift ""

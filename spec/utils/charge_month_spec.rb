@@ -86,20 +86,20 @@ module Util
 
       it "no data" do
         expect(month.predicted_count).to eq 0
-        expect(month.predicted_cost).to eq "0.00 USD"
+        expect(month.predicted_cost).to eq 0.0
       end
 
       it "one datum" do
         month.add_data(month.start_date, 100)
         expect(month.predicted_count).to eq 3000
-        expect(month.predicted_cost).to eq "0.00 USD"
+        expect(month.predicted_cost).to eq 0.0
       end
 
       it "two data" do
         month.add_data(month.start_date, 200)
         month.add_data(month.end_date, 200)
         expect(month.predicted_count).to eq 6000
-        expect(month.predicted_cost).to eq "0.00 USD"
+        expect(month.predicted_cost).to eq 0.0
       end
 
       it "three data" do
@@ -107,14 +107,14 @@ module Util
         month.add_data(month.end_date, 500)
         month.add_data(today, 500)
         expect(month.predicted_count).to eq 15000
-        expect(month.predicted_cost).to eq "2.50 USD"
+        expect(month.predicted_cost).to eq 2.5
       end
 
       it "irrelevant data" do
         month.add_data(month.start_date.days_ago(1), 1000)
         month.add_data(month.end_date.days_since(1), 1000)
         expect(month.predicted_count).to eq 0
-        expect(month.predicted_cost).to eq "0.00 USD"
+        expect(month.predicted_cost).to eq 0.0
       end
     end
   end

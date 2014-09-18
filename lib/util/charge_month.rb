@@ -1,6 +1,6 @@
 module Util
   class ChargeMonth
-    attr_reader :start_date, :end_date
+    attr_reader :start_date, :end_date, :currency
 
     def initialize(start_day, today: Date.today, free: 10000, cost: 0.0005, currency: "USD")
       raise ArgumentError.new("invalid start day (#{start_day})") unless start_day >= 1 && start_day <= 31
@@ -53,7 +53,7 @@ module Util
     def predicted_cost
       count = predicted_count
       total = count <= @free ? 0.0 : (count - @free) * @cost
-      "%.2f #{@currency}" % total
+      total.round(2)
     end
   end
 end
