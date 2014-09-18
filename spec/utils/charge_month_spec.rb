@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module Util
   describe ChargeMonth do
-    let(:month) { Util::ChargeMonth.new(start_day, today: today) }
+    let(:month) { Util::ChargeMonth.new(today: today, start_day: start_day) }
 
     context "start day less than today's day" do
       context "regular case" do
@@ -108,6 +108,9 @@ module Util
         month.add_data(today, 500)
         expect(month.predicted_count).to eq 15000
         expect(month.predicted_cost).to eq 2.5
+        month.add_data(month.start_date.days_since(1), 0)
+        expect(month.predicted_count).to be < 15000
+        expect(month.predicted_cost).to be < 2.5
       end
 
       it "irrelevant data" do

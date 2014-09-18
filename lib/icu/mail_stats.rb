@@ -4,7 +4,7 @@ module ICU
       begin
         start_date = ::Date.today.days_ago(32)
         stats = ::Util::Mailgun.stats(start_date)
-        month = ::Util::ChargeMonth.new(::Util::Mailgun::MONTH_START, today: ::Date.today)
+        month = ::Util::ChargeMonth.new
         text = text(stats, month)
       rescue => e
         text = "ERROR: #{e.class}, #{e.message}"

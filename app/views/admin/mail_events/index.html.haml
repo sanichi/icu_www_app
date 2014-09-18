@@ -1,5 +1,16 @@
 - content_for :title, "Mail Events"
 
+%p.text-center
+  Predictions for next bill on
+  = succeed(":") do
+    %strong= @month.end_date
+  count =
+  = succeed(",") do
+    %strong= @month.predicted_count
+  cost =
+  %span.label{class: "label-#{@month.status}"}= @month.predicted_cost
+  = @month.currency
+
 = render "utils/search_panel", form: "admin/mail_events/search_form", title: "Mail Events"
 - if @events.count > 0
   .row

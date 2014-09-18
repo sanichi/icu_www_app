@@ -28,4 +28,12 @@ class MailEvent < ActiveRecord::Base
   def chargeable
     accepted
   end
+
+  def self.month
+    month = Util::ChargeMonth.new
+    ordered.limit(31).each do |event|
+      month.add_data(event.date, event.chargeable)
+    end
+    month
+  end
 end
