@@ -53,6 +53,11 @@ class Failure < ActiveRecord::Base
         exception = details.delete(:exception)
         details[:name] = exception.first
         details[:message] = exception.last
+      elsif details[:exception].is_a?(Exception)
+        exception = details.delete(:exception)
+        details[:name] = exception.class.to_s
+        details[:message] = exception.message
+        details[:backtrace] = exception.backtrace[0..3].join("\n") if exception.backtrace.present?
       end
       self.details = details.map{ |key,val| "#{key}: #{val}" }.sort.join("\n")
     end

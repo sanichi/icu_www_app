@@ -244,7 +244,7 @@ class User < ActiveRecord::Base
       "#{I18n.t('user.old_password')} #{I18n.t('errors.messages.invalid')}"
     end
   rescue => e
-    Failure.log("ChangePasswordFailure", exception: e.class.to_s, message: e.message, user_id: id)
+    Failure.log("ChangePasswordFailure", exception: e, user_id: id)
     I18n.t("errors.alerts.application")
   end
 

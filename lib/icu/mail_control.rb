@@ -20,7 +20,7 @@ module ICU
       if print
         puts "ERROR: #{e.class}, #{e.message}\n#{e.backtrace[0..3].join("\n")}"
       else
-        ::Failure.log("MailControlCheck", exception: e.class.to_s, message: e.message, date: date.to_s, details: e.backtrace[0..3].join("\n"))
+        ::Failure.log("MailControlCheck", exception: e, date: date.to_s)
       end
     end
 

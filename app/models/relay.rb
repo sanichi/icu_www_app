@@ -30,7 +30,7 @@ class Relay < ActiveRecord::Base
     Util::Mailgun.update_route(provider_id, forwards, enabled)
     true
   rescue => e
-    Failure.log("UpdateMailProviderRoute", exception: e.class.to_s, message: e.message, provider_id: provider_id, from: from, to: to)
+    Failure.log("UpdateMailProviderRoute", exception: e, provider_id: provider_id, from: from, to: to)
     false
   end
 
@@ -65,7 +65,7 @@ class Relay < ActiveRecord::Base
     end
     stats.empty?? "none found" : stats.map{ |k,v| "#{k}: #{v}" }.join(", ")
   rescue => e
-    Failure.log("UpdateOfficerRelays", exception: e.class.to_s, message: e.message, details: e.backtrace[0..3].join("\n"))
+    Failure.log("UpdateOfficerRelays", exception: e)
     false
   end
 
@@ -74,7 +74,7 @@ class Relay < ActiveRecord::Base
     refresh(routes)
     true
   rescue => e
-    Failure.log("ToggleAllRelays#{on_or_off ? 'On' : 'Off'}", exception: e.class.to_s, message: e.message, details: e.backtrace[0..3].join("\n"))
+    Failure.log("ToggleAllRelays#{on_or_off ? 'On' : 'Off'}", exception: e)
     false
   end
 

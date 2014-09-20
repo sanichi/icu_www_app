@@ -46,7 +46,7 @@ class Item < ActiveRecord::Base
             user.update_column(:expires_on, season.end_of_grace_period)
           end
         rescue => e
-          Failure.log("UpdateUsersAfterSubscriptionFailure", exception: e.class.to_s, message: e.message)
+          Failure.log("UpdateUsersAfterSubscriptionFailure", exception: e)
         end
       elsif player_data.present?
         begin
@@ -54,7 +54,7 @@ class Item < ActiveRecord::Base
           player.save!
           update_column(:player_id, player.id)
         rescue => e
-          Failure.log("NewPlayerCreateFailure", exception: e.class.to_s, message: e.message, data: player_data)
+          Failure.log("NewPlayerCreateFailure", exception: e, data: player_data)
         end
       end
     end
