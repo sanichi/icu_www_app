@@ -1,6 +1,6 @@
 module Util
   class ChargeMonth
-    attr_reader :start_date, :end_date, :profile
+    attr_reader :start_date, :end_date, :provider_profile
 
     def initialize(profile, today=Date.today)
       # Work out the start and end date of the month we're in.
@@ -23,7 +23,7 @@ module Util
 
         # For making predictions.
         @data = Hash.new
-        @profile = profile
+        @provider_profile = profile
       end
     end
 
@@ -49,7 +49,7 @@ module Util
     end
 
     def predicted_cost
-      return @predicted_cost ||= profile.cost(predicted_count).round(2)
+      return @predicted_cost ||= provider_profile.cost(predicted_count)
     end
 
     def status # returns bootstrap label class

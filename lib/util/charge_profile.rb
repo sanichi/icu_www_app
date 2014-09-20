@@ -16,8 +16,12 @@ module Util
       @currency  = currency
     end
 
-    def cost(count)
-      count <= allowance ? 0.0 : (count - allowance) * item_cost
+    def cost(count, deduct_allowance=true)
+      if deduct_allowance
+        count <= allowance ? 0.0 : (count - allowance) * item_cost
+      else
+        count * item_cost
+      end.round(2)
     end
   end
 end

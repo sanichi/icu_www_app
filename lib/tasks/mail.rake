@@ -7,4 +7,8 @@ namespace :mail do
   task :events, [:print] => :environment do |task, args|
     ICU::MailEvents.new.save(args[:print])
   end
+  desc "Check and control the mail service"
+  task :control, [:print] => :environment do |task, args|
+    ICU::MailControl.new.check(args[:print])
+  end
 end

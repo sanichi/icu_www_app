@@ -65,7 +65,7 @@ class Relay < ActiveRecord::Base
     end
     stats.empty?? "none found" : stats.map{ |k,v| "#{k}: #{v}" }.join(", ")
   rescue => e
-    Failure.log("UpdateOfficerRelays", exception: e.class.to_s, message: e.message)
+    Failure.log("UpdateOfficerRelays", exception: e.class.to_s, message: e.message, details: e.backtrace[0..3].join("\n"))
     false
   end
 
@@ -74,7 +74,7 @@ class Relay < ActiveRecord::Base
     refresh(routes)
     true
   rescue => e
-    Failure.log("ToggleAllRelays#{on_or_off ? 'On' : 'Off'}", exception: e.class.to_s, message: e.message)
+    Failure.log("ToggleAllRelays#{on_or_off ? 'On' : 'Off'}", exception: e.class.to_s, message: e.message, details: e.backtrace[0..3].join("\n"))
     false
   end
 

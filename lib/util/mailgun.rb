@@ -90,13 +90,7 @@ module Util
       next_page, pages, total = nil, 0, 0
 
       (1..MAX_EVENTS_PAGES).each do |number|
-        if next_page
-          response = client.get("icu.ie/events/#{next_page}").to_h
-        else
-          response = client.get("icu.ie/events", begin: btime, end: etime, limit: MAX_EVENTS_PER_PAGE).to_h
-        end
-
-        raise "no 'items' array found for page #{number}" unless response["items"].is_a?(Array)
+        response = events_response(next_page, begin: btime, end: etime, limit: MAX_EVENTS_PER_PAGE).to_h
 
         page_total = 0
         response["items"].each do |item|
@@ -123,6 +117,24 @@ module Util
       events[:pages] = pages
       events[:total] = total
       events
+    end
+
+    def self.charge_for_last(hours)
+      etime = Time.now.utc.rfc2822
+      btime = (Time.now.utc - 3600 * hours).rfc2822
+      next_page, total = nil, 0, 0
+
+      (1..MAX_EVENTS_PAGES).each do |number|
+        response = events_response(next_page, begin: btime, end: etime, limit: MAX_EVENTS_PER_PAGE, event: "accepted")
+
+        page_total = response["items"].size
+        total += page_total
+        break if page_total < MAX_EVENTS_PER_PAGE
+
+        next_page = get_next_events_page(response, number)
+      end
+
+      [total, PROFILE.cost(total, false)]
     end
 
     private
@@ -157,6 +169,16 @@ module Util
       m[1]
     end
 
-    private_class_method :client, :get_count, :get_date, :get_event, :get_next_events_page
+    def self.events_response(next_page, opts)
+      if next_page
+        response = client.get("icu.ie/events/#{next_page}").to_h
+      else
+        response = client.get("icu.ie/events", opts).to_h
+      end
+      raise "no 'items' array found for page #{number}" unless response["items"].is_a?(Array)
+      response
+    end
+
+    private_class_method :client, :get_count, :get_date, :get_event, :get_next_events_page, :events_response
   end
 end
