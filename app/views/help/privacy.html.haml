@@ -3,16 +3,25 @@
 %h2.text-center= t("help.privacy")
 %hr
 
+%ul
+  %li= link_to "Data about You", "#data"
+  %li= link_to "Date of Birth", "#dob"
+  %li= link_to "Phone Numbers", "#phone_numbers"
+  %li= link_to "Email Address", "#emails"
+  %li= link_to "Login Accounts", "#account"
+  %li= link_to "Online Payments", "#payments"
+
 %p.small
   Below, the terms
   %em "privileged user"
   or
   %em "privileged access"
   in the context of this website means certain ICU officers
-  (variable, but typically the chairman, secretary, treasurer, rating officer and webmaster)
+  (usually the chairman, secretary, treasurer, rating officer and webmaster)
   and in the context of the ICU ratings website it means the rating officer, webmaster and all
   = succeed(".") do
     = link_to "tournament reporters", "http://ratings.icu.ie/contacts", target: "ratings"
+%hr
 
 %a{name: "data"}
 %h3 Data about You
@@ -61,9 +70,8 @@
   Only year of births (YOBs) are displayed publicly on the ICU websites but DOBs are available to
   users with privileged access. This is a similar policy to the one FIDE operate for their website.
 %p
-  You can, if you insist, ask us to remove your DOB from the database after you join but we advise against
-  this, especially if you're a junior as it may prevent your selection for international competitions.
-  In the current webmaster's experience, only 2 people in the last 10 years have made such a request.
+  You may, if you insist, ask us to remove your DOB from the ICU and FIDE databases.
+  Between 2004 and 2014, two people made such a request.
 
 %a{name: "phone_numbers"}
 %h3 Phone Numbers
@@ -82,7 +90,7 @@
   page. If you don't want all (or even any of) your numbers to be displayed there, then there are two solutions.
 %ol
   %li
-    On your profile page (see above) click
+    On your profile page click
     = succeed(",") do
       %em= t("player.edit_profile")
     delete any phone numbers you don't want displayed, and then click
@@ -120,14 +128,19 @@
 %p
   ICU mail relaying is provided by an external service and if that service is down or there are
   other problems with it then the personal emails of officers may appear on the contacts page.
-  If this ever happens it will be in exceptional circumstances and hopefully only temporary.
+  If this ever happens it will be in exceptional circumstances and should be temporary.
+%p
+  You can set, update or delete your contact email via
+  = succeed(".") do
+    %em= t("player.edit_profile")
 
 %a{name: "account"}
 %h3 Login Accounts
 
 %p
   Login email addresses are not published publicly. Passwords are stored in encrypted form so
-  there is no password reminder service; forgotten passwords must be reset.
+  there is no password reminder service. If you forget your password, please email the webmaster
+  and request a reset. Send the message from your login email and supply your season ticket.
 
 %a{name: "payments"}
 %h3 Online Payments
