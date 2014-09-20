@@ -30,7 +30,7 @@ class MailEvent < ActiveRecord::Base
   end
 
   def self.month
-    month = Util::ChargeMonth.new
+    month = Util::ChargeMonth.new(Util::Mailgun::PROFILE)
     ordered.limit(31).each do |event|
       month.add_data(event.date, event.chargeable)
     end

@@ -4,10 +4,10 @@ module ICU
       begin
         start_date = ::Date.today.days_ago(32)
         stats = ::Util::Mailgun.stats(start_date)
-        month = ::Util::ChargeMonth.new
+        month = ::Util::ChargeMonth.new(::Util::Mailgun::PROFILE)
         text = text(stats, month)
       rescue => e
-        text = "ERROR: #{e.class}, #{e.message}"
+        text = "ERROR: #{e.class}, #{e.message}\n#{e.backtrace[0..3].join("\n")}"
       end
       if print
         puts text
@@ -31,7 +31,7 @@ module ICU
         text.push format % values
       end
       text.unshift ""
-      text.unshift "cost (%s) %15.2f" % [month.currency, month.predicted_cost]
+      text.unshift "cost (%s) %15.2f" % [month.profile.currency, month.predicted_cost]
       text.unshift "counts %19d" % month.predicted_count
       text.unshift "--------------------------"
       text.unshift "predictions for #{month.end_date}"

@@ -18,7 +18,7 @@ module ICU
       end
     rescue => e
       if print
-        puts e.inspect
+        puts "ERROR: #{e.class}, #{e.message}\n#{e.backtrace[0..3].join("\n")}"
       else
         ::Failure.log("MailEventsReport", exception: e.class.to_s, message: e.message, date: date.to_s, details: e.backtrace[0..5].join("\n"))
       end

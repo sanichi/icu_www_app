@@ -2,9 +2,10 @@ require 'rails_helper'
 
 module Util
   describe ChargeMonth do
-    let(:month) { Util::ChargeMonth.new(today: today, start_day: start_day) }
+    let(:profile) { Util::ChargeProfile.new(start_day, 10000, 0.0005, "USD") }
+    let(:month)   { Util::ChargeMonth.new(profile, today) }
 
-    context "start day less than today's day" do
+    context "start day less than or equal to today's day" do
       context "regular case" do
         let(:start_day) { 5 }
         let(:today)     { Date.new(1955, 11, 9) }
@@ -27,17 +28,59 @@ module Util
         end
       end
 
-      context "corner case" do
-        let(:start_day) { 30 }
+      context "end of month" do
+        let(:start_day) { 31 }
         let(:today)     { Date.new(1988, 1, 31) }
 
         it "start and end" do
-          expect(month.start_date).to eq Date.new(1988, 1, 30)
+          expect(month.start_date).to eq Date.new(1988, 1, 31)
           expect(month.end_date).to eq Date.new(1988, 2, 29)
         end
 
         it "days" do
-          expect(month.days).to eq 31
+          expect(month.days).to eq 30
+        end
+      end
+
+      context "start of leap month" do
+        let(:start_day) { 1 }
+        let(:today)     { Date.new(2016, 2, 1) }
+
+        it "start and end" do
+          expect(month.start_date).to eq Date.new(2016, 2, 1)
+          expect(month.end_date).to eq Date.new(2016, 2, 29)
+        end
+
+        it "days" do
+          expect(month.days).to eq 29
+        end
+      end
+
+      context "end of leap month" do
+        let(:start_day) { 29 }
+        let(:today)     { Date.new(2016, 2, 29) }
+
+        it "start and end" do
+          expect(month.start_date).to eq Date.new(2016, 2, 29)
+          expect(month.end_date).to eq Date.new(2016, 3, 28)
+        end
+
+        it "days" do
+          expect(month.days).to eq 29
+        end
+      end
+
+      context "before february" do
+        let(:start_day) { 31 }
+        let(:today)     { Date.new(2015, 1, 31) }
+
+        it "start and end" do
+          expect(month.start_date).to eq Date.new(2015, 1, 31)
+          expect(month.end_date).to eq Date.new(2015, 2, 28)
+        end
+
+        it "days" do
+          expect(month.days).to eq 29
         end
       end
     end
@@ -65,7 +108,7 @@ module Util
         end
       end
 
-      context "corner case" do
+      context "leap month" do
         let(:start_day) { 30 }
         let(:today)     { Date.new(2015, 2, 28) }
 

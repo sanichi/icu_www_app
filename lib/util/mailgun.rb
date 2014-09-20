@@ -5,6 +5,7 @@ module Util
     CHARGEABLE = %w[received delivered dropped]
     MAX_EVENTS_PAGES = 10
     MAX_EVENTS_PER_PAGE = 300
+    PROFILE = ChargeProfile.new(24, 10000, 0.0005, "USD")
 
     def self.validate(address)
       result = client("public").get "address/validate", { address: address }
