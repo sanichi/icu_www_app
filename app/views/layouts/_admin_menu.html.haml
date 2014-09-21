@@ -50,12 +50,12 @@
           %li{class: active("admin/logins")}= link_to "Logins", admin_logins_path
         - if mevnts
           %li{class: active("admin/mail_events")}= link_to "Mail Events", admin_mail_events_path
+        - if rlays
+          %li{class: active("admin/relays")}= link_to "Mail Relays", admin_relays_path
         - if offs
           %li{class: active("admin/officers")}= link_to "Officers", admin_officers_path
         - if perrs
           %li{class: active("admin/payment_errors")}= link_to "Payment Errors", admin_payment_errors_path
-        - if rlays
-          %li{class: active("admin/relays")}= link_to "Relays", admin_relays_path
         - if rfnds
           %li{class: active("admin/refunds")}= link_to "Refunds", admin_refunds_path
         - if pages

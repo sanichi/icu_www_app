@@ -7,6 +7,6 @@ en:
     provider: Mailgun
     provider_id: Mailgun ID
     refresh: Refresh from Provider
-    relay: Relay
-    relays: Relays
+    relay: Mail Relay
+    relays: Mail Relays
     to: To
