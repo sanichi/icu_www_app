@@ -102,4 +102,25 @@ describe Game do
       expect(g.black).to eq "O'Tal, Mikhail N"
     end
   end
+
+  context "to_pgn" do
+    it "produces valid pgn" do
+      pgn_content = <<PGN
+[Event "Largs Weekender"]
+[Site "?"]
+[Date "1998.07.12"]
+[Round "4"]
+[White "Lee, C"]
+[Black "Orr, M"]
+[Result "0-1"]
+[WhiteElo "2420"]
+[ECO "B34"]
+
+1.e4 c5 2.Nf3 Nc6 3.d4 cxd4 4.Nxd4 g6 5.Nc3 Bg7 6.Be3 Nf6 7.f3 O-O 8.Bc4 Qb6
+9.Qd3 Ne5 10.Qe2 Qxb2 11.Kd2 Qb4 12.Bd3 Nc6 13.Rab1 Qa5 14.Nb3 Qxc3+ 15.Kxc3
+Nxe4+ 16.Kc4 Nd6+ 17.Kd5 Nb4+ 18.Kc5 Bc3 19.Bd4 b6# 0-1
+PGN
+      expect(game.to_pgn).to eq pgn_content
+    end
+  end
 end
