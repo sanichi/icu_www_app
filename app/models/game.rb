@@ -198,7 +198,7 @@ class Game < ActiveRecord::Base
     signature = ""
     signature += date.to_s
     signature += result.to_s
-    signature += black.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
+    signature += white.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
     signature += black.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
     move_text = moves.to_s.downcase
     move_text.gsub!(/\{[^}]*\}/, "")        # remove comments
