@@ -15,14 +15,19 @@ class GamesController < ApplicationController
     @entries = @game.journal_entries if can?(:update, Game)
     respond_to do |format|
       format.html
-      format.pgn { send_pgn_games([@game]) }
+      format.pgn { send_pgn_file(@game.to_pgn) }
     end
   end
 
   private
 
   def send_pgn_games(games)
-    pgn_content = games.map {|game| game.to_pgn }.join("\n\n")
+    pgn_content = ""
+    games.find_each {|game| pgn_content += "#{game.to_pgn}\n\n" }
+    send_pgn_file pgn_content
+  end
+
+  def send_pgn_file(pgn_content)
     send_data pgn_content, filename: "icu.pgn", type: :pgn
   end
 end
