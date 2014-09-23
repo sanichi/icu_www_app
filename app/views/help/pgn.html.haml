@@ -6,19 +6,17 @@
 %p
   There are some PGN files amongst the
   = link_to t("download.downloads"), downloads_path
-  but the main way of searching for and playing over games
-  %em
-    (apologies for the delay, the game viewer is not implemented
-    yet but should be available before the end of 2014)
-  on this website, is via the
+  but the main way of searching for and playing over the games of (mostly) Irish players is via the
   = link_to t("game.games"), games_path
   page.
+  %em
+    (Apologies for the delay, a game viewer is not available
+    yet but one should be in place before the end of 2014.)
 %p
   Like the previous version of this website, a ZIP-compressed PGN file of
-  all games in the collection is available for anyone to download.
-%p
-  Unlike the previous website, there are two other ways to download PGN files
-  but only available to members who are signed in (see
+  all games in the collection is available for anyone to download,
+  but unlike the old site, there are a couple of new ways to
+  download PGN data for members who are signed in (see
   = link_to t("help.membership")
   and
   = succeed(").") do
@@ -34,10 +32,10 @@
   = link_to t("game.games"), games_path
   page.
 %p
-  This file is regenerated once per day early in the morning but only if there have been any updates to
-  the games collection during the previous day. It therefore may be slightly out-of-date for up to 24 hours.
+  This file is regenerated once per day early in the morning if there have been any updates to
+  the games collection during the previous day.
   There will normally be some information next to the link about how many games the file
-  contains and when the last update to the collection was at the time the file was last generated.
+  contains and when the last update to the collection was at the time the file was generated.
 
 %a{name: "game"}
 %h3 Download a Single Game
@@ -54,7 +52,7 @@
     click the
     %em= t("game.pgn.download.game")
     button.
-%p This will download an uncompressed PGN file containing a single game to your computer.
+%p This will download an uncompressed PGN file containing that one game to your computer.
 
 %a{name: "game"}
 %h3 Download Multiple Game
@@ -74,7 +72,7 @@
     click on the
     %em= t("game.pgn.download.games")
     button.
-%p This will download an uncompressed PGN file containing all the games in your result set to your computer.
+%p This will download an uncompressed PGN file containing all the games in the result set to your computer.
 %p
   If you need more than
   = Game::MAX_DOWNLOAD_SIZE
