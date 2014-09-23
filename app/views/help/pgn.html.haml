@@ -1,0 +1,81 @@
+- content_for :title, t("help.pgn")
+
+%h2.text-center= t("help.pgn")
+%hr
+
+%p
+  There are some PGN files amongst the
+  = link_to t("download.downloads"), downloads_path
+  but the main way of searching for and playing over games
+  %em
+    (apologies for the delay, the game viewer is not implemented
+    yet but should be available before the end of 2014)
+  on this website, is via the
+  = link_to t("game.games"), games_path
+  page.
+%p
+  Like the previous version of this website, a ZIP-compressed PGN file of
+  all games in the collection is available for anyone to download.
+%p
+  Unlike the previous website, there are two other ways to download PGN files
+  but only available to members who are signed in (see
+  = link_to t("help.membership")
+  and
+  = succeed(").") do
+    = link_to t("help.accounts")
+
+%a{name: "db"}
+%h3 Download All Games in the ICU Database
+
+%p
+  Click the
+  %em= t("game.pgn.download.db")
+  link on the
+  = link_to t("game.games"), games_path
+  page.
+%p
+  This file is regenerated once per day early in the morning but only if there have been any updates to
+  the games collection during the previous day. It therefore may be slightly out-of-date for up to 24 hours.
+  There will normally be some information next to the link about how many games the file
+  contains and when the last update to the collection was at the time the file was last generated.
+
+%a{name: "game"}
+%h3 Download a Single Game
+
+%ul
+  %li Sign in,
+  %li
+    go to the
+    = link_to t("game.games"), games_path
+    page,
+  %li search for the game you're interested in,
+  %li click on it's link (the result) to display it,
+  %li
+    click the
+    %em= t("game.pgn.download.game")
+    button.
+%p This will download an uncompressed PGN file containing a single game to your computer.
+
+%a{name: "game"}
+%h3 Download Multiple Game
+
+%ul
+  %li Sign in,
+  %li
+    go to the
+    = link_to t("game.games"), games_path
+    page,
+  %li search for the games you're interested in,
+  %li
+    make sure the number of results is
+    = Game::MAX_DOWNLOAD_SIZE
+    or less,
+  %li
+    click on the
+    %em= t("game.pgn.download.games")
+    button.
+%p This will download an uncompressed PGN file containing all the games in your result set to your computer.
+%p
+  If you need more than
+  = Game::MAX_DOWNLOAD_SIZE
+  games, download the entire collection (see above) and use your favourite database program for searching.
