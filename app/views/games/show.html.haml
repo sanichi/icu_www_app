@@ -14,6 +14,8 @@
   %p.text-center= "#{t('game.annotator')}: #{@game.annotator}"
 %pre= @game.moves
 
-= render "utils/show_buttons", object: @game
+- extras = {}
+- extras[t("game.pgn.download.game")] = game_path(@game, format: "pgn") if can?(:download, Game)
+= render "utils/show_buttons", object: @game, extras: extras
 
 = render "admin/journal_entries/changes", entries: @entries

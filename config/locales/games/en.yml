@@ -18,5 +18,10 @@ en:
     white_elo: White's rating
     white_or_black: White/Black
     pgn:
-      upload: "PGN Upload"
-      uploads: "PGN Uploads"
+      upload: PGN Upload
+      uploads: PGN Uploads
+      download:
+        game: Download Game
+        games: Download Games
+        db: Download PGN Database
+        details: "%{count} games, last updated %{last_mod}"

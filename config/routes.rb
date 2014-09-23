@@ -33,7 +33,9 @@ IcuWwwApp::Application.routes.draw do
   resources :clubs,       only: [:index, :show]
   resources :downloads,   only: [:index, :show]
   resources :events,      only: [:index, :show]
-  resources :games,       only: [:index, :show]
+  resources :games,       only: [:index, :show] do
+    get :download, on: :collection
+  end
   resources :images,      only: [:index, :show]
   resources :items,       only: [:new, :create, :destroy]
   resources :new_players, only: [:create]

@@ -17,6 +17,10 @@ every :day, at: "4:31am" do
   rake "mail:events"
 end
 
+every :day, at: "5:15am" do
+  rake "pgn:db"
+end
+
 every :hour do
   rake "mail:control"
 end

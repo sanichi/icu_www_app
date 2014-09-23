@@ -7,6 +7,10 @@ class Game < ActiveRecord::Base
 
   MAX_ELO = 3000
   RESULTS = %w[1-0 0-1 ½-½ ?-?]
+  ZIP_FILE = Rails.root + "public" + "system" + "icu.pgn.zip"
+  PGN_FILE = Rails.root + "tmp" + "icu.pgn"
+  LOG_FILE = Rails.root + "log" + "last_pgn_db.log"
+  MAX_DOWNLOAD_SIZE = Rails.env.test?? 2 : 1000
 
   belongs_to :pgn
 
@@ -27,6 +31,10 @@ class Game < ActiveRecord::Base
   scope :ordered, -> { order(date: :desc) }
 
   def self.search(params, path)
+    paginate(matches(params), params, path)
+  end
+
+  def self.matches(params)
     matches = ordered
     if params[:date].present?
       if params[:date].match(/\A\s*(\d{4})(?:\D+(0[1-9]|1[012]|[1-9])(?:\D+(0[1-9]|[12][0-9]|3[01]|[1-9]))?)?/)
@@ -67,7 +75,7 @@ class Game < ActiveRecord::Base
     matches = matches.where(result: params[:result]) if RESULTS.include?(params[:result])
     matches = matches.where("event LIKE ?", "%#{params[:event]}%") if params[:event].present?
     matches = matches.where(pgn_id: params[:pgn_id].to_i) if params[:pgn_id].to_i > 0
-    paginate(matches, params, path)
+    matches
   end
 
   def add_tag(name, value)
@@ -137,6 +145,62 @@ class Game < ActiveRecord::Base
     %q{<a href="/games/%d">%s</a>} % [id, text]
   end
 
+  def to_pgn
+    lines = []
+
+    lines << %Q/[Event "#{event || '?'}"]/
+    lines << %Q/[Site "#{site || "?"}"]/
+    lines << %Q/[Date "#{date}"]/
+    lines << %Q/[Round "#{round || '?'}"]/
+    lines << %Q/[White "#{white}"]/
+    lines << %Q/[Black "#{black}"]/
+    lines << %Q/[Result "#{result == '½-½' ? '1/2-1/2' : (result == '?-?' ? '*' : result)}"]/
+    lines << %Q/[WhiteElo "#{white_elo}"]/ if white_elo.present?
+    lines << %Q/[BlackElo "#{black_elo}"]/ if black_elo.present?
+    lines << %Q/[ECO "#{eco}"]/ if eco.present?
+    lines << %Q/[Annotator "#{annotator}"]/ if annotator.present?
+    lines << %Q/[FEN "#{fen}"]/ if fen.present?
+    lines << ""
+    lines << moves
+
+    text = lines.join("\n")
+    text += text.match(/\n\z/) ? "\n" : "\n\n"
+
+    text
+  end
+
+  def self.save_last_pgn_db(last_mod, count)
+    File.open(LOG_FILE, "w") do |f|
+      f.write "#{last_mod}|#{count}"
+    end
+  end
+
+  def self.get_last_pgn_db
+    last_mod_count = File.open(LOG_FILE, "r") { |f| f.each_line.first }
+    if last_mod_count.to_s.match(/\A([^|]+)\|([1-9]\d+)\z/)
+      last_mod = $1
+      count = $2
+    else
+      Failure.log("GetLastPGNDB", message: "unexpected log file contents", last_mod_count: last_mod_count || "(nil)")
+    end
+    [last_mod, count]
+  rescue Errno::ENOENT
+    [nil, nil]
+  end
+
+  def self.db_link
+    path, text, details = nil, nil
+    if File.exists?(ZIP_FILE)
+      path = "/#{ZIP_FILE.relative_path_from(Rails.root + 'public')}"
+      text = I18n.t("game.pgn.download.db")
+      last_mod, count = get_last_pgn_db
+      if last_mod && count
+        details = I18n.t("game.pgn.download.details", last_mod: last_mod, count: count)
+      end
+    end
+    [path, text, details]
+  end
+
   private
 
   def normalize_attributes
@@ -148,9 +212,9 @@ class Game < ActiveRecord::Base
         send("#{atr}=", send(atr).trim)
       end
     end
-    if result == "1/2-1/2"
+    if result == "1/2-1/2" || result == "½-½"
       self.result = "½-½"
-    elsif result == "*"
+    elsif result != "1-0" && result != "0-1"
       self.result = "?-?"
     end
     if date.present?
@@ -166,7 +230,7 @@ class Game < ActiveRecord::Base
     signature = ""
     signature += date.to_s
     signature += result.to_s
-    signature += black.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
+    signature += white.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
     signature += black.to_s.downcase.sub(/,.*/, "").gsub(/[^a-z]/, "")
     move_text = moves.to_s.downcase
     move_text.gsub!(/\{[^}]*\}/, "")        # remove comments
@@ -185,7 +249,7 @@ class Game < ActiveRecord::Base
     duplicate = duplicates.first
     if duplicate
       errors.add(:base, "Duplicate game found (ID: #{duplicate.id})") # to higlight the error for the user
-      errors.add(:signature, "duplicate")                             # so the PGN parser (see models/pgn.rb) can be sure the problem is a duplicate error
+      errors.add(:signature, "duplicate") # so the PGN parser (see models/pgn.rb) can be sure the problem is a duplicate error
     end
   end
 end

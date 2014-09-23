@@ -1,6 +1,10 @@
-- defined?(text) || text = t("new")
-- defined?(path) || path = send("new_admin_#{klass.to_s.underscore}_path")
+- defined?(text)   || text = t("new")
+- defined?(path)   || path = send("new_admin_#{klass.to_s.underscore}_path")
+- defined?(extras) || extras = {}
 
-- if can?(:create, klass)
+- if can?(:create, klass) || extras.any?
   .text-center
-    = link_to text, path, class: "btn btn-info"
+    - if can?(:create, klass)
+      = link_to text, path, class: "btn btn-info"
+    - extras.each do |text, link|
+      = link_to text, link, class: "btn btn-info"
