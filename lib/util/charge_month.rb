@@ -20,11 +20,11 @@ module Util
         rescue ArgumentError
           @start_date = last_month.end_of_month
         end
-
-        # For making predictions.
-        @data = Hash.new
-        @provider_profile = profile
       end
+
+      # For making predictions.
+      @data = Hash.new
+      @provider_profile = profile
     end
 
     def includes?(date)
