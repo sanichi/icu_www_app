@@ -9,7 +9,7 @@ class Game < ActiveRecord::Base
   RESULTS = %w[1-0 0-1 ½-½ ?-?]
   ZIP_FILE = Rails.root + "public" + "system" + "icu.pgn.zip"
   PGN_FILE = Rails.root + "tmp" + "icu.pgn"
-  LOG_FILE = Rails.root + "log" + "last_pgn_db.log"
+  LOG_FILE = Rails.root + "log" + "last_pgn_db.norotate"
   MAX_DOWNLOAD_SIZE = Rails.env.test?? 2 : 1000
 
   belongs_to :pgn
