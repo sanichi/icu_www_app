@@ -74,7 +74,7 @@ module Util
 
     def self.stats(start_date)
       stats = Hash.new { |h, k| h[k] = Hash.new(0) }
-      client.get("icu.ie/stats", "start-date" => start_date.to_s, "limit" => 200).to_h["items"].each do |item|
+      client.get("icu.ie/stats", "start-date" => start_date.to_s, "limit" => 300).to_h["items"].each do |item|
         date = get_date(item)
         event = get_event(item)
         count = get_count(item)

@@ -1,6 +1,6 @@
 module Util
   class ChargeMonth
-    attr_reader :start_date, :end_date, :provider_profile
+    attr_reader :start_date, :end_date, :today, :provider_profile
 
     def initialize(profile, today=Date.today)
       # Work out the start and end date of the month we're in.
@@ -23,6 +23,7 @@ module Util
       end
 
       # For making predictions.
+      @today = today
       @data = Hash.new
       @provider_profile = profile
     end

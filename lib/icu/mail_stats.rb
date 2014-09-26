@@ -3,7 +3,7 @@ module ICU
     def report(print=false)
       begin
         start_date = ::Date.today.days_ago(32)
-        stats = ::Util::Mailgun.stats(start_date)
+        stats = ::Util::Mailgun.stats(start_date) # stats[date][event] = count
         month = ::Util::ChargeMonth.new(::Util::Mailgun::PROFILE)
         text = text(stats, month)
       rescue => e
@@ -19,7 +19,7 @@ module ICU
     private
 
     def text(stats, month)
-      events = stats.values.map(&:keys).flatten.uniq.sort
+      events = stats.values.map(&:keys).flatten.uniq.sort # unique event names from Mailgun data
       augment(events, stats, month)
       header, format = format(events)
       text = []
@@ -53,7 +53,9 @@ module ICU
       events.each { |event| formats.push "%-#{lengths[event]}d" }
       [headers.join("  "), formats.join("  ")]
     end
-
+    
+    # Add counts for virtual events "cumulative" and "chargeable" to stats.
+    # Add "chargeable" counts to the ChargeMonth so it can make predictions.
     def augment(events, stats, month)
       events.push "chargeable"
       events.push "cumulative"
@@ -63,7 +65,9 @@ module ICU
         numbers["chargeable"] = ::Util::Mailgun::CHARGEABLE.map{ |event| numbers[event] }.reduce(&:+)
         if month.includes?(date)
           cumulative += numbers["chargeable"]
-          month.add_data(date, numbers["chargeable"])
+          if date != month.today.to_s # stats for today will be incomplete and shouldn't be used for prediction
+            month.add_data(date, numbers["chargeable"])
+          end
         end
         numbers["cumulative"] = cumulative
       end
