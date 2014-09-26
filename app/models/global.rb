@@ -29,7 +29,7 @@ module Global
   # A list of help page names.
   HELP_PAGES = %w[
     accounts header index membership pgn privacy profile
-    downloads markdown officers offline_payments shortcuts treasurer
+    downloads images markdown officers offline_payments shortcuts treasurer
   ]
 
   # Validator for full URLs.

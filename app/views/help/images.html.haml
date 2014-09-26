@@ -1,0 +1,100 @@
+- content_for :title, t("help.images")
+
+%h2.text-center= t("help.images")
+%hr
+
+%p
+  Once an image is uploaded, it's available to include in articles and news items (via the
+  = link_to "IMG", help_shortcuts_path(anchor: "IMG")
+  or
+  = link_to "IML", help_shortcuts_path(anchor: "IML")
+  shortcuts) and discoverable by users browsing through the ICU's
+  = link_to "collection", images_path
+  of photographs. Before uploading an image, it should first be prepared.
+
+%a{name: "prepare"}
+%h3 Prepare the Image File for Upload
+
+%p
+  For this you need an image editing tool (e.g. photoshop) with at least cropping and resizing functions.
+  Auto fixing and red eye removal are also nice-to-have functions but not essential.
+  If you don't have a suitable application on your device, try the free
+  = link_to "Pixlr", "https://pixlr.com/", target: "external"
+  online tool. Then:
+%ul
+  %li
+    %strong load
+    the image file into your editor,
+  %li
+    if necessary,
+    %strong crop
+    the image to remove irrelevant or distracting detail,
+  %li
+    apply
+    %strong auto fixing
+    (of brightness and colours) if your editor supports it,
+  %li
+    apply
+    %strong red eye removal
+    if necessary and if your editor supports it,
+  %li
+    %strong resize
+    the image using the following rough guidelines for the maximum width or height:
+  %ul
+    %li 300 if the image is not the best quality,
+    %li 600 for a good quality image but with only an average amount of detail,
+    %li 1000 for a good quality image with a lot of detail,
+  %li
+    %strong save
+    the new image file, normally as JPG (with medium to high quality) or PNG if it's a graphic.
+
+%a{name: "prepare"}
+%h3 Upload the File
+
+%p
+  For this your login account must have been assigned one of the roles (e.g. editor) that are authorised to manage images.
+  You also need:
+%ul
+  %li
+    the prepared
+    %strong image
+    (see above),
+  %li
+    a
+    %strong caption
+    for the image,
+  %li
+    the
+    %strong year
+    the image was taken,
+  %li
+    (optional) some text to give
+    %strong credit
+    to the photographer or graphic artist.
+%p Then to upload the image:
+%ul
+  %li sign in,
+  %li
+    goto
+    = succeed(",") do
+      = link_to t("image.images"), images_path
+  %li
+    scroll to the bottom and click
+    = succeed(",") do
+      = link_to t("new"), images_path
+  %li
+    select your file, fill in the caption, year and credit (if any) and click
+    = succeed(".") do
+      %em Save
+%p
+  If you need the image for an article or news item then note it's ID for use with one of the image shortcuts
+  = precede("(") do
+    = succeed(").") do
+      = link_to "IMG", help_shortcuts_path(anchor: "IMG")
+      or
+      = link_to "IML", help_shortcuts_path(anchor: "IML")
+  If, for example,
+  %em www.icu.ie/images/12345
+  is showing in the browser's address bar then the image ID is
+  = succeed(".") do
+    %em 12345
