@@ -52,7 +52,7 @@ module Util
       mm["action"] = STOP unless enabled
       forwards.each { |email| mm["action"] = "forward('#{email}')" }
       mm["action"] = STOP
-      client.put "routes/#{id}", mm
+      client.put "routes/#{id}", mm.map{ |key,val| "#{CGI.escape(key.to_s)}=#{CGI.escape(val)}" }.join('&')
     end
 
     def self.toggle_all(on_or_off)
