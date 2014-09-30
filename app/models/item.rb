@@ -60,6 +60,23 @@ class Item < ActiveRecord::Base
     end
   end
 
+  def refund
+    update_column(:status, "refunded")
+    if subtype == "subscription" && player.present? && player.users.any?
+      last_subscription = Item::Subscription.active.where(player: player).where.not(end_date: nil).order(:end_date).last
+      if last_subscription
+        # Reset to that subscription.
+        expires_on = Season.new(last_subscription.end_date).end_of_grace_period
+      else
+        # Reset to two season's ago so they are no longer valid.
+        expires_on = Season.new.last.last.end_of_grace_period
+      end
+      player.users.each do |user|
+        user.update_column(:expires_on, expires_on)
+      end
+    end
+  end
+
   def full_description
     parts = []
     parts.push description

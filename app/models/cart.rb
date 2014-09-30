@@ -73,7 +73,7 @@ class Cart < ActiveRecord::Base
     charge.refund(amount: cents(refund.amount))
     items.each do |item|
       if item_ids.include?(item.id)
-        item.update_column(:status, "refunded")
+        item.refund
       end
     end
     self.status = self.total == refund.amount ? "refunded" : "part_refunded"
