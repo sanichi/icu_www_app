@@ -18,9 +18,17 @@
   based on a description that you provide.
 %p
   Other types of files can also be uploaded and made available to users in the same way,
-  including PGN, spread sheets, plain text and audio.
+  including spread sheets, plain text and audio.
 %p
-  Optionally, you can limit access to a download to members only or editors only.
+  Optionally, you can limit access to a download to members or editors only.
+%p
+  Image files are
+  = succeed(".") do
+    = link_to "handled seperately", help_images_path
+  You can upload individual PGN files for later download but normally PGN
+  games featuring Irish players are
+  = succeed(".") do
+    = link_to "imported into the database", help_pgn_upload_path
 
 %a{name: "how"}
 %h3 How to Create a Download

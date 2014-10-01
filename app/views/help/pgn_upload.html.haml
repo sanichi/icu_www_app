@@ -1,0 +1,78 @@
+- content_for :title, t("help.pgn_upload")
+
+%h2.text-center= t("help.pgn_upload")
+%hr
+
+%p
+  When a PGN file is uploaded its games are added to the ICU's collection and become available for users to
+  = succeed(".") do
+    = link_to "search for, play over and download", help_pgn_path
+%p
+  Before uploading, please make sure the data is consistent (e.g. if all the
+  games are from the same tournament, ensure the event name is spelt consistently in each game)
+  and complete (e.g. round numbers, ECO codes, dates). This will help make game searches more effective.
+
+%a{name: "import"}
+%h3 Import the Games from a PGN File
+
+%p
+  Assuming your login account has been assigned one of the roles (e.g. editor) that are
+  authorised to manage games, then follow these steps:
+%ul
+  %li sign in,
+  %li
+    click
+    %em Game Uploads
+    from the
+    %em Admin
+    section of the top navigation bar,
+  %li
+    scroll to the bottom of the page and click
+    = succeed(",") do
+      %em= t("new")
+  %li select the PGN file you want to upload,
+  %li
+    tick the
+    %em Import
+    checkbox,
+  %li add an optional comment,
+  %li
+    click
+    = succeed(".") do
+      %em= t("save")
+%p Some or all of the games will then be imported and some details displayed. Note that:
+%ul
+  %li duplicates of games already in the collection (same last names, date, result and moves minus comments or variations) will be skipped,
+  %li if a PGN syntax error is detected then processing halts, no games after the error will be imported and a diagnostic message will be displayed.
+
+%a{name: "test"}
+%h3 Test a File before Importing any Games
+
+%p
+  To test a file (to see if it contains duplicates or syntax errors) without importing any games, follow
+  the above procedure but don't click the
+  %em Import
+  checkbox.
+%p
+  Having obtained the required information, the test record can be safely deleted (see below)
+  as no games will have been imported.
+
+%a{name: "edit"}
+%h3 Edit or Delete Previous Imports
+
+%p Having uploaded some PGN and created a record with details of the file and imported games you can:
+%ul
+  %li
+    delete that record,
+    %strong as well any games that were imported,
+    by clicking
+    = succeed(",") do
+      %em= t("delete")
+  %li
+    edit the optional comment by clicking
+    = succeed(",") do
+      %em= t("edit")
+  %li
+    edit or delete individual games by first displaying the game and then clicking
+    = succeed(".") do
+      %em= t("edit")

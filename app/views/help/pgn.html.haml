@@ -17,10 +17,15 @@
   all games in the collection is available for anyone to download,
   but unlike the old site, there are a couple of new ways to
   download PGN data for members who are signed in (see
-  = link_to t("help.membership")
+  = link_to t("help.membership"), help_membership_path
   and
   = succeed(").") do
-    = link_to t("help.accounts")
+    = link_to t("help.accounts"), help_accounts_path
+%p
+  See also
+  = link_to t("help.pgn_upload"), help_pgn_upload_path
+  = succeed(".") do
+    for administrators
 
 %a{name: "db"}
 %h3 Download All Games in the ICU Database
