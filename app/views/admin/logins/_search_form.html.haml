@@ -1,4 +1,5 @@
 = form_tag admin_logins_path, method: :get, class: "form-inline", role: "form" do
+  = render "utils/inline_text_field", param: :player_id, text: "ICU ID", size: 5
   = render "utils/inline_text_field", param: :last_name, text: "Last", size: 6
   = render "utils/inline_text_field", param: :first_name, text: "First", size: 6
   = render "utils/inline_text_field", param: :email, text: "Email", size: 6

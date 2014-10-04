@@ -6,11 +6,12 @@ class Login < ActiveRecord::Base
 
   def self.search(params, path)
     matches = order(created_at: :desc).includes(user: :player)
-    if params[:last_name].present? || params[:first_name].present? || params[:email].present?
+    if params[:last_name].present? || params[:first_name].present? || params[:email].present? || params[:player_id].present?
       matches = matches.joins(user: :player)
       matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
       matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
-      matches = matches.where("users.email LIKE ?", "%#{params[:email]}%")
+      matches = matches.where("players.id = ?", params[:player_id].to_i) if params[:player_id].to_i > 0
+      matches = matches.where("users.email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     end
     matches = matches.where("logins.ip LIKE ?", "%#{params[:ip]}%") if params[:ip].present?
     params[:result] = "Success" if params[:result].nil?
