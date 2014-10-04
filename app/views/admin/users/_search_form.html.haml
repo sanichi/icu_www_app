@@ -1,7 +1,9 @@
 = form_tag admin_users_path, method: :get, class: "form-inline", role: "form" do
-  = render "utils/inline_text_field", param: :email, text: t("email"), size: 5
+  = render "utils/inline_text_field", param: :email, text: t("email"), size: 8
+  = render "utils/inline_text_field", param: :player_id, text: t("player.id"), size: 5
   = render "utils/inline_text_field", param: :last_name, text: t("player.last_name"), size: 8
   = render "utils/inline_text_field", param: :first_name, text: t("player.first_name"), size: 8
+  .voffset2
   = render "utils/inline_select", param: :expiry, text: t("user.expires"), menu: user_expiry_menu(params[:expiry])
   = render "utils/inline_select", param: :status, text: t("user.status"), menu: user_status_menu(params[:status])
   = render "utils/inline_select", param: :verify, text: t("user.verified"), menu: user_verify_menu(params[:verify])

@@ -123,6 +123,7 @@ class User < ActiveRecord::Base
     end
     matches = matches.where("users.email LIKE ?", "%#{params[:email]}%") if params[:email].present?
     matches = matches.where(status: User::OK) if params[:status] == "OK"
+    matches = matches.where(player_id: params[:player_id].to_i) if params[:player_id].to_i > 0
     matches = matches.where.not(status: User::OK) if params[:status] == "Not OK"
     case
     when params[:role] == "some"       then matches = matches.where("roles IS NOT NULL")
