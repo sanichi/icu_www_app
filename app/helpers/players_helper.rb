@@ -42,9 +42,17 @@ module PlayersHelper
 
   def player_status_menu(selected, opt={})
     statuses = Player::STATUSES.map { |g| [t("player.status.#{g}"), g] }
-    statuses.push [t("player.duplicate"), "duplicate"] if opt[:duplicate]
     statuses.push [t("any"), ""] if opt[:any]
     options_for_select(statuses, selected)
+  end
+
+  def player_duplicate_menu(selected)
+    dups = [
+      [t("player.non_duplicate"), "false"],
+      [t("player.duplicate"), "true"],
+      [t("any"), ""],
+    ]
+    options_for_select(dups, selected)
   end
 
   def player_title_menu(selected)

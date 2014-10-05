@@ -1,6 +1,7 @@
 shared_context "features" do
   let(:active)       { I18n.t("active") }
   let(:address)      { I18n.t("address") }
+  let(:any)          { I18n.t("any") }
   let(:category)     { I18n.t("category") }
   let(:cancel)       { I18n.t("cancel") }
   let(:comment)      { I18n.t("comment") }

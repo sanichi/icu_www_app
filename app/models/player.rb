@@ -137,6 +137,7 @@ class Player < ActiveRecord::Base
 
   def self.search(params, path, opt={})
     params[:status] = "active" unless params.has_key?(:status)
+    params[:duplicate] = "false" unless params.has_key?(:duplicate)
     params[:order] = "id" if params[:order].blank?
     matches = include_clubs
     matches = matches.where(id: params[:id].to_i) if params[:id].to_i > 0
@@ -173,9 +174,9 @@ class Player < ActiveRecord::Base
         matches = matches.where(trainer_title: params[:title])
       end
     end
-    if params[:status] == "duplicate"
+    if params[:duplicate] == "true"
       matches = matches.where.not(player_id: nil)
-    else
+    elsif params[:duplicate] == "false"
       matches = matches.where(player_id: nil)
     end
     if (1900..2099).include?(yob = params[:yob].to_i)

@@ -18,6 +18,7 @@ describe Player do
   let(:inactive_status) { I18n.t("player.status.inactive") }
   let(:male)            { I18n.t("player.gender.M") }
   let(:none)            { I18n.t("player.no_club") }
+  let(:non_duplicate)   { I18n.t("player.non_duplicate") }
   let(:privacy)         { I18n.t("player.privacy") }
   let(:profile)         { I18n.t("player.profile") }
   let(:status)          { I18n.t("player.status.status") }
@@ -274,13 +275,15 @@ describe Player do
       expect(page).to have_xpath(result, count: 1)
     end
 
-    it "status" do
+    it "status and duplicates" do
       expect(page).to_not have_select(status)
       login "membership"
       visit players_path
-      select duplicate, from: status
+      select any, from: status
+      select duplicate, from: duplicate
       click_button search
       expect(page).to have_xpath(result, count: 1)
+      select non_duplicate, from: duplicate
       select inactive_status, from: status
       click_button search
       expect(page).to have_xpath(result, count: 2)
