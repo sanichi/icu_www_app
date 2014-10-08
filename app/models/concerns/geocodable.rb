@@ -38,6 +38,9 @@ module Geocodable
       when /esplanade.+hotel.+bray/i
         self.lat  = 53.199098
         self.long = -6.096285
+      when /grand.+hotel.+wicklow/i
+        self.lat  = 52.980893
+        self.long = -6.047359
       when /gresham.+hotel.+connell.+dublin/i
         self.lat  = 53.351888
         self.long = -6.260601
