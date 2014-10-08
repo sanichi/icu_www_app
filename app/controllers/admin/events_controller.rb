@@ -32,7 +32,7 @@ class Admin::EventsController < ApplicationController
   def destroy
     @event.journal(:destroy, current_user, request.remote_ip)
     @event.destroy
-    redirect_to admin_events_path, notice: "Event was successfully deleted"
+    redirect_to events_path, notice: "Event was successfully deleted"
   end
 
   private
