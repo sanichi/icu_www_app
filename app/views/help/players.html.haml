@@ -1,0 +1,154 @@
+- content_for :title, t("help.players")
+
+%h2.text-center= t("help.players")
+%hr
+
+%p
+  The ICU maintains two tables of players, one in the main (www) database and one in the ratings database.
+  The main database contains every player who has ever been assigned an ICU ID.
+  However the players in the ratings database are a subset of the total and do not,
+  for example, include foreign players or domestic players who are no longer active.
+  This avoids cluttering up player lists (as used, for example, by tournament controllers in their
+  pairings programs) with irrelevant entries. The difference between the two tables is determined
+  by player classification.
+
+%p
+  This is explained in detail below but, in case just you're looking for a short summary, here it is:
+  to synchronise a
+  %strong player who is no longer inactive
+  to the ratings database, get the webmaster to
+  %strong update their status to active
+  in the main database.
+
+%a{name: "classification"}
+%h3 Classification
+
+%p There are three independent dimensions for classifying each player record: status, source and duplication.
+
+%h4 Status
+
+%p A player's status is one of the following:
+%ul
+  %li
+    %strong active:
+    has joined the ICU or played some rated games after 2000,
+  %li
+    %strong inactive:
+    hasn't subscribed to the ICU or played any rated games since before 2000,
+  %li
+    %strong foreign:
+    has been classified as foreign,
+  %li
+    %strong deceased:
+    is no longer with us.
+%p
+  There are approximately 3400 players in the main database who have been identified as
+  = succeed(".") do
+    %strong foreign
+  These records accumulated during the years when the ICU's ratings software was such
+  that every player, even (for example) the opponents of Irish players competing
+  abroad, had to have an ICU ID. Nowadays, when rating tournaments with foreign
+  players, all that's needed is their name and FIDE rating, they no longer
+  require an ICU ID.
+
+%h4 Source
+
+%p
+  This relates to which of the ICU's various computer systems the record was first created in
+  = precede("(") do
+    = succeed(").") do
+      see
+      = link_to "article", "http://ratings.icu.ie/articles/24", target: "ratings"
+  A record has one of the following sources:
+%ul
+  %li
+    %strong import:
+    the record was imported from the 1st to the 2nd version of the main website database in July 2014,
+  %li
+    %strong archive:
+    the record was imported from the archive database (see below) to the 2nd version of the main website database in July 2014,
+  %li
+    %strong subscription:
+    the record was automatically created from a new subscription after July 2014,
+  %li
+    %strong officer:
+    the record was manually entered by an ICU officer (most likely the webmaster) after July 2014 (rare).
+%p
+  The
+  %strong archive database
+  dates from sometime before 2000 and contained a mixture of players who had, at that time, been classified
+  as inactive and various duplicates (certain, probable and possible). The certain duplicates (which matched another
+  record by both name and DOB) were discarded when the data was imported. By default, records from the archive
+  have inactive status (until and unless they are resurrected - see below).
+%p
+  The main difference between imported records and records from the archive is the quality of data.
+  Players from the old archive will contain a higher proportion of probable or possible duplicates.
+
+%h4 Duplication
+
+%p
+  Every record has field used to indicate duplication. Usually this field is empty, but if it contains
+  an ICU ID then it means the record is a confirmed duplicate of the indicated ID and should not be used.
+  These duplicates stem from human errors made by subscribers, tournament reporters and rating officers
+  accumulated over the history of the ICU's various computer systems
+  = precede("(") do
+    = succeed(").") do
+      see
+      = link_to "article", "http://ratings.icu.ie/articles/24", target: "ratings"
+%p
+  Many records are
+  %strong probable or possible duplicates
+  but not yet marked as such due to lack of
+  %strong corroborating evidence.
+  A mere name match is not sufficient; something extra like a DOB match is required to confirm a duplicate.
+
+%a{name: "synchronisation"}
+%h3 Synchronisation
+
+%p
+  The main database is the master. New players are created there (usually when someone pays their
+  ICU membership subscription for the first time) and updates or corrections to existing players
+  (by the webmaster) are performed on the main website. Once a day, early in the morning, the two
+  tables are
+  %strong synchronised
+  by transferring new or updated data from the main database to ratings.
+%p
+  Current policy is to transfer only
+  %strong active
+  and
+  %strong deceased
+  players.
+  Duplicates, foreigners and inactive players are excluded.
+  Note that while deceased players will, of course, no longer be active,
+  they still may have historical records (games and ratings since 2000)
+  while, by definition, players classified as inactive will not.
+%p When someone who has been inactive for many years starts playing again, then they need to be resurrected.
+
+%a{name: "resurrection"}
+%h3 Resurrection
+
+%p
+  If the record for a player exists in the main database but not the ratings database
+  and that person starts playing in tournaments again, then their main database record
+  needs to be updated by the webmaster (to change their status from
+  %strong inactive
+  to
+  = succeed(").") do
+    %strong active
+  From that point onwards, that record will then be part of the nightly synchronisation between
+  the main database and the ratings database. That facilitates tracking their rating
+  starting from whatever old rating they have recorded in the system.
+%p
+  Each season a handful of players require resurrecting in this way. Often they match records
+  sourced from the old archive database (see above) where the quality of data is poor.
+  If you're the webmaster:
+%ul
+  %li be careful which record you chose to resurrect because there may be duplicates and more than one possible match,
+  %li try to use more than just the player's name to confirm the match (if any other data is available),
+  %li
+    all old ratings are already in the ratings database, even if the corresponding player records are not
+    = precede("(") do
+      = succeed("),") do
+        see
+        = link_to "Legacy Ratings", "http://ratings.icu.ie/admin/old_ratings", target: "ratings"
+  %li once a match is confirmed, use the opportunity to obtain missing data (DOB, email address, federation) from the player and enter it into the database.
