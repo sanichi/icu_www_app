@@ -9,6 +9,7 @@ en:
     created: New user account successsfully created
     create_failed: New user account NOT created
     expires: Expires on
+    forgot_password: Forgotten password
     hide_header: Hide header
     incomplete_registration: Already created but waiting for response to verification message
     locale: Language
