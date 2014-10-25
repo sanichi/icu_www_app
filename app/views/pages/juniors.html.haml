@@ -1,0 +1,42 @@
+- content_for :title, t("junior.chess")
+
+%h3.text-center= t("junior.chess")
+%hr
+
+.row
+  .col-md-5.col-md-offset-1
+    %h4= t("junior.learners")
+    %ul
+      %li= link_to "The Benefits of Learning Chess", article_path(95)
+      %li= link_to "Junior Chess Corner", downloads_path(description: "junior chess corner")
+      %li= link_to "Focloir Fichille (Chess Dictionary)", download_path(188)
+      %li= link_to "Conas Ficheall a Imirt (How to Play Chess)", download_path(189)
+      %li= link_to "How to Play Chess", downloads_path(description: "How to Play Chess Part")
+    %h4= t("junior.organisations")
+    %ul
+      %li= link_to "ChessInSchools", "http://cis.fide.com/", target: "external"
+      %li= link_to "Community Games", "http://www.communitygames.ie/", target: "external"
+      %li= link_to "Home School Chess Ireland", "http://www.homeschoolchessireland.com/", target: "external"
+      %li= link_to "Leinster Chess Union Junior Chess", "http://www.leinsterjuniorchess.com/", target: "external"
+      %li= link_to "Leinster Schools Chess Association", "http://www.leinsterschoolschess.com/", target: "external"
+      %li= link_to "Logic NI Limited", "http://www.logicni.com/", target: "external"
+      %li= link_to "MovesForLife", "http://www.movesforlife.ie/", target: "external"
+  .col-md-4.col-md-offset-1
+    %h4= t("junior.events")
+    %ul
+      %li= link_to "Forthcoming Junior Events", events_path(category: "junior")
+      %li= link_to "Junior Eligibility Criteria", icu_junior_eligibility_criteria_path
+    %h4= t("junior.ratings")
+    %ul
+      %li= link_to "ICU Junior Ratings", "http://ratings.icu.ie/icu_ratings/juniors", target: "ratings"
+    %h4= t("junior.clubs")
+    %ul
+      %li= link_to "Blanchardstown", "http://sites.google.com/site/blanchardstownjuniorchessclub/", target: "external"
+      %li= link_to "Enniscorthy", "http://www.enniscorthychessclub.com/", target: "external"
+      %li= link_to "Galway", "http://www.galwayjuniorchess.com/", target: "external"
+      %li= link_to "Naomb Barrog", "http://members.upc.ie/tom.collins8/NaomhBarrogChessClub/Juniors.html", target: "external"
+      %li= link_to "Rathmines", "http://rathminesjuniorchessclub.wordpress.com/", target: "external"
+      %li= link_to "Shankill", "http://www.shankillchessclub.wordpress.com/", target: "external"
+      %li= link_to "Skerries", "http://www.skerrieschess.com/", target: "external"
+      %li= link_to "St. Benildus", "http://stbenilduschessclub.wordpress.com/about/", target: "external"
+      %li= link_to "Wicklow", "http://www.wicklowchess.com/juniors_4.html", target: "external"
