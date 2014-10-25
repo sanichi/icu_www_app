@@ -9,15 +9,13 @@
     %ul
       %li= link_to "The Benefits of Learning Chess", article_path(95)
       %li= link_to "Junior Chess Corner", downloads_path(description: "junior chess corner")
-      %li= link_to "Focloir Fichille (Chess Dictionary)", download_path(188)
-      %li= link_to "Conas Ficheall a Imirt (How to Play Chess)", download_path(189)
+      %li= link_to "Focloir Fichille (Chess Dictionary)", download_path(188), target: "pdf"
+      %li= link_to "Conas Ficheall a Imirt (How to Play Chess)", download_path(189), target: "pdf"
       %li= link_to "How to Play Chess", downloads_path(description: "How to Play Chess Part")
     %h4= t("junior.organisations")
     %ul
       %li= link_to "ChessInSchools", "http://cis.fide.com/", target: "external"
       %li= link_to "Community Games", "http://www.communitygames.ie/", target: "external"
-      %li= link_to "Home School Chess Ireland", "http://www.homeschoolchessireland.com/", target: "external"
-      %li= link_to "Leinster Chess Union Junior Chess", "http://www.leinsterjuniorchess.com/", target: "external"
       %li= link_to "Leinster Schools Chess Association", "http://www.leinsterschoolschess.com/", target: "external"
       %li= link_to "Logic NI Limited", "http://www.logicni.com/", target: "external"
       %li= link_to "MovesForLife", "http://www.movesforlife.ie/", target: "external"
