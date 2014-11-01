@@ -11,7 +11,7 @@
 #   * mogadishu:~/Projects/Migration/sync (MO's laptop)
 # A copy of the legacy database has also been retained on MO's computers and in the file:
 #   * aontas:~/bak/migration/www1/icuadmi_main_2014-07-23.sql.gz
-# After the migration, the tasks in this file (except check which is still OK to run) were
+# After the migration, the tasks in this file (except "check" which is still OK to run) were
 # all disabled. This code is kept for posterity in case any detective work, in conjunction
 # with the log files and the last state of the legacy database, is ever required.
 namespace :sync do

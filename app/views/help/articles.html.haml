@@ -1,0 +1,135 @@
+- content_for :title, t("help.articles")
+
+%h2.text-center= t("help.articles")
+%hr
+
+%p
+  News items and articles are often, but not always, created in pairs.
+  The item, which should always be short because it has to fit on the home page,
+  summarises some news or topic of interest and the article,
+  a link to which is put in the news item, contains further details. Website editors
+  (users whose account has been assigned the role of
+  = succeed(")") do
+    %em Editor
+  can create, edit or delete them.
+
+%h3 Create News Item and Articles
+
+%p To create a news items or article:
+%ul
+  %li
+    log in as an
+    = succeed(",") do
+      %em Editor
+  %li
+    click
+    %em More
+    (in the top navigation bar),
+  %li
+    click
+    %em News Items
+    = precede("(") do
+      = succeed("),") do
+        or
+        %em Articles
+  %li
+    scroll to the bottom of the list and click
+    = succeed(",") do
+      %em New
+  %li
+    fill in the details but, for now, leave
+    %em Active
+    unchecked,
+  %li the details are:
+  %ul
+    %li for a news item: headline and story (Markdown),
+    %li for an article: title, category, year, authors, access level and text (Markdown),
+  %li
+    click
+    = succeed(",") do
+      %em Save
+  %li
+    examine your work and if unsatisfied, click
+    = succeed(",") do
+      %em Edit
+    update the details, click
+    = succeed(",") do
+      %em Save
+    and repeat if necessary,
+  %li
+    when ready click
+    = succeed(",") do
+      %em Edit
+    check the
+    %em Active
+    button and then click
+    = succeed(",") do
+      %em Save
+    to publish it.
+%p
+  Published news items appear on the
+  = succeed(",") do
+    = link_to "home page", home_path
+  while published articles appear in the
+  = succeed(".") do
+    = link_to "searchable list", articles_path
+
+%h3 Editing News Items and Articles
+
+%p Note that you cannot edit news items or articles created by other editors.
+%p To edit a news item or article:
+%ul
+  %li
+    log in as an
+    = succeed(",") do
+      %em Editor
+  %li
+    click
+    %em More
+    (in the top navigation bar),
+  %li
+    then click
+    %em News Items
+    = precede("(") do
+      = succeed("),") do
+        or
+        %em Articles
+  %li search for the item (or article) you want to alter and click it's headline (or title),
+  %li
+    scroll to the bottom and click
+    = succeed(",") do
+      %em Edit
+  %li
+    update the details and click
+    = succeed(",") do
+      %em Save
+  %li repeat as required.
+
+%h3 Deleting News Items and Articles
+
+%p Note that you cannot delete news items or articles created by other editors.
+%p
+  To delete something, follow the instructions above for editing but click
+  %em Delete
+  (instead of
+  = succeed(")") do
+    %em Edit
+  and confirm your intention.
+
+%h3 Markdown and Shortcuts
+
+%p
+  The story (of new items) and text (of articles) are both written in
+  = succeed(",") do
+    %em Markdown
+  a simple syntax (easier than HTML) for entering plain text plus optional formatting if you need it (headers, paragraphs, lists, links and so on).
+  A general reference for Markdown is on
+  = link_to "Wikipedia", "http://en.wikipedia.org/wiki/Markdown", target: "external"
+  and there's a
+  = link_to "cheat sheet", help_markdown_path
+  on this website.
+%p
+  Links (to articles, games, images etc) can be input using Markdown but, where available, you should use
+  = link_to "Shortcuts", help_shortcuts_path
+  which are custom extensions of Markdown for this website.
+  Shortcuts also support the display of images and FEN diagrams.
