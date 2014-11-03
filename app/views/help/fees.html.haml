@@ -1,0 +1,273 @@
+- content_for :title, t("help.fees")
+
+%h2.text-center= t("help.fees")
+%hr
+
+%a{name: "types"}
+%h3 Fee Types
+
+%p
+  The fees on sale in the
+  = link_to "shop", shop_path
+  are currently divided into 3 types:
+  = succeed(",") do
+    %em Subscriptions
+  %em Tournaments Entries
+  and
+  = succeed(".") do
+    %em Other
+  In the future it's likely that additional types will be created but only at the cost of significant programming effort by the webmaster.
+  With this in mind, the third category, the
+  %em Other
+  type, has been designed such that subtypes can be quickly configured (rather than programmed) by the treasurer (rather than the webmaster).
+  The result may not be as slick or be as feature rich but, for an organisation with limited technical resources,
+  it's useful to be able to create and deploy a new fee with the minimum of effort and delay.
+  However, it's easy to imagine fees that would be too complicated to handle this way and would need a new type to be implemented.
+
+%a{name: "subtypes"}
+%h3
+  %em Other
+  Subtypes
+
+%p
+  Subtypes of the
+  %em Other
+  category are distinguished by two things:
+%ul
+  %li variations of the basic properties shared by all fee types,
+  %li
+    zero or more
+    = succeed(",") do
+      %em User Inputs
+    a concept that only applies to fees of type
+    = succeed(".") do
+      %em Other
+%p
+  Some examples should make this clear. A
+  %em Donation
+  consists of:
+%ul
+  %li a description ("Donation"),
+  %li shared properties:
+  %ul
+    %li no amount,
+    %li no start and end sale dates (permanently for sale in the shop),
+    %li no player on behalf of whom the fee is being paid,
+  %li 2 user inputs:
+  %ul
+    %li the amount the payer wants to donate,
+    %li an optional comment (e.g. to express any wishes about how the donation should be used).
+%p
+  A
+  %em Foreign Rating Fee
+  consists of:
+%ul
+  %li a description ("Foreign Rating"),
+  %li shared properties:
+  %ul
+    %li a fixed amount,
+    %li no start and end sale dates (permanently for sale in the shop),
+    %li a player on behalf of whom the fee is being paid,
+  %li 2 user inputs:
+  %ul
+    %li the name of the tournament,
+    %li the start date of the tournament.
+
+%a{name: "user_inputs"}
+%h3 User Inputs
+
+%p
+  There is a repertoire of different user inputs that can be applied to fees.
+  Below is a list of what's available at the time of writing, there may be more in the future.
+  Note that it's a lot easier for the webmaster to create a new type of user input than it is to create a new type of fee.
+%ul
+  %li
+    %em Amount:
+    for the user to specify the amount paid (e.g. for a donation), rather than it being fixed in advance.
+    It includes the ability to set a minimum amount the user can enter.
+  %li
+    %em Date:
+    for the user to enter a date (e.g. when a tournament starts).
+    It includes the ability to specify whether the date is required or optional and
+    if it has a constraint, such as whether it should be in the future or past (relative to the time the fee is paid).
+  %li
+    %em Text:
+    for the user to enter arbitrary text (e.g. the name of a tournament, the reason for a donation).
+    It includes the ability to set a maximum on the number of characters the user is allowed to enter.
+  %li
+    %em Option:
+    for the user to check/uncheck a tick box next to a label to indicate a yes/no choice.
+    At present it unfortunately does not have the ability to alter the fee amount, which limits its usefulness.
+
+%a{name: "example"}
+%h3 Example
+
+%p
+  Following is an example of how the treasurer can configure a new fee. The example fee is for parents of children playing in the
+  2014 U16 Olympiad to pay their accommodation and meals. The amount is not fixed, it depends on choices made by the parents.
+  If this were a new fee type, programmed by the webmaster, the shop would:
+%ul
+  %li display the price of rooms and meals,
+  %li provide inputs for the number of nights, meals and adults to be chosen,
+  %li calculate the total amount on the basis of the user's choices,
+  %li send a confirmation email with a breakdown of the total.
+%p
+  However, that would be a lot of programming effort for a one-off fee.
+  The low-tech alternative is for the treasurer to configure a new
+  %em Other
+  type fee with user inputs for parents to describe what they want and enter the total amount by themselves.
+  This requires them to be sent a price list in advance, before they pay their fee in the shop.
+%p Here are the steps the treasurer would follow to set up this fee.
+%p First, setup the basic fee with an amount (required to begin with, but will be changed later when user inputs are added):
+%ul
+  %li sign in as treasurer,
+  %li
+    from the top navigation bar choose
+    %em Admin
+    and then
+    = succeed(",") do
+      %em Fees
+  %li
+    scroll to the bottom and click
+    = succeed(",") do
+      %em New
+  %li
+    click
+    = succeed(",") do
+      %em Other Fee
+  %li
+    enter "U16 Olympiad Board and Meals" for the
+    = succeed(",") do
+      %em Name
+  %li
+    enter a dummy figure for the
+    %em Amount
+    (this will be changed later),
+  %li
+    enter today for the
+    = succeed(",") do
+      %em Sale start
+  %li
+    enter a date sometime before the start of the tournament for the
+    = succeed(",") do
+      %em Sale end
+  %li
+    ensure that
+    %em Player required
+    is checked (to identify the parents via their child's ICU ID),
+  %li
+    leave everything else blank and leave
+    %em Active
+    unchecked to avoid adding this fee to the shop until it's fully configured,
+  %li
+    click
+    = succeed(".") do
+      %em Save
+%p Next, set up the first of the two user inputs, starting with the amount:
+%ul
+  %li
+    click
+    = succeed(",") do
+      %em Add User Input
+  %li
+    choose
+    %em Amount
+    for the
+    = succeed(",") do
+      %em Type
+  %li
+    enter "Total Fee" for the
+    = succeed(",") do
+      %em Label
+  %li
+    click
+    = succeed(".") do
+      %em Save
+%p Next, set up the second user input, a text box to describe the accommodation and meals required:
+%ul
+  %li click the name of the fee to return to it's page,
+  %li
+    click
+    = succeed(",") do
+      %em Add User Input
+  %li
+    choose
+    %em Text
+    for the
+    = succeed(",") do
+      %em Type
+  %li
+    enter "Accommodation and Meals" for the
+    = succeed(",") do
+      %em Label
+  %li
+    enter "140" for the
+    %em Max length
+    (the maximum number of characters the user can type into the box),
+  %li
+    make sure
+    %em Required
+    is checked (this prevents the user leaving it blank),
+  %li
+    click
+    = succeed(".") do
+      %em Save
+%p Next, make the fee active (so it appears in the shop) and check to see if it has been setup correctly:
+%ul
+  %li click the name of the fee to return to it's page,
+  %li
+    click
+    = succeed(",") do
+      %em Edit
+  %li
+    check
+    = succeed(",") do
+      %em Active
+  %li
+    click
+    = succeed(",") do
+      %em Save
+  %li
+    go to the
+    = link_to "shop", shop_path
+    and click the name of the new fee,
+  %li check that the fee works as intended by adding it to your cart,
+  %li check what happens if you leave the text or amount blank,
+  %li delete the item from your cart in case you accidentally pay for it!
+%p If you need to make any changes, deactivate the fee (to remove it from the shop), make the changes, reactivate it and give it another test.
+%p Lastly, email instructions to parents of how to pay the fee (i.e. enter a description and amount) and what the prices of rooms and meals are.
+%p Later, after some of these fees have been paid for, you can search for them as follows:
+%ul
+  %li sign in as treasurer,
+  %li
+    from the top navigation bar click
+    %em Admin
+    and then
+    %em Items
+    (items are fees that have been added to shopping carts),
+  %li
+    choose
+    %em Other
+    for the
+    = succeed(",") do
+      %em Type
+  %li
+    choose
+    %em Paid
+    for the
+    = succeed(",") do
+      %em Status
+  %li
+    enter "U16 Olympiad" for the
+    = succeed(",") do
+      %em Description
+  %li
+    click
+    = succeed(".") do
+      %em Search
+
+
+
+
+
+

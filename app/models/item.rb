@@ -33,6 +33,7 @@ class Item < ActiveRecord::Base
     matches = matches.where(player_id: params[:player_id].to_i) if params[:player_id].to_i > 0
     matches = matches.where("players.last_name LIKE ?", "%#{params[:last_name]}%") if params[:last_name].present?
     matches = matches.where("players.first_name LIKE ?", "%#{params[:first_name]}%") if params[:first_name].present?
+    matches = matches.where("description LIKE ?", "%#{params[:description]}%") if params[:description].present?
     paginate(matches, params, path)
   end
 
