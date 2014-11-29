@@ -19,5 +19,6 @@
         = render "utils/text_field_for", locals.merge(param: :white_elo, text: t("game.white_elo"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :black_elo, text: t("game.black_elo"), width: 2)
         = render "utils/text_field_for", locals.merge(param: :annotator, text: t("game.annotator"), width: 3)
+        = render "utils/select_for", locals.merge(param: :clean, text: t("game.clean.clean"), width: 3, menu: game_clean_menu(@game.clean))
         = render "utils/text_area_for", locals.merge(param: :moves, text: t("game.moves"), width: 10, rows: 20, klass: "significant-space")
       = render "utils/form_buttons", form: f, object: @game

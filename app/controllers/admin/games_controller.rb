@@ -26,6 +26,6 @@ class Admin::GamesController < ApplicationController
   end
 
   def game_params
-    params[:game].permit(:annotator, :black, :black_elo, :date, :eco, :event, :fen, :moves, :ply, :result, :round, :site, :white, :white_elo)
+    params[:game].permit(:annotator, :black, :black_elo, :clean, :date, :eco, :event, :fen, :moves, :ply, :result, :round, :site, :white, :white_elo)
   end
 end

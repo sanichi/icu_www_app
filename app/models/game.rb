@@ -3,6 +3,8 @@ class Game < ActiveRecord::Base
   include Normalizable
   include Pageable
 
+  attr_accessor :clean
+
   journalize %w[annotator black black_elo date eco event fen moves ply result round site white white_elo], "/games/%d"
 
   MAX_ELO = 3000
@@ -204,6 +206,10 @@ class Game < ActiveRecord::Base
   private
 
   def normalize_attributes
+    case clean
+    when "clock"
+      self.moves = moves.gsub(/\s*\{\[%clk[^\]]+\]\}\s*/, " ")
+    end
     normalize_newlines(:moves)
     %w[annotator eco event fen round site].each do |atr|
       if send(atr).blank? || send(atr).trim.match(/\A\?+\z/)

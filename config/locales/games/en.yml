@@ -17,6 +17,9 @@ en:
     white: White
     white_elo: White's rating
     white_or_black: White/Black
+    clean:
+      clean: Clean
+      clock: Remove clock times
     pgn:
       upload: PGN Upload
       uploads: PGN Uploads
