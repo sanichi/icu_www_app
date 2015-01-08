@@ -20,6 +20,7 @@ en:
     old_password: Old password
     password: Password
     preferences: Preferences
+    role_denied: This member is denied any role
     status: Status
     sign_up: Sign up
     theme: Theme

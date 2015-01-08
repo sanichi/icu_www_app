@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   default_scope { order(:email) }
   scope :include_player, -> { includes(:player) }
 
-  before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present
+  before_validation :canonicalize_roles, :dont_remove_the_last_admin, :update_password_if_present, :asshole_check
 
   validates :email, uniqueness: { case_sensitive: false }, email: true
   validates :encrypted_password, :expires_on, :status, presence: true
@@ -284,6 +284,13 @@ class User < ActiveRecord::Base
       else
         errors.add :password, I18n.t("errors.attributes.password.length", minimum: MINIMUM_PASSWORD_LENGTH)
       end
+    end
+  end
+
+  def asshole_check
+    return if new_record? || roles.blank?
+    if [11, 295, 1354, 5198, 5601, 6141].include? player_id
+      errors.add(:roles, I18n.t("user.role_denied"))
     end
   end
 end
