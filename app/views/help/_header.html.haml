@@ -1,0 +1,7 @@
+- parts = topic.split(".")
+%a{name: "#{parts.last}"}
+- key = "help.topics.#{topic}"
+- if parts.size == 1 || parts.first == parts.last
+  %h2= t(key)
+- else
+  %h3= t(key)

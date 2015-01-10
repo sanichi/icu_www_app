@@ -16,6 +16,7 @@ en:
     membership: Annual Subscriptions and Membership of the ICU
     officers: Manage Officers and Mail Relays
     offline_payments: Process Offline Payments
+    overview: Overview of the ICU Websites
     payment_status: Payment Status
     pgn: Download PGN Games
     pgn_upload: Upload PGN Games
@@ -26,3 +27,45 @@ en:
     search_items: Search Items
     shortcuts: Link Shortcuts in Articles and News Items
     treasurer: "Carts, Items, Refunds and the Sales Ledger"
+    topics:
+      intro:
+        components: Main Components
+        dev_test_deploy: "The Development, Test and Deploy Environment"
+        intro: Introduction
+        test_commit_push_deploy: "Test, Commit, Push, Deploy"
+      tasks:
+        check_ticket: Check a Season Ticket
+        create_new_help_page: Create a New Help Page
+        create_new_payment_type: Create a New Payment Type
+        maintenance_mode: Put an Application into Maintenance Mode
+        reset_password: Reset a User's Forgotten Password
+        sql_query: Answer a Complicated Query with SQL
+        tasks: Common Tasks
+        update_rhs_panel: Update the Panel on the Right of the www Home Page
+      appendix:
+        apache: Apache
+        appendix: Appendix
+        bootstrap: Bootstrap
+        bundler: Bundler
+        can_can: Can-Can
+        capistrano: Capistrano
+        centos: Centos
+        ftp: FTP
+        gems: Gems
+        github: Github
+        google: Google Apps
+        haml: HAML
+        mailgun: Mailgun
+        mysql: MyQSL
+        passenger: Passenger
+        rails: Rails
+        rake: Rake
+        redis: Redis
+        register365: Register365
+        rspec: RSpec
+        ruby: Ruby
+        secrets: Secrets
+        ssl: SSL/TLS
+        stripe: Stripe
+        webrick: WEBrick
+        whenever: Whenever

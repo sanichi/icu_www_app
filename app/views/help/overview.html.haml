@@ -1,0 +1,344 @@
+- content_for :title, t("help.overview")
+
+%h2.text-center= t("help.overview")
+%hr
+
+%p
+  This is an intoduction to the ICU websites: how they work, what's involved, how to make changes.
+  It's primarily intended as a resource for ICU webmasters.
+%p
+  The websites have evolved since the first one appeared in 2004 and will probably continue to do so in the future.
+  Future webmasters are encouraged to keep this document up to date. Revison history:
+%ul
+  %li January 2015: created by MO (still in progress).
+
+%hr
+
+%ul
+  %li
+    = render "link", topic: "intro.intro"
+    %ul
+      - %w[components dev_test_deploy test_commit_push_deploy].each do |topic|
+        = render "item", topic: "intro.#{topic}"
+  %li
+    = render "link", topic: "tasks.tasks"
+    %ul
+      - %w[maintenance_mode reset_password check_ticket sql_query create_new_help_page create_new_payment_type update_rhs_panel].each do |topic|
+        = render "item", topic: "tasks.#{topic}"
+  %li
+    = render "link", topic: "appendix.appendix"
+    %ul
+      - %w[apache appendix bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+        = render "item", topic: "appendix.#{topic}"
+
+= render "header", topic: "intro.intro"
+
+= render "header", topic: "intro.components"
+%p
+  The ICU currently manages two web sites:
+%ol
+  %li
+    A
+    %a{href: "http://www.icu.ie", target: "internal"} www
+    site mainly for news, articles, general information and online payments.
+  %li
+    A
+    %a{href: "http://ratings.icu.ie", target: "internal"} ratings
+    site for the ICU's chess rating system.
+%p
+  The main sub-systems supporting the two websites are as follows:
+%ul
+  %li
+    A rented machine permanently connected to the internet (see
+    = succeed("),") do
+      = render "link", topic: "appendix.centos"
+    with a web server (see
+    = succeed(")") do
+      = render "link", topic: "appendix.apache"
+    and an application server (see
+    = succeed(").") do
+      = render "link", topic: "appendix.passenger"
+  %li
+    Two SQL databases, one for each website (see
+    = succeed(").") do
+      = render "link", topic: "appendix.mysql"
+  %li
+    Two web applications, one for each website (see
+    = succeed(").") do
+      = render "link", topic: "appendix.rails"
+  %li
+    Several modular software components for specialised tasks, most of which relate to the ratings site (see
+    = succeed(").") do
+      = render "link", topic: "appendix.gems"
+  %li
+    An account with a repository hosting service for source code management (see
+    = succeed(").") do
+      = render "link", topic: "appendix.github"
+  %li
+    An account with a registrar to maintain the ICU domain (icu.ie) and it's DNS records (see
+    = succeed(").") do
+      = render "link", topic: "appendix.register365"
+  %li
+    An account with an e-commerce business to process online card payments (see
+    = succeed(").") do
+      = render "link", topic: "appendix.stripe"
+  %li
+    An account with an email provider for delivery and relaying (see
+    = succeed(").") do
+      = render "link", topic: "appendix.mailgun"
+  %li
+    Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never commited to the repository (see
+    = succeed(").") do
+      = render "link", topic: "appendix.secrets"
+  %li
+    An FTP service mainly for tournament controllers (see
+    = succeed(").") do
+      = render "link", topic: "appendix.ftp"
+  %li
+    A system for scheduling regular jobs (see
+    = succeed(").") do
+      = render "link", topic: "appendix.whenever"
+  %li
+    A no-SQL database for fast retrieval of Irish language translations (see
+    = succeed(").") do
+      = render "link", topic: "appendix.redis"
+
+= render "header", topic: "intro.dev_test_deploy"
+%p
+  The development, test and deploy environment is what the webmaster has on their local machine.
+  It's essential and new webmasters should spend some time setting it up correctly.
+  It's used to:
+%ul
+  %li develop new functionality or fix bugs,
+  %li write new automated tests,
+  %li
+    run automated tests to prove new functionality and make sure old functionally hasn't regressed (see
+    = succeed("),") do
+      = render "link", topic: "appendix.rspec"
+  %li
+    manually check functionality on a local running webserver (see
+    = succeed("),") do
+      = render "link", topic: "appendix.webrick"
+  %li
+    commit well-tested code to a local repository and then push it to the master (see
+    = succeed("),") do
+      = render "link", topic: "appendix.github"
+  %li
+    deploy new code to the live server (see
+    = succeed(").") do
+      = render "link", topic: "appendix.capistrano"
+%p
+  Following are the steps to setup the environment for the first time.
+  It's not required to use the same OS (Centos) as the live server,
+  any Unix-like OS will be fine (MacOS or any flavour of Linux).
+  However, you really want to avoid Windows, believe me.
+%p
+  You can put the ICU code wherever you like but for the sake of an example
+  (which will be used throughout this document), we'll assume it all goes into
+  = succeed(".") do
+    %stong ~/Projects/
+%ul
+  %li
+    Install git and clone all the repositories (2 web applications and 4 gems) into
+    %stong ~/Projects/
+    (see
+    = succeed(").") do
+      = render "link", topic: "appendix.github"
+  %li
+    Install and start MySQL and then create the 4 test and development databases required.
+    Fill the development databases with data copied from the production server but leave the test databases empty. See
+    = succeed(".") do
+      = render "link", topic: "appendix.mysql"
+  %li More to come ...
+
+= render "header", topic: "intro.test_commit_push_deploy"
+
+= render "header", topic: "tasks.tasks"
+
+= render "header", topic: "tasks.maintenance_mode"
+
+= render "header", topic: "tasks.reset_password"
+
+= render "header", topic: "tasks.check_ticket"
+
+= render "header", topic: "tasks.sql_query"
+
+= render "header", topic: "tasks.create_new_help_page"
+%p
+  The page you're currently reading is an example of a help page.
+  Unlike articles and news items, help pages are not stored in the database and can't be changed by editors.
+  Instead, they're part of the web application code and need the webmaster to create and edit them.
+  To create a new help page do the following on your development machine:
+%ul
+  %li
+    think of a single word or short snake-case name for the new page and add it to the
+    %em HELP_PAGES
+    array in
+    = succeed(",") do
+      %strong app/models/global.rb
+  %li
+    map that short name to the full title of your new help page in the file
+    = succeed(",") do
+      %strong config/locales/help/en.yml
+  %li
+    add a link to the new page in the help index:
+    = succeed(",") do
+      %strong app/views/help/index.html.haml
+  %li
+    create a new page view using the same short name you chose earlier:
+    <b>app/views/help/</b><em>short_name</em><b>.html.haml</b>,
+  %li
+    in the same way as other help pages in
+    = succeed(",") do
+      %b app/views/help/
+    start the new page with two titles (one for the browser tab, one for the page) and a horizontal rule,
+  %li
+    insert the help text, divided into sections with headers and (for large articles like this one) a table of contents,
+  %li
+    = succeed(",") do
+      %a{href: "#view_application_locally"} view and check your work in a browser
+  %li
+    when you're finished:
+    = succeed(".") do
+      %a{href: "#test_commit_push_deploy"} test, commit, push and deploy
+
+= render "header", topic: "tasks.create_new_payment_type"
+
+= render "header", topic: "tasks.update_rhs_panel"
+
+= render "header", topic: "appendix.appendix"
+
+= render "header", topic: "appendix.apache"
+
+= render "header", topic: "appendix.bootstrap"
+
+= render "header", topic: "appendix.bundler"
+
+= render "header", topic: "appendix.can_can"
+
+= render "header", topic: "appendix.capistrano"
+
+= render "header", topic: "appendix.centos"
+
+= render "header", topic: "appendix.ftp"
+
+= render "header", topic: "appendix.gems"
+
+= render "header", topic: "appendix.github"
+%p
+There are public repositories for each of the two web applications:
+%ul
+  %li
+    %a{href: "https://github.com/sanichi/icu_www_app", target: "external"} icu_www_app
+  %li
+    %a{href: "https://github.com/sanichi/icu_ratings_app", target: "external"} icu_ratings_app
+And 4 more for the
+= succeed(":") do
+  = render "link", topic: "appendix.gems"
+%ul
+  %li
+    %a{href: "https://github.com/sanichi/icu_ratings", target: "external"} icu_ratings
+  %li
+    %a{href: "https://github.com/sanichi/icu_tournament", target: "external"} icu_tournament
+  %li
+    %a{href: "https://github.com/sanichi/icu_name", target: "external"} icu_name
+  %li
+    %a{href: "https://github.com/sanichi/icu_utils", target: "external"} icu_utils
+
+= render "header", topic: "appendix.google"
+%p
+  %a{href: "https://google-developers.appspot.com/chart/", target: "external"} Google Charts
+  for rating graphs and
+  %a{href: "https://google-developers.appspot.com/maps/", target: "external"} Google Maps
+  for club and event maps on the main site. The latter requires an API key which goes in
+  %strong config/secrets.yaml
+  (see
+  = succeed(").") do
+    = render "link", topic: "appendix.secrets"
+
+= render "header", topic: "appendix.ftp"
+
+= render "header", topic: "appendix.haml"
+
+= render "header", topic: "appendix.mailgun"
+
+= render "header", topic: "appendix.mysql"
+%p
+  There are two production MySQL databases on the live server, one for each web application:
+%ul
+  %li www_production
+  %li ratings_production
+%p
+  Locally, each of these has a development and test counterpart (see
+  = succeed("):") do
+    = render "link", topic: "intro.dev_test_deploy"
+%ul
+  %li www_development
+  %li ratings_development
+  %li www_test
+  %li ratings_test
+%p
+  The test databases should be empty (data is loaded and unload by the tests).
+  The development databases should be loaded with recent copies of the production databases.
+
+= render "header", topic: "appendix.passenger"
+
+= render "header", topic: "appendix.rails"
+
+= render "header", topic: "appendix.rake"
+
+= render "header", topic: "appendix.redis"
+
+= render "header", topic: "appendix.register365"
+
+= render "header", topic: "appendix.rspec"
+
+%p Capybara, FactoryGirl, Faker, Selenium.
+
+= render "header", topic: "appendix.ruby"
+
+= render "header", topic: "appendix.secrets"
+
+%p
+  Each web application has a pair of files that are used to store sensitive information such as
+  API keys, database connection parameters, cryptographic data and passwords. The two files are:
+%ul
+  %li
+    %strong config/database.yml
+  %li
+    %strong config/secrets.yml
+%p
+  These files are
+  %strong NEVER COMMITED TO THE REPOSITORY
+  because anyone can view our Github data. For this reason, the files are listed in
+  %strong .gitignore
+  for both web apps.
+%p
+  When setting up a development and test environment, separate versions of these files
+  (different to those on the live server) are required.
+  Sample files showing what's required are available in the repository in
+  = succeed(",") do
+    %strong config/examples/
+  but they contain dummy data.
+  Examples of data that will differ between live site and local environment are:
+%ul
+  %li
+    the connection parameters to our payment processor - the local versions should be for testing only (see
+    = succeed("),") do
+      = render "link", topic: "appendix.stripe"
+  %li
+    database connection parameters will refer to databases running the local machine, not the live server (see
+    = succeed(").") do
+      = render "link", topic: "appendix.mysql"
+%p
+  A few things can remain the same, such as the API key for Google Maps (see
+  = succeed(").") do
+    = render "link", topic: "appendix.google"
+
+= render "header", topic: "appendix.stripe"
+
+= render "header", topic: "appendix.ssl"
+
+= render "header", topic: "appendix.webrick"
+
+= render "header", topic: "appendix.whenever"
