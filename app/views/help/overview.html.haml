@@ -192,6 +192,10 @@
     = succeed(").") do
       = render "link", topic: "appendix.secrets"
   %li
+    Install
+    = render "link", topic: "appendix.redis"
+    and make sure it's responding on the standard port (6379).
+  %li
     Install the same version of Ruby that is currently in use on the server
     (look at the file ~/Projects/icu_www_app/.ruby-version to find out what that is).
     It's convenient to be able to switch Ruby versions in the local environment,
@@ -237,16 +241,17 @@
     %pre~ cmd.join("\n")
     This time the development version of the ratings site will be at the same address.
   %li
-    The final test of whether the environment is correctly setup is to run all the tests:
+    The final check of whether the environment is correctly setup is to run all the automated tests:
     - cmd = []
     - cmd << '$ cd ~/Projects/icu_www_app/'
     - cmd << '$ bin/rake # this will take a few minutes'
     - cmd << '$ cd ~/Projects/icu_ratings_app/'
     - cmd << '$ bin/rake # this will also take a few minutes'
     %pre~ cmd.join("\n")
-    All these tests should pass (or nearly all, see
-    = succeed(").") do
+    If all these tests should pass (or nearly all, see
+    = succeed("),") do
       = render "link", topic: "appendix.rspec"
+    the environment is working correctly.
 
 = render "header", topic: "intro.test_commit_push_deploy"
 
