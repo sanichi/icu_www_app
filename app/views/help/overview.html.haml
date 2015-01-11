@@ -4,11 +4,11 @@
 %hr
 
 %p
-  This is an intoduction to the ICU websites: how they work, what's involved, how to make changes.
+  This is an introduction to the ICU websites: how they work, what's involved, how to make changes.
   It's primarily intended as a resource for ICU webmasters.
 %p
   The websites have evolved since the first one appeared in 2004 and will probably continue to do so in the future.
-  Future webmasters are encouraged to keep this document up to date. Revison history:
+  Future webmasters are encouraged to keep this document up to date. Revision history:
 %ul
   %li January 2015: created by MO (still in progress).
 
@@ -61,13 +61,23 @@
   = precede("(") do
     = succeed("),") do
       %a{href: "/help/articles", target: "internal"} more details
-  and the webmaster can grant roles to or remove roles from other users.
+  and the webmaster can grant roles to (or remove roles from) other users.
+  Further information on tasks that users with roles can accomplish via the website can be found in the
+  = t("help.admins")
+  section of the main
+  %a{href: "/help", target: "internal"}= t("help.help")
+  page.
 %p
-  The webmaster's role (Admin) is the most powerful one and it enables the webmaster to do anything that the other users can do (and more).
-  However, the day-to-day content management of the site (news, articles, etc) is not the primary concern of the webmaster, whose chief responsibilities are:
+  The webmaster's role (Admin) is the most powerful one and it enables the webmaster to do anything other users can do (and more).
+  However, the day-to-day content management of the sites (news, articles, ratings, etc) is not the primary concern of the webmaster,
+  whose chief responsibilities are:
 %ul
-  %li Ensuring the team members know what to do, where to get help and are capable of managing their particular responsibilities.
-  %li Managing the technical side of things (server, application code, databases, external services, etc), as described in further detail in this document.
+  %li Managing the technical side of things (server, application code, databases, external services, etc.) as described in further detail in this document.
+  %li Ensuring the other team members know what to do, where to get help and are capable of managing their particular responsibilities.
+  %li Dealing with queries and issues from various sources: the executive, other team members and ordinary users.
+%p
+  In practice, as well as looking after the technical side of things, webmasters act as cover for the rest of the team
+  and can expect to perform a little bit of all the other roles, depending on how assiduous other team members are.
 
 = render "header", topic: "intro.components"
 %p
@@ -142,7 +152,7 @@
     = succeed("),") do
       = render "link", topic: "appendix.rspec"
   %li
-    manually check functionality on a local running webserver (see
+    manually check functionality on a locally running web server (see
     = succeed("),") do
       = render "link", topic: "appendix.webrick"
   %li
@@ -157,7 +167,7 @@
   Following are the steps to setup the environment for the first time.
   It's not required to use the same OS (Centos) as the live server,
   any Unix-like OS should be fine (MacOS or any flavour of Linux)
-  but you should avoid Windows.
+  but you should probably avoid Windows.
 %p
   You can put the ICU code wherever you like but for the sake of an example
   (which will be used throughout this document), we'll assume it all goes into
@@ -165,17 +175,78 @@
     %stong ~/Projects/
 %ul
   %li
-    Install git and clone all the repositories (2 web applications and 4 gems) into
+    Install git and clone all the master repositories (2 web applications and 4 gems) from Github into
     %stong ~/Projects/
     (see
     = succeed(").") do
       = render "link", topic: "appendix.github"
   %li
     Install and start MySQL and then create the 4 test and development databases required.
-    Fill the development databases with data copied from the production server but leave the test databases empty. See
-    = succeed(".") do
+    Fill the development databases with data copied from the production server but leave the test databases empty (see
+    See
+    = succeed(").") do
       = render "link", topic: "appendix.mysql"
-  %li More to come ...
+    Whatever connection parameters you choose (username, password), copy them to
+    %strong config/database.yml
+    (see
+    = succeed(").") do
+      = render "link", topic: "appendix.secrets"
+  %li
+    Install the same version of Ruby that is currently in use on the server
+    (look at the file ~/Projects/icu_www_app/.ruby-version to find out what that is).
+    It's convenient to be able to switch Ruby versions in the local environment,
+    so consider installing rbenv or rvm (see
+    = succeed(").") do
+      = render "link", topic: "appendix.ruby"
+  %li
+    Install
+    = render "link", topic: "appendix.bundler"
+    and issue the following commands:
+    - cmd = []
+    - cmd << '$ cd ~/Projects/icu_www_app/'
+    - cmd << '$ bundle install'
+    - cmd << '$ cd ~/Projects/icu_ratings_app/'
+    - cmd << '$ bundle install'
+    %pre~ cmd.join("\n")
+    which will install all the other
+    = render "link", topic: "appendix.gems"
+    required by the applications.
+  %li
+    Follow the instructions in
+    = render "link", topic: "appendix.secrets"
+    for setting up local versions of
+    %strong config/secrets.yml
+    for both applications.
+  %li
+    Issue the following commands (see
+    = succeed("):") do
+      = render "link", topic: "appendix.webrick"
+    - cmd = []
+    - cmd << '$ cd ~/Projects/icu_www_app/'
+    - cmd << '$ bin/rails s'
+    %pre~ cmd.join("\n")
+    You should now be able to see a development version of the main site at:
+    = succeed(".") do
+      %em http://127.0.0.1:3000
+    Type Control-C to quit.
+  %li
+    Similarly, for the ratings site run the following commands (see:
+    - cmd = []
+    - cmd << '$ cd ~/Projects/icu_ratings_app/'
+    - cmd << '$ bin/rails s'
+    %pre~ cmd.join("\n")
+    This time the development version of the ratings site will be at the same address.
+  %li
+    The final test of whether the environment is correctly setup is to run all the tests:
+    - cmd = []
+    - cmd << '$ cd ~/Projects/icu_www_app/'
+    - cmd << '$ bin/rake # this will take a few minutes'
+    - cmd << '$ cd ~/Projects/icu_ratings_app/'
+    - cmd << '$ bin/rake # this will also take a few minutes'
+    %pre~ cmd.join("\n")
+    All these tests should pass (or nearly all, see
+    = succeed(").") do
+      = render "link", topic: "appendix.rspec"
 
 = render "header", topic: "intro.test_commit_push_deploy"
 
@@ -338,7 +409,7 @@ And 4 more for the
   %li www_test
   %li ratings_test
 %p
-  The test databases should be empty (data is loaded and unload by the tests).
+  The test databases should be empty (test data is loaded automatically when tests run).
   The development databases should be loaded with recent copies of the production databases.
 
 = render "header", topic: "appendix.passenger"
