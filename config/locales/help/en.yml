@@ -29,9 +29,11 @@ en:
     treasurer: "Carts, Items, Refunds and the Sales Ledger"
     topics:
       intro:
-        components: Main Components
-        dev_test_deploy: "The Development, Test and Deploy Environment"
+        components: System Components
+        dev_test_deploy: The Local Environment
         intro: Introduction
+        logging_into_server: Logging in to the Server
+        roles: User Roles
         test_commit_push_deploy: "Test, Commit, Push, Deploy"
       tasks:
         check_ticket: Check a Season Ticket

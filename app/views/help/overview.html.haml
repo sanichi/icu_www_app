@@ -18,7 +18,7 @@
   %li
     = render "link", topic: "intro.intro"
     %ul
-      - %w[components dev_test_deploy test_commit_push_deploy].each do |topic|
+      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server].each do |topic|
         = render "item", topic: "intro.#{topic}"
   %li
     = render "link", topic: "tasks.tasks"
@@ -28,14 +28,14 @@
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache appendix bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+      - %w[apache bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
 
-= render "header", topic: "intro.components"
+= render "header", topic: "intro.roles"
 %p
-  The ICU currently manages two web sites:
+  The ICU currently runs two web sites:
 %ol
   %li
     A
@@ -46,7 +46,33 @@
     %a{href: "http://ratings.icu.ie", target: "internal"} ratings
     site for the ICU's chess rating system.
 %p
-  The main sub-systems supporting the two websites are as follows:
+  These websites are managed by a team, one of which is the webmaster. Some examples of roles other than webmaster on the main site are:
+%ul
+  %li Editor: manages news items, articles, images, games, club listings, calendar entries, etc.
+  %li Treasurer: manages subscription and other fees, can issue refunds and view shopping carts.
+  %li Translator: manages Irish language translations.
+%p And on the ratings site:
+%ul
+  %li Reporter: loads tournament reports for rating.
+  %li Rating Officer: rates tournaments, publishes rating lists.
+%p
+  When anyone with a role logs in, certain pages become available through which they can manage some part of the databases (depending what the role is).
+  For example, editors will see and Edit button on news items and articles
+  = precede("(") do
+    = succeed("),") do
+      %a{href: "/help/articles", target: "internal"} more details
+  and the webmaster can grant roles to or remove roles from other users.
+%p
+  The webmaster's role (Admin) is the most powerful one and it enables the webmaster to do anything that the other users can do (and more).
+  However, the day-to-day content management of the site (news, articles, etc) is not the primary concern of the webmaster, whose chief responsibilities are:
+%ul
+  %li Ensuring the team members know what to do, where to get help and are capable of managing their particular responsibilities.
+  %li Managing the technical side of things (server, application code, databases, external services, etc), as described in further detail in this document.
+
+= render "header", topic: "intro.components"
+%p
+  The main technical sub-systems supporting the two websites,
+  all of which the webmaster is responsible for maintaining, are as follows:
 %ul
   %li
     A rented machine permanently connected to the internet (see
@@ -67,7 +93,7 @@
     = succeed(").") do
       = render "link", topic: "appendix.rails"
   %li
-    Several modular software components for specialised tasks, most of which relate to the ratings site (see
+    Several modular software components for specialized tasks, most of which relate to the ratings site (see
     = succeed(").") do
       = render "link", topic: "appendix.gems"
   %li
@@ -87,7 +113,7 @@
     = succeed(").") do
       = render "link", topic: "appendix.mailgun"
   %li
-    Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never commited to the repository (see
+    Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never committed to the repository (see
     = succeed(").") do
       = render "link", topic: "appendix.secrets"
   %li
@@ -105,8 +131,8 @@
 
 = render "header", topic: "intro.dev_test_deploy"
 %p
-  The development, test and deploy environment is what the webmaster has on their local machine.
-  It's essential and new webmasters should spend some time setting it up correctly.
+  The local environment is what the webmaster has on their local machine to develop, test and deploy new code to the production server.
+  New webmasters should spend some time setting it up correctly as it's essential.
   It's used to:
 %ul
   %li develop new functionality or fix bugs,
@@ -120,7 +146,7 @@
     = succeed("),") do
       = render "link", topic: "appendix.webrick"
   %li
-    commit well-tested code to a local repository and then push it to the master (see
+    commit well-tested code to a local repository and then push it to the master repository (see
     = succeed("),") do
       = render "link", topic: "appendix.github"
   %li
@@ -130,8 +156,8 @@
 %p
   Following are the steps to setup the environment for the first time.
   It's not required to use the same OS (Centos) as the live server,
-  any Unix-like OS will be fine (MacOS or any flavour of Linux).
-  However, you really want to avoid Windows, believe me.
+  any Unix-like OS should be fine (MacOS or any flavour of Linux)
+  but you should avoid Windows.
 %p
   You can put the ICU code wherever you like but for the sake of an example
   (which will be used throughout this document), we'll assume it all goes into
@@ -152,6 +178,40 @@
   %li More to come ...
 
 = render "header", topic: "intro.test_commit_push_deploy"
+
+= render "header", topic: "intro.logging_into_server"
+%p
+  Most changes the webmaster performs are done either via the web site (to update the database) or via
+  = render "link", topic: "intro.dev_test_deploy"
+  (to update the applications).
+  However, there are some jobs for which logging into the production server is required (see
+  = succeed(").") do
+    = render "link", topic: "appendix.centos"
+  Here are a few examples:
+%ul
+  %li
+    Change web server configuration files (see
+    = succeed(").") do
+      = render "link", topic: "appendix.apache"
+  %li
+    Examine web server (see
+    = succeed(")") do
+      = render "link", topic: "appendix.apache"
+    or application log files.
+  %li
+    Update system libraries (see
+    = succeed(").") do
+      = render "link", topic: "appendix.centos"
+  %li
+    Install the latest version of
+    = render "link", topic: "appendix.ruby"
+    and/or
+    = succeed(".") do
+      = render "link", topic: "appendix.passenger"
+  %li
+    Change the password for the
+    = render "link", topic: "appendix.ftp"
+    user.
 
 = render "header", topic: "tasks.tasks"
 
