@@ -1,7 +1,4 @@
-- content_for :title, t("help.privacy")
-
-%h2.text-center= t("help.privacy")
-%hr
+= render "titles", text: "help.privacy"
 
 %ul
   %li= link_to "Data about You", "#data"

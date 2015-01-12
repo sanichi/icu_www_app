@@ -1,7 +1,4 @@
-- content_for :title, t("help.accounts")
-
-%h2.text-center= t("help.accounts")
-%hr
+= render "titles", text: "help.accounts"
 
 %a{name: "create_account"}
 %h3 Creating a Login Account

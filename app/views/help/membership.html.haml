@@ -1,9 +1,6 @@
-- content_for :title, t("help.membership")
+= render "titles", text: "help.membership"
 
 - season = Season.new
-
-%h2.text-center= t("help.membership")
-%hr
 
 %a{name: "subscription_season"}
 %h3 Subscription Season

@@ -1,7 +1,4 @@
-- content_for :title, t("help.overview")
-
-%h2.text-center= t("help.overview")
-%hr
+= render "titles", text: "help.overview"
 
 %p
   This is an introduction to the ICU websites: how they work, what's involved, how to make changes.
@@ -11,29 +8,25 @@
   Future webmasters are encouraged to keep this document up to date. Revision history:
 %ul
   %li January 2015: created by MO (still in progress).
-
 %hr
-
 %ul
   %li
     = render "link", topic: "intro.intro"
     %ul
-      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server].each do |topic|
+      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server accounts resources].each do |topic|
         = render "item", topic: "intro.#{topic}"
   %li
     = render "link", topic: "tasks.tasks"
     %ul
-      - %w[maintenance_mode reset_password check_ticket sql_query create_new_help_page create_new_payment_type update_rhs_panel].each do |topic|
+      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type update_rhs_panel].each do |topic|
         = render "item", topic: "tasks.#{topic}"
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
-
-= render "header", topic: "intro.roles"
 %p
   The ICU currently runs two web sites:
 %ol
@@ -45,6 +38,8 @@
     A
     %a{href: "http://ratings.icu.ie", target: "internal"} ratings
     site for the ICU's chess rating system.
+
+= render "header", topic: "intro.roles"
 %p
   These websites are managed by a team, one of which is the webmaster. Some examples of roles other than webmaster on the main site are:
 %ul
@@ -56,12 +51,21 @@
   %li Reporter: loads tournament reports for rating.
   %li Rating Officer: rates tournaments, publishes rating lists.
 %p
-  When anyone with a role logs in, certain pages become available through which they can manage some part of the databases (depending what the role is).
-  For example, editors will see and Edit button on news items and articles
-  = precede("(") do
-    = succeed("),") do
-      %a{href: "/help/articles", target: "internal"} more details
-  and the webmaster can grant roles to (or remove roles from) other users.
+  When anyone with a role logs in, certain pages become available through which they can update part of one of two databases (depending what the role is).
+  For example:
+  %ul
+    %li
+      On the main site, Editors can edit news items and articles
+      = precede("(") do
+        = succeed(").") do
+          %a{href: "/help/articles", target: "internal"} more details
+    %li
+      On the ratings site, Reporters can upload tournament reports
+      = precede("(") do
+        = succeed(").") do
+          %a{href: "http://ratings.icu.ie/articles/6", target: "internal"} more details
+    %li On both sites, Admins can grant roles to (or remove roles from) other users.
+%p
   Further information on tasks that users with roles can accomplish via the website can be found in the
   = t("help.admins")
   section of the main
@@ -69,12 +73,13 @@
   page.
 %p
   The webmaster's role (Admin) is the most powerful one and it enables the webmaster to do anything other users can do (and more).
-  However, the day-to-day content management of the sites (news, articles, ratings, etc) is not the primary concern of the webmaster,
-  whose chief responsibilities are:
+  However, the day-to-day content management of the sites (news, articles, ratings, etc) is not the webmaster's top priority.
+  Their chief responsibilities are:
 %ul
-  %li Managing the technical side of things (server, application code, databases, external services, etc.) as described in further detail in this document.
-  %li Ensuring the other team members know what to do, where to get help and are capable of managing their particular responsibilities.
-  %li Dealing with queries and issues from various sources: the executive, other team members and ordinary users.
+  %li Managing the technical side of things (server, application code, databases, external services, etc.) as described in further detail on this help page.
+  %li Ensuring each member of the team is capable of managing their particular responsibilities.
+  %li Dealing with all sorts of queries from website users as well as the executive.
+  %li Maintaining a log of all upgrades and configuration changes on the production server.
 %p
   In practice, as well as looking after the technical side of things, webmasters act as cover for the rest of the team
   and can expect to perform a little bit of all the other roles, depending on how assiduous other team members are.
@@ -103,13 +108,9 @@
     = succeed(").") do
       = render "link", topic: "appendix.rails"
   %li
-    Several modular software components for specialized tasks, most of which relate to the ratings site (see
+    Several modular software components for specialized tasks, mostly for the ratings site (see
     = succeed(").") do
       = render "link", topic: "appendix.gems"
-  %li
-    An account with a repository hosting service for source code management (see
-    = succeed(").") do
-      = render "link", topic: "appendix.github"
   %li
     An account with a registrar to maintain the ICU domain (icu.ie) and it's DNS records (see
     = succeed(").") do
@@ -122,6 +123,10 @@
     An account with an email provider for delivery and relaying (see
     = succeed(").") do
       = render "link", topic: "appendix.mailgun"
+  %li
+    An account with a repository hosting service for source code management (see
+    = succeed(").") do
+      = render "link", topic: "appendix.github"
   %li
     Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never committed to the repository (see
     = succeed(").") do
@@ -156,7 +161,7 @@
     = succeed("),") do
       = render "link", topic: "appendix.webrick"
   %li
-    commit well-tested code to a local repository and then push it to the master repository (see
+    commit changes to a local repository and then push it to the master repository (see
     = succeed("),") do
       = render "link", topic: "appendix.github"
   %li
@@ -166,8 +171,8 @@
 %p
   Following are the steps to setup the environment for the first time.
   It's not required to use the same OS (Centos) as the live server,
-  any Unix-like OS should be fine (MacOS or any flavour of Linux)
-  but you should probably avoid Windows.
+  any Unix-like OS should be fine (e.g. MacOS or any flavour of Linux).
+  You should probably avoid Windows.
 %p
   You can put the ICU code wherever you like but for the sake of an example
   (which will be used throughout this document), we'll assume it all goes into
@@ -199,7 +204,11 @@
     Install the same version of Ruby that is currently in use on the server
     (look at the file ~/Projects/icu_www_app/.ruby-version to find out what that is).
     It's convenient to be able to switch Ruby versions in the local environment,
-    so consider installing rbenv or rvm (see
+    so consider installing
+    %em rbenv
+    or
+    %em rvm
+    (see
     = succeed(").") do
       = render "link", topic: "appendix.ruby"
   %li
@@ -239,7 +248,7 @@
     - cmd << '$ cd ~/Projects/icu_ratings_app/'
     - cmd << '$ bin/rails s'
     %pre~ cmd.join("\n")
-    This time the development version of the ratings site will be at the same address.
+    and visit the same address to see the development version of the ratings site.
   %li
     The final check of whether the environment is correctly setup is to run all the automated tests:
     - cmd = []
@@ -254,13 +263,35 @@
     the environment is working correctly.
 
 = render "header", topic: "intro.test_commit_push_deploy"
+%p
+  The steps to deploy a new release to the live server are always the same and rely on
+  = succeed(",") do
+    = render "link", topic: "appendix.rspec"
+  = render "link", topic: "appendix.github"
+  and
+  = succeed(".") do
+    = render "link", topic: "appendix.capistrano"
+  Here are the commands to run:
+- cmd = []
+- cmd << '$ bin/rake                                       # runs entire test suite to check nothing has regressed'
+- cmd << '$ git add .                                      # stages all changes'
+- cmd << '$ git commit -m "Comment describing the change"  # commits to the local repository'
+- cmd << '$ git push                                       # pushes to the master repository'
+- cmd << '$ cap production deploy                          # deploys to the production server'
+%pre~ cmd.join("\n")
+%p If anything goes wrong with the deployment, you can roll it back to the previous release with:
+%pre bin/cap production deploy:rollback
+%p
+  The above steps require SSH keys to be registered with both Github and the production server (see
+  = succeed(").") do
+    = render "link", topic: "intro.accounts"
 
 = render "header", topic: "intro.logging_into_server"
 %p
   Most changes the webmaster performs are done either via the web site (to update the database) or via
   = render "link", topic: "intro.dev_test_deploy"
   (to update the applications).
-  However, there are some jobs for which logging into the production server is required (see
+  However, there are some things for which logging into the production server is required (see
   = succeed(").") do
     = render "link", topic: "appendix.centos"
   Here are a few examples:
@@ -288,16 +319,191 @@
     Change the password for the
     = render "link", topic: "appendix.ftp"
     user.
+%p
+  The website-related logs files are:
+  %ul
+    %li <b>/var/log/http/www/</b>: Apache log files for the <em>www</em> site,
+    %li <b>/var/log/http/ratings/</b>: Apache log files for the <em>ratings</em> site,
+    %li <b>/var/apps/www/log/production.log</b>: application log file for the <em>www</em> site,
+    %li <b>/var/apps/ratings/log/production.log</b>: application log file for the <em>ratings</em> site.
+%p
+  Other useful directories and files on the live server to know about:
+  %ul
+    %li <b>/etc/httpd/conf.d/vhost.conf</b>: Apache configuration for both sites,
+    %li <b>/var/apps/www/current</b>: root directory for the current release of the <em>www</em> application,
+    %li <b>/var/apps/ratings/current</b>: root directory for the current release of the <em>ratings</em> application,
+    %li <b>/etc/logrotate.d/</b>: log file rotation configuration,
+    %li
+      <b>~/bak/</b>: backups kept here prior to transfer offsite (see
+      = succeed(").") do
+        = render "link", topic: "appendix.backups"
+
+= render "header", topic: "intro.accounts"
+%p
+  This is a list of the all the services (both our own and those of external providers)
+  which require access credentials of one kind or another (username/password or API keys).
+  The actual credentials are kept in an offline file by the webmaster
+  and copied to a small number of trusted individuals for backup.
+  Some of the credentials are also in <em>secrets.yml</em> or <em>database.yml</em> on the production server (see
+  = succeed(").") do
+    = render "link", topic: "appendix.secrets"
+%ul
+  %li
+    The <em>root</em> user on the production ICU server:
+    %ul
+      %li Password.
+      %li Remote logins disabled (if you need <em>root</em>, login as the ordinary user and switch).
+  %li
+    The ordinary user on the production ICU server:
+    %ul
+      %li Username and password.
+      %li Remote logins allowed (this is the normal way to login). Setup SSH keys for convenience.
+  %li
+    Read-only access to the <em>www_production</em> database:
+    %ul
+      %li Username and password.
+      %li Remote access allowed.
+  %li
+    Read-write access to the <em>www_production</em> database:
+    %ul
+      %li Username and password.
+      %li Remote access disabled.
+      %li These go in <em>database.yml</em> on the production server.
+  %li
+    Read-only access to the <em>ratings_production</em> database:
+    %ul
+      %li Username and password.
+      %li Remote access allowed.
+  %li
+    Read-write access to the <em>ratings_production</em> database:
+    %ul
+      %li Username and password.
+      %li Remote access disabled.
+      %li These go in <em>database.yml</em> on the production server.
+  %li
+    The
+    = render "link", topic: "appendix.ftp"
+    user on the production ICU server:
+    %ul
+      %li Username and password.
+  %li
+    Our
+    = render "link", topic: "appendix.github"
+    account:
+    %ul
+      %li
+        Email and password to login at
+        = succeed(".") do
+          %a{href: "https://github.com/login", target: "external"} github.com/login
+      %li SSH keys (one for each webmaster/developer) registered with Github to enable push access to the repository.
+  %li
+    Our Linode account (see
+    = succeed("):") do
+      = render "link", topic: "appendix.centos"
+    %ul
+      %li
+        Email and password to login at
+        = succeed(".") do
+          %a{href: "https://manager.linode.com/", target: "external"} manager.linode.com
+  %li
+    Our
+    = render "link", topic: "appendix.mailgun"
+    account:
+    %ul
+      %li
+        Email and password to login at
+        = succeed(".") do
+          %a{href: "https://mailgun.com/sessions/new", target: "external"} mailgun.com/sessions/new
+      %li A password, a secret key and a public key for <em>secrets.yml</em> on the production server.
+  %li
+    Our
+    = render "link", topic: "appendix.register365"
+    account:
+    %ul
+      %li
+        Email and password to login at
+        = succeed(".") do
+          %a{href: "https://www.register365.com/login", target: "external"} www.register365.com/login
+  %li
+    Our
+    = render "link", topic: "appendix.stripe"
+    account:
+    %ul
+      %li
+        Email and password to login at
+        = succeed(".") do
+          %a{href: "https://dashboard.stripe.com/login", target: "external"} dashboard.stripe.com/login
+      %li A pair of API keys for live transactions which go in <em>secrets.yml</em> on the production server.
+      %li A pair of API keys for test transactions which go in <em>secrets.yml</em> in the webmaster's local environment.
+  %li
+    A
+    = render "link", topic: "appendix.google"
+    API key for <em>secrets.yml</em> (the same key can be used for the production server and local environment).
+
+= render "header", topic: "intro.resources"
+%p Other resources helpful to the webmaster are:
+%ul
+  %li
+    A detailed log of all software installations and configuration changes for the current production server
+    (available from MO as a single <em>Evernote</em> page).
+  %li
+    A
+    %a{href: "https://github.com/sanichi/icu_ratings_app/wiki/Setup", target: "external"} description
+    of how the current production server (2014-) was built.
+  %li
+    A
+    %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup-a-Server", target: "external"} description
+    of how the previous production server (2011-2014) was built.
 
 = render "header", topic: "tasks.tasks"
 
+%p TODO
+
 = render "header", topic: "tasks.maintenance_mode"
 
-= render "header", topic: "tasks.reset_password"
+%p TODO
 
 = render "header", topic: "tasks.check_ticket"
+%p
+  Given a season ticket
+  = precede("(") do
+    = succeed("),") do
+      %a{href: "/help/accounts", target: "internal"} more details here
+  say for example, <em>2tDdxD</em>, then you can check it's validity by starting a console for the <em>www</em> web application:
+  - cmd = []
+  - cmd << '$ cd ~/Projects/icu_www_app/'
+  - cmd << '$ bin/rails c'
+  - cmd << '>> st = SeasonTicket.new("2tDdxD")'
+  - cmd << '>> st.expires_on'
+  - cmd << '=> "2010-12-31"'
+  - cmd << '>> st.icu_id'
+  - cmd << '=> "1234"'
+  %pre~ cmd.join("\n")
+  %p
+    In this particular example the ticket is valid and belongs to ICU ID 1234 but expired at the end of 2010.
+    If you try the same thing with an invalid ticket you'll get some kind of error, for example:
+  - cmd = []
+  - cmd << '>> st = SeasonTicket.new("rubbish")'
+  - cmd << '>> st.error'
+  - cmd << '=> "invalid season ticket (bad characters)"'
+  %pre~ cmd.join("\n")
+  %p
+    Note that for proper decoding of season tickets in the local environment, the same cryptographic entries configured
+    in the production application's <em>secrets.yml</em> file are required in the local version of that file (see
+    = succeed(").") do
+      = render "link", topic: "appendix.secrets"
+  %p
+    If you don't have the right crypto entires in <em>secrets.yml</em>, and alternative would be to log into the live server
+    and perform the operation there, but remember to start the console in the <em>production</em> environment because the
+    default is <em>development</em> (which the live server lacks):
+  - cmd = []
+  - cmd << '$ cd /var/apps/www/current'
+  - cmd << '$ RAILS_ENV=production bin/rails c'
+  %pre~ cmd.join("\n")
 
 = render "header", topic: "tasks.sql_query"
+
+%p TODO
 
 = render "header", topic: "tasks.create_new_help_page"
 %p
@@ -329,36 +535,66 @@
       %b app/views/help/
     start the new page with two titles (one for the browser tab, one for the page) and a horizontal rule,
   %li
-    insert the help text, divided into sections with headers and (for large articles like this one) a table of contents,
+    insert the help text, divided into sections with headers and (for large articles, such as this one) a table of contents,
   %li
-    = succeed(",") do
-      %a{href: "#view_application_locally"} view and check your work in a browser
+    view and manually check your work in a browser (see
+    = succeed("),") do
+      = render "link", topic: "appendix.webrick"
+  %li
+    run the following test which is focused solely on the help pages:
+    %pre $ bin/rspec spec/features/help_spec.rb
   %li
     when you're finished:
     = succeed(".") do
-      %a{href: "#test_commit_push_deploy"} test, commit, push and deploy
+      = render "link", topic: "intro.test_commit_push_deploy"
 
 = render "header", topic: "tasks.create_new_payment_type"
 
+%p TODO
+
 = render "header", topic: "tasks.update_rhs_panel"
+
+%p TODO
 
 = render "header", topic: "appendix.appendix"
 
+%p TODO
+
 = render "header", topic: "appendix.apache"
+
+%p TODO
+
+= render "header", topic: "appendix.backups"
+
+%p TODO
 
 = render "header", topic: "appendix.bootstrap"
 
+%p TODO
+
 = render "header", topic: "appendix.bundler"
+
+%p TODO
 
 = render "header", topic: "appendix.can_can"
 
+%p TODO
+
 = render "header", topic: "appendix.capistrano"
+
+%p TODO
 
 = render "header", topic: "appendix.centos"
 
+%p TODO
+
 = render "header", topic: "appendix.ftp"
 
+%p TODO
+
 = render "header", topic: "appendix.gems"
+
+%p TODO
 
 = render "header", topic: "appendix.github"
 %p
@@ -394,9 +630,15 @@ And 4 more for the
 
 = render "header", topic: "appendix.ftp"
 
+%p TODO
+
 = render "header", topic: "appendix.haml"
 
+%p TODO
+
 = render "header", topic: "appendix.mailgun"
+
+%p TODO
 
 = render "header", topic: "appendix.mysql"
 %p
@@ -419,22 +661,35 @@ And 4 more for the
 
 = render "header", topic: "appendix.passenger"
 
+%p TODO
+
 = render "header", topic: "appendix.rails"
+
+%p TODO
 
 = render "header", topic: "appendix.rake"
 
+%p TODO
+
 = render "header", topic: "appendix.redis"
+
+%p TODO
 
 = render "header", topic: "appendix.register365"
 
+%p TODO
+
 = render "header", topic: "appendix.rspec"
+
+%p TODO
 
 %p Capybara, FactoryGirl, Faker, Selenium.
 
 = render "header", topic: "appendix.ruby"
 
-= render "header", topic: "appendix.secrets"
+%p TODO
 
+= render "header", topic: "appendix.secrets"
 %p
   Each web application has a pair of files that are used to store sensitive information such as
   API keys, database connection parameters, cryptographic data and passwords. The two files are:
@@ -473,8 +728,17 @@ And 4 more for the
 
 = render "header", topic: "appendix.stripe"
 
+%p TODO
+
 = render "header", topic: "appendix.ssl"
+
+%p TODO
 
 = render "header", topic: "appendix.webrick"
 
+%p TODO
+
 = render "header", topic: "appendix.whenever"
+
+%p TODO
+

@@ -17,6 +17,7 @@ en:
     officers: Manage Officers and Mail Relays
     offline_payments: Process Offline Payments
     overview: Overview of the ICU Websites
+    password_reset: Reset a User's Forgotten Password
     payment_status: Payment Status
     pgn: Download PGN Games
     pgn_upload: Upload PGN Games
@@ -29,10 +30,12 @@ en:
     treasurer: "Carts, Items, Refunds and the Sales Ledger"
     topics:
       intro:
+        accounts: "Usernames, Passwords and API Keys"
         components: System Components
         dev_test_deploy: The Local Environment
         intro: Introduction
         logging_into_server: Logging in to the Server
+        resources: Other Webmaster Resouces
         roles: User Roles
         test_commit_push_deploy: "Test, Commit, Push, Deploy"
       tasks:
@@ -40,13 +43,13 @@ en:
         create_new_help_page: Create a New Help Page
         create_new_payment_type: Create a New Payment Type
         maintenance_mode: Put an Application into Maintenance Mode
-        reset_password: Reset a User's Forgotten Password
         sql_query: Answer a Complicated Query with SQL
         tasks: Common Tasks
         update_rhs_panel: Update the Panel on the Right of the www Home Page
       appendix:
         apache: Apache
         appendix: Appendix
+        backups: Backups
         bootstrap: Bootstrap
         bundler: Bundler
         can_can: Can-Can
