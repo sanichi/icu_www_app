@@ -3,7 +3,6 @@ en:
     help: Help
     HELP: HELP
     accounts: Login Accounts for the ICU Websites
-    admins: Administrators
     articles: Create and Edit News Items and Articles
     downloads: Upload Files for Later Download
     fees: Configure a New Fee
@@ -12,7 +11,6 @@ en:
     index: Help
     make_refund: Make a Refund
     markdown: Markdown for Articles and News Items
-    members: Members
     membership: Annual Subscriptions and Membership of the ICU
     officers: Manage Officers and Mail Relays
     offline_payments: Process Offline Payments
