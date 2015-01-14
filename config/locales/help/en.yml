@@ -22,9 +22,11 @@ en:
     players: "Player Classification, Synchronisation and Resurrection"
     privacy: Privacy Policy
     profile: Change your Club or Contact Details
+    rollover_subs: Rollover Subscriptions
     search_carts: Search Carts
     search_items: Search Items
     shortcuts: Link Shortcuts in Articles and News Items
+    suspend_account: Suspend a User's Login Account
     treasurer: "Carts, Items, Refunds and the Sales Ledger"
     topics:
       intro:
@@ -43,7 +45,8 @@ en:
         maintenance_mode: Put an Application into Maintenance Mode
         sql_query: Answer a Complicated Query with SQL
         tasks: Common Tasks
-        update_rhs_panel: Update the Panel on the Right of the www Home Page
+        seasonal: Seasonal Tasks
+        web: Update the Database using Tools on the Website
       appendix:
         apache: Apache
         appendix: Appendix

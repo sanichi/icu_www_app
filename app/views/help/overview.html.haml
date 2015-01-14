@@ -17,7 +17,7 @@
   %li
     = render "link", topic: "tasks.tasks"
     %ul
-      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type update_rhs_panel].each do |topic|
+      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type seasonal web].each do |topic|
         = render "item", topic: "tasks.#{topic}"
   %li
     = render "link", topic: "appendix.appendix"
@@ -551,13 +551,47 @@
 
 %p TODO
 
-= render "header", topic: "tasks.update_rhs_panel"
+= render "header", topic: "tasks.seasonal"
 
-%p TODO
+%p
+  = succeed(":") do
+    %b After the Irish Championships
+  Update the right hand panel of the home page of the <em>www</em> site with the names and photos of the new mens and womens champions.
+  The file to edit is:
+  = succeed(".") do
+    %em app/views/layouts/_features.html.haml
+%p
+  = succeed(":") do
+    %b July
+  Make sure the Treasurer has rolled over the current set of subscriptions ready to go on sale on the 1st August (see
+  = succeed(").") do
+    = link_to t("help.rollover_subs"), help_rollover_subs_path
+%p
+  = succeed(":") do
+    %b July
+  Renew the security certificate for <em>www.icu.ie</em> so that <em>https</em> keeps working for credit card payments (see
+  = succeed(").") do
+    = render "link", topic: "appendix.ssl"
+%p
+  = succeed(":") do
+    %b December
+  Make sure the annual fee for the <em>icu.ie</em> domain is paid. It should be automatic as long as a valid credit card is registered with the account (see
+  = succeed(").") do
+    = render "link", topic: "appendix.register365"
+
+= render "header", topic: "tasks.web"
+
+%p
+  When the webmaster (the user with the
+  = t("user.role.admin")
+  role) logs into either website, extra buttons and forms become available through which various updates can be performed on the databases.
+  Help for some common tasks the webmaster can accomplish this way is available under the
+  = t("user.role.admin")
+  heading on the
+  = succeed(".") do
+    = link_to "main help page", help_index_path
 
 = render "header", topic: "appendix.appendix"
-
-%p TODO
 
 = render "header", topic: "appendix.apache"
 
@@ -597,15 +631,16 @@
 
 = render "header", topic: "appendix.github"
 %p
-There are public repositories for each of the two web applications:
+  There are public Github repositories for each of the two web applications:
 %ul
   %li
     %a{href: "https://github.com/sanichi/icu_www_app", target: "external"} icu_www_app
   %li
     %a{href: "https://github.com/sanichi/icu_ratings_app", target: "external"} icu_ratings_app
-And 4 more for the
-= succeed(":") do
-  = render "link", topic: "appendix.gems"
+%p
+  Plus 4 more for the
+  = succeed(":") do
+    = render "link", topic: "appendix.gems"
 %ul
   %li
     %a{href: "https://github.com/sanichi/icu_ratings", target: "external"} icu_ratings
@@ -615,6 +650,20 @@ And 4 more for the
     %a{href: "https://github.com/sanichi/icu_name", target: "external"} icu_name
   %li
     %a{href: "https://github.com/sanichi/icu_utils", target: "external"} icu_utils
+%p
+  As described in
+  = succeed(",") do
+    = render "link", topic: "intro.test_commit_push_deploy"
+  the webmaster commits changes to a local git repository and
+  then pushes them to one of the master repositories listed above.
+%p Git and Github resources:
+%ul
+  %li
+    %a{href: "http://git-scm.com/doc", target: "external"} Git Documentation
+  %li
+    %a{href: "https://help.github.com/", target: "external"} Github Help
+  %li
+    %a{href: "http://www.git-tower.com/learn/videos", target: "external"} Git Tower Video Course
 
 = render "header", topic: "appendix.google"
 %p
@@ -626,10 +675,6 @@ And 4 more for the
   (see
   = succeed(").") do
     = render "link", topic: "appendix.secrets"
-
-= render "header", topic: "appendix.ftp"
-
-%p TODO
 
 = render "header", topic: "appendix.haml"
 
@@ -651,8 +696,8 @@ And 4 more for the
     = render "link", topic: "intro.dev_test_deploy"
 %ul
   %li www_development
-  %li ratings_development
   %li www_test
+  %li ratings_development
   %li ratings_test
 %p
   The test databases should be empty (test data is loaded automatically when tests run).
@@ -700,7 +745,7 @@ And 4 more for the
 %p
   These files are
   %strong NEVER COMMITED TO THE REPOSITORY
-  because anyone can view our Github data. For this reason, the files are listed in
+  because anyone can view our Github data. For this reason, the above two files are included in
   %strong .gitignore
   for both web apps.
 %p
@@ -724,6 +769,10 @@ And 4 more for the
   A few things can remain the same, such as the API key for Google Maps (see
   = succeed(").") do
     = render "link", topic: "appendix.google"
+%p
+  See also
+  = succeed(".") do
+    = render "link", topic: "intro.accounts"
 
 = render "header", topic: "appendix.stripe"
 
@@ -731,7 +780,28 @@ And 4 more for the
 
 = render "header", topic: "appendix.ssl"
 
-%p TODO
+%p
+  To enable secure communication between the user's browser and the ICU server for credit card purchases,
+  the ICU has purchased an SSL (also known as TLS) certificate for the <em>www.icu.ie</em> domain.
+  It only lasts a year and so must be renewed. The first one purchased (from
+  = succeed(")") do
+    %a{href: "https://www.123-reg.co.uk/", target: "external"} 123-reg
+  cost £10 and
+  = Date.today >= Date.new(2015, 8, 4) ? "expired" : "expires"
+  on 4th August 2015, so the right time to renew is July each year (see
+  = succeed(").") do
+    = render "link", topic: "tasks.seasonal"
+%p Notes:
+%ul
+  %li The certificate files are kept in <b>/etc/httpd/ssl/</b>.
+  %li
+    There is a separate configuration file for the SSL/TLS port, <b>/etc/httpd/conf.d/ssl.conf</b>,
+    and separate log files in <b>/var/log/httpd/ssl/</b> (see
+    = succeed(").") do
+      = render "link", topic: "appendix.apache"
+  %li A secure connection is also used for logging into the <em>www</em> site.
+  %li The certificate doesn't work for <em>ratings.icu.ie</em>, so logging in there is not protected.
+  %li The certificate also doesn't work for <em>https://icu.ie</em>, so that URL is redirected to <em>https://www.icu.ie</em>.
 
 = render "header", topic: "appendix.webrick"
 

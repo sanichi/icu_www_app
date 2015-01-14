@@ -1,0 +1,24 @@
+= render "titles", text: "help.rollover_subs"
+
+%p
+  Each subscription fee (see
+  = succeed(")") do
+    = link_to t("fee.fees"), admin_fees_path
+  is setup for the current season only. The time to prepare new fees is <b>July</b> so that they're ready
+  to go on sale on 1st August, one month before the new season begins (some people like to pay early).
+%p
+  It's not necessary to create new fees from scratch as one season's subscriptions are
+  usually pretty similar to the previous season's, except for start and end dates of course.
+  Instead, simply find each subscription in the list and then:
+%ul
+  %li click its description in the list to display it,
+  %li click the <b>Rollover</b> button.
+%p
+  This will create an identical set of subscriptions for the new season that won't go on sale until the 1st August.
+%ul
+  %li If there are any adjustments to be made (e.g. cost), edit the rolled-over fees.
+  %li If any fees are to be discontinued, don't roll them over.
+  %li If there are any new subscription fees then either:
+  %ul
+    %li click <b>New</b> and build it from scratch, or
+    %li click <b>Clone</b> on one of the rolled-over subscriptions and edit the clone.

@@ -1,0 +1,14 @@
+= render "titles", text: "help.suspend_account"
+
+%p
+  Once in a while the executive may ask the webmaster to suspend a user's account, for example,
+  as the result of disciplinary proceedings. To do this, find the player in the
+  = succeed(",") do
+    = link_to "player list", players_path
+  click their name to display their details and scroll to the bottom of the page to find the list of login emails they have.
+  For each login email, click to display the details then click <em>Edit</em>, change the user's status from "OK" to
+  something else and click <em>Save</em>. For example, if the account is to be suspended for a year, then for the status
+  enter something like:
+%blockquote= "Suspended until #{Date.today.years_since(1).to_s(:db)}"
+%p The user will then be unable to log in using any of their accounts because their status is not "OK".
+%p The webmaster should make a note to revert the account statuses back to "OK" once the period of suspension has ended.
