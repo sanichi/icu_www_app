@@ -756,9 +756,11 @@
   role) logs into either website, extra buttons and forms become available through which various updates can be performed on the databases.
   Help for some common tasks the webmaster can accomplish this way is available under the
   = t("user.role.admin")
-  heading on the
-  = succeed(".") do
-    = link_to "main help page", help_index_path
+  heading on the main
+  = link_to t("help.help"), help_index_path
+  page on this site and in the
+  %a{href: "http://ratings.icu.ie/articles", target: "external"} articles
+  on the <em>ratings</em> site.
 
 = render "header", topic: "appendix.appendix"
 
