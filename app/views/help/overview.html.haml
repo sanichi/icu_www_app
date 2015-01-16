@@ -22,7 +22,7 @@
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems git github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
@@ -136,7 +136,7 @@
     = succeed(").") do
       = render "link", topic: "intro.dev_test_deploy"
   %li
-    An account with a registrar for the ICU domain (icu.ie) (see
+    An account with a domain registrar for <em>icu.ie</em> (see
     = succeed(").") do
       = render "link", topic: "appendix.register365"
   %li
@@ -170,7 +170,7 @@
   %li
     commit changes to a local repository and then push them to the master repository (see
     = succeed("),") do
-      = render "link", topic: "appendix.github"
+      = render "link", topic: "appendix.git"
   %li
     deploy new code to the production server (see
     = succeed(").") do
@@ -274,7 +274,7 @@
   The steps to deploy a new release of either of the two web applications to the production server are always the same and rely on
   = succeed(",") do
     = render "link", topic: "appendix.rspec"
-  = render "link", topic: "appendix.github"
+  = render "link", topic: "appendix.git"
   and
   = render "link", topic: "appendix.capistrano"
   to test, commit and deploy. The same commands are run every time:
@@ -411,9 +411,9 @@
           %a{href: "https://github.com/login", target: "external"} github.com/login
       %li SSH keys (one for each webmaster/developer) registered with Github to enable push access to the repository.
   %li
-    Our hosting account (see
-    = succeed("):") do
-      = render "link", topic: "appendix.linode"
+    Our
+    = render "link", topic: "appendix.linode"
+    account:
     %ul
       %li
         Email and password to login at
@@ -800,6 +800,43 @@
 
 %p TODO
 
+= render "header", topic: "appendix.git"
+
+%p
+  Git is a tool for software version contol. For each of the ICU web applications and
+  = render "link", topic: "appendix.gems"
+  there are 2 Git repositories:
+%ol
+  %li
+    a master repository on
+    = render "link", topic: "appendix.github"
+    (see the next section),
+  %li
+    a local repository within
+    = succeed(".") do
+      = render "link", topic: "intro.dev_test_deploy"
+%p
+  Code changes for both the applications and gems are first committed to the local repository and then pushed to the master.
+  The webmaster needs to install the Git command line tool for
+  = render "link", topic: "intro.dev_test_deploy"
+  and optionally may also wish to use a GUI (such as
+  %a{href: "http://www.git-tower.com/", target: "external"} Tower
+  on MacOS).
+%p
+  Anyone interested in contributing code can <em>fork</em> (copy) the public repositories, add their changes and then send a
+  <em>pull request</em> (proposal to incorporate their work) to the webmaster, the only person with write access to the
+  public repositories. The webmaster would pull the changes into the local repository, test them and decide whether or not
+  to accept them. If accepted they would be committed locally, pushed to the master repository and ultimately deployed
+  to the production server by
+  = succeed(".") do
+    = render "link", topic: "appendix.capistrano"
+  If rejected, they would be deleted from the local repository and never make it to the master or the production server.
+%p
+  In theory, there could be a <b>webmaster team</b> with one person (the official ICU webmaster) being in charge, merging
+  updates into the master repository and deploying them to the production server.
+  = succeed(".") do
+    = render "link", topic: "intro.dev_test_deploy"
+
 = render "header", topic: "appendix.github"
 %p
   There are public Github repositories for each of the two web applications:
@@ -822,19 +859,9 @@
   %li
     %a{href: "https://github.com/sanichi/icu_utils", target: "external"} icu_utils
 %p
-  As described in
-  = succeed(",") do
-    = render "link", topic: "intro.test_commit_push_deploy"
-  the webmaster commits changes to a local git repository and
-  then pushes them to one of the master repositories listed above.
-%p Git and Github resources:
-%ul
-  %li
-    %a{href: "http://git-scm.com/doc", target: "external"} Git Documentation
-  %li
-    %a{href: "https://help.github.com/", target: "external"} Github Help
-  %li
-    %a{href: "http://www.git-tower.com/learn/videos", target: "external"} Git Tower Video Course
+  Anyone can read these repositories but only the webmaster can write to them.
+  = render "link", topic: "appendix.secrets"
+  are never commited to repositories.
 
 = render "header", topic: "appendix.google"
 %p

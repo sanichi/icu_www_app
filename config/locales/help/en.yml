@@ -58,6 +58,7 @@ en:
         centos: Centos
         ftp: FTP
         gems: Gems
+        git: Git
         github: Github
         google: Google Apps
         haml: HAML
