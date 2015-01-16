@@ -5,7 +5,7 @@ en:
     accounts: Login Accounts for the ICU Websites
     articles: Create and Edit News Items and Articles
     downloads: Upload Files for Later Download
-    fees: Configure a New Fee
+    fees: Configure a New Simple Fee
     header: Hide or Show the Banner Header
     images: Upload Images
     index: Help
@@ -43,7 +43,7 @@ en:
         create_new_help_page: Create a New Help Page
         create_new_payment_type: Create a New Payment Type
         maintenance_mode: Put an Application into Maintenance Mode
-        sql_query: Answer Complicated Queries using SQL
+        sql_query: Answer Complex Queries using SQL
         tasks: Common Tasks
         seasonal: Seasonal Tasks
         web: Update the Database using Tools on the Website
