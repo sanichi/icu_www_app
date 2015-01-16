@@ -22,7 +22,7 @@
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems github google haml mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
@@ -89,29 +89,54 @@
   all of which the webmaster is responsible for maintaining, are as follows:
 %ul
   %li
-    A rented machine permanently connected to the internet (see
-    = succeed("),") do
+    An account with a hosting provider for a <em>production server</em> (see
+    = succeed(").") do
+      = render "link", topic: "appendix.linode"
+  %li
+    A Linux distribution running on the production server (see
+    = succeed(").") do
       = render "link", topic: "appendix.centos"
-    with a web server (see
+  %li
+    Web (see
     = succeed(")") do
       = render "link", topic: "appendix.apache"
-    and an application server (see
+    and application server software (see
     = succeed(").") do
       = render "link", topic: "appendix.passenger"
-  %li
-    Two SQL databases, one for each website (see
-    = succeed(").") do
-      = render "link", topic: "appendix.mysql"
   %li
     Two web applications, one for each website (see
     = succeed(").") do
       = render "link", topic: "appendix.rails"
   %li
-    Several modular software components for specialized tasks, mostly for the ratings site (see
+    Two SQL databases, one for each website (see
+    = succeed(").") do
+      = render "link", topic: "appendix.mysql"
+  %li
+    A no-SQL database for fast retrieval of Irish language translations (see
+    = succeed(").") do
+      = render "link", topic: "appendix.redis"
+  %li
+    Some modular software components for specific tasks (see
     = succeed(").") do
       = render "link", topic: "appendix.gems"
   %li
-    An account with a registrar to maintain the ICU domain (icu.ie) and it's DNS records (see
+    An FTP service mainly for tournament controllers (see
+    = succeed(").") do
+      = render "link", topic: "appendix.ftp"
+  %li
+    Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never committed to the repository (see
+    = succeed(").") do
+      = render "link", topic: "appendix.secrets"
+  %li
+    A system for scheduling regular jobs (see
+    = succeed(").") do
+      = render "link", topic: "appendix.whenever"
+  %li
+    Development and test versions of the websites setup by the webmaster on their own machine (see
+    = succeed(").") do
+      = render "link", topic: "intro.dev_test_deploy"
+  %li
+    An account with a registrar for the ICU domain (icu.ie) (see
     = succeed(").") do
       = render "link", topic: "appendix.register365"
   %li
@@ -119,35 +144,18 @@
     = succeed(").") do
       = render "link", topic: "appendix.stripe"
   %li
-    An account with an email provider for delivery and relaying (see
+    An account with an email provider for delivery and relays (see
     = succeed(").") do
       = render "link", topic: "appendix.mailgun"
   %li
     An account with a repository hosting service for source code management (see
     = succeed(").") do
       = render "link", topic: "appendix.github"
-  %li
-    Data files containing sensitive information (passwords, API keys, cryptographic data, etc) which are never committed to the repository (see
-    = succeed(").") do
-      = render "link", topic: "appendix.secrets"
-  %li
-    An FTP service mainly for tournament controllers (see
-    = succeed(").") do
-      = render "link", topic: "appendix.ftp"
-  %li
-    A system for scheduling regular jobs (see
-    = succeed(").") do
-      = render "link", topic: "appendix.whenever"
-  %li
-    A no-SQL database for fast retrieval of Irish language translations (see
-    = succeed(").") do
-      = render "link", topic: "appendix.redis"
 
 = render "header", topic: "intro.dev_test_deploy"
 %p
-  The local environment is what the webmaster has on their local machine to develop, test and deploy new code to the production server.
-  New webmasters should spend some time setting it up correctly as it's essential.
-  It's used to:
+  The local environment is what the webmaster has on their own machine to develop, test and deploy new code to the production server.
+  New webmasters should spend some time setting it up correctly as it's essential. It's used to:
 %ul
   %li develop new functionality or fix bugs,
   %li write new automated tests,
@@ -160,16 +168,16 @@
     = succeed("),") do
       = render "link", topic: "appendix.webrick"
   %li
-    commit changes to a local repository and then push it to the master repository (see
+    commit changes to a local repository and then push them to the master repository (see
     = succeed("),") do
       = render "link", topic: "appendix.github"
   %li
-    deploy new code to the live server (see
+    deploy new code to the production server (see
     = succeed(").") do
       = render "link", topic: "appendix.capistrano"
 %p
   Following are the steps to setup the environment for the first time.
-  It's not required to use the same OS (Centos) as the live server,
+  It's not required to use the same OS (Centos) as the production server,
   any Unix-like OS should be fine (e.g. MacOS or any flavour of Linux).
   You should probably avoid Windows.
 %p
@@ -263,16 +271,16 @@
 
 = render "header", topic: "intro.test_commit_push_deploy"
 %p
-  The steps to deploy a new release to the live server are always the same and rely on
+  The steps to deploy a new release of either of the two web applications to the production server are always the same and rely on
   = succeed(",") do
     = render "link", topic: "appendix.rspec"
   = render "link", topic: "appendix.github"
   and
-  = succeed(".") do
-    = render "link", topic: "appendix.capistrano"
-  Here are the commands to run:
+  = render "link", topic: "appendix.capistrano"
+  to test, commit and deploy. The same commands are run every time:
 - cmd = []
-- cmd << '$ bin/rake                                       # runs entire test suite to check nothing has regressed'
+- cmd << '$ cd ~/Projects/icu_www_app                      # or ~/Projects/icu_ratings_app for the ratings site'
+- cmd << '$ bin/rake                                       # runs the entire test suite to check nothing has regressed'
 - cmd << '$ git add .                                      # stages all changes'
 - cmd << '$ git commit -m "Comment describing the change"  # commits to the local repository'
 - cmd << '$ git push                                       # pushes to the master repository'
@@ -303,7 +311,10 @@
     Examine web server (see
     = succeed(")") do
       = render "link", topic: "appendix.apache"
-    or application log files.
+    or application (see
+    = succeed(")") do
+      = render "link", topic: "appendix.rails"
+    log files.
   %li
     Update system libraries (see
     = succeed(").") do
@@ -323,19 +334,23 @@
   %ul
     %li <b>/var/log/http/www/</b>: Apache log files for the <em>www</em> site,
     %li <b>/var/log/http/ratings/</b>: Apache log files for the <em>ratings</em> site,
-    %li <b>/var/apps/www/log/production.log</b>: application log file for the <em>www</em> site,
-    %li <b>/var/apps/ratings/log/production.log</b>: application log file for the <em>ratings</em> site.
+    %li <b>/var/apps/www/current/log/production.log</b>: Rails log file for the <em>www</em> site,
+    %li <b>/var/apps/ratings/current/log/production.log</b>: Rails log file for the <em>ratings</em> site.
 %p
-  Other useful directories and files on the live server to know about:
+  Other useful directories and files on the production server to know about:
   %ul
     %li <b>/etc/httpd/conf.d/vhost.conf</b>: Apache configuration for both sites,
+    %li
+      <b>/etc/httpd/conf.d/ssl.conf</b>:
+      = render "link", topic: "appendix.ssl"
+      configuration for the www site,
     %li <b>/var/apps/www/current</b>: root directory for the current release of the <em>www</em> application,
     %li <b>/var/apps/ratings/current</b>: root directory for the current release of the <em>ratings</em> application,
     %li <b>/etc/logrotate.d/</b>: log file rotation configuration,
     %li
-      <b>~/bak/</b>: backups kept here prior to transfer offsite (see
-      = succeed(").") do
-        = render "link", topic: "appendix.backups"
+      <b>~/bak/</b>:
+      = render "link", topic: "appendix.backups"
+      are kept here prior to transfer offsite.
 
 = render "header", topic: "intro.accounts"
 %p
@@ -396,9 +411,9 @@
           %a{href: "https://github.com/login", target: "external"} github.com/login
       %li SSH keys (one for each webmaster/developer) registered with Github to enable push access to the repository.
   %li
-    Our Linode account (see
+    Our hosting account (see
     = succeed("):") do
-      = render "link", topic: "appendix.centos"
+      = render "link", topic: "appendix.linode"
     %ul
       %li
         Email and password to login at
@@ -456,11 +471,50 @@
 
 = render "header", topic: "tasks.tasks"
 
-%p TODO
+%p This section contains details of some common webmaster tasks.
 
 = render "header", topic: "tasks.maintenance_mode"
 
-%p TODO
+%p
+  If a serious problem develops with one of the websites it can be temporarily taken offline
+  by putting the application on the production server into maintenance mode. This is done from
+  = render "link", topic: "intro.dev_test_deploy"
+  by running the following
+  = render "link", topic: "appendix.capistrano"
+  task:
+- cmd = []
+- cmd << '$ cd ~/Projects/icu_www_app/  # or ~/Projects/icu_rating_app/ for the ratings site'
+- cmd << '$ bin/cap production deploy:web:disable'
+%pre~ cmd.join("\n")
+%p
+  In maintenance mode
+  = render "link", topic: "appendix.apache"
+  will redirect all requests to a maintenance page which will display the default message:
+%blockquote
+  We're currently offline for maintenance as of [current time].
+  Sorry for any inconvenience. We'll be back shortly.
+%p The words "maintenance" and "shortly" in this message can be replaced by setting temporary environment variable like this:
+- cmd = []
+- cmd << '$ REASON="a system upgrade" BACK="in a couple of hours" bin/rake production deploy:web:disable'
+%pre~ cmd.join("\n")
+%p To exit from maintenance mode and make the site accessible again, run:
+- cmd = []
+- cmd << '$ bin/cap production deploy:web:enable'
+%pre~ cmd.join("\n")
+%p
+  It's possible to allow the webmaster to continue to view the live websites even if they are in maintenance mode.
+  To do this:
+%ul
+  %li log into the production server,
+  %li edit the Apache configuration file for the two sites (<em>/etc/httpd/conf.d/vhost.conf</em>),
+  %li find the maintenance page rewrite rules (there's one set for each of the two websites),
+  %li alter the <em>REMOTE_ADDRESS</em> rule to exclude the webmaster's IP address,
+  %li to view secure <em>www</em> pages, do the same for <em>/etc/httpd/conf.d/ssl.conf</em>,
+  %li restart Apache.
+%p
+  This will allow the site to be accessed by requests from that IP only (all others get the maintenance page).
+  To avoid forgetting to return things to normal once repairs are complete,
+  a prominent notice is displayed at the top of every page whenever maintenance mode is on.
 
 = render "header", topic: "tasks.check_ticket"
 %p
@@ -469,40 +523,58 @@
     = succeed("),") do
       %a{href: "/help/accounts", target: "internal"} more details here
   say for example, <em>2tDdxD</em>, then you can check it's validity by starting a console for the <em>www</em> web application:
-  - cmd = []
-  - cmd << '$ cd ~/Projects/icu_www_app/'
-  - cmd << '$ bin/rails c'
-  - cmd << '>> st = SeasonTicket.new("2tDdxD")'
-  - cmd << '>> st.expires_on'
-  - cmd << '=> "2010-12-31"'
-  - cmd << '>> st.icu_id'
-  - cmd << '=> "1234"'
-  %pre~ cmd.join("\n")
-  %p
-    In this particular example the ticket is valid and belongs to ICU ID 1234 but expired at the end of 2010.
-    If you try the same thing with an invalid ticket you'll get some kind of error, for example:
-  - cmd = []
-  - cmd << '>> st = SeasonTicket.new("rubbish")'
-  - cmd << '>> st.error'
-  - cmd << '=> "invalid season ticket (bad characters)"'
-  %pre~ cmd.join("\n")
-  %p
-    Note that for proper decoding of season tickets in the local environment, the same cryptographic entries configured
-    in the production application's <em>secrets.yml</em> file are required in the local version of that file (see
-    = succeed(").") do
-      = render "link", topic: "appendix.secrets"
-  %p
-    If you don't have the right crypto entires in <em>secrets.yml</em>, and alternative would be to log into the live server
-    and perform the operation there, but remember to start the console in the <em>production</em> environment because the
-    default is <em>development</em> (which the live server lacks):
-  - cmd = []
-  - cmd << '$ cd /var/apps/www/current'
-  - cmd << '$ RAILS_ENV=production bin/rails c'
-  %pre~ cmd.join("\n")
+- cmd = []
+- cmd << '$ cd ~/Projects/icu_www_app/'
+- cmd << '$ bin/rails c'
+- cmd << '>> st = SeasonTicket.new("2tDdxD")'
+- cmd << '>> st.expires_on'
+- cmd << '=> "2010-12-31"'
+- cmd << '>> st.icu_id'
+- cmd << '=> "1234"'
+%pre~ cmd.join("\n")
+%p
+  In this particular example the ticket is valid and belongs to ICU ID 1234 but expired at the end of 2010.
+  If you try the same thing with an invalid ticket you'll get some kind of error, for example:
+- cmd = []
+- cmd << '>> st = SeasonTicket.new("rubbish")'
+- cmd << '>> st.error'
+- cmd << '=> "invalid season ticket (bad characters)"'
+%pre~ cmd.join("\n")
+%p
+  Note that for proper decoding of season tickets in the local environment, the same cryptographic entries configured
+  in the production application's <em>secrets.yml</em> file are required in the local version of that file (see
+  = succeed(").") do
+    = render "link", topic: "appendix.secrets"
+%p
+  If you don't have the right crypto entires in <em>secrets.yml</em>, and alternative would be to log into the production server
+  and perform the operation there, but remember to start the console in the <em>production</em> environment because the
+  default is <em>development</em> (which the production server lacks):
+- cmd = []
+- cmd << '$ cd /var/apps/www/current'
+- cmd << '$ RAILS_ENV=production bin/rails c'
+%pre~ cmd.join("\n")
 
 = render "header", topic: "tasks.sql_query"
 
-%p TODO
+%p
+  The webmaster can expect to occasionally receive requests (from, for example, the treasurer or selection committees)
+  for detailed information from the databases which is not available on either of the two websites. One option would be to
+  add new functionality to one of the websites to display the requested information, but that could require a lot of work.
+%p
+  Alternatively, for a quick one-off answer, the data could be generated by logging into one or both databases, issuing
+  the appropriate SQL commands and converting the results to CSV before emailing them back to the requestor. To do this
+  the webmaster must:
+%ul
+  %li know what data is stored in which tables of both databases,
+  %li have a good grasp of SQL, especially of table joins.
+%p
+  As an example of a complex query best handled this way is to list, for all juniors (under 19 on Jan 1):
+%ul
+  %li name, birthday and ICU number,
+  %li current rating and number of rated games in the last two years,
+  %li club, telephone and email (if available),
+  %li the date on which they last subscribed.
+%p The data for this particular query is spread across several tables in both databases.
 
 = render "header", topic: "tasks.create_new_help_page"
 %p
@@ -549,14 +621,58 @@
 
 = render "header", topic: "tasks.create_new_payment_type"
 
-%p TODO
+%p There are currently three categories of fees payable on the <em>www</em> website:
+%ul
+  %li subscriptions,
+  %li tournament entries,
+  %li simple.
+%p The last category, <em>simple</em>, is designed for fees types that have the following properties:
+%ul
+  %li the restrictions, if any, on who can pay the fee are solely in terms of age and/or rating,
+  %li when a payment is made, other than recording it, no additional database table updates are required.
+%p
+  Simple fees, including the creation of new types in that category, can be managed by the treasurer
+  or webmaster via tools on the website (see
+  = succeed(").") do
+    = link_to t("help.fees"), help_fees_path, target: "internal"
+  The
+  %a{href: "http://ratings.icu.ie/articles/14", target: "internal"} foreign tournament rating fee
+  is an example of a simple fee. Another example is a donation.
+%p
+  For more complex categories of fees, special purpose code has to be written to support
+  their management on the website. This has already been done for subscriptions and tournament entries.
+  Unless their requirements change in the future, no further programming effort is necessary.
+%p
+  However, new types of fees that don't fit into any of the existing categories may
+  arise in the future and to support them on the web site will require custom code
+  to be written. To accomplish this the webmaster will need a thorough understanding
+  of how fees and payments are implemented.
+%p
+  An example of a type of fee that would require new code is the payment of license fees
+  for registered coaches (so-called TRG licenses). There are several reasons that the
+  proposed requirements for this type of fee would make it too complex to fit into the
+  <em>simple</em> category:
+%ul
+  %li the fee must be paid every two years from the date it was first paid,
+  %li a fine is imposed for late payments,
+  %li attendance at a relevant course is required before a license can be acquired,
+  %li auxiliary database tables would be needed to hold data on courses and attendees,
+  %li seed data on who has already paid and on what date would also be necessary.
+%p
+  As this example shows, implementing new categories could take a fair amount of work
+  even though the framework for doing so is already present. Depending on the skills
+  of and time available to the webmaster, it might be preferable to squeeze new types
+  of fees into the simple category by watering down their requirements, as was done
+  for the example detailed in
+  = succeed(".") do
+    = link_to t("help.fees"), help_fees_path, target: "internal"
 
 = render "header", topic: "tasks.seasonal"
 
 %p
   = succeed(":") do
     %b After the Irish Championships
-  Update the right hand panel of the home page of the <em>www</em> site with the names and photos of the new mens and womens champions.
+  Update the right hand panel of the home page of the <em>www</em> site with the names and photos of the new men's and women's champions.
   The file to edit is:
   = succeed(".") do
     %em app/views/layouts/_features.html.haml
@@ -676,6 +792,10 @@
   = succeed(").") do
     = render "link", topic: "appendix.secrets"
 
+= render "header", topic: "appendix.linode"
+
+%p TODO
+
 = render "header", topic: "appendix.haml"
 
 %p TODO
@@ -686,7 +806,7 @@
 
 = render "header", topic: "appendix.mysql"
 %p
-  There are two production MySQL databases on the live server, one for each web application:
+  There are two production MySQL databases on the production server, one for each web application:
 %ul
   %li www_production
   %li ratings_production
@@ -744,13 +864,13 @@
     %strong config/secrets.yml
 %p
   These files are
-  %strong NEVER COMMITED TO THE REPOSITORY
+  %strong NEVER COMMITTED TO THE REPOSITORY
   because anyone can view our Github data. For this reason, the above two files are included in
   %strong .gitignore
   for both web apps.
 %p
   When setting up a development and test environment, separate versions of these files
-  (different to those on the live server) are required.
+  (different to those on the production server) are required.
   Sample files showing what's required are available in the repository in
   = succeed(",") do
     %strong config/examples/
@@ -762,7 +882,7 @@
     = succeed("),") do
       = render "link", topic: "appendix.stripe"
   %li
-    database connection parameters will refer to databases running the local machine, not the live server (see
+    database connection parameters will refer to databases running the local machine, not the production server (see
     = succeed(").") do
       = render "link", topic: "appendix.mysql"
 %p

@@ -43,7 +43,7 @@ en:
         create_new_help_page: Create a New Help Page
         create_new_payment_type: Create a New Payment Type
         maintenance_mode: Put an Application into Maintenance Mode
-        sql_query: Answer a Complicated Query with SQL
+        sql_query: Answer Complicated Queries using SQL
         tasks: Common Tasks
         seasonal: Seasonal Tasks
         web: Update the Database using Tools on the Website
@@ -61,6 +61,7 @@ en:
         github: Github
         google: Google Apps
         haml: HAML
+        linode: Linode
         mailgun: Mailgun
         mysql: MyQSL
         passenger: Passenger
