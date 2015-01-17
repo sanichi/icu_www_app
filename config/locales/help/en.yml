@@ -33,6 +33,7 @@ en:
         accounts: "Usernames, Passwords and API Keys"
         components: System Components
         dev_test_deploy: The Local Environment
+        financial: The Cost of the Websites
         intro: Introduction
         logging_into_server: Logging in to the Server
         resources: Other Webmaster Resouces
@@ -46,7 +47,6 @@ en:
         sql_query: Answer Complex Queries using SQL
         tasks: Common Tasks
         seasonal: Seasonal Tasks
-        web: Update the Database using Tools on the Website
       appendix:
         apache: Apache
         appendix: Appendix

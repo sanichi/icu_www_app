@@ -4,20 +4,20 @@
   This is an introduction to the ICU websites: how they work, what's involved, how to make changes.
   It's primarily intended as a resource for ICU webmasters.
   The websites have evolved since the first one appeared in 2004 and will probably continue to do so in the future.
-  Future webmasters are encouraged to keep this document up to date. Revision history:
-%ul
-  %li January 2015: created by MO (still in progress).
+  Future webmasters are encouraged to keep this document up to date.
+%p
+  The first version of this page was created in Jan 2015 by MO and is currently still in progress.
 %hr
 %ul
   %li
     = render "link", topic: "intro.intro"
     %ul
-      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server accounts resources].each do |topic|
+      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server accounts resources financial].each do |topic|
         = render "item", topic: "intro.#{topic}"
   %li
     = render "link", topic: "tasks.tasks"
     %ul
-      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type seasonal web].each do |topic|
+      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type seasonal].each do |topic|
         = render "item", topic: "tasks.#{topic}"
   %li
     = render "link", topic: "appendix.appendix"
@@ -43,7 +43,9 @@
   These websites are managed by a team, one of which is the webmaster. Some examples of roles other than webmaster on the main site are:
 %ul
   %li Editor: manages news items, articles, images, games, club listings, calendar entries, etc.
-  %li Treasurer: manages subscription and other fees, can issue refunds and view shopping carts.
+  %li Calendar Editor: can only manage calendar entries.
+  %li Treasurer: manages subscription and other fees; can process offline payments, issue refunds and view shopping carts.
+  %li Membership Officer: can process offline payments and manage player data.
   %li Translator: manages Irish language translations.
 %p And on the ratings site:
 %ul
@@ -458,8 +460,8 @@
 %p Other resources helpful to the webmaster are:
 %ul
   %li
-    A detailed log of all system software updates and configuration changes for the current production server
-    (available from MO as a single <em>Evernote</em> page).
+    A detailed log of all software updates and configuration changes for the current production server (2014-)
+    available from MO as a single <em>Evernote</em> page.
   %li
     A
     %a{href: "https://github.com/sanichi/icu_ratings_app/wiki/Setup", target: "external"} description
@@ -468,6 +470,37 @@
     A
     %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup-a-Server", target: "external"} description
     of how the previous production server (2011-2014) was built.
+
+= render "header", topic: "intro.financial"
+
+%p The unavoidable costs are:
+%ul
+  %li
+    web hosting, about $20/month (see
+    = succeed("),") do
+      = render "link", topic: "appendix.linode"
+  %li
+    domain registration, about €30/year (see
+    = succeed("),") do
+      = render "link", topic: "appendix.register365"
+  %li
+    a security certificate for the <em>www</em> site, about £10/year (see
+    = succeed(").") do
+      = render "link", topic: "appendix.ssl"
+%p Optional extras, none of which are currently used (in Jan 15) are:
+%ul
+  %li
+    full server backup, about $5/month (see
+    = succeed("),") do
+      = render "link", topic: "appendix.backups"
+  %li
+    extended server monitoring, about $20/month (see
+    = succeed("),") do
+      = render "link", topic: "appendix.linode"
+  %li
+    extra security certificates (one for the <em>ratings</em> site, one for http://icu.ie), each about £10/year (see
+    = succeed(").") do
+      = render "link", topic: "appendix.ssl"
 
 = render "header", topic: "tasks.tasks"
 
@@ -621,7 +654,7 @@
       on MacOS
 %p
   In either case, the result is 3 CSV files (say <em>data1.csv</em>, <em>data2.csv</em> and <em>data3.csv</em>) with <em>N</em> rows and 6, 1 and 1 columns.
-  The final step is to stitch them together horizontally to generate 1 file with <em>N</em> rows and 8 columns using the Unix utiliy
+  The final step is to stitch them together horizontally to generate 1 file with <em>N</em> rows and 8 columns using the Unix utility
   = succeed(":") do
     %a{href: "http://en.wikipedia.org/wiki/Paste_%28Unix%29", target: "external"} paste
 %pre $ paste -d, data{1,2,3}.csv > data.csv
@@ -723,8 +756,8 @@
 = render "header", topic: "tasks.seasonal"
 
 %p
-  = succeed(":") do
-    %b After the Irish Championships
+  %b July
+  (or whenever the Irish Championships finish):
   Update the right hand panel of the home page of the <em>www</em> site with the names and photos of the new men's and women's champions.
   The file to edit is:
   = succeed(".") do
@@ -738,9 +771,15 @@
 %p
   = succeed(":") do
     %b July
-  Renew the security certificate for <em>www.icu.ie</em> so that <em>https</em> keeps working for credit card payments (see
+  Renew the security certificate for <em>www.icu.ie</em> so that <em>https</em> continues to work for credit card payments (see
   = succeed(").") do
     = render "link", topic: "appendix.ssl"
+%p
+  %b September
+  (or whenever the executive changes):
+  Update the database records for ICU officers and email addresses (see
+  = succeed(").") do
+    = link_to t("help.officers"), help_officers_path
 %p
   = succeed(":") do
     %b December
@@ -748,29 +787,81 @@
   = succeed(").") do
     = render "link", topic: "appendix.register365"
 
-= render "header", topic: "tasks.web"
-
-%p
-  When the webmaster (the user with the
-  = t("user.role.admin")
-  role) logs into either website, extra buttons and forms become available through which various updates can be performed on the databases.
-  Help for some common tasks the webmaster can accomplish this way is available under the
-  = t("user.role.admin")
-  heading on the main
-  = link_to t("help.help"), help_index_path
-  page on this site and in the
-  %a{href: "http://ratings.icu.ie/articles", target: "external"} articles
-  on the <em>ratings</em> site.
-
 = render "header", topic: "appendix.appendix"
 
 = render "header", topic: "appendix.apache"
 
-%p TODO
+%p
+  The web server is Apache and its configuration is in:
+%ul
+  %li
+    = succeed(":") do
+      %em /etc/httpd/conf/httpd.conf
+    the main file but not much different from the default,
+  %li
+    = succeed(":") do
+      %em /etc/httpd/conf.d/vhost.conf
+    contains most of the configuration for the ICU websites,
+  %li
+    = succeed(":") do
+      %em /etc/httpd/conf.d/ssl.conf
+    has a secure version of the configuration settings for the <em>www</em> site.
+%p
+  Log files are in:
+%ul
+  %li
+    = succeed(":") do
+      %em /var/log/httpd/www/
+    for the <em>www</em> site,
+  %li
+    = succeed(":") do
+      %em /var/log/httpd/ratings/
+    for the <em>ratings</em> site,
+  %li
+    = succeed(":") do
+      %em /var/log/httpd/ssl/
+    for secure connections to the <em>www</em> site,
+  %li
+    = succeed(":") do
+      %em /var/log/httpd
+    for everything else.
+%p Log rotation is configured by files in <em>/etc/logrotate.d</em>: <em>www</em>, <em>ratings</em> and <em>httpd</em>.
+%p
+  Apache passes requests for the two websites to the application server (see
+  = succeed("),") do
+    = render "link", topic: "appendix.passenger"
+  so these requests get logged twice, firstly in one of the Apache logs and secondly in one of the two application logs:
+%ul
+  %li <em>/var/apps/www/current/log/production.log</em> or
+  %li <em>/var/apps/ratings/current/log/production.log</em>.
 
 = render "header", topic: "appendix.backups"
 
-%p TODO
+%p
+  The backup policy is to regularly (once a day) save important data (the databases) and files
+  (images, uploads, tournament flyers, Apache configuration, firewall settings and
+  = succeed(")") do
+    = render "link", topic: "appendix.secrets"
+  to a directory (<em>~/bak</em>) on the production server and then periodically
+  <em>rsync</em> this entire directory to one or more offsite locations (for example
+  of the webmaster's desktop and laptop). The server backups are managed by the script
+  <em>~/bin/bak.sh</em> run every night via <em>cron</em>.
+%p The <em>crontab</em> entry for the <em>rsync</em> running on one of the webmaster's home computers might look something like this:
+%pre 0 10,14,18,22 * * * cd ~/Projects/bak; rsync -rtvz <em>user</em>@aontas.icu.ie:bak/ aontas > aontas.log 2>&1
+%p Multiple attempts per day are made because home computers are not always turned on.
+%p
+  Since the source code for the
+  = render "link", topic: "appendix.rails"
+  applications and ICU
+  = render "link", topic: "appendix.gems"
+  are in
+  = render "link", topic: "appendix.git"
+  repositories, there's no need to back it up.
+%p
+  = render "link", topic: "appendix.linode"
+  offer an inexpensive backup of the entire server which would make it extremely easy to recover from a failure.
+  It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that, if necessary,
+  you could rebuild the server from scratch, you might decide it's not worth it. Currently (Jan 15) we aren't using it.
 
 = render "header", topic: "appendix.bootstrap"
 
@@ -803,7 +894,7 @@
 = render "header", topic: "appendix.git"
 
 %p
-  Git is a tool for software version contol. For each of the ICU web applications and
+  Git is a tool for software version control. For each of the ICU web applications and
   = render "link", topic: "appendix.gems"
   there are 2 Git repositories:
 %ol
@@ -861,7 +952,7 @@
 %p
   Anyone can read these repositories but only the webmaster can write to them.
   = render "link", topic: "appendix.secrets"
-  are never commited to repositories.
+  are never committed to repositories.
 
 = render "header", topic: "appendix.google"
 %p
@@ -964,7 +1055,7 @@
     = succeed("),") do
       = render "link", topic: "appendix.stripe"
   %li
-    database connection parameters will refer to databases running the local machine, not the production server (see
+    database connection parameters will refer to databases running on the local machine, not the production server (see
     = succeed(").") do
       = render "link", topic: "appendix.mysql"
 %p
@@ -983,9 +1074,9 @@
 = render "header", topic: "appendix.ssl"
 
 %p
-  To enable secure communication between the user's browser and the ICU server for credit card purchases,
-  the ICU has purchased an SSL (also known as TLS) certificate for the <em>www.icu.ie</em> domain.
-  It only lasts a year and so must be renewed. The first one purchased (from
+  To enable secure communication between the user's browser and the ICU server during credit card purchases
+  there is an SSL (aka TLS) certificate for the <em>www.icu.ie</em> domain which is renewed annually.
+  The first one purchased (from
   = succeed(")") do
     %a{href: "https://www.123-reg.co.uk/", target: "external"} 123-reg
   cost £10 and
@@ -1001,9 +1092,13 @@
     and separate log files in <b>/var/log/httpd/ssl/</b> (see
     = succeed(").") do
       = render "link", topic: "appendix.apache"
-  %li A secure connection is also used for logging into the <em>www</em> site.
-  %li The certificate doesn't work for <em>ratings.icu.ie</em>, so logging in there is not protected.
-  %li The certificate also doesn't work for <em>https://icu.ie</em>, so that URL is redirected to <em>https://www.icu.ie</em>.
+  %li The secure connection is also used for logging into the <em>www</em> site.
+  %li
+    The certificate doesn't work for <em>ratings.icu.ie</em>, so logging in there is not protected
+    (it could easily be if the ICU paid for a second certificate).
+  %li
+    The certificate also doesn't work for <em>https://icu.ie</em> (this would again require paying for another certificate).
+    To cope with this, such URLs are redirected to <em>https://www.icu.ie</em> by directives in <em>ssl.conf</em>.
 
 = render "header", topic: "appendix.webrick"
 
