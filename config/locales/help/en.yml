@@ -32,9 +32,9 @@ en:
       intro:
         accounts: "Usernames, Passwords and API Keys"
         components: System Components
-        dev_test_deploy: The Local Environment
         financial: The Cost of the Websites
         intro: Introduction
+        local_env: The Local Environment
         logging_into_server: Logging in to the Server
         resources: Other Webmaster Resouces
         roles: User Roles
@@ -51,7 +51,6 @@ en:
         apache: Apache
         appendix: Appendix
         backups: Backups
-        bootstrap: Bootstrap
         bundler: Bundler
         can_can: Can-Can
         capistrano: Capistrano
@@ -75,5 +74,6 @@ en:
         secrets: Secrets
         ssl: SSL/TLS
         stripe: Stripe
+        style_script: Styling and Scripting
         webrick: WEBrick
         whenever: Whenever

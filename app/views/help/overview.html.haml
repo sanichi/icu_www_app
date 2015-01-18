@@ -12,7 +12,7 @@
   %li
     = render "link", topic: "intro.intro"
     %ul
-      - %w[roles components dev_test_deploy test_commit_push_deploy logging_into_server accounts resources financial].each do |topic|
+      - %w[roles components local_env test_commit_push_deploy logging_into_server accounts resources financial].each do |topic|
         = render "item", topic: "intro.#{topic}"
   %li
     = render "link", topic: "tasks.tasks"
@@ -22,7 +22,7 @@
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache backups bootstrap bundler can_can capistrano centos ftp gems git github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe webrick whenever].each do |topic|
+      - %w[apache backups bundler can_can capistrano centos ftp gems git github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe style_script webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
@@ -52,8 +52,10 @@
   %li Reporter: loads tournament reports for rating.
   %li Rating Officer: rates tournaments, publishes rating lists.
 %p
-  When anyone with a role logs in, certain pages become available through which they can update part of one of two databases (depending what the role is).
-  For example:
+  When anyone with a role logs in, certain pages become available through which they can update some part of the databases
+  (depending what the role is; see
+  = render "link", topic: "appendix.can_can"
+  for more details). For example:
   %ul
     %li
       On the main site, Editors can edit news items and articles
@@ -136,7 +138,7 @@
   %li
     Development and test versions of the websites setup by the webmaster on their own machine (see
     = succeed(").") do
-      = render "link", topic: "intro.dev_test_deploy"
+      = render "link", topic: "intro.local_env"
   %li
     An account with a domain registrar for <em>icu.ie</em> (see
     = succeed(").") do
@@ -154,7 +156,7 @@
     = succeed(").") do
       = render "link", topic: "appendix.github"
 
-= render "header", topic: "intro.dev_test_deploy"
+= render "header", topic: "intro.local_env"
 %p
   The local environment is what the webmaster has on their own machine to develop, test and deploy new code to the production server.
   New webmasters should spend some time setting it up correctly as it's essential. It's used to:
@@ -298,7 +300,7 @@
 = render "header", topic: "intro.logging_into_server"
 %p
   Most changes the webmaster performs are done either via the web site (to update the database) or via
-  = render "link", topic: "intro.dev_test_deploy"
+  = render "link", topic: "intro.local_env"
   (to update the applications).
   However, there are some things for which logging into the production server is required (see
   = succeed(").") do
@@ -511,7 +513,7 @@
 %p
   If a serious problem develops with one of the websites it can be temporarily taken offline
   by putting the application on the production server into maintenance mode. This is done from
-  = render "link", topic: "intro.dev_test_deploy"
+  = render "link", topic: "intro.local_env"
   by running the following
   = render "link", topic: "appendix.capistrano"
   task:
@@ -647,7 +649,7 @@
   %li
     Working from the
     = succeed(",") do
-      = render "link", topic: "intro.dev_test_deploy"
+      = render "link", topic: "intro.local_env"
     instead of using the command line, use a GUI with the ability export CSV (e.g.
     %a{href: "http://www.sequelpro.com/", target: "external"} Sequel Pro
     = succeed(").") do
@@ -667,7 +669,7 @@
   Instead, they're part of the web application code and need the webmaster to create and edit them.
   To create a new help page do the following in
   = succeed(":") do
-    = render "link", topic: "intro.dev_test_deploy"
+    = render "link", topic: "intro.local_env"
 %ul
   %li
     think of a single word or short snake-case name for the new page and add it to the
@@ -863,21 +865,116 @@
   It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that, if necessary,
   you could rebuild the server from scratch, you might decide it's not worth it. Currently (Jan 15) we aren't using it.
 
-= render "header", topic: "appendix.bootstrap"
-
-%p TODO
-
 = render "header", topic: "appendix.bundler"
 
-%p TODO
+%p
+  Bundler is a tool for managing
+  = succeed(".") do
+    = render "link", topic: "appendix.gems"
+  Both web applications list the gems they depend on in a file called <em>Gemfile</em> which
+  may also specify constraints on the required gem versions. The explicitly required gems
+  often have implicit dependencies (specified by the gem authors) on yet more gems.
+  Bundler works out a set of gem versions that will satisfy all constraints and saves that
+  set to a file called <em>Gemfile.lock</em> which is committed to the repository, ensuring
+  that all instances of the application will use the exact same set of gems.
+%p
+  In
+  = render "link", topic: "intro.local_env"
+  the tool is invoked from the command line. For example:
+%pre $ bundle install
+%p
+  will install any gems from <em>Gemfile.lock</em> that are not already installed.
+  On the production server, bundler is automatically invoked by
+  = render "link", topic: "appendix.capistrano"
+  during deployment.
+%p
+  Most gems are under active development and new versions are regularly available.
+  If the following command is run locally:
+%pre $ bundle update
+%p
+  the latest available versions of all gems (consistent with the explicit constraints in <em>Gemfile</em>
+  and the implicit constraints of the gem authors) will be installed and <em>Gemfile.lock</em>
+  updated. However, caution should be exercised when updating many gems at the same time as
+  it may be difficult to identify the cause of any incompatibilities that may arise. A better
+  approach is to update a small group of gems together and then run the tests before committing
+  to the new versions. For example, to update just the ICU gems that the
+  <em>ratings</em> application depends on:
+%pre $ bundle update icu_tournament icu_ratings icu_name
+%p
+  This will also try to update the <em>icu_utils</em> gem which is an implicit dependency
+  of <em>icu_tournament</em>. In other words, the dependency on <em>icu_utils</em> is specified in the
+  manifest for the <em>icu_tournament</em> gem, not the <em>rating</em> application's <em>Gemfile</em>.
+%p
+  For more details on bundler, see the
+  = succeed(".") do
+    %a{href: "http://bundler.io/", target: "external"} website
 
 = render "header", topic: "appendix.can_can"
-
-%p TODO
+%p
+  Can-can is a gem for authorization and maps
+  = render "link", topic: "intro.roles"
+  to permissions via the file <em>app/models/ability.rb</em>
+  = precede("(") do
+    = succeed(",") do
+      %a{href: "https://github.com/sanichi/icu_www_app/blob/master/app/models/ability.rb", target: "external"} www
+    = succeed(")") do
+      %a{href: "https://github.com/sanichi/icu_ratings_app/blob/master/app/models/ability.rb", target: "external"} ratings
+  along with directives in controllers and views.
+  To give an example from the <em>www</em> site, in <em>ability.rb</em>:
+- cmd = []
+- cmd << 'if user.calendar? || user.editor?'
+- cmd << '  can :create, Event'
+- cmd << '  can [:destroy, :update], Event, user_id: user.id'
+- cmd << 'end'
+%pre~ cmd.join("\n")
+%p
+  means that only users who have the role of
+  = t("user.role.editor")
+  or
+  = t("user.role.calendar")
+  can create, update or delete calendar events and, further, they can only update or delete events that they created themselves,
+  that is, when the user ID of the event (<em>user_id</em>) matches the user's own ID (<em>user.id</em>).
 
 = render "header", topic: "appendix.capistrano"
 
-%p TODO
+%p
+  Capistrano is a command-line tool for automating code deployments.
+  The most common Capistrano task that the webmaster runs is:
+%pre $ bin/cap production deploy
+%p
+  which is part of the
+  = render "link", topic: "intro.test_commit_push_deploy"
+  sequence of commands to update one of the websites.
+  This simple command makes many things happen on the production server:
+%ul
+  %li migrates the database,
+  %li
+    installs gems using
+    = succeed(",") do
+      = render "link", topic: "appendix.bundler"
+  %li
+    installs new code from the master
+    = render "link", topic: "appendix.github"
+    repository,
+  %li archives the previous code release in case it has to be redeployed,
+  %li
+    restarts the application server (see
+    = succeed(").") do
+      = render "link", topic: "appendix.passenger"
+%p If anything goes wrong with a deployment, it can be rolled back with:
+%pre bin/cap production deploy:rollback
+%p There are other Capistrano tasks and the following command will list them all.
+%pre bin/cap -T
+%p
+  Most are sub-tasks of the main <tt>deploy</tt> task.
+  In practice the only tasks the webmaster needs to know about are:
+%ul
+  %li <tt>deploy</tt>,
+  %li <tt>deploy:rollback</tt>,
+  %li
+    <tt>deploy:web:disable</tt> and <tt>deploy:web:enable</tt> (see
+    = succeed(").") do
+      = render "link", topic: "tasks.maintenance_mode"
 
 = render "header", topic: "appendix.centos"
 
@@ -905,11 +1002,11 @@
   %li
     a local repository within
     = succeed(".") do
-      = render "link", topic: "intro.dev_test_deploy"
+      = render "link", topic: "intro.local_env"
 %p
   Code changes for both the applications and gems are first committed to the local repository and then pushed to the master.
   The webmaster needs to install the Git command line tool for
-  = render "link", topic: "intro.dev_test_deploy"
+  = render "link", topic: "intro.local_env"
   and optionally may also wish to use a GUI (such as
   %a{href: "http://www.git-tower.com/", target: "external"} Tower
   on MacOS).
@@ -926,7 +1023,7 @@
   In theory, there could be a <b>webmaster team</b> with one person (the official ICU webmaster) being in charge, merging
   updates into the master repository and deploying them to the production server.
   = succeed(".") do
-    = render "link", topic: "intro.dev_test_deploy"
+    = render "link", topic: "intro.local_env"
 
 = render "header", topic: "appendix.github"
 %p
@@ -986,7 +1083,7 @@
 %p
   Locally, each of these has a development and test counterpart (see
   = succeed("):") do
-    = render "link", topic: "intro.dev_test_deploy"
+    = render "link", topic: "intro.local_env"
 %ul
   %li www_development
   %li www_test
@@ -1099,6 +1196,10 @@
   %li
     The certificate also doesn't work for <em>https://icu.ie</em> (this would again require paying for another certificate).
     To cope with this, such URLs are redirected to <em>https://www.icu.ie</em> by directives in <em>ssl.conf</em>.
+
+= render "header", topic: "appendix.style_script"
+
+%p TODO
 
 = render "header", topic: "appendix.webrick"
 
