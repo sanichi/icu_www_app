@@ -75,5 +75,6 @@ en:
         ssl: SSL/TLS
         stripe: Stripe
         style_script: Styling and Scripting
+        webalizer: Webalizer
         webrick: WEBrick
         whenever: Whenever

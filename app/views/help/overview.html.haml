@@ -22,7 +22,7 @@
   %li
     = render "link", topic: "appendix.appendix"
     %ul
-      - %w[apache backups bundler can_can capistrano centos ftp gems git github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe style_script webrick whenever].each do |topic|
+      - %w[apache backups bundler can_can capistrano centos ftp gems git github google haml linode mailgun mysql passenger rails rake redis register365 rspec ruby secrets ssl stripe style_script webalizer webrick whenever].each do |topic|
         = render "item", topic: "appendix.#{topic}"
 
 = render "header", topic: "intro.intro"
@@ -1198,6 +1198,10 @@
     To cope with this, such URLs are redirected to <em>https://www.icu.ie</em> by directives in <em>ssl.conf</em>.
 
 = render "header", topic: "appendix.style_script"
+
+%p TODO
+
+= render "header", topic: "appendix.webalizer"
 
 %p TODO
 
