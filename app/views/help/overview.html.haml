@@ -7,6 +7,7 @@
   Future webmasters are encouraged to keep this document up to date.
 %p
   The first version of this page was created in Jan 2015 by MO and is currently still in progress.
+- now = "Jan 2015"
 %hr
 %ul
   %li
@@ -27,7 +28,7 @@
 
 = render "header", topic: "intro.intro"
 %p
-  The ICU currently runs two web sites:
+  = "The ICU currently (#{now}) runs two web sites:"
 %ol
   %li
     A
@@ -489,7 +490,7 @@
     a security certificate for the <em>www</em> site, about £10/year (see
     = succeed(").") do
       = render "link", topic: "appendix.ssl"
-%p Optional extras, none of which are currently used (in Jan 15) are:
+%p= "Optional extras, none of which are currently used (in #{now}) are:"
 %ul
   %li
     full server backup, about $5/month (see
@@ -709,7 +710,7 @@
 
 = render "header", topic: "tasks.create_new_payment_type"
 
-%p There are currently three categories of fees payable on the <em>www</em> website:
+%p= "There are currently (#{now}) three categories of fees payable on the <em>www</em> website:"
 %ul
   %li subscriptions,
   %li tournament entries,
@@ -863,10 +864,10 @@
   = render "link", topic: "appendix.linode"
   offer an inexpensive backup of the entire server which would make it extremely easy to recover from a failure.
   It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that, if necessary,
-  you could rebuild the server from scratch, you might decide it's not worth it. Currently (Jan 15) we aren't using it.
+  you could rebuild the server from scratch, you might decide it's not worth it.
+  = "Currently (#{now}) we aren't using it."
 
 = render "header", topic: "appendix.bundler"
-
 %p
   Bundler is a tool for managing
   = succeed(".") do
@@ -978,7 +979,57 @@
 
 = render "header", topic: "appendix.centos"
 
-%p TODO
+%p
+  Centos is the Linux distribution used on the production server
+  = "and is currently (#{now}) at version 6.5."
+  A description of configuring Centos and installing additional software to support the websites
+  = precede("(") do
+    = succeed(")") do
+      = succeed(",") do
+        = render "link", topic: "appendix.ruby"
+      = succeed(",") do
+        = render "link", topic: "appendix.apache"
+      = succeed(",") do
+        = render "link", topic: "appendix.mysql"
+      etc.
+  is available for:
+%ul
+  %li
+    the current server
+    = precede("(") do
+      = succeed("),") do
+        %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup-a-Server", target: "external"} aontas
+  %li
+    the preceding (and first) self-managed ICU server which is no longer in use
+    = precede("(") do
+      = succeed(").") do
+        %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup", target: "external"} ratalacha
+%p
+  There's also a detailed log (available from MO as an <em>Evernote</em> page) of all changes made to
+  <em>aontas</em> between November 2013 (when it was first created) and September 2014, which might
+  be useful to future webmasters.
+%p
+  <b>Maintenance</b> of Centos consists of the webmaster periodically updating the system software using
+  the <em>yum</em> package management tool. This is important to provide protection against security
+  vulnerabilities such as
+  %a{href: "http://en.wikipedia.org/wiki/Heartbleed", target: "external"} Heartbleed
+  (April 2014) and
+  %a{href: "http://en.wikipedia.org/wiki/Shellshock_%28software_bug%29", target: "external"} Shellshock
+  (September 2014).
+%p
+  <b>Upgrading</b> Centos to the next major version is desirable at some stage although it's not
+  = "currently (#{now}) urgent."
+  Full updates for Centos 6 should be available until 2017 and maintenance updates
+  until 2020 (according to this Wikipedia
+  = succeed(").") do
+    %a{href: "http://en.wikipedia.org/wiki/CentOS", target: "external"} article
+  The previous update (Centos 5 to Centos 6, <em>ratalacha</em> to <em>aontas</em>) was managed by
+  temporarily having a second server running the new version of Centos which took over serving the
+  websites when it was fully configured and tested. After that the old server was shut down and the
+  ICU went back to only paying
+  = succeed(",") do
+    = render "link", topic: "appendix.linode"
+  for one server.
 
 = render "header", topic: "appendix.ftp"
 
@@ -989,7 +1040,6 @@
 %p TODO
 
 = render "header", topic: "appendix.git"
-
 %p
   Git is a tool for software version control. For each of the ICU web applications and
   = render "link", topic: "appendix.gems"
@@ -1212,4 +1262,3 @@
 = render "header", topic: "appendix.whenever"
 
 %p TODO
-
