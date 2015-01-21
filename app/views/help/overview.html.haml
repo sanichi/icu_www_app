@@ -53,7 +53,7 @@
   %li Reporter: loads tournament reports for rating.
   %li Rating Officer: rates tournaments, publishes rating lists.
 %p
-  When anyone with a role logs in, certain pages become available through which they can update some part of the databases
+  When anyone with a role logs in, certain pages become available through which changes can be made to the databases
   (depending what the role is; see
   = render "link", topic: "appendix.can_can"
   for more details). For example:
@@ -85,12 +85,12 @@
   %li Dealing with queries from website users and the executive.
   %li Maintaining a log of all upgrades and configuration changes on the production server.
 %p
-  In practice, as well as looking after the technical side of things, webmasters act as cover for the rest of the team
-  and can expect to perform a little bit of all the other roles, depending on how assiduous other team members are.
+  In practice, as well as looking after the technical side of things, the webmaster acts as cover for the rest of the team
+  and can expect to perform a little bit of all the other roles.
 
 = render "header", topic: "intro.components"
 %p
-  The main technical sub-systems supporting the two websites,
+  The main technical subsystems supporting the two websites,
   all of which the webmaster is responsible for maintaining, are as follows:
 %ul
   %li
@@ -475,7 +475,6 @@
     of how the previous production server (2011-2014) was built.
 
 = render "header", topic: "intro.financial"
-
 %p The unavoidable costs are:
 %ul
   %li
@@ -506,11 +505,9 @@
       = render "link", topic: "appendix.ssl"
 
 = render "header", topic: "tasks.tasks"
-
 %p This section contains details of some common webmaster tasks.
 
 = render "header", topic: "tasks.maintenance_mode"
-
 %p
   If a serious problem develops with one of the websites it can be temporarily taken offline
   by putting the application on the production server into maintenance mode. This is done from
@@ -591,7 +588,6 @@
 %pre~ cmd.join("\n")
 
 = render "header", topic: "tasks.sql_query"
-
 %p
   The webmaster can expect to occasionally receive requests (from, for example, the treasurer or selection committees)
   for detailed information from the databases which is not available on either of the two websites. One option would be to
@@ -709,7 +705,6 @@
       = render "link", topic: "intro.test_commit_push_deploy"
 
 = render "header", topic: "tasks.create_new_payment_type"
-
 %p= "There are currently (#{now}) three categories of fees payable on the <em>www</em> website:"
 %ul
   %li subscriptions,
@@ -757,7 +752,6 @@
     = link_to t("help.fees"), help_fees_path, target: "internal"
 
 = render "header", topic: "tasks.seasonal"
-
 %p
   %b July
   (or whenever the Irish Championships finish):
@@ -793,7 +787,6 @@
 = render "header", topic: "appendix.appendix"
 
 = render "header", topic: "appendix.apache"
-
 %p
   The web server is Apache and its configuration is in:
 %ul
@@ -839,7 +832,6 @@
   %li <em>/var/apps/ratings/current/log/production.log</em>.
 
 = render "header", topic: "appendix.backups"
-
 %p
   The backup policy is to regularly (once a day) save important data (the databases) and files
   (images, uploads, tournament flyers, Apache configuration, firewall settings and
@@ -903,8 +895,8 @@
 %pre $ bundle update icu_tournament icu_ratings icu_name
 %p
   This will also try to update the <em>icu_utils</em> gem which is an implicit dependency
-  of <em>icu_tournament</em>. In other words, the dependency on <em>icu_utils</em> is specified in the
-  manifest for the <em>icu_tournament</em> gem, not the <em>rating</em> application's <em>Gemfile</em>.
+  of <em>icu_tournament</em> (the dependency on <em>icu_utils</em> is specified in the
+  manifest for the <em>icu_tournament</em> gem, not the <em>rating</em> application's <em>Gemfile</em>).
 %p
   For more details on bundler, see the
   = succeed(".") do
@@ -937,7 +929,6 @@
   that is, when the user ID of the event (<em>user_id</em>) matches the user's own ID (<em>user.id</em>).
 
 = render "header", topic: "appendix.capistrano"
-
 %p
   Capistrano is a command-line tool for automating code deployments.
   The most common Capistrano task that the webmaster runs is:
@@ -967,7 +958,7 @@
 %p There are other Capistrano tasks and the following command will list them all.
 %pre bin/cap -T
 %p
-  Most are sub-tasks of the main <tt>deploy</tt> task.
+  Most are subtasks of the main <tt>deploy</tt> task.
   In practice the only tasks the webmaster needs to know about are:
 %ul
   %li <tt>deploy</tt>,
@@ -1032,12 +1023,98 @@
   for one server.
 
 = render "header", topic: "appendix.ftp"
-
-%p TODO
+%p
+  This service is for tournament controllers to upload pairing lists, standings and live games
+  and then place links to those on their own websites. Managing the files is entirely up to
+  the controllers (subject to guidelines below), the webmaster just provides the account.
+  People who want to use it should ask the webmaster for the username and password.
+  For security reasons the webmaster should change the password from time to time,
+  but not while any tournaments are in progress (unless urgent).
+%p There are two subdirectories where users can place their files:
+%ul
+  %li <em>live<em> for live games (corresponds to <em>http://www.icu.ie/live/</em>),
+  %li <em>sm</em> for tournament tables and pairings (corresponds to </em>http://www.icu.ie/sm/</em>).
+%p
+  Users are encouraged to create a subdirectory in which to place all their files.
+  For example, the files for the Bunratty 2015 tournaments might all go into <em>sm/bunratty15/</em>.
+  This avoids getting the files for different tournaments getting mixed up together.
 
 = render "header", topic: "appendix.gems"
-
-%p TODO
+%p
+  Gems are packages of
+  = render "link", topic: "appendix.ruby"
+  code designed to perform a particular task.
+  Gems usually come with their own documentation and may have dependencies on other gems.
+  When Ruby is installed, many standard gems are installed with it.
+  = render "link", topic: "appendix.rails"
+  (the application framework used by the ICU websites) is a gem itself and has a large number of gem dependencies.
+  Gems are versioned and often under active development with new versions appearing regularly.
+  = render "link", topic: "appendix.bundler"
+  is a tool to help application developers establish a set of gem versions that work together.
+%p
+  Gems are stored in repositories the biggest of which is
+  = succeed(".") do
+    %a{href: "https://rubygems.org/", target: "external"} RubyGems
+  The repositories used are declared at the top of Bundler's <em>Gemfile</em>.
+  The ICU have developed some gems primarily for its websites but which could theoretically
+  be used independently. Two of the gems are specifically for the <em>ratings</em> site:
+%ul
+  %li
+    = succeed(":") do
+      %a{href: "https://rubygems.org/gems/icu_tournament", target: "external"} icu_tournament
+    for parsing and generating tournament reports,
+  %li
+    = succeed(":") do
+      %a{href: "https://rubygems.org/gems/icu_ratings", target: "external"} icu_ratings
+    for performing rating calculations,
+%p The other two are for code and data that is shared between the two sites:
+%ul
+  %li
+    = succeed(":") do
+      %a{href: "https://rubygems.org/gems/icu_name", target: "external"} icu_name
+    for matching player names,
+  %li
+    = succeed(":") do
+      %a{href: "https://rubygems.org/gems/icu_utils", target: "external"} icu_utils
+    miscellaneous utility classes.
+%p
+  The same procedure is used to update any of these ICU gems, including the web applications that use them.
+  Here we illustrate how to make an update to the <em>icu_ratings</em> gem. First, the gem is updated, tested and released:
+- cmd = []
+- cmd << "$ cd ~/Projects/icu_ratings/        # change to the gem's project directory"
+- cmd << "$ vi ...                            # make changes"
+- cmd << "$ bin/rake                          # run the entire test suite to detect regressions"
+- cmd << "$ vi lib/icu_ratings/version.rb     # update the version number"
+- cmd << "$ bin/rake build                    # check for build errors"
+- cmd << "$ bin/rake release                  # push to RubyGems"
+- cmd << "$ git add .                         # stage and ..."
+- cmd << "$ git commit -m '...'               # ... commit changes to the local repository"
+- cmd << "$ git push                          # push changes to the master repository"
+%pre~ cmd.join("\n")
+%p Next, the web applications that use the gem (in this case only <em>icu_ratings_app</em>) are updated, tested and deployed:
+- cmd = []
+- cmd << "$ cd ~/Projects/icu_ratings_app/    # change to the application's project directory"
+- cmd << "$ bin/bundle update icu_ratings     # update to the latest version of the gem"
+- cmd << "$ bin/rake                          # run the entire test suite to detect regressions"
+- cmd << "$ git add .                         # stage and ..."
+- cmd << "$ git commit -m '...'               # ... commit changes to the local repository"
+- cmd << "$ git push                          # push changes to the master repository"
+- cmd << "$ bin/cap production deploy         # deploy the update to the production server"
+%pre~ cmd.join("\n")
+%p
+  Note that the web applications (<em>icu_ww_app</em>, <em>icu_ratings_app</em>) are not gems.
+  Their only public presence are their master
+  = render "link", topic: "appendix.github"
+  repositories, whereas the ICU gems are on both Github and RubyGems.
+  During a
+  = render "link", topic: "appendix.capistrano"
+  deployment, new application code is downloaded (by
+  = succeed(")") do
+    = render "link", topic: "appendix.git"
+  to the production server from Github while new gems are downloaded (by
+  = succeed(")") do
+    = render "link", topic: "appendix.bundler"
+  from RubyGems.
 
 = render "header", topic: "appendix.git"
 %p
