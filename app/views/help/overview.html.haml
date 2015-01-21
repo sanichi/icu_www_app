@@ -13,7 +13,7 @@
   %li
     = render "link", topic: "intro.intro"
     %ul
-      - %w[roles components local_env test_commit_push_deploy logging_into_server accounts resources financial].each do |topic|
+      - %w[roles components local_env test_commit_push_deploy logging_into_server accounts financial resources].each do |topic|
         = render "item", topic: "intro.#{topic}"
   %li
     = render "link", topic: "tasks.tasks"
@@ -459,21 +459,6 @@
     = render "link", topic: "appendix.google"
     API key for <em>secrets.yml</em> (the same key can be used for the production server and local environment).
 
-= render "header", topic: "intro.resources"
-%p Other resources helpful to the webmaster are:
-%ul
-  %li
-    A detailed log of all software updates and configuration changes for the current production server (2014-)
-    available from MO as a single <em>Evernote</em> page.
-  %li
-    A
-    %a{href: "https://github.com/sanichi/icu_ratings_app/wiki/Setup", target: "external"} description
-    of how the current production server (2014-) was built.
-  %li
-    A
-    %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup-a-Server", target: "external"} description
-    of how the previous production server (2011-2014) was built.
-
 = render "header", topic: "intro.financial"
 %p The unavoidable costs are:
 %ul
@@ -503,6 +488,21 @@
     extra security certificates (one for the <em>ratings</em> site, one for http://icu.ie), each about £10/year (see
     = succeed(").") do
       = render "link", topic: "appendix.ssl"
+
+= render "header", topic: "intro.resources"
+%p Other resources helpful to the webmaster are:
+%ul
+  %li
+    A detailed log of all software updates and configuration changes for the current production server (2014-)
+    available from MO as a single <em>Evernote</em> page.
+  %li
+    A
+    %a{href: "https://github.com/sanichi/icu_ratings_app/wiki/Setup", target: "external"} description
+    of how the current production server (2014-) was built.
+  %li
+    A
+    %a{href: "https://github.com/sanichi/icu_www_app/wiki/Setup-a-Server", target: "external"} description
+    of how the previous production server (2011-2014) was built.
 
 = render "header", topic: "tasks.tasks"
 %p This section contains details of some common webmaster tasks.
@@ -969,7 +969,6 @@
       = render "link", topic: "tasks.maintenance_mode"
 
 = render "header", topic: "appendix.centos"
-
 %p
   Centos is the Linux distribution used on the production server
   = "and is currently (#{now}) at version 6.5."
@@ -1148,9 +1147,8 @@
   If rejected, they would be deleted from the local repository and never make it to the master or the production server.
 %p
   In theory, there could be a <b>webmaster team</b> with one person (the official ICU webmaster) being in charge, merging
-  updates into the master repository and deploying them to the production server.
-  = succeed(".") do
-    = render "link", topic: "intro.local_env"
+  updates into the master repository and deploying them to the production server. The other team members would have their
+  own local environments but without the ability to update the master repositories or to deploy to the production server.
 
 = render "header", topic: "appendix.github"
 %p
@@ -1176,29 +1174,68 @@
 %p
   Anyone can read these repositories but only the webmaster can write to them.
   = render "link", topic: "appendix.secrets"
-  are never committed to repositories.
+  are never committed to any repositories, including the public ones.
 
 = render "header", topic: "appendix.google"
 %p
   %a{href: "https://google-developers.appspot.com/chart/", target: "external"} Google Charts
-  for rating graphs and
+  is used for rating graphs and the <em>www</em> site uses
   %a{href: "https://google-developers.appspot.com/maps/", target: "external"} Google Maps
-  for club and event maps on the main site. The latter requires an API key which goes in
+  for club and event maps. The latter requires an API key which goes in
   %strong config/secrets.yaml
   (see
   = succeed(").") do
     = render "link", topic: "appendix.secrets"
 
 = render "header", topic: "appendix.linode"
-
-%p TODO
+%p
+  Linode is the company that provides our hosting services. They're a US company with
+  data centers in several locations round the world the nearest one of which to Ireland
+  is in London and that is where the ICU production server is.
+%p The service consists of:
+%ul
+  %li a virtual server with full root control,
+  %li a web dashboard for managing servers,
+  %li a documentation and support site,
+  %li out-of-band emergency SSH access ("lish"),
+  %li free (but limited data retention) server monitoring ("longview"),
+  %li configurable email alerts.
+%p
+  For extra payment, the following are also available:
+%ul
+  %li full server backups,
+  %li extended data retention for server monitoring.
+%p
+  See also
+  = succeed(".") do
+    = render "link", topic: "intro.financial"
 
 = render "header", topic: "appendix.haml"
-
-%p TODO
+%p
+  HAML is a templating language (HTML with embedded Ruby code) and is the main one used by the ICU web applications.
+  This help page, for example, is written in HAML. Erb, the default Rails templating language, is used in some
+  JavaScript files. To illustrate the difference here is a simple example, firstly in HAML:
+- cmd = []
+- cmd << '%p This is a demo.'
+- cmd << '%ul'
+- cmd << '  %li= "The date is #{ Date.today.to_s(:db) }."'
+- cmd << '  %li= "The number of players is #{ Player.count }."'
+%pre~ cmd.join("\n")
+%p Secondly, in Erb:
+- cmd = []
+- cmd << '<p>This is a demo.</p>'
+- cmd << '<ul>'
+- cmd << '  <li>The date is <%= Date.today.to_s(:db)} %>.</li>'
+- cmd << '  <li>The number of players is <%= Player.count %>."</li>'
+- cmd << '</ul>'
+%pre~ cmd.join("\n")
+%p Both examples produce the same output, namely:
+%p This is a demo.
+%ul
+  %li= "The date is #{Date.today.to_s(:db)}."
+  %li= "The number of players is #{Player.count}."
 
 = render "header", topic: "appendix.mailgun"
-
 %p TODO
 
 = render "header", topic: "appendix.mysql"
@@ -1221,33 +1258,26 @@
   The development databases should be loaded with recent copies of the production databases.
 
 = render "header", topic: "appendix.passenger"
-
 %p TODO
 
 = render "header", topic: "appendix.rails"
-
 %p TODO
 
 = render "header", topic: "appendix.rake"
-
 %p TODO
 
 = render "header", topic: "appendix.redis"
-
 %p TODO
 
 = render "header", topic: "appendix.register365"
-
 %p TODO
 
 = render "header", topic: "appendix.rspec"
-
 %p TODO
 
 %p Capybara, FactoryGirl, Faker, Selenium.
 
 = render "header", topic: "appendix.ruby"
-
 %p TODO
 
 = render "header", topic: "appendix.secrets"
@@ -1292,11 +1322,9 @@
     = render "link", topic: "intro.accounts"
 
 = render "header", topic: "appendix.stripe"
-
 %p TODO
 
 = render "header", topic: "appendix.ssl"
-
 %p
   To enable secure communication between the user's browser and the ICU server during credit card purchases
   there is an SSL (aka TLS) certificate for the <em>www.icu.ie</em> domain which is renewed annually.
@@ -1325,17 +1353,13 @@
     To cope with this, such URLs are redirected to <em>https://www.icu.ie</em> by directives in <em>ssl.conf</em>.
 
 = render "header", topic: "appendix.style_script"
-
 %p TODO
 
 = render "header", topic: "appendix.webalizer"
-
 %p TODO
 
 = render "header", topic: "appendix.webrick"
-
 %p TODO
 
 = render "header", topic: "appendix.whenever"
-
 %p TODO
