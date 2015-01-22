@@ -1214,14 +1214,14 @@
 %p
   HAML is a templating language (HTML with embedded Ruby code) and is the main one used by the ICU web applications.
   This help page, for example, is written in HAML. Erb, the default Rails templating language, is used in some
-  JavaScript files. To illustrate the difference here is a simple example, firstly in HAML:
+  JavaScript files. To illustrate the difference between HAML and Erb, here is a simple example. First, HAML:
 - cmd = []
 - cmd << '%p This is a demo.'
 - cmd << '%ul'
 - cmd << '  %li= "The date is #{ Date.today.to_s(:db) }."'
 - cmd << '  %li= "The number of players is #{ Player.count }."'
 %pre~ cmd.join("\n")
-%p Secondly, in Erb:
+%p Second, Erb:
 - cmd = []
 - cmd << '<p>This is a demo.</p>'
 - cmd << '<ul>'
@@ -1236,7 +1236,50 @@
   %li= "The number of players is #{Player.count}."
 
 = render "header", topic: "appendix.mailgun"
-%p TODO
+%p
+  Instead of running our own mail server, the ICU has chosen to take advantage of one of the
+  mail services that have sprung up in recent years such as AmazonSES, Mailjet, Mandrill,
+  Postmark, SendGrid and <b>Mailgun</b> (which is the one we use). The main benefit of these
+  services for us is that, given our relatively low monthly transactions, most of them are free.
+  For Mailgun the free threshold is 10,000 transactions per month
+  = "(which so far, in #{now}, has never been exceeded)"
+  and the cost for each additional transaction over this limit is only $0.0005.
+  Unless a credit card is registered with our account, then the service
+  simply stops if the threshold is exceeded and no mail would be delivered
+  until the start of the next monthly billing period.
+%p There are two types of email delivery this service provides:
+%ol
+  %li Emails sent from the production server (e.g. payment confirmations).
+  %li Emails sent to an @icu.ie address and relayed to one or more private addresses.
+%p In order to work, the relays need the following (which the webmaster is responsible for):
+%ul
+  %li Mail exchange DNS records pointing at Mailgun's servers.
+  %li SPF and DKIM text DNS records for security (values obtained from the Mailgun dashboard).
+  %li Mappings, stored with Mailgun, from @icu.ie addresses to one or more private addresses.
+%p
+  See
+  = link_to t("help.officers"), help_officers_path, target: "internal"
+  for how to manage these mappings.
+%p
+  As well as delivering mail, the Mailgun service includes a log of all transactions
+  which is very useful for identifying delivery problems. Sometimes the reason for
+  a failed delivery is right there in the log. As long as a credit card is registered
+  with Mailgun the log includes the last 30 days (without a credit card, just 1 day).
+  It doesn't contain the content of messages but it does include sender, recipients,
+  subject and delivery status. It also includes timestamps of when recipients open
+  emails that were delivered to them.
+%p
+  In practice the Mailgun service is free, but in theory the cost is unlimited (if a credit card is registered).
+  Therefore certain safeguards are in place to automatically disable all relays
+  (which are responsible for most of the transactions) if either the predicted
+  end-of-month cost is too high or there is a sudden spike in transactions.
+  Additionally, details of the predicted cost are calculated on the ICU server
+  every night (using Mailgun's API) and the details sent by email to the webmaster.
+%p If the relays are automatically disabled the webmaster should:
+%ul
+  %li ascertain the reason,
+  %li manually re-enable all relays (if safe to do so),
+  %li (optional) adjust the automatic safeguards (in <em>lib/icu/mail_control.rb</em>).
 
 = render "header", topic: "appendix.mysql"
 %p
@@ -1256,6 +1299,21 @@
 %p
   The test databases should be empty (test data is loaded automatically when tests run).
   The development databases should be loaded with recent copies of the production databases.
+%p
+  There are several
+  = render "link", topic: "appendix.rake"
+  tasks related to the databases. To see a list of them run:
+%pre $ bin/rake -T db
+%p
+  To make changes to either of the databases, the webmaster first creates a migration file (see
+  = succeed(")") do
+    %a{href: "http://guides.rubyonrails.org/active_record_migrations.html", target: "external"} Active Record Migrations
+  and then runs the following <em>rake</em> command to migrate the local database:
+%pre $ bin/rake db:migrate
+%p
+  During deployment to the production server, database migration is handled automatically by
+  = succeed(".") do
+    = render "link", topic: "appendix.capistrano"
 
 = render "header", topic: "appendix.passenger"
 %p TODO
