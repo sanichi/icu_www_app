@@ -1344,15 +1344,14 @@
   API keys, database connection parameters, cryptographic data and passwords. The two files are:
 %ul
   %li
-    %strong config/database.yml
+    = succeed(",") do
+      %em config/database.yml
   %li
-    %strong config/secrets.yml
+    = succeed(".") do
+      %em config/secrets.yml
 %p
-  These files are
-  %strong NEVER COMMITTED TO THE REPOSITORY
-  because anyone can view our Github data. For this reason, the above two files are included in
-  %strong .gitignore
-  for both web apps.
+  These files are <b>NEVER COMMITTED TO THE REPOSITORY</b> because anyone can view our Github data.
+  For this reason, the above two files are included in <b>.gitignore</b> for both web apps.
 %p
   When setting up a development and test environment, separate versions of these files
   (different to those on the production server) are required.
@@ -1374,6 +1373,10 @@
   A few things can remain the same, such as the API key for Google Maps (see
   = succeed(").") do
     = render "link", topic: "appendix.google"
+%p A new webmaster, setting up their local environment for the first time should:
+%ul
+  %li create their own version of <em>database.yml</em>,
+  %li ask the previous webmaster for their local version of <em>secrets.yml</em>.
 %p
   See also
   = succeed(".") do
