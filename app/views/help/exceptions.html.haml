@@ -1,0 +1,44 @@
+= render "titles", text: "help.exceptions"
+
+%p
+  When exceptions (unhandled fatal errors) occur they're logged (to the database) in case they are the result
+  of bugs in the web application and require action to be taken by the webmaster.
+  In both applications, exceptions are handled the same way:
+%ol
+  %li they get picked up by the Rails notification system (see <em>config/initializers/notifications.rb</em>),
+  %li the Failure class decides whether they are worth logging,
+  %li if so, a new failure record is created with details of the exception,
+  %li the webmaster can view the list of failures and take appropriate action.
+%p
+  Some exceptions are due to hackers probing for weaknesses.
+  The IP address the request is always recorded to as part of the failure details.
+%p There are some differences in the way failures are presented to the webmaster in the two web sites.
+
+%h3 www
+%p
+  In the main ICU site, failures can be in two states: <em>active</em> and <em>inactive</em>
+  and are always in the active state when first created. When the webmaster logs in and there are some
+  active failures a small badge appears at the top of all web pages notifying the webmaster that
+  there are active failures. If this badge is clicked, the list of active failures is displayed.
+  Alternatively, the list of failures can always be accessed via the
+  = link_to "Failures", admin_failures_path
+  link under the <em>Admin</em> tab of the top navigation bar.
+%p
+  For each active failure, the webmaster can do one of three things:
+%ul
+  %li If it's benign (not due to a bug in the website code) and doesn't warrant further investigation, delete it.
+  %li If it looks like it might be due to a bug, leave it in the active state until it's been fully investigated.
+  %li If it's unclear whether it's a bug or if it might be due to hackers, change it's state to inactive.
+%p
+  When the webmaster makes a failure inactive it's like saying "I'm not sure about this but I'll save it in case
+  I need to look at it again later". The warning badge is not displayed if there are only inactive failures.
+
+%h3 ratings
+%p
+  On the ratings site there is no warning badge and no active/inactive states for failures.
+  The list of current failures can be reached via the <em>Failures</em> link under the <em>Admin</em> tab.
+  The webmaster should:
+%ul
+  %li Periodically check to see if there are any failures.
+  %li View the details (click the scroll icon) of each failure in the list.
+  %li Either delete them (click the bin icon) or investigate them, as appropriate.
