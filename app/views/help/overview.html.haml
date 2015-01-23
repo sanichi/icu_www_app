@@ -1316,10 +1316,96 @@
     = render "link", topic: "appendix.capistrano"
 
 = render "header", topic: "appendix.passenger"
-%p TODO
+%p
+  There are a number of options for serving Ruby applications such as Mongrel, Thin and Unicorn.
+  The choice for the ICU websites is the free version of
+  = succeed(".") do
+    %a{href: "https://www.phusionpassenger.com/", target: "external"} Phusion Passenger
+  This software keeps copies of both applications running in memory, even when there are
+  no requests to process, in order to avoid the overhead of restarting applications
+  for every request.
+%p
+  The usual way of installing a new version of Passenger on the production server is to login as <em>root</em>,
+  download the latest Passenger gem and run the command to install the rest of the software:
+- cmd = []
+- cmd << '$ gem install passenger'
+- cmd << '$ passenger-install-apache2-module'
+%pre~ cmd.join("\n")
+%p
+  The installation software will give directions on how to update
+  = render "link", topic: "appendix.apache"
+  configuration (in our case in <em>/etc/httpd/conf/httpd.conf</em>) to complete the installation.
+  It also has excellent diagnostics if there are any installation problems.
+%p
+  The task in <em>lib/capistrano/tasks/restart.rake</em> (in both applications) ensures that Phusion will be restarted after a
+  = render "link", topic: "appendix.capistrano"
+  deployment.
+%p
+  Before upgrading
+  = render "link", topic: "appendix.ruby"
+  make sure that Passenger supports the new version.
+%p
+  It's not necessary to run Passenger in
+  = succeed(",") do
+    = render "link", topic: "intro.local_env"
+  although it's certainly possible.
+  = render "link", topic: "appendix.webrick"
+  is sufficient.
 
 = render "header", topic: "appendix.rails"
-%p TODO
+%p
+  Rails is a model-view-controller application framework. It:
+%ul
+  %li dictates, in general terms, how the application works,
+  %li provides a default directory structure for the application files,
+  %li makes default choices for some of the supporting technologies.
+%p Developers are free to choose their own favorite technologies over the defaults, as the ICU have done for:
+%ul
+  %li
+    templates: preferring
+    = render "link", topic: "appendix.haml"
+    over Erb,
+  %li
+    testing: preferring
+    = render "link", topic: "appendix.rspec"
+    over Test::Unit.
+%p
+  The
+  %a{href: "http://guides.rubyonrails.org/", target: "external"} Guides
+  and
+  %a{href: "http://api.rubyonrails.org/", target: "external"} API
+  are amongst the best internet resources for Rails.
+%p
+  Rails is under active development and new versions with new features come out regularly.
+  Just upgrading the Rails gem is usually not enough as often there are changes
+  to be made elsewhere, such as the configuration files:
+%ul
+  %li <em>config/application.rb</em>
+  %li <em>config/environments/production.rb</em>
+  %li <em>config/environments/development.rb</em>
+  %li <em>config/environments/test.rb</em>
+%p
+  For this reason, the precise version of the Rails gem currently in use is always specified in
+  = succeed("'s") do
+    = render "link", topic: "appendix.bundler"
+  <em>Gemfile</em>.
+%p
+  To upgrade from
+  = succeed(":") do
+    = render "link", topic: "intro.local_env"
+%ul
+  %li increment the gem's version in <em>Gemfile</em>,
+  %li run <em>bin/bundle install</em>,
+  %li make any additional required changes (consult the release notes for the new version),
+  %li
+    follow the usual procedure
+    = precede("(") do
+      = succeed(")") do
+        = render "link", topic: "intro.test_commit_push_deploy"
+    for deploying any changes to the production server.
+%p
+  It is possible to have different versions of Rails running the two web applications.
+  However, to avoid confusion, if one is upgraded then the other should be too.
 
 = render "header", topic: "appendix.rake"
 %p TODO
