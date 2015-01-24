@@ -1406,12 +1406,55 @@
 %p
   It is possible to have different versions of Rails running the two web applications.
   However, to avoid confusion, if one is upgraded then the other should be too.
+%p
+  The <em>rails</em> command line tool is often used in
+  = succeed(".") do
+    = render "link", topic: "intro.local_env"
+  Some examples:
+- cmd = []
+- cmd << '$ bin/rails s      # start webrick on port 3000'
+- cmd << '$ bin/rails g ...  # generate skeleton files for new code or migrations'
+- cmd << '$ bin/rails c      # start an irb console with the application loaded'
+- cmd << '$ bin/rails db -p  # log into the development database'
+%pre~ cmd.join("\n")
 
 = render "header", topic: "appendix.rake"
-%p TODO
+%p
+  Rake is a Make-like build tool implemented in Ruby with tasks and dependencies specified in standard Ruby syntax.
+  = render "link", topic: "appendix.rails"
+  provides several application-related Rake tasks and
+  = render "link", topic: "appendix.capistrano"
+  is implemented on top of Rake. Some Rake tasks the webmaster will often run in
+  = render "link", topic: "intro.local_env"
+  are:
+- cmd = []
+- cmd << '$ bin/rake db:migrate     # migrate the developent database'
+- cmd << '$ bin/rake db:rollback    # return the development database to the previous state'
+- cmd << '$ bin/rake routes         # examine the routing table'
+- cmd << '$ bin/rake spec           # run all spec tests'
+- cmd << '$ bin/rake                # run all spec tests (that is the default task)'
+- cmd << '$ bin/rake -T             # print a list of all rake tasks'
+%pre~ cmd.join("\n")
 
 = render "header", topic: "appendix.redis"
-%p TODO
+%p
+  Redis is a fast key-value store used for retrieving translations (<em>www</em> site only)
+  if the user enables the option for displaying parts of the site (headers and links only) in Irish.
+  Translations are stored in the SQL database (to support their management by the translator)
+  and synced to the Redis database. When pages are rendered translations come from the fast Redis
+  store and not the relatively slow SQL database.
+%p
+  Unfortunately, although the technical work to support a partly bi-lingual <em>www</em> site is complete,
+  the work of actually translating all the English language text snippets is not. The original translator,
+  who also inspired the project, quit without completing the project and nobody has come forward to replace her.
+  Therefore the controls to swap between English and Irish are currently
+  = "(#{now})"
+  disabled on the production server (not in development or test) via the method
+  <em>irish_enabled?</em> in <em>app/helpers/application_helper.rb</em>.
+%p
+  The webmaster should install Redis in
+  = render "link", topic: "intro.local_env"
+  and start it running with its default port, otherwise parts of the test suite will fail.
 
 = render "header", topic: "appendix.register365"
 %p TODO
