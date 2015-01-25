@@ -7,7 +7,7 @@
   Future webmasters are encouraged to keep this document up to date.
 %p
   The first version of this page was created in Jan 2015 by MO and is currently still in progress.
-- now = "Jan 2015"
+- v1 = "Jan 2015"
 %hr
 %ul
   %li
@@ -28,7 +28,7 @@
 
 = render "header", topic: "intro.intro"
 %p
-  = "The ICU currently (#{now}) runs two web sites:"
+  = "The ICU currently (#{v1}) runs two web sites:"
 %ol
   %li
     A
@@ -474,7 +474,7 @@
     a security certificate for the <em>www</em> site, about £10/year (see
     = succeed(").") do
       = render "link", topic: "appendix.ssl"
-%p= "Optional extras, none of which are currently used (in #{now}) are:"
+%p= "Optional extras, none of which are currently used (in #{v1}) are:"
 %ul
   %li
     full server backup, about $5/month (see
@@ -705,7 +705,7 @@
       = render "link", topic: "intro.test_commit_push_deploy"
 
 = render "header", topic: "tasks.create_new_payment_type"
-%p= "There are currently (#{now}) three categories of fees payable on the <em>www</em> website:"
+%p= "There are currently (#{v1}) three categories of fees payable on the <em>www</em> website:"
 %ul
   %li subscriptions,
   %li tournament entries,
@@ -857,7 +857,7 @@
   offer an inexpensive backup of the entire server which would make it extremely easy to recover from a failure.
   It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that, if necessary,
   you could rebuild the server from scratch, you might decide it's not worth it.
-  = "Currently (#{now}) we aren't using it."
+  = "Currently (#{v1}) we aren't using it."
 
 = render "header", topic: "appendix.bundler"
 %p
@@ -971,7 +971,7 @@
 = render "header", topic: "appendix.centos"
 %p
   Centos is the Linux distribution used on the production server
-  = "and is currently (#{now}) at version 6.5."
+  = "and is currently (#{v1}) at version 6.5."
   A description of configuring Centos and installing additional software to support the websites
   = precede("(") do
     = succeed(")") do
@@ -1008,7 +1008,7 @@
   (September 2014).
 %p
   <b>Upgrading</b> Centos to the next major version is desirable at some stage although it's not
-  = "currently (#{now}) urgent."
+  = "currently (#{v1}) urgent."
   Full updates for Centos 6 should be available until 2017 and maintenance updates
   until 2020 (according to this Wikipedia
   = succeed(").") do
@@ -1242,7 +1242,7 @@
   Postmark, SendGrid and <b>Mailgun</b> (which is the one we use). The main benefit of these
   services for us is that, given our relatively low monthly transactions, most of them are free.
   For Mailgun the free threshold is 10,000 transactions per month
-  = "(which so far, in #{now}, has never been exceeded)"
+  = "(which so far, in #{v1}, has never been exceeded)"
   and the cost for each additional transaction over this limit is only $0.0005.
   Unless a credit card is registered with our account, then the service
   simply stops if the threshold is exceeded and no mail would be delivered
@@ -1258,8 +1258,10 @@
   %li Mappings, stored with Mailgun, from @icu.ie addresses to one or more private addresses.
 %p
   See
+  = render "link", topic: "appendix.register365"
+  for more on DNS entries and
   = link_to t("help.officers"), help_officers_path, target: "internal"
-  for how to manage these mappings.
+  for how to manage the @icu.ie mappings.
 %p
   As well as delivering mail, the Mailgun service includes a log of all transactions
   which is very useful for identifying delivery problems. Sometimes the reason for
@@ -1414,8 +1416,19 @@
 - cmd = []
 - cmd << '$ bin/rails s      # start webrick on port 3000'
 - cmd << '$ bin/rails g ...  # generate skeleton files for new code or migrations'
-- cmd << '$ bin/rails c      # start an irb console with the application loaded'
 - cmd << '$ bin/rails db -p  # log into the development database'
+%pre~ cmd.join("\n")
+%p
+  Another useful command is to start an <em>irb</em> (interactive Ruby) console with
+  the development environment already loaded. Any database queries issued are echoed
+  along with and their execution time.
+- cmd = []
+- cmd << '$ bin/rails c'
+- cmd << '>> Rails.env'
+- cmd << '=> "development"'
+- cmd << '>> Player.count'
+- cmd << '   (10.7ms)  SELECT COUNT(*) FROM `players`'
+- cmd << '=> ' + Player.count.to_s
 %pre~ cmd.join("\n")
 
 = render "header", topic: "appendix.rake"
@@ -1448,7 +1461,7 @@
   the work of actually translating all the English language text snippets is not. The original translator,
   who also inspired the project, quit without completing the project and nobody has come forward to replace her.
   Therefore the controls to swap between English and Irish are currently
-  = "(#{now})"
+  = "(#{v1})"
   disabled on the production server (not in development or test) via the method
   <em>irish_enabled?</em> in <em>app/helpers/application_helper.rb</em>.
 %p
@@ -1457,7 +1470,18 @@
   and start it running with its default port, otherwise parts of the test suite will fail.
 
 = render "header", topic: "appendix.register365"
-%p TODO
+%p
+  This is our domain provider and through the
+  %a{href: "https://admin.register365.com/login.php", target: "external"} control panel
+  the webmaster is able to make DNS updates or change the credit card used to make
+  annual payments. Some DNS entries are for the
+  = render "link", topic: "appendix.linode"
+  production server and the others are for handling mail via
+  = succeed(".") do
+    = render "link", topic: "appendix.mailgun"
+  = "Here's a snapshot taken in #{v1}:"
+.text-center
+  = image_tag "misc/dns.png", alt: t("help.topics.appendix.register365"), title: t("help.topics.appendix.register365")
 
 = render "header", topic: "appendix.rspec"
 %p TODO
