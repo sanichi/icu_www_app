@@ -4,10 +4,10 @@
   This is an introduction to the ICU websites: how they work, what's involved, how to make changes.
   It's primarily intended as a resource for ICU webmasters.
   The websites have evolved since the first one appeared in 2004 and will probably continue to do so in the future.
-  Future webmasters are encouraged to keep this document up to date.
-%p
-  The first version of this page was created in Jan 2015 by MO and is currently still in progress.
+  Future webmasters are encouraged to <b>keep this document up to date</b>.
 - v1 = "Jan 2015"
+%ul
+  %li= "Version 1, created in #{v1} by MO."
 %hr
 %ul
   %li
@@ -1484,9 +1484,50 @@
   = image_tag "misc/dns.png", alt: t("help.topics.appendix.register365"), title: t("help.topics.appendix.register365")
 
 = render "header", topic: "appendix.rspec"
-%p TODO
-
-%p Capybara, FactoryGirl, Faker, Selenium.
+%p
+  This is the preferred test framework (over the default
+  = render "link", topic: "appendix.rails"
+  <em>Test::Unit</em>). It's used in conjunction with a number of other
+  = succeed(":") do
+    = render "link", topic: "appendix.gems"
+%ul
+  %li <em>capybara</em> and <em>selenium-webdriver</em> for in-browser tests,
+  %li <em>factory_girl_rails</em> for test data,
+  %li <em>faker</em> for random but realistic person names, email addresses, etc.
+  %li <em>database_cleaner</em> to keep the test database in a known state (empty) at the start of each test.
+%p The tests are all in the directory <em>spec</em> with most in:
+%ul
+  %li <em>spec/models</em>: relatively fast tests of small individual components,
+  %li <em>spec/features</em>: relatively slow tests of entire website features.
+%p Some special directories and files are:
+%ul
+  %li <em>spec/factories</em>: test data definitions (using <em>factory_girl</em> and <em>faker</em>),
+  %li <em>spec/files</em>: file-oriented test data,
+  %li <em>spec/support</em>: shared test data,
+  %li <em>spec/rails_helper.rb</em>: application setup and test helpers,
+  %li <em>spec/spec_helper.rb</em>: rspec setup.
+%p The entire test suite can be run as follows and takes a few minutes:
+%pre $ bin/rspec spec
+%p
+  Alternatively, since this is the default
+  = render "link", topic: "appendix.rake"
+  command, the following will do exactly the same thing:
+%pre $ bin/rake
+%p
+  At the end of any development work the webmaster should always run the entire test suite
+  before committing anything to the local repository. During development, avoid repeatedly
+  running all tests (that would be too slow). Instead, identify a small subset of existing
+  relevant tests that can provide more rapid feedback on whether anything has been broken.
+  Also, strongly consider writing new tests for the feature being developed to defend against
+  future regressions.
+%p
+  An example of a quick, focused test designed to be run repeatedly during development
+  is the test for this very page of documentation:
+%pre $ bin/rspec spec/features/help_spec.rb -e overview
+%p
+  It may seem strange to be testing a page of documentation but in fact there is a system of
+  keys being used for the headings and links in this page (to avoid repeating the same text
+  over and over again) and the test is useful to detect spelling mistakes in these keys.
 
 = render "header", topic: "appendix.ruby"
 %p TODO
