@@ -1694,6 +1694,11 @@
   %li
     The certificate also doesn't work for <em>https://icu.ie</em> (this would again require paying for another certificate).
     To cope with this, such URLs are redirected to <em>https://www.icu.ie</em> by directives in <em>ssl.conf</em>.
+%p
+  There is support in the <em>www</em> application for automatically switching into secure mode, when required,
+  and back out of it, when no longer required. Thus the user will stay in normal mode unless they go to login
+  or make a credit card payment. See the helper methods <em>switch_to_tls</em> and <em>switch_from_tls</em> in
+  <b>app/controllers/application_controller.rb</b> and the file <b>app/assets/javascripts/switch_from_tls.js</b>.
 
 = render "header", topic: "appendix.style_script"
 %p TODO
