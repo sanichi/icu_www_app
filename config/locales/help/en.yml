@@ -42,9 +42,10 @@ en:
         test_commit_push_deploy: "Test, Commit, Push, Deploy"
       tasks:
         check_ticket: Check a Season Ticket
-        create_new_help_page: Create a New Help Page
         create_new_payment_type: Create a New Payment Type
         maintenance_mode: Put an Application into Maintenance Mode
+        manage_help_pages: Create and Update Help Pages
+        manage_icu_pages: Create and Update ICU Documentation
         sql_query: Answer Complex Queries using SQL
         tasks: Common Tasks
         seasonal: Seasonal Tasks

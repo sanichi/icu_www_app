@@ -18,7 +18,7 @@
   %li
     = render "link", topic: "tasks.tasks"
     %ul
-      - %w[maintenance_mode check_ticket sql_query create_new_help_page create_new_payment_type seasonal].each do |topic|
+      - %w[maintenance_mode check_ticket sql_query manage_help_pages manage_icu_pages create_new_payment_type seasonal].each do |topic|
         = render "item", topic: "tasks.#{topic}"
   %li
     = render "link", topic: "appendix.appendix"
@@ -84,6 +84,10 @@
   %li Ensuring each member of the team is capable of managing their particular responsibilities.
   %li Dealing with queries from website users and the executive.
   %li Maintaining a log of all upgrades and configuration changes on the production server.
+  %li
+    Maintaining
+    = succeed(".") do
+      = render "link", topic: "appendix.backups"
 %p
   In practice, as well as looking after the technical side of things, the webmaster acts as cover for the rest of the team
   and can expect to perform a little bit of all the other roles.
@@ -288,10 +292,10 @@
 - cmd << '$ bin/rake                                       # runs the entire test suite to check nothing has regressed'
 - cmd << '$ git add .                                      # stages all changes'
 - cmd << '$ git commit -m "Comment describing the change"  # commits to the local repository'
-- cmd << '$ git push                                       # pushes to the master repository'
+- cmd << '$ git push                                       # pushes to the master Github repository'
 - cmd << '$ cap production deploy                          # deploys to the production server'
 %pre~ cmd.join("\n")
-%p If anything goes wrong with the deployment, you can roll it back to the previous release with:
+%p If anything goes wrong with the deployment, it can be rolled back to the previous release with:
 %pre bin/cap production deploy:rollback
 %p
   The above steps require SSH keys to be registered with both Github and the production server (see
@@ -359,7 +363,7 @@
 
 = render "header", topic: "intro.accounts"
 %p
-  This is a list of the all the services (both our own and those of external providers)
+  This is a list of the all the services (both the ICU's and those of external providers)
   which require access credentials of one kind or another (username/password or API keys).
   The actual credentials are kept in an offline file by the webmaster
   and copied to a small number of trusted individuals for backup.
@@ -400,13 +404,13 @@
       %li Remote access disabled.
       %li These go in <em>database.yml</em> on the production server.
   %li
-    The
+    An
     = render "link", topic: "appendix.ftp"
     user on the production ICU server:
     %ul
       %li Username and password.
   %li
-    Our
+    A
     = render "link", topic: "appendix.github"
     account:
     %ul
@@ -416,7 +420,7 @@
           %a{href: "https://github.com/login", target: "external"} github.com/login
       %li SSH keys (one for each webmaster/developer) registered with Github to enable push access to the repository.
   %li
-    Our
+    A
     = render "link", topic: "appendix.linode"
     account:
     %ul
@@ -425,7 +429,7 @@
         = succeed(".") do
           %a{href: "https://manager.linode.com/", target: "external"} manager.linode.com
   %li
-    Our
+    A
     = render "link", topic: "appendix.mailgun"
     account:
     %ul
@@ -435,7 +439,7 @@
           %a{href: "https://mailgun.com/sessions/new", target: "external"} mailgun.com/sessions/new
       %li A password, a secret key and a public key for <em>secrets.yml</em> on the production server.
   %li
-    Our
+    A
     = render "link", topic: "appendix.register365"
     account:
     %ul
@@ -444,7 +448,7 @@
         = succeed(".") do
           %a{href: "https://www.register365.com/login", target: "external"} www.register365.com/login
   %li
-    Our
+    A
     = render "link", topic: "appendix.stripe"
     account:
     %ul
@@ -659,11 +663,11 @@
 %pre $ paste -d, data{1,2,3}.csv > data.csv
 %p and, voilà, the answer to the original query is in <em>data.csv</em>.
 
-= render "header", topic: "tasks.create_new_help_page"
+= render "header", topic: "tasks.manage_help_pages"
 %p
   The page you're currently reading is an example of a help page.
   Unlike articles and news items, help pages are not stored in the database and can't be changed by editors.
-  Instead, they're part of the web application code and need the webmaster to create and edit them.
+  Instead, they're part of the web application code and need the webmaster to create, edit and deploy them.
   To create a new help page do the following in
   = succeed(":") do
     = render "link", topic: "intro.local_env"
@@ -697,12 +701,49 @@
     = succeed("),") do
       = render "link", topic: "appendix.webrick"
   %li
-    run the following test which is focused solely on the help pages:
+    periodically run the following quick test which is focused solely on the help pages:
     %pre $ bin/rspec spec/features/help_spec.rb
   %li
     when you're finished:
     = succeed(".") do
       = render "link", topic: "intro.test_commit_push_deploy"
+%p The steps for updating existing help pages are the same except the first few steps will have already been done.
+
+= render "header", topic: "tasks.manage_icu_pages"
+%p
+  The procedure to follow is very similar to the above case (see
+  = succeed(")") do
+    = render "link", topic: "tasks.manage_help_pages"
+  because, like help pages,
+  = link_to "ICU documentation", icu_index_path, target: "internal"
+  is saved to the
+  = render "link", topic: "appendix.github"
+  repository and therefore changes are managed from
+  = render "link", topic: "intro.local_env"
+  and deployed to the production server by
+  = succeed(".") do
+    = render "link", topic: "appendix.capistrano"
+  The differences are:
+%ul
+  %li
+    instead of one data structure in
+    = succeed(",") do
+      %strong app/models/global.rb
+    there are two:
+    %ol
+      %li
+        <em>ICU_PAGES</em>: an array of keys (see <b>config/locales/icu/en.yml</b>) for the links in the
+        = succeed(",") do
+          = link_to "main index page", icu_index_path, target: "internal"
+      %li
+        <em>ICU_DOCS</em>: a hash for the
+        = link_to "constitution and related documents", icu_documents_path, target: "internal"
+        where the keys (see <b>config/locales/icu/en.yml</b>) are for headings
+        and the values are optional sub-headings (English only),
+  %li the view templates are in <b>app/views/icu</b>,
+  %li
+    the quick test for these pages is
+    %pre $ bin/rspec spec/features/icu_spec.rb
 
 = render "header", topic: "tasks.create_new_payment_type"
 %p= "There are currently (#{v1}) three categories of fees payable on the <em>www</em> website:"
@@ -833,13 +874,14 @@
 
 = render "header", topic: "appendix.backups"
 %p
-  The backup policy is to regularly (once a day) save important data (the databases) and files
+  The backup policy is to regularly (once a day) save data (the databases) and files that are not in
+  = render "link", topic: "appendix.github"
   (images, uploads, tournament flyers, Apache configuration, firewall settings and
   = succeed(")") do
     = render "link", topic: "appendix.secrets"
   to a directory (<em>~/bak</em>) on the production server and then periodically
   <em>rsync</em> this entire directory to one or more offsite locations (for example
-  of the webmaster's desktop and laptop). The server backups are managed by the script
+  the webmaster's desktop and laptop). The server backups are managed by the script
   <em>~/bin/bak.sh</em> run every night via <em>cron</em>.
 %p The <em>crontab</em> entry for the <em>rsync</em> running on one of the webmaster's home computers might look something like this:
 %pre 0 10,14,18,22 * * * cd ~/Projects/bak; rsync -rtvz <em>user</em>@aontas.icu.ie:bak/ aontas > aontas.log 2>&1
@@ -851,12 +893,12 @@
   = render "link", topic: "appendix.gems"
   are in
   = render "link", topic: "appendix.git"
-  repositories, there's no need to back it up.
+  repositories, there's no need to back them up.
 %p
   = render "link", topic: "appendix.linode"
   offer an inexpensive backup of the entire server which would make it extremely easy to recover from a failure.
-  It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that, if necessary,
-  you could rebuild the server from scratch, you might decide it's not worth it.
+  It's up to each individual webmaster to decide whether to make use of this or not. If you're confident that,
+  if necessary, you could rebuild the server from scratch, you might decide it's not worth it.
   = "Currently (#{v1}) we aren't using it."
 
 = render "header", topic: "appendix.bundler"
@@ -1188,7 +1230,7 @@
 
 = render "header", topic: "appendix.linode"
 %p
-  Linode is the company that provides our hosting services. They're a US company with
+  Linode is the company that provides the ICU's hosting services. They're a US company with
   data centers in several locations round the world the nearest one of which to Ireland
   is in London and that is where the ICU production server is.
 %p The service consists of:
@@ -1213,7 +1255,7 @@
 %p
   HAML is a templating language (HTML with embedded Ruby code) and is the main one used by the ICU web applications.
   This help page, for example, is written in HAML. Erb, the default Rails templating language, is used in some
-  JavaScript files. To illustrate the difference between HAML and Erb, here is a simple example. First, HAML:
+  JavaScript files. To illustrate the difference between HAML and Erb for HTML, here is a simple example. First, HAML:
 - cmd = []
 - cmd << '%p This is a demo.'
 - cmd << '%ul'
@@ -1236,14 +1278,14 @@
 
 = render "header", topic: "appendix.mailgun"
 %p
-  Instead of running our own mail server, the ICU has chosen to take advantage of one of the
+  Instead of running its own mail server, the ICU has chosen to take advantage of one of the
   mail services that have sprung up in recent years such as AmazonSES, Mailjet, Mandrill,
   Postmark, SendGrid and <b>Mailgun</b> (which is the one we use). The main benefit of these
-  services for us is that, given our relatively low monthly transactions, most of them are free.
+  services for us is that, given the ICU's relatively low monthly transactions, most of them are free.
   For Mailgun the free threshold is 10,000 transactions per month
   = "(which so far, in #{v1}, has never been exceeded)"
   and the cost for each additional transaction over this limit is only $0.0005.
-  Unless a credit card is registered with our account, then the service
+  Unless a credit card is registered with the account, then the service
   simply stops if the threshold is exceeded and no mail would be delivered
   until the start of the next monthly billing period.
 %p There are two types of email delivery this service provides:
@@ -1335,8 +1377,8 @@
 %p
   The installation software will give directions on how to update
   = render "link", topic: "appendix.apache"
-  configuration (in our case in <em>/etc/httpd/conf/httpd.conf</em>) to complete the installation.
-  It also has excellent diagnostics if there are any installation problems.
+  configuration (<em>/etc/httpd/conf/httpd.conf</em>) to complete the installation.
+  It also has good diagnostics if there are any installation problems.
 %p
   The task in <em>lib/capistrano/tasks/restart.rake</em> (in both applications) ensures that Phusion will be restarted after a
   = render "link", topic: "appendix.capistrano"
@@ -1470,7 +1512,7 @@
 
 = render "header", topic: "appendix.register365"
 %p
-  This is our domain provider and through the
+  This is the ICU's domain provider and through the
   %a{href: "https://admin.register365.com/login.php", target: "external"} control panel
   the webmaster is able to make DNS updates or change the credit card used to make
   annual payments. Some DNS entries are for the
@@ -1543,7 +1585,7 @@
     = succeed(".") do
       %em config/secrets.yml
 %p
-  These files are <b>NEVER COMMITTED TO THE REPOSITORY</b> because anyone can view our Github data.
+  These files are <b>NEVER COMMITTED TO THE REPOSITORY</b> because anyone can view the Github data.
   For this reason, the above two files are included in <b>.gitignore</b> for both web apps.
 %p
   When setting up a development and test environment, separate versions of these files
@@ -1555,7 +1597,7 @@
   Examples of data that will differ between live site and local environment are:
 %ul
   %li
-    the connection parameters to our payment processor - the local versions should be for testing only (see
+    connection parameters to the payment processor - the local versions should be for testing only (see
     = succeed("),") do
       = render "link", topic: "appendix.stripe"
   %li
