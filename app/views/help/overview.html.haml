@@ -1571,7 +1571,54 @@
   over and over again) and the test is useful to detect spelling mistakes in these keys.
 
 = render "header", topic: "appendix.ruby"
-%p TODO
+%p
+  Since
+  = render "link", topic: "appendix.rails"
+  is the chosen web application framework, it follows that most of the application code is written in Ruby,
+  an elegant, object-oriented language which surged in popularity around 2005
+  (partly due to the success of Rails). The language is still in active development.
+%p
+  As with
+  = render "link", topic: "appendix.rails"
+  and
+  = render "link", topic: "appendix.passenger"
+  the general approach to new versions,
+  = "at least up to now (#{v1}),"
+  has been to upgrade on a regular basis, if it's safe to do so.
+  With Ruby, the main thing to check is that Passenger and Rails support the new version.
+%p
+  On the production server there is just one version of the <em>ruby</em> executable, the one in <em>/usr/local/bin</em>.
+  The installation steps are illustrated below for the 2.0.0 version:
+- cmd = []
+- cmd << '$ cd ~/src'
+- cmd << '$ wget http://cache.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0.tar.gz'
+- cmd << '$ tar -zxvf ruby-2.0.0.tar.gz'
+- cmd << '$ cd ruby-2.0.0'
+- cmd << '$ ./configure'
+- cmd << '$ make'
+- cmd << '$ sudo make install'
+- cmd << '$ touch /var/apps/{www,ratings}/current/tmp/restart.txt'
+%pre~ cmd.join("\n")
+%p The last step restarts both web applications.
+%p
+  In
+  = succeed(",") do
+    = render "link", topic: "intro.local_env"
+  the webmaster should use the same version of Ruby as on the production server.
+  However, it's recommended to have multiple versions of Ruby installed
+  and managed by either
+  %a{href: "https://github.com/sstephenson/rbenv", target: "external"} rbenv
+  or
+  = succeed(".") do
+    %a{href: "https://rvm.io/", target: "external"} rvm
+  This makes it easy to test both applications with a new version
+  of Ruby before upgrading the version on the production server.
+%p
+  The file <b>.ruby-version</b> in the root directory of both applications has no effect
+  on the production server but, locally, it automatically runs the specified version
+  of Ruby in development or test mode if either <em>rbenv</em> or <em>rvm</em> is installed.
+  So testing a new version is as simple as installing it, setting it in the <em>.ruby-version</em>
+  file (for both applications) and then running both test suites.
 
 = render "header", topic: "appendix.secrets"
 %p
