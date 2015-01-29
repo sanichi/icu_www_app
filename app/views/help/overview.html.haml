@@ -882,7 +882,9 @@
   to a directory (<em>~/bak</em>) on the production server and then periodically
   <em>rsync</em> this entire directory to one or more offsite locations (for example
   the webmaster's desktop and laptop). The server backups are managed by the script
-  <em>~/bin/bak.sh</em> run every night via <em>cron</em>.
+  <em>~/bin/bak.sh</em> run every night via <em>cron</em> (see
+  = succeed(").") do
+    = render "link", topic: "appendix.whenever"
 %p The <em>crontab</em> entry for the <em>rsync</em> running on one of the webmaster's home computers might look something like this:
 %pre 0 10,14,18,22 * * * cd ~/Projects/bak; rsync -rtvz <em>user</em>@aontas.icu.ie:bak/ aontas > aontas.log 2>&1
 %p Multiple attempts per day are made because home computers are not always turned on.
@@ -1709,4 +1711,67 @@
 %p TODO
 
 = render "header", topic: "appendix.whenever"
-%p TODO
+%p Both applications and the production server have tasks that need to be scheduled with <em>crontab</em>.
+%p For <em>www</em>:
+%ul
+  %li
+    daily:
+    %ul
+      %li cleanup empty carts that are more than a day old,
+      %li cleanup unpaid carts and their items that are more than a month old,
+      %li email the latest Mailgun stats to the webmaster,
+      %li store a summary of Mailgun events for the day to the database,
+  %li
+    hourly:
+    %ul
+      %li assess the latest Mailgun stats and take appropriate action.
+%p For <em>ratings</em>:
+%ul
+  %li
+    once every minute:
+    %ul
+      %li check to see if the rating officer has requested a rating run and, if so, start one,
+  %li
+    daily:
+    %ul
+      %li import new and updated data from the <em>www</em> database (players, users, subscriptions),
+      %li export the latest published and live ratings to a file that tournament controllers can download,
+  %li
+    weekly:
+    %ul
+      %li import new and updated FIDE player data (IDs, names, federation, YOBs, latest rating).
+%p For the production server:
+%ul
+  %li
+    daily:
+    %ul
+      %li
+        = succeed(".") do
+          = render "link", topic: "appendix.backups"
+%p
+  Managing these tasks could be achieved by requiring the webmaster to (a) log into the production server and
+  (b) manually edit the <em>crontab</em> file. However, a better solution is to make use of the
+  %a{href: "https://github.com/javan/whenever", target: "external"} Whenever
+  gem and configure tasks in the file <b>config/schedule.rb</b>. There are two benefits:
+%ul
+  %li
+    Just like most other website changes, scheduled tasks are managed from
+    = render "link", topic: "intro.local_env"
+    and the production server's crontab is updated automatically by <em>Whenever</em> during a
+    = render "link", topic: "appendix.capistrano"
+    deployment.
+  %li The gem has a cleaner syntax for specifying tasks than the possibly familiar but archaic <em>crontab</em>.
+  %li The gem automatically takes care of some Rails specific details which can thus be omitted from the specifications.
+%p To illustrate, compare the following <em>Whenever</em> task specification in <em>config/schedule.rb</em>:
+- cmd = []
+- cmd << 'every :day, at: "5:15am" do'
+- cmd << '  rake "pgn:db"'
+- cmd << 'end'
+%pre~ cmd.join("\n")
+%p with the corresponding specification in <em>crontab</em>:
+%pre= "15 5 * * * cd /var/apps/www/releases/current && RAILS_ENV=production bin/rake pgn:db >> log/cron.log"
+%p
+  That said, there is one task that is entered directly in the <em>crontab</em> and not managed by <em>Whenever</em>
+  (because it's not application specific) and that is the daily
+  = succeed(".") do
+    = render "link", topic: "appendix.backups"
