@@ -1411,7 +1411,7 @@
   %li
     testing: preferring
     = render "link", topic: "appendix.rspec"
-    over Test::Unit.
+    over <em>Test::Unit</em> or <em>Minitest</em>.
 %p
   The
   %a{href: "http://guides.rubyonrails.org/", target: "external"} Guides
@@ -1526,9 +1526,8 @@
 
 = render "header", topic: "appendix.rspec"
 %p
-  This is the preferred test framework (over the default
-  = render "link", topic: "appendix.rails"
-  <em>Test::Unit</em>). It's used in conjunction with a number of other
+  This is the preferred (over <em>Test::Unit</em> or <em>Minitest</em>) test framework.
+  It's used in conjunction with a number of other
   = succeed(":") do
     = render "link", topic: "appendix.gems"
 %ul
