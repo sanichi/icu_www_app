@@ -1672,12 +1672,11 @@
 %p
   To enable secure communication between the user's browser and the ICU server during credit card purchases
   there is an SSL (aka TLS) certificate for the <em>www.icu.ie</em> domain which is renewed annually.
-  The first one purchased (from
-  = succeed(")") do
-    %a{href: "https://www.123-reg.co.uk/", target: "external"} 123-reg
-  cost £10 and
+  The first one ever purchased from
+  %a{href: "https://www.123-reg.co.uk/", target: "external"} 123-reg
+  (the cheapest that could be found at the time) cost £10 and
   = Date.today >= Date.new(2015, 8, 4) ? "expired" : "expires"
-  on 4th August 2015, so the right time to renew is July each year (see
+  on 4th August 2015, so the right time to start the renewal process each year is July (see
   = succeed(").") do
     = render "link", topic: "tasks.seasonal"
 %p Notes:
@@ -1705,10 +1704,44 @@
 %p TODO
 
 = render "header", topic: "appendix.webalizer"
-%p TODO
+%p
+  Webalizer is a simple web server log file analysis program. It's reports for the two sites cab be viewed here:
+  = succeed(",") do
+    %a{href: "http://www.icu.ie/webalizer/index.html", target: "internal"} www
+  = succeed(".") do
+    %a{href: "http://ratings.icu.ie/webalizer/index.html", target: "internal"} ratings
+%p The Webalizer configuration files for the two sites are:
+%ul
+  %li <em>/etc/webalizer/www.conf</em>,
+  %li <em>/etc/webalizer/ratings.conf</em>.
+%p
+  Unlike most other scheduled tasks (see
+  = succeed("),") do
+    = render "link", topic: "appendix.whenever"
+  which run under the ordinary user, the two Webalizer daily tasks are scheduled in the <em>root</em> user's <em>crontab</em>.
 
 = render "header", topic: "appendix.webrick"
-%p TODO
+%p
+  Run from an application's root directory in
+  = succeed(",") do
+    = render "link", topic: "intro.local_env"
+  the command:
+%pre $ bin/rails s
+%p
+  ("s" is short for "server") starts a small web server called <em>Webrick</em>
+  (distributed as part of Ruby's standard library) running on the default port 3000.
+  The application can then be accessed in development mode at:
+  = succeed(".") do
+    %a{href: "http://localhost:3000", target: "internal"} http://localhost:3000
+%p
+  There's no particular need to replicate the setup on the production server
+  = precede("(") do
+    = render "link", topic: "appendix.apache"
+    plus
+    = succeed("),") do
+      = render "link", topic: "appendix.passenger"
+  <em>Webrick</em> is perfectly adequate for development work.
+  The converse, however, would not be true: <em>Webrick</em> would be too slow for the production websites.
 
 = render "header", topic: "appendix.whenever"
 %p Both applications and the production server have tasks that need to be scheduled with <em>crontab</em>.
@@ -1721,6 +1754,9 @@
       %li cleanup unpaid carts and their items that are more than a month old,
       %li email the latest Mailgun stats to the webmaster,
       %li store a summary of Mailgun events for the day to the database,
+      %li
+        = render "link", topic: "appendix.webalizer"
+        log file analysis,
   %li
     hourly:
     %ul
@@ -1736,6 +1772,9 @@
     %ul
       %li import new and updated data from the <em>www</em> database (players, users, subscriptions, foreign rating fees),
       %li export the latest published and live ratings to a file that tournament controllers can download,
+      %li
+        = render "link", topic: "appendix.webalizer"
+        log file analysis,
   %li
     weekly:
     %ul
@@ -1771,7 +1810,9 @@
 %p with the corresponding specification in <em>crontab</em>:
 %pre= "15 5 * * * cd /var/apps/www/releases/current && RAILS_ENV=production bin/rake pgn:db >> log/cron.log"
 %p
-  That said, there is one task that is entered directly in the <em>crontab</em> and not managed by <em>Whenever</em>
-  (because it's not application specific) and that is the daily
+  That said, there are some tasks that are entered directly in the <em>crontab</em> and not managed by <em>Whenever</em>
+  (because either they're not application specific or need to run under <em>root</em>) and those are
+  = render "link", topic: "appendix.backups"
+  and
   = succeed(".") do
-    = render "link", topic: "appendix.backups"
+    = render "link", topic: "appendix.webalizer"
