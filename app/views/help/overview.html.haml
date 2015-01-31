@@ -1701,7 +1701,47 @@
   <b>app/controllers/application_controller.rb</b> and the file <b>app/assets/javascripts/switch_from_tls.js</b>.
 
 = render "header", topic: "appendix.style_script"
-%p TODO
+%p
+  Other than a common reliance on
+  %a{href: "http://jquery.com/", target: "external"} jQuery
+  (via the <em>jquery-rails</em> gem) the two web applications
+  take different approaches to CSS and JavaScript extensions.
+%p
+  The <em>www</em> site uses
+  = succeed(",") do
+    %a{href: "http://getbootstrap.com/", target: "external"} Twitter Bootstrap
+  a responsive framework (styling adapts to the size of the viewing device).
+  Moreover, signed-in members can choose from a number of themes
+  (different versions of Bootstrap provided by
+  = succeed(").") do
+    %a{href: "http://bootswatch.com/", target: "external"} Bootswatch
+  Some of the implementation details:
+%ul
+  %li the Bootswatch files in <em>app/assets/stylesheets</em>,
+  %li the constants <em>THEMES</em> and <em>DEFAULT_THEME</em> in <em>app/models/user.rb</em>,
+  %li a collection of Bootstrap-related helper templates in <em>app/views/utils</em>.
+%p
+  From time to time new bug-fix versions of Bootstrap (in the version 3 series) are released
+  and Bootswatch usually follows suit shortly thereafter. The webmaster should replace the old
+  Bootswatch files with the new versions and then go through the usual
+  = render "link", topic: "intro.test_commit_push_deploy"
+  procedure.
+%p
+  The <em>ratings</em> site is more basic: there are no user-selectable themes and it's not responsive.
+  Styling is provided by a custom set of rules written in
+  = succeed(",") do
+    %a{href: "http://sass-lang.com/", target: "external"} SASS
+  a developer-friendly extension of CSS, in the file <em>app/assets/stylesheets/main.sass</em>.
+  This file is automatically compiled to CSS by the Rails
+  = succeed(".") do
+    %a{href: "http://guides.rubyonrails.org/asset_pipeline.html", target: "external"} Asset Pipeline.
+%p
+  Support for dynamic features is provided by
+  = succeed(".") do
+    %a{href: "http://jqueryui.com/", target: "external"} jQuery UI
+  The <em>Dialog</em> widget, in particular, is used a lot in the administrative part of the site.
+  The hover-to-reveal-menu behaviour of the top navigation bar is due to something called SuperFish
+  (see <em>vendor/assets/javascripts/superfish.js</em>).
 
 = render "header", topic: "appendix.webalizer"
 %p
@@ -1728,7 +1768,7 @@
   the command:
 %pre $ bin/rails s
 %p
-  ("s" is short for "server") starts a small web server called <em>Webrick</em>
+  ("s" is short for "server") starts a small web server called Webrick
   (distributed as part of Ruby's standard library) running on the default port 3000.
   The application can then be accessed in development mode at:
   = succeed(".") do
@@ -1740,7 +1780,7 @@
     plus
     = succeed("),") do
       = render "link", topic: "appendix.passenger"
-  <em>Webrick</em> is perfectly adequate for development work.
+  Webrick is perfectly adequate for development work.
   The converse, however, would not be true: <em>Webrick</em> would be too slow for the production websites.
 
 = render "header", topic: "appendix.whenever"
