@@ -143,10 +143,10 @@ describe "Sessions" do
 
     it "help#index" do
       visit help_index_path
-      expect(page).to have_title(I18n.t("help.index"))
+      expect(page).to have_title(I18n.t("help.help"))
       login
       expect(page).to have_css(success, text: signed_in_as)
-      expect(page).to have_title(I18n.t("help.index"))
+      expect(page).to have_title(I18n.t("help.help"))
     end
 
     it "icu#constitution" do

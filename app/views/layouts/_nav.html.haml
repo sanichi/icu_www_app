@@ -21,7 +21,6 @@
           %li{class: active("clubs")}= link_to t("club.clubs"), clubs_path
           %li{class: active("downloads")}= link_to t("download.downloads"), downloads_path
           %li{class: active("games")}= link_to t("game.games"), games_path
-          %li{class: active("help")}= link_to t("help.HELP"), help_index_path
           %li{class: active("images")}= link_to t("image.images"), images_path
           %li{class: active("champions")}= link_to t("champion.champions"), champions_path
           %li{class: active("pages", "juniors")}= link_to t("junior.juniors"), juniors_path
@@ -30,13 +29,14 @@
           %li{class: active("players")}= link_to t("player.players"), players_path
           %li= link_to t("player.rating.ratings"), "http://ratings.icu.ie", target: "ratings"
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
-      - if content_for?(:help)
-        %li.dropdown
-          = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
-            = t("help.HELP")
-            %b.caret
-          %ul.dropdown-menu
+      %li.dropdown
+        = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
+          = t("help.HELP")
+          %b.caret
+        %ul.dropdown-menu
+          - if content_for?(:help)
             = yield :help
+          %li= link_to t("help.index"), help_index_path
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"
       = render "layouts/admin_menu"
