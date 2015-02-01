@@ -999,6 +999,7 @@
       = render "link", topic: "appendix.passenger"
 %p If anything goes wrong with a deployment, it can be rolled back with:
 %pre bin/cap production deploy:rollback
+%p To get more detailed feedback, temporarily change the <em>log_level</em> in the file <em>config/deploy.rb</em> to <em>debug</em>.
 %p There are other Capistrano tasks and the following command will list them all.
 %pre bin/cap -T
 %p
