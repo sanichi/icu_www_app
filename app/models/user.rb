@@ -289,7 +289,7 @@ class User < ActiveRecord::Base
 
   def asshole_check
     return if new_record? || roles.blank?
-    if [11, 295, 1354, 5198, 5601, 6141].include? player_id
+    if [11, 295, 1354, 1733, 5198, 5601, 6141].include? player_id
       errors.add(:roles, I18n.t("user.role_denied"))
     end
   end
