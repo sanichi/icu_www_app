@@ -29,14 +29,16 @@
           %li{class: active("players")}= link_to t("player.players"), players_path
           %li= link_to t("player.rating.ratings"), "http://ratings.icu.ie", target: "ratings"
           %li{class: active("tournaments")}= link_to t("tournament.tournaments"), tournaments_path
-      %li.dropdown
-        = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
-          = t("help.HELP")
-          %b.caret
-        %ul.dropdown-menu
-          - if content_for?(:help)
+      - if content_for?(:help)
+        %li.dropdown
+          = link_to "#", class: "dropdown-toggle", data: { toggle: "dropdown" } do
+            = t("help.HELP")
+            %b.caret
+          %ul.dropdown-menu
             = yield :help
-          %li= link_to t("help.index"), help_index_path
+            %li= link_to t("help.index"), help_index_path
+      - else
+        %li{class: active("help")}= link_to t("help.HELP"), help_index_path
     %ul.nav.navbar-nav.navbar-right
       = render "layouts/locale_switch"
       = render "layouts/admin_menu"
