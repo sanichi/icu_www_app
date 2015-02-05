@@ -46,9 +46,10 @@ en:
         maintenance_mode: Put an Application into Maintenance Mode
         manage_help_pages: Create and Update Help Pages
         manage_icu_pages: Create and Update ICU Documentation
+        seasonal: Seasonal Tasks
         sql_query: Answer Complex Queries using SQL
         tasks: Common Tasks
-        seasonal: Seasonal Tasks
+        updates: Keep Software Up-To-Date
       appendix:
         apache: Apache
         appendix: Appendix

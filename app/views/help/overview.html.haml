@@ -18,7 +18,7 @@
   %li
     = render "link", topic: "tasks.tasks"
     %ul
-      - %w[maintenance_mode check_ticket sql_query manage_help_pages manage_icu_pages create_new_payment_type seasonal].each do |topic|
+      - %w[maintenance_mode check_ticket sql_query manage_help_pages manage_icu_pages create_new_payment_type updates seasonal].each do |topic|
         = render "item", topic: "tasks.#{topic}"
   %li
     = render "link", topic: "appendix.appendix"
@@ -791,6 +791,61 @@
   = succeed(".") do
     = link_to t("help.fees"), help_fees_path, target: "internal"
 
+= render "header", topic: "tasks.updates"
+%p Keep packages and libraries on which the applications depend up-to-date. This includes:
+%ul
+  %li
+    on the production server:
+    %ul
+      %li
+        = succeed(",") do
+          = render "link", topic: "appendix.ruby"
+      %li
+        = succeed(",") do
+          = render "link", topic: "appendix.passenger"
+      %li
+        system libraries (see
+        = succeed(";") do
+          = render "link", topic: "appendix.centos"
+        includes
+        = render "link", topic: "appendix.git"
+        and
+        = succeed(").") do
+          = render "link", topic: "appendix.mysql"
+      %li
+        = succeed(",") do
+          = render "link", topic: "appendix.redis"
+  %li
+    in the local environment:
+    %ul
+      %li
+        = succeed(",") do
+          = render "link", topic: "appendix.ruby"
+        = succeed(",") do
+          = render "link", topic: "appendix.git"
+        = succeed(",") do
+          = render "link", topic: "appendix.mysql"
+        and
+        = render "link", topic: "appendix.redis"
+        (maintain the same versions as on the production server),
+      %li
+        = succeed(".") do
+          = render "link", topic: "appendix.gems"
+%p Due to the way Linux distributions are curated, updating all the system libraries on the production server in one go with:
+%pre $ yum update
+%p
+  shouldn't cause any problems. However, updating all
+  = render "link", topic: "appendix.gems"
+  in the local environment with
+%pre $ bundle update
+%p
+  is a riskier proposition. It may be difficult to identify the cause if a lot of gems get updated but something goes wrong.
+  Where gems are concerned, it's better to update in small steps (a few at a time) and afterwards run the test suite.
+  Big changes introduced by new major versions, especially
+  = succeed(",") do
+    = render "link", topic: "appendix.rails"
+  may require changes to the applications.
+
 = render "header", topic: "tasks.seasonal"
 %p
   %b July
@@ -1044,8 +1099,10 @@
   be useful to future webmasters.
 %p
   <b>Maintenance</b> of Centos consists of the webmaster periodically updating the system software using
-  the <em>yum</em> package management tool. This is important to provide protection against security
-  vulnerabilities such as
+  the <em>yum</em> package management tool
+  = succeed(").") do
+    = render "link", topic: "tasks.updates"
+  This is important to provide protection against security vulnerabilities such as
   %a{href: "http://en.wikipedia.org/wiki/Heartbleed", target: "external"} Heartbleed
   (April 2014) and
   %a{href: "http://en.wikipedia.org/wiki/Shellshock_%28software_bug%29", target: "external"} Shellshock
