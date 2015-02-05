@@ -204,7 +204,6 @@
   %li
     Install and start MySQL and then create the 4 test and development databases required.
     Fill the development databases with data copied from the production server but leave the test databases empty (see
-    See
     = succeed(").") do
       = render "link", topic: "appendix.mysql"
     Whatever connection parameters you choose (username, password), copy them to
@@ -1329,12 +1328,12 @@
 
 = render "header", topic: "appendix.mysql"
 %p
-  There are two production MySQL databases on the production server, one for each web application:
+  There are two MySQL databases on the production server, one for each web application:
 %ul
   %li www_production
   %li ratings_production
 %p
-  Locally, each of these has a development and test counterpart (see
+  Locally, each of these has development and test counterpart (see
   = succeed("):") do
     = render "link", topic: "intro.local_env"
 %ul
@@ -1351,10 +1350,10 @@
   tasks related to the databases. To see a list of them run:
 %pre $ bin/rake -T db
 %p
-  To make changes to either of the databases, the webmaster first creates a migration file (see
+  To make changes to either of the databases, the webmaster first creates a <em>migration</em> (see
   = succeed(")") do
     %a{href: "http://guides.rubyonrails.org/active_record_migrations.html", target: "external"} Active Record Migrations
-  and then runs the following <em>rake</em> command to migrate the local database:
+  and then runs the following <em>rake</em> command to update the local database:
 %pre $ bin/rake db:migrate
 %p
   During deployment to the production server, database migration is handled automatically by
