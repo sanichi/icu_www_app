@@ -100,6 +100,24 @@
   should be treated the same way as offline payments.
   Contact the webmaster if in doubt.
 
+%a{name: "transfer_payment"}
+%h3= t("help.transfer_payment")
+
+%p
+  This is relevant when people make mistakes when paying for things.
+  An example is when an already existing member erroneously joins as a new member thus creating a duplicate.
+  It would be nice if, once the error is discovered, the payment could be transferred from the duplicate
+  to the original member. Sadly, in the current implementation, that is not possible.
+%p
+  The way to handle this type of scenario is to refund the relevant part of the payment
+  (in the example it would be the subscription) and to instruct the player to try again
+  and this time make the correct payment (in the example, resubscribe the existing member).
+%p
+  In the example scenario, where a duplicate has been created, one more thing needs to be done and
+  that is to mark the duplicate record as such. This involves setting its <em>Master ID</em>
+  to the ID of the original record and has to be done by the webmaster (the treasurer isn't
+  authorized to make such changes).
+
 %a{name: "search_carts"}
 %h3= t("help.search_carts")
 
