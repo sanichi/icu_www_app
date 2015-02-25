@@ -31,6 +31,10 @@ describe Refund, js: true do
   let(:player)            { create(:player) }
   let!(:subscription_fee) { create(:subscription_fee) }
 
+  after(:each) do
+    ActionMailer::Base.deliveries.clear
+  end
+
   context "multiple items" do
     let!(:entry_fee) { create(:entry_fee) }
 
@@ -63,10 +67,6 @@ describe Refund, js: true do
       wait_a_second(10.0)
 
       expect(page).to have_css(title, text: completed)
-    end
-
-    after(:each) do
-      ActionMailer::Base.deliveries.clear
     end
 
     it "refund separately" do
