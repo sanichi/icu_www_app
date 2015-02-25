@@ -32,7 +32,7 @@ describe Refund, js: true do
   let!(:subscription_fee) { create(:subscription_fee) }
 
   context "multiple items" do
-    let!(:entry_fee)         { create(:entry_fee) }
+    let!(:entry_fee) { create(:entry_fee) }
 
     before(:each) do
       visit shop_path

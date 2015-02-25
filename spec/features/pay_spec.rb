@@ -40,10 +40,11 @@ describe "Pay", js: true do
   let(:name_id)   { "payment_name" }
   let(:number_id) { "number" }
 
-  let(:cvc)          { "123" }
-  let(:expiry)       { "01 / #{(Date.today.year + 2).to_s}" }
-  let(:number)       { "4242 4242 4242 4242" }
-  let(:stripe)       { "stripe" }
+  let(:cvc)     { "123" }
+  let(:expiry)  { "01 / #{(Date.today.year + 2).to_s}" }
+  let(:number)  { "4242 4242 4242 4242" }
+  let(:stripe)  { "stripe" }
+  let(:account) { Cart.current_payment_account }
 
   let(:card_declined) { "Your card was declined." }
   let(:expired_card)  { "Your card has expired." }
@@ -101,6 +102,7 @@ describe "Pay", js: true do
       expect(cart.payment_completed).to be_nil
       expect(cart.payment_ref).to be_nil
       expect(cart.payment_method).to be_nil
+      expect(cart.payment_account).to be_nil
       expect(cart.user).to be_nil
       expect(cart.items.count).to eq 1
 
@@ -122,6 +124,7 @@ describe "Pay", js: true do
       expect(cart.payment_completed).to be_present
       expect(cart.payment_ref).to be_present
       expect(cart.payment_method).to eq stripe
+      expect(cart.payment_account).to eq account
       expect(cart.payment_errors.count).to eq 0
       expect(cart.confirmation_sent).to be true
       expect(cart.confirmation_error).to be_nil
@@ -269,6 +272,7 @@ describe "Pay", js: true do
       expect(cart.payment_completed).to be_present
       expect(cart.payment_ref).to be_nil
       expect(cart.payment_method).to eq "cheque"
+      expect(cart.payment_account).to be_nil
       expect(cart.user).to eq officer
       expect(cart.payment_errors.count).to eq 0
       expect(cart.items.count).to eq 1

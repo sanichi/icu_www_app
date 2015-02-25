@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140917164938) do
+ActiveRecord::Schema.define(version: 20150225112811) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140917164938) do
     t.datetime "payment_completed"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "payment_account",    limit: 32
   end
 
   add_index "carts", ["confirmation_email"], name: "index_carts_on_confirmation_email", using: :btree

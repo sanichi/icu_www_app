@@ -22,7 +22,7 @@ class Cart < ActiveRecord::Base
   end
 
   def refundable?
-    active? && payment_method == "stripe"
+    active? && payment_method == "stripe" && payment_account == Cart.current_payment_account
   end
 
   def duplicates?(new_item, add_error: false)
@@ -54,7 +54,7 @@ class Cart < ActiveRecord::Base
   rescue => e
     add_payment_error(e, name, email, "Something went wrong, please contact webmaster@icu.ie")
   else
-    successful_payment("stripe", charge.id)
+    successful_payment("stripe", charge.id, Cart.current_payment_account)
   ensure
     update_cart(total, name, email, user)
     send_receipt
@@ -105,6 +105,10 @@ class Cart < ActiveRecord::Base
     paginate(matches, params, path)
   end
 
+  def self.current_payment_account
+    @current_payment_account ||= Rails.application.secrets.stripe["public"].truncate(32, omission: "")
+  end
+
   def all_notes
     items.each_with_object({}) do |item, notes|
       item.notes.each do |note|
@@ -115,9 +119,10 @@ class Cart < ActiveRecord::Base
 
   private
 
-  def successful_payment(payment_method, charge_id=nil)
+  def successful_payment(payment_method, charge_id=nil, payment_account=nil)
     self.status = "paid"
     self.payment_method = payment_method
+    self.payment_account = payment_account
     self.payment_ref = charge_id
     self.payment_completed = Time.now
     items.each { |item| item.complete(payment_method) }
