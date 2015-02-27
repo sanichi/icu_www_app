@@ -21,7 +21,6 @@
   Offline purchases are similar except that an ICU officer fills in a cart on behalf of a user (see
   = succeed(").") do
     = link_to t("help.offline_payments"), help_offline_payments_path
-
   If the payment is successful, the cart and all its items change status from
   %strong= t("shop.payment.status.unpaid")
   to
@@ -54,7 +53,8 @@
 %h3= t("help.make_refund")
 
 %p
-  A suitably priviledged user (typically the treasuer or webmaster) can refund one or more items in an active cart as follows:
+  A suitably privileged user (typically the treasurer or webmaster) can refund
+  (or revoke - see the next section) one or more items in an active cart as follows:
 %ul
   %li Search carts or items to locate and then view the relevant cart (see below).
   %li
@@ -70,11 +70,11 @@
   If the original payment was made online then the refund to the payer's credit card
   will be initiated automatically, without any further action required. Depending on
   details of the payer's bank, the process may take some days to complete and the
-  refund will not neessarily show up in the payer's statement, instead the original
+  refund will not necessarily show up in the payer's statement, instead the original
   payment may simply drop off.
 %p
   If the payment was made offline then the refund is also offline, in other words
-  arrangements must be made to manually refund the payer.
+  arrangements must be made to manually refund the payer (see the section below on revokes).
 %p
   The refunded items change status from
   %strong= t("shop.payment.status.paid")
@@ -93,12 +93,53 @@
   depending on whether there are any remaining items with status
   = succeed(".") do
     %em= t("shop.payment.status.paid")
+
+%a{name: "make_revoke"}
+%h3= t("help.make_revoke")
+
+%p A refund (see previous section) involves two changes:
+%ol
+  %li an update of records in the ICU database to indicate that one or more items in a cart have been refunded,
+  %li an automatic reimbursement to the payer's credit card (via the ICU's payment processor, currently <em>Stripe</em>).
 %p
-  Note that refunds for online payments made prior to
-  %strong= t("migration_date")
-  (i.e. using PayPal and not our current payment processor, Stripe)
-  should be treated the same way as offline payments.
-  Contact the webmaster if in doubt.
+  However, the second change, the automatic reimbursement, is not always possible.
+  When the reimbursement has to be done manually (by the ICU sending a cheque, for example)
+  then the operation is termed a <b>revoke</b> (rather than a <b>refund</b>).
+%p The different scenarios when a refund and/or a revoke is possible are as follows:
+%ul
+  %li
+    Old payments made before
+    = t("migration_date")
+    that predate the current version of the ICU website can neither be revoked nor refunded.
+  %li
+    After
+    = succeed(":") do
+      = t("migration_date")
+    %ul
+      %li Cash/cheque payments can only be revoked.
+      %li Credit/debit card payments can be refunded if they were processed by the current Stripe account.
+      %li Credit/debit card payments processed by an old Stripe account can only be revoked.
+%p
+  See
+  = link_to t("help.topics.appendix.stripe"), help_overview_path(anchor: "stripe")
+  in the
+  = link_to t("help.overview"), help_overview_path
+  for why the ICU's Stripe account may sometimes change.
+%p
+  To perform a revoke the administrative user follows the same set of steps as above for a refund
+  except that the button to click will be labelled <em>Revoke</em> rather than <em>Refund</em>.
+  The changes to the ICU database are the same for a refund and revoke, the only difference
+  is that with a revoke the payer doesn't receive an automatic refund. It's the responsibility of
+  the user who revoked the cart item(s) — usually the treasurer — to ensure that the repayment is completed manually.
+%p To summarize:
+%ul
+  %li <b>DO NOT</b> send a manual repayment for a <b>refund</b> as otherwise the payer will be reimbursed twice.
+  %li <b>DO</b> send a manual repayment for a <b>revoke</b> as otherwise the payer will not be reimbursed at all.
+%p
+  In the
+  = succeed(",") do
+    = link_to_if can?(:view, Refund), "searchable list of previous refunds", admin_refunds_path
+  the type (Refund/Revoke) of each item is indicated.
 
 %a{name: "transfer_payment"}
 %h3= t("help.transfer_payment")

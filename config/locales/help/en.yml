@@ -10,7 +10,8 @@ en:
     header: Hide or Show the Banner Header
     images: Upload Images
     index: Help Index
-    make_refund: Make a Refund
+    make_refund: Refunds
+    make_revoke: Revokes
     markdown: Markdown for Articles and News Items
     membership: Annual Subscriptions and Membership of the ICU
     officers: Manage Officers and Mail Relays

@@ -1,4 +1,5 @@
 - content_for :title, "Cart"
+- add_help("treasurer")
 - content_for :javascript do
   = render "modal_control.js"
 - if @cart.payment_ref.present?
