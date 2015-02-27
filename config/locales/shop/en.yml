@@ -20,6 +20,7 @@ en:
       registered: Payment registered
       refund: Refund
       ref_number: Reference number for enquiries
+      revoke: Revoke
       time: Payment completed at
       card:
         amount_due: Amount due

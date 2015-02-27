@@ -7,6 +7,7 @@
       %thead
         %tr
           %th Amount
+          %th Type
           %th Officer
           %th Date/Time
           %th Error
@@ -14,6 +15,7 @@
         - cart.refunds.each do |refund|
           %tr
             %td= euros(refund.amount)
+            %td= t("shop.payment.#{refund.automatic ? 'refund' : 'revoke'}")
             %td= refund.user.player.name
             %td= refund.created_at.to_s(:db)
             %td= refund.error || "None"

@@ -22,14 +22,14 @@ class Admin::CartsController < ApplicationController
 
   def edit
     @cart = Cart.include_items_plus.find(params[:id])
-    redirect_to [:admin, @cart] unless @cart.refundable?
+    redirect_to [:admin, @cart] unless @cart.revokable?
   end
 
   def update
     @cart = Cart.include_items_plus.find(params[:id])
     item_ids = params.keys.map{ |k| k.match(/\Aitem_([1-9]\d*)\z/) ? $1.to_i : nil }.compact
     if item_ids.size == 0
-      flash.now[:warning] = "Please either click Cancel or select one or more items and then click Refund"
+      flash.now[:warning] = "Please either click #{I18n.t('cancel')} or select one or more items and then click #{@cart.refund_type}"
       render "edit"
     else
       refund = @cart.refund(item_ids, current_user)
@@ -37,7 +37,7 @@ class Admin::CartsController < ApplicationController
         flash.now[:alert] = refund.error
         render "edit"
       else
-        flash[:notice] = "Refund was successful"
+        flash[:notice] = "#{@cart.refund_type} was successful"
         redirect_to [:admin, @cart]
       end
     end

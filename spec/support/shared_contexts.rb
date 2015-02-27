@@ -2,12 +2,12 @@ shared_context "features" do
   let(:active)       { I18n.t("active") }
   let(:address)      { I18n.t("address") }
   let(:any)          { I18n.t("any") }
-  let(:category)     { I18n.t("category") }
   let(:cancel)       { I18n.t("cancel") }
-  let(:comment)      { I18n.t("comment") }
-  let(:contact)      { I18n.t("contact") }
+  let(:category)     { I18n.t("category") }
   let(:city)         { I18n.t("city") }
+  let(:comment)      { I18n.t("comment") }
   let(:confirm)      { I18n.t("confirm") }
+  let(:contact)      { I18n.t("contact") }
   let(:date)         { I18n.t("date") }
   let(:delete)       { I18n.t("delete") }
   let(:description)  { I18n.t("description") }
@@ -21,8 +21,8 @@ shared_context "features" do
   let(:latitude)     { I18n.t("latitude") }
   let(:longitude)    { I18n.t("longitude") }
   let(:member)       { I18n.t("member") }
-  let(:new_one)      { I18n.t("new") }
   let(:name)         { I18n.t("name") }
+  let(:new_one)      { I18n.t("new") }
   let(:none)         { I18n.t("none") }
   let(:notes)        { I18n.t("notes") }
   let(:please)       { I18n.t("please_select") }

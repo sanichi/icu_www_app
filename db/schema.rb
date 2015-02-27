@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225112811) do
+ActiveRecord::Schema.define(version: 20150226114153) do
 
   create_table "articles", force: true do |t|
     t.string   "access",     limit: 20
@@ -445,6 +445,7 @@ ActiveRecord::Schema.define(version: 20150225112811) do
     t.string   "error"
     t.decimal  "amount",     precision: 9, scale: 2
     t.datetime "created_at"
+    t.boolean  "automatic",                          default: true
   end
 
   add_index "refunds", ["cart_id"], name: "index_refunds_on_cart_id", using: :btree

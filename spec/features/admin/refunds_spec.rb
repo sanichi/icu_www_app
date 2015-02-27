@@ -10,6 +10,8 @@ describe Refund, js: true do
   let(:first_name)        { I18n.t("player.first_name") }
   let(:last_name)         { I18n.t("player.last_name") }
   let(:pay)               { I18n.t("shop.payment.card.pay") }
+  let(:refund_button)     { I18n.t("shop.payment.refund") }
+  let(:revoke_button)     { I18n.t("shop.payment.revoke") }
   let(:select_member)     { I18n.t("item.member.select") }
 
   let(:cvc_id)            { "cvc" }
@@ -22,9 +24,8 @@ describe Refund, js: true do
   let(:expiry)            { "01 / #{(Date.today.year + 2).to_s}" }
   let(:number)            { "4242 4242 4242 4242" }
 
-  let(:refund_button)     { "Refund" }
-  let(:refund_link)       { "Refund..." }
-  let(:refund_ok)         { "Refund was successful" }
+  let(:refund_link)       { "#{refund_button}..." }
+  let(:refund_ok)         { "#{refund_button} was successful" }
   let(:title)             { "h3" }
   let(:total)             { "//th[.='All']/following-sibling::th" }
 
@@ -106,10 +107,11 @@ describe Refund, js: true do
       expect(entry).to be_paid
 
       expect(cart.refunds.size).to eq 1
-      refund = cart.refunds[0]
+      refund = cart.refunds.last
       expect(refund.error).to be_nil
       expect(refund.amount).to eq subscription.cost
       expect(refund.user).to eq treasurer
+      expect(refund.automatic).to be true
 
       click_link refund_link
 
@@ -121,6 +123,7 @@ describe Refund, js: true do
 
       expect(page).to have_css(success, refund_ok)
       expect(page).to_not have_link(refund_button)
+      expect(page).to_not have_link(revoke_button)
 
       cart.reload
       subscription.reload
@@ -132,10 +135,11 @@ describe Refund, js: true do
       expect(entry).to be_refunded
 
       expect(cart.refunds.size).to eq 2
-      refund = cart.refunds[0]
+      refund = cart.refunds.where.not(id: refund.id).first
       expect(refund.error).to be_nil
       expect(refund.amount).to eq entry.cost
       expect(refund.user).to eq treasurer
+      expect(refund.automatic).to be true
     end
 
     it "refunded together" do
@@ -164,6 +168,8 @@ describe Refund, js: true do
       confirm_dialog
 
       expect(page).to have_css(success, refund_ok)
+      expect(page).to_not have_link(refund_button)
+      expect(page).to_not have_link(revoke_button)
 
       cart.reload
       subscription.reload
@@ -175,10 +181,11 @@ describe Refund, js: true do
       expect(entry).to be_refunded
 
       expect(cart.refunds.size).to eq 1
-      refund = cart.refunds[0]
+      refund = cart.refunds.last
       expect(refund.error).to be_nil
       expect(refund.amount).to eq subscription.cost + entry.cost
       expect(refund.user).to eq treasurer
+      expect(refund.automatic).to be true
     end
   end
 

@@ -4,6 +4,8 @@
 - content_for :includes do
   = javascript_include_tag "spin.js"
 
+- confirm = "Are you sure you want to cancel the selected purchase(s)#{@cart.refundable?? ' and refund the credit card' : ''}?"
+
 .row
   .col-md-2
   .col-md-8
@@ -14,7 +16,7 @@
             %th= t("item.item")
             %th= t("member")
             %th.text-center= t("item.cost")
-            %th.text-center= t("shop.payment.refund")
+            %th.text-center= @cart.refund_type
         %tbody
           %tr
             %th{colspan: 2}= t("all")
@@ -27,5 +29,5 @@
                 %td= item.player.name(id: true) if item.player.present?
                 %td.text-center= euros(item.cost)
                 %td.text-center= check_box_tag "item_#{item.id}"
-      = submit_tag t("shop.payment.refund"), class: "btn btn-danger", disabled: true, data: { confirm: "Are you sure you want to cancel the selected purchase(s) and refund the credit card?" }
+      = submit_tag @cart.refund_type, class: "btn btn-danger", disabled: true, data: { confirm: confirm }
       = link_to t("cancel"), [:admin, @cart], class: "btn btn-primary"

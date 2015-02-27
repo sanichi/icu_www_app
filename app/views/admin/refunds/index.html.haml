@@ -10,6 +10,7 @@
           %tr
             %th Cart
             %th Amount
+            %th Type
             %th Officer
             %th Date/Time
             %th Error
@@ -18,7 +19,8 @@
             %tr
               %td= link_to refund.cart_id, [:admin, refund.cart]
               %td= euros(refund.amount)
+              %td= t("shop.payment.#{refund.automatic ? 'refund' : 'revoke'}")
               %td= refund.user.player.name
               %td= refund.created_at.to_s(:db)
               %td= refund.error || "None"
-          = render "utils/pagination_links", pager: @refunds, columns: 5
+          = render "utils/pagination_links", pager: @refunds, columns: 6

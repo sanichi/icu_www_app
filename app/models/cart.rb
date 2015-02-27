@@ -22,7 +22,15 @@ class Cart < ActiveRecord::Base
   end
 
   def refundable?
-    active? && payment_method == "stripe" && payment_account == Cart.current_payment_account
+    active? && payment_method == "stripe" && purchased_with_current_payment_account?
+  end
+
+  def revokable?
+    active?
+  end
+
+  def refund_type
+    I18n.t("shop.payment.#{refundable?? 'refund' : 'revoke'}")
   end
 
   def duplicates?(new_item, add_error: false)
@@ -67,10 +75,11 @@ class Cart < ActiveRecord::Base
   end
 
   def refund(item_ids, user)
-    refund = Refund.new(user: user, cart: self)
-    charge = Stripe::Charge.retrieve(payment_ref)
+    automatic = refundable?
+    refund = Refund.new(user: user, cart: self, automatic: automatic)
+    charge = Stripe::Charge.retrieve(payment_ref) if automatic
     refund.amount = refund_amount(item_ids, charge)
-    charge.refund(amount: cents(refund.amount))
+    charge.refund(amount: cents(refund.amount)) if automatic
     items.each do |item|
       if item_ids.include?(item.id)
         item.refund
@@ -103,6 +112,10 @@ class Cart < ActiveRecord::Base
       matches = matches.where("created_at LIKE ? OR updated_at LIKE ?", date, date)
     end
     paginate(matches, params, path)
+  end
+
+  def purchased_with_current_payment_account?
+    payment_account == Cart.current_payment_account
   end
 
   def self.current_payment_account
@@ -175,15 +188,18 @@ class Cart < ActiveRecord::Base
       refund_amount += item.cost
     end
 
-    # Check that the ICU cart and Stripe totals are consistent.
-    unless cents(original_total) == charge.amount
-      raise "Cart amount (#{cents(original_total)}) is inconsistent with Stripe amount (#{charge.amount})"
-    end
+    # If there's a charge object (we're automatically refunding the payment as well as updating the database).
+    if charge
+      # Check that the ICU cart and Stripe totals are consistent.
+      unless cents(original_total) == charge.amount
+        raise "Cart amount (#{cents(original_total)}) is inconsistent with Stripe amount (#{charge.amount})"
+      end
 
-    # Check any previous refund amounts are consistent.
-    cart_refund = cents(original_total) - cents(total)
-    unless cart_refund == charge.amount_refunded
-      raise "Previous cart refund (#{cart_refund}) is inconsistent with previous Stripe refund (#{charge.amount_refunded})"
+      # Check any previous refund amounts are consistent.
+      cart_refund = cents(original_total) - cents(total)
+      unless cart_refund == charge.amount_refunded
+        raise "Previous cart refund (#{cart_refund}) is inconsistent with previous Stripe refund (#{charge.amount_refunded})"
+      end
     end
 
     # Check the proposed refund isn't too large.
