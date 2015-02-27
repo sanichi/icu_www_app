@@ -1723,7 +1723,42 @@
     = render "link", topic: "intro.accounts"
 
 = render "header", topic: "appendix.stripe"
-%p TODO
+%p
+  Stripe provides a way for individuals and organizations to accept payments over the internet.
+  Although the company is American it was founded by two brothers from Limerick.
+  Previously the ICU used Paypal but Stripe is technically superior and setting up and verifying an account is easier.
+%p
+  As the ICU has no legal standing (not being incorporated) it's necessary for an individual (called a <em>sole trader</em>)
+  to own the Stripe account on behalf of the ICU and for that person's name and address to be used for the account verification process
+  (the same applied to PayPal). Once the account has been verified and connected to the ICU's bank account two pairs of API keys
+  (one pair for production and one pair for test and development) need to be registered with the application (see
+  = render "link", topic: "appendix.secrets"
+  and
+  = succeed(")") do
+    = render "link", topic: "intro.accounts"
+  before payments can be made.
+%p
+  The person who owns the account is normally a member of the ICU committee at the time the account is first setup.
+  They are able to login to the account dashboard (on the Stripe website) which, amongst other things, provides details
+  of all transactions made through the account. Most of the information that the treasurer needs is recorded in the ICU
+  database but, if the account holder is not also the treasurer, it's normal to share the dashboard login credentials
+  with the treasurer so that they can also benefit from the additional source of information.
+%p
+  One issue that the sole trader model gives rise to is what happens when that person leaves the ICU committee and
+  doesn't wish to continue in the role (and may even wish to shut down their Stripe account)? With Stripe the solution is easy:
+%ul
+  %li find another committee member to volunteer as the sole trader,
+  %li get them to setup and verify a new Stripe account connected to the same ICU bank account,
+  %li
+    replace the old account's API keys with the new ones (in <em>secrets.yml</em> — see
+    = succeed(").") do
+      = render "link", topic: "appendix.secrets"
+%p
+  Note that when a new Stripe account is used then payments made with older accounts can no longer be automatically
+  refunded (if any refunds are required). Instead payments would first have to be revoked in the ICU database and then
+  reimbursement made manually (e.g. sending a cheque) — see
+  = link_to t("help.treasurer"), help_treasurer_path
+  for details of the distinction between refunds and revokes.
 
 = render "header", topic: "appendix.ssl"
 %p
