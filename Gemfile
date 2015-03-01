@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 source 'https://code.stripe.com'
 
-gem "rails", "4.1.5"
+gem "rails", "4.2.1.rc2"
 gem "mysql2"
 gem "haml-rails"
-gem "sass-rails", "~> 4.0.3"
+gem "sass-rails", "~> 5.0"
 gem "uglifier", ">= 1.3.0"
 gem "jquery-rails"
 gem "cancan", "~> 1.6"
@@ -35,4 +35,5 @@ group :development, :test do
   gem "launchy"
   gem "faker"
   gem "database_cleaner"
+  gem "byebug"
 end

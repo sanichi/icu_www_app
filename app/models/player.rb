@@ -268,10 +268,17 @@ SQL
 
   def canonicalize_privacy
     if privacy.present?
-      self.privacy = privacy.scan(/\w+/) unless privacy.is_a?(Array)
-      self.privacy = privacy.select{ |p| PRIVACIES.include?(p) }.sort.join(" ")
+      _privacy = privacy
+      _privacy = _privacy.scan(/\w+/) unless _privacy.is_a?(Array)
+      _privacy = _privacy.select{ |p| PRIVACIES.include?(p) }
+      if _privacy.empty?
+        self.privacy = nil
+      else
+        self.privacy = _privacy.sort.join(" ")
+      end
+    else
+      self.privacy = nil
     end
-    self.privacy = nil if privacy.blank?
   end
 
   def strict?

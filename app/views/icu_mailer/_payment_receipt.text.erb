@@ -1,7 +1,7 @@
 Hi<%= cart.payment_name.present? ? " #{cart.payment_name}" : "" %>,
 
 <%- unless Rails.env.production? %>
-** TEST PURCHASE, NO ACTUAL PAYMENT HAS BEEN TAKEN FROM YOUR CARD **
+** TEST PURCHASE — NO ACTUAL PAYMENT HAS BEEN TAKEN **
 
 <%- end %>
 This is a receipt from the ICU for your payment of <%= euros(cart.total) %> on <%= cart.payment_completed.to_date.to_s %>.

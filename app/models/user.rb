@@ -253,14 +253,19 @@ class User < ActiveRecord::Base
 
   def canonicalize_roles
     if roles.present?
-      self.roles = roles.scan(/\w+/) unless roles.is_a?(Array)
-      if roles.include?("admin")
+      _roles = roles
+      _roles = _roles.scan(/\w+/) unless _roles.is_a?(Array)
+      _roles = _roles.select { |r| User::ROLES.include?(r) }
+      if _roles.include?("admin")
         self.roles = "admin"
+      elsif _roles.empty?
+        self.roles = nil
       else
-        self.roles = roles.select{ |r| User::ROLES.include?(r) }.sort.join(" ")
+        self.roles = _roles.sort.join(" ")
       end
+    else
+      self.roles = nil
     end
-    self.roles = nil if roles.blank?
   end
 
   def dont_remove_the_last_admin

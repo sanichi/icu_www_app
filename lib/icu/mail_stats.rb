@@ -12,7 +12,7 @@ module ICU
       if print
         puts text
       else
-        ::IcuMailer.mail_stats(text).deliver
+        ::IcuMailer.mail_stats(text).deliver_now
       end
     end
 

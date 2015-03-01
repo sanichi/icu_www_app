@@ -22,7 +22,7 @@ class Cart < ActiveRecord::Base
   end
 
   def refundable?
-    active? && payment_method == "stripe" && purchased_with_current_payment_account?
+    active? && purchased_with_current_payment_account?
   end
 
   def revokable?
@@ -30,7 +30,7 @@ class Cart < ActiveRecord::Base
   end
 
   def refund_type
-    I18n.t("shop.payment.#{refundable?? 'refund' : 'revoke'}")
+    I18n.t("shop.payment.#{purchased_with_current_payment_account?? 'refund' : 'revoke'}")
   end
 
   def duplicates?(new_item, add_error: false)
@@ -115,7 +115,7 @@ class Cart < ActiveRecord::Base
   end
 
   def purchased_with_current_payment_account?
-    payment_account == Cart.current_payment_account
+    payment_method == "stripe" && payment_account == Cart.current_payment_account
   end
 
   def self.current_payment_account
@@ -155,7 +155,7 @@ class Cart < ActiveRecord::Base
     mail = IcuMailer.payment_receipt(id)
     update_column(:confirmation_text, mail.body.decoded)
     raise "no email address available" unless confirmation_email.present?
-    mail.deliver
+    mail.deliver_now
     update_column(:confirmation_sent, true)
   rescue => e
     update_columns(confirmation_sent: false, confirmation_error: e.message.gsub(/\s+/, ' ').truncate(255))

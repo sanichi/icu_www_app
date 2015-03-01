@@ -25,7 +25,7 @@ class UsersController < ApplicationController
     if @user.sign_up && @user.save
       flash.now[:notice] = I18n.t("user.created")
       @user.journal(:create, @user, request.remote_ip)
-      IcuMailer.verify_new_user_email(@user.id).deliver
+      IcuMailer.verify_new_user_email(@user.id).deliver_now
       render action: "confirm"
     else
       flash.now[:alert] = I18n.t("user.create_failed")

@@ -4,8 +4,6 @@ class Failure < ActiveRecord::Base
   scope :ordered, -> { order(created_at: :desc) }
   scope :active, -> { where(active: true) }
 
-  before_create :normalize_details
-
   def self.examine(payload)
     unless ignore?(payload)
       Failure.log(payload[:exception].first, payload.dup)
@@ -21,7 +19,7 @@ class Failure < ActiveRecord::Base
   end
 
   def self.log(name, details={})
-    create(name: name, details: details)
+    create(name: name, details: normalize(details))
   end
 
   def self.ignore?(payload)
@@ -45,9 +43,7 @@ class Failure < ActiveRecord::Base
     details.to_s.gsub(/\n/, " ").truncate(50)
   end
 
-  private
-
-  def normalize_details
+  def self.normalize(details)
     if details.is_a?(Hash)
       if details[:exception].is_a?(Array) && details[:exception].size == 2
         exception = details.delete(:exception)
@@ -59,7 +55,11 @@ class Failure < ActiveRecord::Base
         details[:message] = exception.message
         details[:backtrace] = exception.backtrace[0..3].join("\n") if exception.backtrace.present?
       end
-      self.details = details.map{ |key,val| "#{key}: #{val}" }.sort.join("\n")
+      details.map{ |key,val| "#{key}: #{val}" }.sort.join("\n")
+    else
+      details.to_s
     end
   end
+  
+  private_class_method :normalize
 end

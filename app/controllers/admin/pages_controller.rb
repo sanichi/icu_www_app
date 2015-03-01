@@ -15,7 +15,7 @@ class Admin::PagesController < ApplicationController
       subject = params[:subject].presence || "Test"
       message = params[:message].presence || "this is a test"
       begin
-        IcuMailer.test_email(to, subject, message).deliver
+        IcuMailer.test_email(to, subject, message).deliver_now
         @message = "Email sent to #{to}"
         @error = false
       rescue => e
