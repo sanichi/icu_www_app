@@ -1,5 +1,4 @@
 source "https://rubygems.org"
-source 'https://code.stripe.com'
 
 gem "rails", "4.2.1.rc2"
 gem "mysql2"
@@ -18,7 +17,6 @@ gem "mailgun-ruby", require: "mailgun"
 gem "paperclip", "~> 4.1"
 gem "colored"
 gem "whenever", :require => false
-gem "multimap"
 
 group :development do
   gem "capistrano"
