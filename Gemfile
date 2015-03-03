@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "4.2.1.rc2"
+gem "rails", "4.2.1.rc3"
 gem "mysql2"
 gem "haml-rails"
 gem "sass-rails", "~> 5.0"
@@ -19,9 +19,7 @@ gem "colored"
 gem "whenever", :require => false
 
 group :development do
-  gem "capistrano"
-  gem "capistrano-rails"
-  gem "capistrano-bundler"
+  gem "capistrano-rails", "~> 1.1"
   gem "wirble"
 end
 
