@@ -529,7 +529,7 @@
 %blockquote
   We're currently offline for maintenance as of [current time].
   Sorry for any inconvenience. We'll be back shortly.
-%p The words "maintenance" and "shortly" in this message can be replaced by setting temporary environment variable like this:
+%p The words "maintenance" and "shortly" in this message can be replaced by setting temporary environment variables like this:
 - cmd = []
 - cmd << '$ REASON="a system upgrade" BACK="in a couple of hours" bin/rake production deploy:web:disable'
 %pre~ cmd.join("\n")
